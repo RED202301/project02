@@ -1,0 +1,38 @@
+.bold {
+    margin: 5%;
+    font-weight: bold;
+    font-size: 20px;
+  }
+  
+#factory {
+    border: 2px solid black;
+    background-color: silver;
+    margin: 5%;
+    width: 1000px;
+    height: 1000px;
+    border-radius: 4px;
+  }
+  
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5%;
+  }
+  
+  #silverborder {
+    border: 2px solid silver;
+    background-color: silver;
+    padding: 2%;
+    margin-left: 5%;
+    font-weight: bold;
+  }
+  
+
+  #silverborders {
+    border: 2px solid silver;
+    background-color: silver;
+    padding: 2%;
+    margin-left: 3%;
+    font-weight: bold;
+  
+  }

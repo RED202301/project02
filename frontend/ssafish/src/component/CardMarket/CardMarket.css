@@ -1,0 +1,58 @@
+#inputbox {
+    display: flex;
+    justify-content: center;
+    margin: 5%;
+  }
+  
+  .search {
+    font-weight: bold;
+    font-size: 18px;
+  }
+  
+  .inputtag {
+    border: 5px solid black;
+    width: 500px;
+  }
+  #marin {
+    margin: 10px;
+    padding: 10px 20px 10px;
+  }
+  .gridcard {
+    display: grid; 
+    grid-template-columns: repeat(4, 1fr); /* 4개의 열을 만듭니다. */
+    gap: 5%; /* 각 셀 사이의 간격을 줍니다. */
+    margin: 5%;
+  
+  }
+  #cardboard {
+    border: 2px solid silver;
+    background-color: silver;
+    margin: 5%;
+    border-radius: 4px;
+    width: 500px;
+    height: 800px;
+  }
+  .pcard-container {
+
+    padding: 10px;
+    margin-bottom: 10px;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 95%;
+  }
+  
+  .pcard-header {
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .pcard-footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 24px;
+    font-weight: bold;
+  }
