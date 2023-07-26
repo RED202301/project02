@@ -39,3 +39,10 @@ dependencies {
 	implementation 'org.webjars:sockjs-client:1.0.2'
 	implementation 'org.webjars:stomp-websocket:2.3.3'
 }
+
+
+# 23.07.25
+## 금일 출근 스크럼
+- 커밋 컨벤션 논의, 소켓 통신 api 논의
+## 금일 퇴근 회고
+- 커밋 컨벤션을 정하고, 제대로 동작하리라 짐작한 스켈레톤 코드가 작동하지 않아 애를 먹음. 명확하게 이해하고 정리해서 공유할 필요성을 느낌.
