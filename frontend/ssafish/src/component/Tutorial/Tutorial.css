@@ -1,21 +1,24 @@
+.Tutorial{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    flex-wrap: nowrap;
+}
+
 .Description{
     border: solid 1px black;
     border-radius: 10px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     margin-left: 50px;
     margin-right: 50px;
 }
 
-.Tutorial{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    height: 100vh;
-    width: 100vw;
-}
 
 .Logo{
     display: flex;
@@ -30,4 +33,15 @@
     justify-content: center;
     margin-left: auto;
     margin-right: auto;
+}
+
+.card_image{
+    width: 150px;
+    height: 225px;
+    border: solid 1px;
+    border-radius: 10px;
+}
+
+.a{
+    display: flex;
 }
