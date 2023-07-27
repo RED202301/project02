@@ -13,6 +13,7 @@ import CardMarket from './component/CardMarket/CardMarket'
 import Mypage from './component/MyPage/MyPage'
 import RoomList from './component/RoomList/RoomList'
 
+import Sample from './component/Card/samples/Parallax Depth Cards'
 
 function App() {
 
@@ -21,17 +22,20 @@ function App() {
     <AnimatePresence>
     <div className="App">
     <Routes>
-    <Route path="/" element={<Landing/>}/>
-    <Route path="/Login" element={<Login/>}/>
-    <Route path='/kakaoLogin' element={<KakaoLogin/>}/>
-    <Route path="/Tutorial" element={<Tutorial/>}/>
-    <Route path="/Main" element={<Main/>}/>
-    <Route path="/RoomList" element={<RoomList/>}/>
-    <Route path="/WebMain" element={[<Header/>, <WebMain/>]}/>
-    <Route path="/CardFactory" element={[<Header/>, <CardFactory/>]}/>
-    <Route path="/CardMarket" element={[<Header/>, <CardMarket/>]}/>
-    <Route path="/Mypage" element={[<Header/>, <Mypage/>]}/>
-    <Route path="/WebMain" element={[<Header/>, <WebMain/>]}/>
+      <Route path="/" element={<Landing/>}/>
+      <Route path="/Login" element={<Login/>}/>
+      <Route path='/kakaoLogin' element={<KakaoLogin/>}/>
+      <Route path="/Tutorial" element={<Tutorial/>}/>
+      <Route path="/Main" element={<Main/>}/>
+      <Route path="/RoomList" element={<RoomList/>}/>
+      <Route path="/WebMain" element={[<Header/>, <WebMain/>]}/>
+      <Route path="/CardFactory" element={[<Header/>, <CardFactory/>]}/>
+      <Route path="/CardMarket" element={[<Header/>, <CardMarket/>]}/>
+      <Route path="/Mypage" element={[<Header/>, <Mypage/>]}/>
+      <Route path="/WebMain" element={[<Header/>, <WebMain/>]}/>
+      
+      <Route path="/Sample" element={<Sample/>}/>
+  
     </Routes>
     </div>
     </AnimatePresence>
