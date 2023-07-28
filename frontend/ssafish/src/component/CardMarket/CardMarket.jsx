@@ -44,4 +44,44 @@ function Pcard1(props) {
     );
   }
 
+// 덱소개글 모달
+
+  // function Deckintro(props) {
+  //   return (
+  //     <div>
+        
+  
+  //       <div id="factory">
+  //       <h3 className='bold'>카드 덱 이름</h3>
+  //       <p className='introbox'>카드 덱 소개글</p>
+  //       <span className='bold'>좋아요</span>
+  //       <span className='bold'>사용횟수</span>
+  //       <button className='buttonbox'>담기/빼기</button>
+  //       <div className='reviewsbox'>
+  //       <Reviews/>
+  //       </div>
+  
+  //   {/* <span>덱 등록하기 </span>
+  //   <span>대표카드 지정</span> */}
+  //   </div>
+  //   </div>
+  //   )
+  // }
+  
+  // function Reviews(props) {
+  //   return (
+  //     <div className='gridprivate'>
+  //       <p className='profilebox'>프로필 사진</p>
+  //       <p className="reviewbox">사용후기글</p>
+  //     </div>
+  //   )
+  // }
+  
+  // function Cards(props) {
+  //   return (
+  //     <div>
+  
+  // </div>
+  //   )
+  // }
 export default CardMarket;

@@ -47,4 +47,46 @@ function Selectin(props) {
     )
   }
 
+// 카드 만들기, 상세 모달
+
+
+  // function Deckmake(props) {
+
+  //   return (
+  //     <div className='makebox'>
+        
+  //       <p className='showingbox'>이름</p>
+  //       <p className='imagebox'>카드 사진</p>
+  //       <p className='showingbox'>짤막한 글</p>
+  //       <div className='buttoncontain'>
+  //       <button className='button'>등록하기</button>
+  //       </div>
+  //       </div>
+  
+    
+  
+  //   )
+  // }
+  
+  // function Deckintroduce(props) {
+  //   return (
+  //     <div className='makebox'>
+        
+  //       <p className='showingbox'>이름</p>
+  
+  //   <p className='introducebox'>덱 소개글</p>
+  //   <div className='buttoncontain'>
+  //   <button className='button'>등록하기</button>
+  //   </div>
+  //   </div>
+  
+    
+  //   )
+  
+  // }
+
+
+
+
+
 export default CardFactory;
