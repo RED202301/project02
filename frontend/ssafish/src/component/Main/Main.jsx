@@ -29,7 +29,7 @@ import { Link } from 'react-router-dom';
                         &times;
                     </button>
                 </div>
-              <div>
+      <div>
                 <h1 className="modal-title">방 만들기</h1>
                 <p>방 제목</p>
                 <p>게임 선택</p>
@@ -37,7 +37,7 @@ import { Link } from 'react-router-dom';
                 <p>턴 제한 시간</p>
                 <p>인원 제한</p>
                 <button className="modal-enter">생성</button>
-              </div>
+      </div>
                   </div>
             </motion.div>
         )}
