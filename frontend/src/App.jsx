@@ -13,9 +13,11 @@ import CardMarket from './pages/CardMarket/CardMarket';
 import Mypage from './pages/MyPage/MyPage';
 import RoomList from './pages/RoomList/RoomList';
 
-import Sample from './components/Card/samples/Parallax Depth Cards';
+import Sample from './components/backup/samples/Parallax Depth Cards';
+import Card from './components/Card/Card';
 
 function App() {
+  [];
   return (
     <Router>
       <AnimatePresence>
@@ -34,6 +36,30 @@ function App() {
             <Route path="/WebMain" element={[<Header />, <WebMain />]} />
 
             <Route path="/Sample" element={<Sample />} />
+            <Route
+              path="/Card"
+              element={
+                <div
+                  style={{
+                    backgroundColor: 'tomato',
+                    width: '100vw',
+                    height: '100vh',
+                  }}
+                >
+                  {[0, 0].map((_, idx) => (
+                    <Card
+                      width={'200px'}
+                      height={'300px'}
+                      img_url="./sample_imgs/마크_저커버그_메타.png"
+                      bg_url="./sample_imgs/background.png"
+                      subtitle="메타"
+                      title="마크 저커버그"
+                      key={idx}
+                    />
+                  ))}
+                </div>
+              }
+            />
           </Routes>
         </div>
       </AnimatePresence>
