@@ -13,5 +13,5 @@ import lombok.Setter;
 public class SocketData {
 
     private String sender;
-    private String contents;
+    private String content;
 }
