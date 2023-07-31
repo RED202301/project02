@@ -1,0 +1,59 @@
+.Tutorial{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+}
+
+.title{
+    display: flex;
+    justify-content: center;
+}
+
+.Description{
+    border: solid 1px black;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: auto;  
+    margin-right: auto;
+    width: 50%;
+    height: 300px;
+}
+
+
+.Logo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: auto;  
+    margin-right: auto;
+}
+
+.back{
+    display: flex;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.card_image{
+    max-width: 100%;
+    width: 150px;
+    height: 225px;
+    border: solid 1px;
+    border-radius: 10px;
+}
+
+.slick-prev:before, .slick-next:before {
+    font-family: 'slick';
+    font-size: 20px;
+    line-height: 1;
+    opacity: .75;
+    color: black;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
