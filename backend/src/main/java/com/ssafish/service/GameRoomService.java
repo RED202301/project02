@@ -1,7 +1,10 @@
 package com.ssafish.service;
 
 import com.ssafish.common.util.WebSocketSubscriberManager;
+import com.ssafish.web.dto.SocketData;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +20,14 @@ public class GameRoomService {
 
     public void sendMessageToRoom(Integer roomId, String message) throws IOException {
         Map<Integer, String> sessionIds = subscriberManager.getRoomById(roomId);
-        sessionIds.entrySet().parallelStream().forEach(entry -> {
-            String sessionId = entry.getValue();
-            messagingTemplate.convertAndSendToUser(sessionId, "/sub/" + roomId, message);
-        });
+        if (sessionIds == null) {
+            System.out.println("TT");
+            return;
+        }
+        messagingTemplate.convertAndSend("/sub/" + roomId, new SocketData(77, message));
+    }
+
+    public void processClientEntrance(Integer roomId, Integer userId, String sessionId) {
+        subscriberManager.addSubscriber(roomId, userId, sessionId);
     }
 }

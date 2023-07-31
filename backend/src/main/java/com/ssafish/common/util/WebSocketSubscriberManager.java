@@ -15,29 +15,42 @@ public class WebSocketSubscriberManager {
 
     private final Map<Integer, String> entireSessions = new ConcurrentHashMap<>();
     private final Map<Integer, Map<Integer, String>> rooms = new ConcurrentHashMap<>();
+    private final Map<String, Integer> roomTable = new ConcurrentHashMap<>();
+    private final Map<String, Integer> userTable = new ConcurrentHashMap<>();
 
-    public void addSubscriber(Integer userId, String sessionId) {
+    public void addSubscriber(Integer roomId, Integer userId, String sessionId) {
         entireSessions.put(userId, sessionId);
-    }
-
-    public void removeSubscriber(Integer userId) {
-        entireSessions.remove(userId);
-    }
-    public void addSubscriberToRoom(Integer roomId, Integer userId, String sessionId) {
         if (!rooms.containsKey(roomId)) {
             rooms.put(roomId, new ConcurrentHashMap<>());
         }
         rooms.get(roomId).put(userId, sessionId);
+        roomTable.put(sessionId, roomId);
+        userTable.put(sessionId, userId);
     }
 
-    public void removeSubscriberFromRoom(Integer roomId, Integer userId) {
-        rooms.get(roomId).remove(userId);
+    public void removeSubscriber(String sessionId) {
+        if (roomTable.containsKey(sessionId) && userTable.containsKey(sessionId)) {
+            Integer roomId = roomTable.get(sessionId);
+            Integer userId = userTable.get(sessionId);
+            entireSessions.remove(userId);
+            rooms.get(roomId).remove(userId);
+            roomTable.remove(sessionId);
+            userTable.remove(sessionId);
+        }
     }
 
     public Map<Integer, String> getRoomById(Integer roomId) {
         return rooms.get(roomId);
     }
-    public boolean isExist(Integer roomId, Integer userId) {
-        return rooms.containsKey(roomId) && rooms.get(roomId).containsKey(userId);
+    public boolean isExist(String sessionId) {
+        return roomTable.containsKey(sessionId);
+    }
+
+    public Integer getRoomIdBySessionId(String sessionId) {
+        return roomTable.get(sessionId);
+    }
+
+    public Integer getUserIdBySessionId(String sessionId) {
+        return userTable.get(sessionId);
     }
 }
