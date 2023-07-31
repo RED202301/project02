@@ -1,0 +1,128 @@
+*{
+    margin: 0px;
+}
+.Room{
+    width: 100vw;
+    height: 100vh;
+}
+.Time{
+    height: 6%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: xx-large;
+}
+.Room1{
+    height: 34%;
+}
+.Room2{
+    height: 60%;
+    background-image: url(../../assets/나무패턴4.jpg);
+    background-size: cover;
+    border-top-left-radius: 15%;
+    border-top-right-radius: 15%;
+}
+
+.Room1-1{
+    height: 20%;
+    display: flex;  
+}
+
+@for $i from 1 through 5{
+    .Room1-1-#{$i}{
+        width: 20%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+.Room1-1-1{
+    width: 17%;
+    transform: rotate(-7deg);
+}
+.Room1-1-3{
+    width: 25%;
+}
+.Room1-1-5{
+    width: 17%;
+    transform: rotate(7deg);
+}
+.Room1-2{
+      height: 80%;    
+      display: flex;    
+    }
+    
+@for $i from 1 through 5{
+    .Room1-2-#{$i}{
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        width: 20%; 
+    }
+}
+.Room1-2-1{
+    width: 17%;
+    height: 105%; 
+    transform: rotate(-7deg);
+}
+.Room1-2-3{
+    width: 25%;
+    height: 105%; 
+}
+.Room1-2-5{
+    width: 17%;
+    height: 105%; 
+    transform: rotate(7deg);
+}
+
+.Room2-1{
+    height: 56%;    
+    display: flex;    
+}
+
+@for $i from 1 through 5{
+    .Room2-1-#{$i}{
+        width: 20%;
+    }
+}
+.Room2-1-4-1{
+    height: 50%;      
+}
+.Room2-1-4-2{
+    height: 50%;      
+}
+
+.Room2-2{
+    height: 44%;    
+    display: flex;    
+}
+.Room2-2-1{
+    width: 10%;
+}
+@for $i from 2 through 11{
+    .Room2-2-#{$i}{
+        width: 9%;
+    }
+}
+
+.인물1{
+    width: 70%;
+    height: 70%;
+}
+
+.인물2{
+    width: 60%;
+    height: 78%;
+}
+
+.인물4{
+    width: 70%;
+    height: 70%;
+}
+
+.인물5{
+    width: 100%;
+    height: 85%;
+}
