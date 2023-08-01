@@ -12,6 +12,7 @@ import CardFactory from './pages/CardFactory/CardFactory';
 import CardMarket from './pages/CardMarket/CardMarket';
 import Mypage from './pages/MyPage/MyPage';
 import RoomList from './pages/RoomList/RoomList';
+import Room from './pages/Room/Room';
 
 import Sample from './components/backup/samples/Parallax Depth Cards';
 import Card from './components/Card/Card';
@@ -36,6 +37,7 @@ function App() {
             <Route path="/CardMarket" element={[<Header />, <CardMarket />]} />
             <Route path="/Mypage" element={[<Header />, <Mypage />]} />
             <Route path="/WebMain" element={[<Header />, <WebMain />]} />
+            <Route path="/Room" element={<Room/>}/>
 
             <Route path="/Sample" element={<Sample />} />
             <Route path="/MVP" element={<MVP />} />
