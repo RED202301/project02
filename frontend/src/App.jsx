@@ -13,7 +13,7 @@ import CardMarket from './pages/CardMarket/CardMarket';
 import Mypage from './pages/MyPage/MyPage';
 import RoomList from './pages/RoomList/RoomList';
 import Room from './pages/Room/Room';
-
+import Game from './pages/Game/Game';
 import Sample from './components/backup/samples/Parallax Depth Cards';
 import Card from './components/Card/Card';
 import Card_backup from './components/Card/Card_backup';
@@ -37,7 +37,7 @@ function App() {
             <Route path="/Mypage" element={[<Header />, <Mypage />]} />
             <Route path="/WebMain" element={[<Header />, <WebMain />]} />
             <Route path="/Room" element={<Room/>}/>
-
+            <Route path='/main/game' element={<Game/ >}/>
             <Route path="/Sample" element={<Sample />} />
             <Route
               path="/Card"

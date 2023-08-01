@@ -1,201 +1,218 @@
-import './Game.css';
-import { useState, useEffect, useRef } from 'react';
-import { OpenVidu } from 'openvidu-browser';
-import io from 'socket.io-client';
-import * as mp from '@mediapipe/pose';
-import * as mpSegmentation from '@mediapipe/selfie_segmentation'; // 미디어 파이프 SelfieSegmentation 모델 불러오기
-function Game() {
 
-  const [showChatbox, setShowChatbox] = useState(false);
-  const [showChatButton, setShowChatButton] = useState(true);
-  const [sessionId, setSessionId] = useState('');
-  const [token, setToken] = useState('');
-  const videoContainerRef = useRef(null);
-  const [showInput, setShowInput] = useState(false);
-  const [inputSessionId, setInputSessionId] = useState('');
-  const [chatMessage, setChatMessage] = useState('');
-  const [receivedMessages, setReceivedMessages] = useState([]);
-  const [session, setSession] = useState(null);
-  const [isPublisher, setIsPublisher] = useState(false);
-  const [backgroundRemovalReady, setBackgroundRemovalReady] = useState(false);
-  const videoCanvasRef = useRef(null);
-  const segmentationModelRef = useRef(null);
-  const [showBackgroundRemoval, setShowBackgroundRemoval] = useState(false);
+import { useEffect, useRef, useState } from 'react';
+import { OpenVidu } from 'openvidu-browser';
+import axios from 'axios';
+
+import './Game.css';
+
+function UserVideoComponent(props) {
+  const getNicknameTag = () => {
+    if (props.streamManager.stream) {
+      return JSON.parse(props.streamManager.stream.connection.data).clientData;
+    } else {
+      return 'Subscriber';
+    }
+  };
+
+  const handleVideoClicked = () => {
+    // 추가: 해당 스트림이 subscriber인 경우만 클릭 이벤트 처리
+    if (!props.streamManager.stream && props.mainVideoStream) {
+      props.mainVideoStream(props.streamManager);
+    }
+  };
+
+  return (
+    <div onClick={handleVideoClicked}>
+      {/* 추가: 해당 스트림이 퍼블리셔인 경우에만 화면에 표시 */}
+      {props.streamManager.stream ? (
+        <OpenViduVideoComponent streamManager={props.streamManager} />
+      ) : null}
+      <div>
+        <p>{getNicknameTag()}</p>
+      </div>
+    </div>
+  );
+}
+
+function OpenViduVideoComponent(props) {
   const videoRef = useRef(null);
-  
+
   useEffect(() => {
-    initializeSession();
-    initSegmentationModel();
+    if (props.streamManager && !!videoRef.current) { // 추가적인 null 체크
+      props.streamManager.addVideoElement(videoRef.current);
+    }
+  }, [props]);
+
+  return <video autoPlay={true} ref={videoRef} />;
+}
+
+function Game() {
+  const [chatMessage, setChatMessage] = useState('');
+const [receivedMessages, setReceivedMessages] = useState([]);
+  const [showChatbox, setShowChatbox] = useState(false);
+const [showChatButton, setShowChatButton] = useState(true);
+const [audioEnabled, setAudioEnabled] = useState(true);
+  const [videoEnabled, setVideoEnabled] = useState(true);
+
+  // Function to toggle audio and video states
+  const toggleAudio = () => {
+    setAudioEnabled((prevAudioEnabled) => !prevAudioEnabled);
+    if (state.publisher) {
+      state.publisher.publishAudio(!audioEnabled);
+    }
+  };
+
+  const toggleVideo = () => {
+    setVideoEnabled((prevVideoEnabled) => !prevVideoEnabled);
+    if (state.publisher) {
+      state.publisher.publishVideo(!videoEnabled);
+    }
+  };
+  const APPLICATION_SERVER_URL = "http://localhost:5000/";
+  const [state, setState] = useState({
+    mySessionId: 'SessionE',
+    myUserName: 'Participant' + Math.floor(Math.random() * 100),
+    session: undefined,
+    mainStreamManager: undefined,
+    publisher: undefined,
+    subscribers: [],
+  });
+
+  let OV = new OpenVidu(); // Change const to let
+
+  const getToken = async () => {
+    const sessionId = await createSession(state.mySessionId);
+    return await createToken(sessionId);
+  };
+
+  const createSession = async (sessionId) => {
+    const response = await axios.post(APPLICATION_SERVER_URL + 'api/sessions', { customSessionId: sessionId }, {
+      headers: { 'Content-Type': 'application/json' },
+    });
+    return response.data; // The sessionId
+  };
+
+  const createToken = async (sessionId) => {
+    const response = await axios.post(APPLICATION_SERVER_URL + 'api/sessions/' + sessionId + '/connections', {}, {
+      headers: { 'Content-Type': 'application/json' },
+    });
+    return response.data; // The token
+  };
+
+  const handleMainVideoStream = (streamManager) => {
+    // 추가: 퍼블리셔인 경우 mainVideoStream 함수 호출하지 않음
+    if (!streamManager.stream) {
+      setState((prevState) => ({
+        ...prevState,
+        mainStreamManager: streamManager,
+      }));
+    }
+  };
+
+  useEffect(() => {
+    const mySession = OV.initSession();
+    setState((prevState) => ({
+      ...prevState,
+      session: mySession,
+    }));
+
+    mySession.on('streamCreated', (event) => {
+      const subscriber = mySession.subscribe(event.stream, undefined);
+      setState((prevState) => ({
+        ...prevState,
+        subscribers: [...prevState.subscribers, subscriber],
+      }));
+    });
+
+    mySession.on('streamDestroyed', (event) => {
+      event.preventDefault();
+      
+      OV.deleteSubscriber(event.stream.streamManager);
+      setState((prevState) => ({
+        ...prevState,
+        subscribers: prevState.subscribers.filter(sub => sub !== event.stream),
+      }));
+    });
+
+    mySession.on('exception', (exception) => {
+      console.warn(exception);
+    });
+
+    getToken().then((token) => {
+      mySession
+        .connect(token, { clientData: state.myUserName })
+        .then(async () => {
+          let publisher = await OV.initPublisherAsync(undefined, {
+            audioSource: undefined,
+            videoSource: undefined,
+            publishAudio: true,
+            publishVideo: true,
+            resolution: '150x200',
+            frameRate: 30,
+            insertMode: 'APPEND',
+            mirror: false,
+          });
+
+          mySession.publish(publisher);
+
+          const devices = await OV.getDevices();
+          const videoDevices = devices.filter((device) => device.kind === 'videoinput');
+          const currentVideoDeviceId = publisher.stream.getMediaStream().getVideoTracks()[0].getSettings().deviceId;
+          const currentVideoDevice = videoDevices.find((device) => device.deviceId === currentVideoDeviceId);
+
+          setState((prevState) => ({
+            ...prevState,
+            currentVideoDevice: currentVideoDevice,
+            mainStreamManager: publisher,
+            publisher: publisher,
+          }));
+        })
+        .catch((error) => {
+          console.log('There was an error connecting to the session:', error.code, error.message);
+        });
+    });
+
+    // Clean up when unmounting the component
+    return () => {
+      if (mySession) {
+        mySession.disconnect();
+      }
+    };
   }, []);
 
-  async function initializeSession() {
-    if (!sessionId) {
-      const API_SERVER_URL = "http://localhost:5000/api/sessions";
-      const headers = {
-        'Content-Type': 'application/json'
-      };
-      const body = {
-        mediaMode: "ROUTED",
-        recordingMode: "MANUAL",
-        customSessionId: "12345",
-      };
+  const leaveSession = () => {
+    const mySession = state.session;
 
-      try {
-        const response = await fetch(API_SERVER_URL, {
-          method: 'POST',
-          headers: headers,
-          body: JSON.stringify(body)
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          setSessionId(data);
-          setIsPublisher(true);
-        } else {
-          throw new Error('OpenVidu 세션 생성에 실패했습니다.');
-        }
-      } catch (error) {
-        console.error('OpenVidu 세션 생성 오류:', error);
-      }
+    if (mySession) {
+      mySession.disconnect();
     }
-  }
-    async function initSegmentationModel() {
-      // 미디어 파이프 SelfieSegmentation 모델 초기화
-      const segmenter = new mpSegmentation.SelfieSegmentation({
-        locateFile: (file) => {
-          return `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${file}`;
-        },
-      });
-      segmenter.setOptions({
-        modelSelection: 1, // 0: General model, 1: Landscape model
-      });
-      segmenter.onResults(handleSegmentationResults);
+
+    setState({
+      mySessionId: 'SessionA',
+      myUserName: 'Participant' + Math.floor(Math.random() * 100),
+      session: undefined,
+      mainStreamManager: undefined,
+      publisher: undefined,
+      subscribers: [],
+    });
+  };
+
+  const handleLeaveSession = () => {
+    leaveSession();
+    // 추가로 수행해야 할 작업들이 있을 수 있습니다.
+    // 예를 들어, 게임을 종료하거나 다른 페이지로 이동하는 등의 동작을 수행할 수 있습니다.
+  };
   
-      // 미디어 파이프 SelfieSegmentation 모델 시작
-      segmenter.reset();
-      videoRef.current.onloadedmetadata = () => {
-        segmenter.send({ image: videoRef.current });
-      };
-  
-      // 배경 제거 준비 완료
-      setBackgroundRemovalReady(true);
-  
-      // 미디어 파이프 Pose 모델 초기화
-      const pose = new mp.Pose({
-        locateFile: (file) => {
-          return `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`;
-        },
-      });
-      pose.onResults(handlePoseResults);
-      pose.reset();
-      videoRef.current.onloadedmetadata = () => {
-        pose.send({ image: videoRef.current });
-      };
-    }
-  async function generateToken(sessionId) {
-    const API_SERVER_URL = `http://localhost:5000/api/sessions/${sessionId}/connections`;
-    const headers = {
-      'Content-Type': 'application/json'
-    };
-
-    try {
-      const response = await fetch(API_SERVER_URL, {
-        method: 'POST',
-        headers: headers,
-        body: JSON.stringify({})
-      });
-
-      if (response.ok) {
-        const data = await response.text();
-        setToken(data);
-      } else {
-        throw new Error('OpenVidu 토큰 생성에 실패했습니다.');
-      }
-    } catch (error) {
-      console.error('OpenVidu 토큰 생성 오류:', error);
-    }
-  }
-  function handleSegmentationResults(results) {
-    // 배경 제거를 위한 이미지 처리
-    // Game 컴포넌트의 기존 코드 유지
-  }
-  async function createGame() {
-    if (isPublisher) {
-      const OV = new OpenVidu();
-      const session = OV.initSession();
-      setSession(session);
-
-      try {
-        await generateToken(sessionId);
-        await session.connect(token);
-        console.log('세션에 연결되었습니다.');
-        console.log('세션 ID:', sessionId);
-        publishStream();
-
-        session.on('signal:my-chat', handleIncomingChat);
-      } catch (error) {
-        console.error('세션 연결 에러:', error.message);
-      }
-    }
-  }
-
-  function publishStream() {
-    if (!publisher) {
-      const OV = new OpenVidu();
-      var publisher = OV.initPublisher('video-container', {
-        audioSource: undefined,
-        videoSource: undefined,
-        publishAudio: true,
-        publishVideo: true,
-        resolution: '400x600',
-        frameRate: 30,
-        insertMode: 'APPEND',
-        mirror: false
-      });
-      session.publish(publisher);
-      setIsPublisher(publisher);
-    } else {
-      if (videoContainerRef.current) {
-        videoContainerRef.current.style.width = '100px';
-        videoContainerRef.current.style.height = '100px';
-
-      }
-    }
-  }
-
-  function handleJoinSession() {
-    setShowInput(true);
-  }
-
-  async function joinSession() {
-    if (inputSessionId) { // 입력한 세션 ID가 비어있지 않은지 확인
-      try {
-        await generateToken(inputSessionId);
-        const socket = io('http://localhost:5000');
-        socket.emit('joinSession', inputSessionId);
-
-        if (!sessionId) {
-          createGame();
-        }
-
-        session.on('signal:my-chat', handleIncomingChat);
-      } catch (error) {
-        console.error('OpenVidu 토큰 생성 오류:', error);
-      }
-    } else {
-      alert('세션 ID를 입력하세요.');
-    }
-  }
   function handleToggleChatbox() {
     setShowChatbox(!showChatbox);
     setShowChatButton(false);
-
+  
     setTimeout(() => {
       setShowChatbox(false);
       setShowChatButton(true);
     }, 5000);
   }
-
+  
   function sendChatMessage() {
     if (session) {
       session.signal({
@@ -208,7 +225,7 @@ function Game() {
         setChatMessage('');
         setShowChatbox(true);
         setShowChatButton(false);
-
+  
         setTimeout(() => {
           setShowChatbox(false);
           setShowChatButton(true);
@@ -226,78 +243,35 @@ function Game() {
     const { data, from } = event;
     setReceivedMessages(prevMessages => [ `${from.data}: ${data}`, ...prevMessages,]);
   }
-
   return (
     <div>
-      <p>핀 번호: {sessionId}</p>
-      <div id="video-container" ref={videoContainerRef}></div>
-      <div>
-        <div>
-          <button onClick={createGame}>게임 생성</button>
-          <button onClick={handleJoinSession}>게임 참가</button>
-          {showInput && (
-            <div>
-              <input
-                type="text"
-                value={inputSessionId}
-                className='inputbox'
-                onChange={(e) => setInputSessionId(e.target.value)}
-                placeholder="세션 ID를 입력하세요"
-              />
-              <button onClick={joinSession} className='joinbtn'>게임참가</button>
-            </div>
-          )}
+      <div className="subscribers-container">
+      {state.subscribers.map((sub, i) => (
+        <div key={i} className="subscriber-video col-md-6 col-xs-6">
+          {/* 다른 참가자들의 비디오 화면을 보여줌 */}
+          <UserVideoComponent streamManager={sub} mainVideoStream={handleMainVideoStream} />
         </div>
+      ))}
       </div>
-
-      {/* 채팅 기능 */}
-      <div className='chatposition'>
-        {showChatButton && (
-          <button
-            style={{
-              float: 'right',
-              width: '40px',
-              height: '15px',
-              fontSize: '5px',
-              textAlign: 'center',
-              justifyContent: 'center',
-              margin: '2px'
-            }}
-            onClick={handleToggleChatbox}
-            className='chat-button'
-          >
-            채팅
-          </button>
-        )}
-        {showChatbox && (
-          <div className='chatbox'>
-            {receivedMessages.map((message, index) => (
-              <p key={index}>{message}</p>
-            ))}
-          </div>
-        )}
-        {showChatbox && (
-          <div>
-            <input
-              type='text'
-              value={chatMessage}
-              onChange={(e) => setChatMessage(e.target.value)}
-              placeholder='메시지 입력'
-            />
-            <button onClick={sendChatMessage} className='sendbtn'>
-              전송
+      {state.publisher !== undefined ? (
+        <div className="stream-container col-md-3 col-xs-3 col-lg-3">
+          <div className="streamcontainer">
+            <button onClick={handleLeaveSession} className="leave">
+              나가기
             </button>
+            <button onClick={toggleAudio} className='leave'>마이크</button>
+            <button onClick={toggleVideo} className='leave'>비디오</button>
+            {/* 자신의 비디오 화면을 보여줌 */}
+            <UserVideoComponent streamManager={state.publisher} mainVideoStream={handleMainVideoStream} />
           </div>
-        )}
-      </div>
 
-      {/* 미디어 파이프 SelfieSegmentation 모델이 준비되면 배경 제거를 위한 비디오 캔버스 추가 */}
-      {backgroundRemovalReady && (
-        <canvas
-          ref={videoCanvasRef}
-          style={{ position: 'absolute', top: 0, left: 0, display: 'none' }}
-        />
-      )}
+            
+
+        </div>
+      ) : null}
+      <div className="streamcomponent">
+        <OpenViduVideoComponent streamManager={state.session ? state.session.publisher : null} />
+      </div>
     </div>
   );
 }
