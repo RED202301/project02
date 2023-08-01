@@ -1,6 +1,5 @@
 package com.ssafish.web.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,8 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SocketData {
-
-    private Integer userId;
-    private String content;
+public class RoomResponse {
+    int roomId;
+    String pinNumber;
 }
