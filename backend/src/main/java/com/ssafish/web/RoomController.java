@@ -1,9 +1,9 @@
 package com.ssafish.web;
 
-import com.ssafish.service.GameRoomService;
+import com.ssafish.service.RoomService;
 import com.ssafish.web.dto.MsgRequest;
-import com.ssafish.web.dto.RoomRequest;
-import com.ssafish.web.dto.RoomResponse;
+import com.ssafish.web.dto.RoomRequestDto;
+import com.ssafish.web.dto.RoomResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -18,34 +18,32 @@ import java.util.UUID;
 @CrossOrigin("*")
 @RequiredArgsConstructor
 @RestController
-public class TestRoomController {
+public class RoomController {
 
-    private final GameRoomService gameRoomService;
+    private final RoomService roomService;
 
     static Map<String, Integer> rooms = new HashMap<>();
 
 
     @PostMapping("/api/v1/room")
-    public RoomResponse createRoom(@RequestBody RoomRequest roomRequest) {
-        log.debug(roomRequest.toString());
+    public RoomResponseDto create(@RequestBody RoomRequestDto requestDto) {
 
-        RoomResponse res = new RoomResponse();
         String uuid = UUID.randomUUID().toString();
-        rooms.put(uuid, rooms.size() + 1);
-        res.setRoomId(rooms.size());
-        res.setPinNumber(uuid);
-        return res;
+        requestDto.setPinNumber(uuid);
+
+        log.info(requestDto.toString());
+        RoomResponseDto responseDto = roomService.create(requestDto);
+
+        rooms.put(uuid, responseDto.getRoomId());
+
+        return responseDto;
     }
 
     @GetMapping("/api/v1/room/id/{pinNumber}")
-    public RoomResponse roomIdByPinNumber(@PathVariable String pinNumber) {
+    public RoomResponseDto findByPinNumber(@PathVariable String pinNumber) {
         log.debug(pinNumber);
 
-        RoomResponse res = new RoomResponse();
-
-        res.setRoomId(rooms.get(pinNumber));
-        res.setPinNumber(pinNumber);
-        return res;
+        return roomService.findByPinNumber(pinNumber);
     }
 
     @PostMapping("/api/v1/room/msg")
@@ -54,6 +52,6 @@ public class TestRoomController {
 
         Integer roomId = msgRequest.getRoomId();
         String content = msgRequest.getContent();
-        gameRoomService.sendMessageToRoom(roomId, content);
+        roomService.sendMessageToRoom(roomId, content);
     }
 }

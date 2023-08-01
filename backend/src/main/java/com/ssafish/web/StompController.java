@@ -1,6 +1,6 @@
 package com.ssafish.web;
 
-import com.ssafish.service.GameRoomService;
+import com.ssafish.service.RoomService;
 import com.ssafish.web.dto.SocketData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +15,7 @@ import java.util.Map;
 @Controller
 public class StompController {
 
-    private final GameRoomService gameRoomService;
+    private final RoomService gameRoomService;
 
     @MessageMapping("/msg/{roomId}")
     @SendTo("/sub/{roomId}")
@@ -35,7 +35,7 @@ public class StompController {
         String sessionId = headerAccessor.getSessionId();
         log.info(roomId + " " + userId + " " + sessionId);
         gameRoomService.processClientEntrance(roomId, userId, sessionId);
-
+        data.setContent("님의 접속을 환영합니다!");
         return data;
     }
 
