@@ -1,5 +1,7 @@
 package com.ssafish.common.util;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -11,38 +13,44 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class WebSocketSubscriberManager {
 
-    private final Map<Integer, WebSocketSession> entireSessions = new ConcurrentHashMap<>();
-    private final Map<Integer, Map<Integer, WebSocketSession>> rooms = new ConcurrentHashMap<>();
+    private final Map<Integer, String> entireSessions = new ConcurrentHashMap<>();
+    private final Map<Integer, Map<Integer, String>> rooms = new ConcurrentHashMap<>();
+    private final Map<String, Integer> roomTable = new ConcurrentHashMap<>();
+    private final Map<String, Integer> userTable = new ConcurrentHashMap<>();
 
-    public void addSubscriber(Integer userId, WebSocketSession session) {
-        entireSessions.put(userId, session);
-    }
-
-    public void removeSubscriber(Integer userId) {
-        entireSessions.remove(userId);
-    }
-    public void addSubscriberToRoom(Integer roomId, Integer userId, WebSocketSession session) {
+    public void addSubscriber(Integer roomId, Integer userId, String sessionId) {
+        entireSessions.put(userId, sessionId);
         if (!rooms.containsKey(roomId)) {
             rooms.put(roomId, new ConcurrentHashMap<>());
         }
-        rooms.get(roomId).put(userId, session);
+        rooms.get(roomId).put(userId, sessionId);
+        roomTable.put(sessionId, roomId);
+        userTable.put(sessionId, userId);
     }
 
-    public void removeSubscriberFromRoom(Integer roomId, Integer userId) {
-        rooms.get(roomId).remove(userId);
+    public void removeSubscriber(String sessionId) {
+        if (roomTable.containsKey(sessionId) && userTable.containsKey(sessionId)) {
+            Integer roomId = roomTable.get(sessionId);
+            Integer userId = userTable.get(sessionId);
+            entireSessions.remove(userId);
+            rooms.get(roomId).remove(userId);
+            roomTable.remove(sessionId);
+            userTable.remove(sessionId);
+        }
     }
 
-    public void sendMessageToRoom(Integer roomId, String message) throws IOException {
-        Map<Integer, WebSocketSession> sessions = rooms.get(roomId);
-        sessions.entrySet().parallelStream().forEach(entry -> {
-            WebSocketSession session = entry.getValue();
-            if (session != null && session.isOpen()) {
-                try {
-                    session.sendMessage(new TextMessage(message));
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
+    public Map<Integer, String> getRoomById(Integer roomId) {
+        return rooms.get(roomId);
+    }
+    public boolean isExist(String sessionId) {
+        return roomTable.containsKey(sessionId);
+    }
+
+    public Integer getRoomIdBySessionId(String sessionId) {
+        return roomTable.get(sessionId);
+    }
+
+    public Integer getUserIdBySessionId(String sessionId) {
+        return userTable.get(sessionId);
     }
 }
