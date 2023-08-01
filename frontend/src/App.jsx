@@ -17,6 +17,7 @@ import Room from './pages/Room/Room';
 import Sample from './components/backup/samples/Parallax Depth Cards';
 import Card from './components/Card/Card';
 import Card_backup from './components/Card/Card_backup';
+import MVP from './pages/MVP/MVP';
 
 function App() {
   [];
@@ -39,6 +40,7 @@ function App() {
             <Route path="/Room" element={<Room/>}/>
 
             <Route path="/Sample" element={<Sample />} />
+            <Route path="/MVP" element={<MVP />} />
             <Route
               path="/Card"
               element={
