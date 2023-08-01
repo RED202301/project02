@@ -1,43 +1,29 @@
-import { useState } from 'react';
-import Websocket from './Websocket/Websocket';
+import { useEffect, useState } from 'react';
+import Websocket from './Room/Room';
+import { useParams, useSearchParams } from 'react-router-dom';
+import Room from './Room/Room';
+import { createRoom, getRoomIdByPinNumber, createUser, sendMessageByRoomId } from './api/api';
 
 const host_URL = 'http://192.168.30.103:5000';
 
 function RoomCreate() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [name, setName] = useState('');
   const [timeLimit, setTimeLimit] = useState(45);
   const [capacity, setCapacity] = useState(5);
   const [gameType, setGameType] = useState('GoFish');
 
-  const [roomId, setRoomId] = useState('');
-  const [pinNumber, setPinNumber] = useState('');
+  function createRoomCallback({ roomId, pinNumber }) {
+    console.log(pinNumber);
+    console.log(roomId);
+    setSearchParams({ roomId });
+    // setSearchParams({ pinNumber });
+  }
 
   /** @param {SubmitEvent} e */
   function handleSubmit(e) {
     e.preventDefault();
-
-    const request_url = host_URL + '/api/v1/room';
-    console.log(request_url);
-
-    fetch(request_url, {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        name,
-        timeLimit,
-        capacity,
-        gameType,
-      }),
-    })
-      .then(res => res.json())
-      .then(({ roomId, pinNumber }) => {
-        setRoomId(roomId);
-        setPinNumber(pinNumber);
-      });
-
+    createRoom({ roomName: name, timeLimit, capacity, gameType }, createRoomCallback);
     setName('');
   }
 
@@ -75,33 +61,26 @@ function RoomCreate() {
         <br />
         <input type="submit" value="방 생성" />
       </form>
-      <div>
-        <h3>응답</h3>
-        <div>방 id: {roomId}</div>
-        <div>핀 번호: {pinNumber}</div>
-      </div>
     </div>
   );
 }
 
-function GetRoomIDbypinNumber() {
+function EnterRoomByPinNumber() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [pinNumber, setPinNumber] = useState('');
-  const [roomId, setRoomId] = useState('');
+  function getRoomIdByPinNumberCallback({ roomId }) {
+    // setRoomId(roomId);
+    // setPinNumber(pinNumber);
+    setSearchParams({ roomId });
+  }
   /** @param {SubmitEvent} e */
   function handleSubmit(e) {
     e.preventDefault();
-    const request_url = host_URL + `/api/v1/room/id/${pinNumber}`;
-
-    fetch(request_url)
-      .then(res => res.json())
-      .then(({ roomId, pinNumber }) => {
-        setRoomId(roomId);
-        setPinNumber(pinNumber);
-      });
+    getRoomIdByPinNumber({ pinNumber }, getRoomIdByPinNumberCallback);
   }
   return (
     <div>
-      <h2>방 번호 조회</h2>
+      <h2>핀 번호로 접속</h2>
       <form onSubmit={handleSubmit}>
         <label htmlFor="pinNumber">핀 번호</label>
         <input
@@ -113,38 +92,51 @@ function GetRoomIDbypinNumber() {
         <br />
         <input type="submit" value="방 번호 불러오기" />
       </form>
-      <div>
-        <h3>응답</h3>
-        <div>방 id: {roomId}</div>
-        <div>핀 번호: {pinNumber}</div>
-      </div>
     </div>
   );
 }
+
+function EnterRoomById() {
+  const [roomId, setRoomId] = useState('');
+  const [room, setRoom] = useState('');
+  /** @param {SubmitEvent} e */
+  function handleSubmit(e) {
+    e.preventDefault();
+    setRoom(roomId);
+  }
+  return (
+    <div>
+      <h2>방 번호로 접속</h2>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="input__roomId">방 번호</label>
+        <input
+          type="text"
+          id="input__roomId"
+          value={roomId}
+          onChange={e => setRoomId(e.target.value)}
+        />
+        <br />
+        <input type="submit" value="방 번호 불러오기" />
+      </form>
+      {room ? (
+        <div>
+          {/* <div>핀 번호: {pinNumber}</div> */}
+          <Websocket roomId={room} />
+        </div>
+      ) : (
+        <></>
+      )}
+    </div>
+  );
+}
+
 function SendMSG2SpecificRoom() {
   const [roomId, setRoomId] = useState('');
   const [content, setContent] = useState('');
   /** @param {SubmitEvent} e */
-  /** @param {SubmitEvent} e */
   function handleSubmit(e) {
     e.preventDefault();
-
-    const request_url = host_URL + '/api/v1/room/msg';
-    console.log(request_url);
-
-    fetch(request_url, {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        roomId,
-        content,
-      }),
-    })
-      .then(res => res.json())
-      .then(res => console.log(res));
+    sendMessageByRoomId({ roomId, content });
   }
   return (
     <div>
@@ -172,14 +164,62 @@ function SendMSG2SpecificRoom() {
   );
 }
 
-export default function MVP() {
+function GetUserId() {
+  const [roomId, setRoomId] = useState('');
+  const [nickname, setNickname] = useState('');
+  function handleSubmit(/** @type {SubmitEvent} */ e) {
+    e.preventDefault();
+    createUser({ nickname }, console.log);
+  }
   return (
     <div>
-      <RoomCreate />
-      <GetRoomIDbypinNumber />
-      <SendMSG2SpecificRoom />
-      <Websocket roomId={123} />
-      <Websocket roomId={125} />
+      <h2>유저 생성</h2>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="input__roomId">방 번호</label>
+        <input
+          type="text"
+          id="input__roomId"
+          value={roomId}
+          onChange={e => setRoomId(e.target.value)}
+        />
+        <br />
+        <label htmlFor="input__nickname">닉네임</label>
+        <input
+          type="text"
+          id="input__nickname"
+          value={nickname}
+          onChange={e => setNickname(e.target.value)}
+        />
+        <input type="submit" value="유저생성" />
+      </form>
+    </div>
+  );
+}
+
+export default function MVP() {
+  const [searchParams, setSeratchParams] = useSearchParams();
+  const roomId = searchParams.get('roomId');
+  const pinNumber = searchParams.get('pinNumber');
+
+  return (
+    <div>
+      {!pinNumber && !roomId ? (
+        <>
+          <RoomCreate />
+          <EnterRoomByPinNumber />
+          <GetUserId />
+          <EnterRoomById />
+          <SendMSG2SpecificRoom />
+        </>
+      ) : roomId ? (
+        <>
+          <Room roomId={roomId} />
+        </>
+      ) : (
+        <>
+          <Room pinNumber={pinNumber} />
+        </>
+      )}
     </div>
   );
 }
