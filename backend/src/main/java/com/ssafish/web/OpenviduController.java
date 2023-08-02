@@ -38,7 +38,7 @@ public class OpenviduController {
     }
 
 //test
-    @PostMapping("/")
+    @PostMapping("/test")
     public String test() {
         return "hello world";
     }
