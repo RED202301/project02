@@ -1,0 +1,194 @@
+.box {
+  width: 400px;
+  height: 200px;
+}
+#publisherElement {
+  /* 카메라 화면의 크기를 원하는 크기로 조정 (예: 200px x 150px) */
+
+
+  /* 카메라 화면을 좌측 아래로 보내기 */
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+
+  /* border와 box-shadow 등 원하는 스타일 추가 */
+  border: 1px solid #ccc;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+/* CSS for the modal */
+/* Game.css */
+
+/* 스타일 예시 */
+/* .modal {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 9999;
+}
+
+.modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  z-index: 10000;
+}
+
+.inputbox {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.joinbtn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cancelbtn {
+  background-color: #f44336;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+} */
+
+/* 이하 나머지 스타일들 */
+/* ... */
+
+
+#local-video-undefined {
+  width: 150px;
+}
+.inputbox {
+  margin-top: 10px;
+  width: 180px;
+  height: 20px;
+  border-radius: 4px;
+}
+.joinbtn {
+
+  margin-left: 5px;
+  width: 60px;
+  height: 22px;
+  font-size: 5px;
+}
+.chatbox {
+  /* border: 2px solid black; */
+  width: 200px;
+  height: 500px;
+  overflow-y: scroll;
+
+}
+
+.chatposition {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  
+}
+.sendbtn {
+  margin-top: 2px;
+  position: fixed;
+  width: 40px;
+  height: 25;
+  font-size: 5px;
+}
+
+.subscribers-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 60px;
+  position: relative;
+  width: 100%;
+  height: 400px;
+}
+/* 둥근이미지 게임종료시 이런 이미지가 되었으면 좋을듯 */
+/* .subscriber-video {
+  border-radius: 50%;
+  overflow: hidden;
+  width: 150px;
+  height: 150px;
+} */
+/* Game.css 파일에 다음 CSS를 추가하세요 */
+
+.subscriber-video {
+  position: absolute;
+  width: 150px; /* 비디오 컨테이너의 크기를 조절하세요 */
+  height: 200px;
+  /* border-radius: 50%; */
+  overflow: hidden;
+}
+
+.subscriber-video:nth-child(1) {
+  top: 40%;
+  left: 10%;
+  transform: translateX(-50%) translateY(-50%) rotate(-7deg);
+
+}
+
+.subscriber-video:nth-child(2) {
+  top: 30%;
+  left: 30%;
+  transform: translateX(-50%) translateY(-50%) rotate(-3deg);
+
+}
+
+.subscriber-video:nth-child(3) {
+  top: 30%;
+  left: 70%;
+  transform: translateX(-50%) translateY(-50%) rotate(3deg);
+}
+
+.subscriber-video:nth-child(4) {
+  top: 40%;
+  left: 90%;
+  transform: translateX(-50%) translateY(-50%) rotate(7deg);
+
+}
+
+
+
+.streamcomponent {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 100px;
+}
+
+.streamcontainer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.leave-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 10px;
+  width: 20px;
+}
+
+.leave {
+  width: 50px;
+  height: 20px;
+  font-size: 5px;
+}
+
+/* Add this CSS to the Game.css file */
+
+

@@ -12,9 +12,12 @@ import CardFactory from './pages/CardFactory/CardFactory';
 import CardMarket from './pages/CardMarket/CardMarket';
 import Mypage from './pages/MyPage/MyPage';
 import RoomList from './pages/RoomList/RoomList';
-
+import Room from './pages/Room/Room';
+import Game from './pages/Game/Game';
 import Sample from './components/backup/samples/Parallax Depth Cards';
 import Card from './components/Card/Card';
+import Card_backup from './components/Card/Card_backup';
+import MVP from './pages/MVP/MVP';
 
 function App() {
   [];
@@ -34,8 +37,10 @@ function App() {
             <Route path="/CardMarket" element={[<Header />, <CardMarket />]} />
             <Route path="/Mypage" element={[<Header />, <Mypage />]} />
             <Route path="/WebMain" element={[<Header />, <WebMain />]} />
-
+            <Route path="/Room" element={<Room/>}/>
+            <Route path='/main/game' element={<Game/ >}/>
             <Route path="/Sample" element={<Sample />} />
+            <Route path="/MVP" element={<MVP />} />
             <Route
               path="/Card"
               element={
@@ -46,7 +51,7 @@ function App() {
                     height: '100vh',
                   }}
                 >
-                  {[0, 0].map((_, idx) => (
+                  {/* {[0].map((_, idx) => (
                     <Card
                       width={'200px'}
                       height={'300px'}
@@ -56,7 +61,23 @@ function App() {
                       title="마크 저커버그"
                       key={idx}
                     />
-                  ))}
+                  ))} */}
+                  <Card_backup
+                    width={200}
+                    height={300}
+                    img_url="./sample_imgs/winter.png"
+                    bg_url="./sample_imgs/background.png"
+                    subtitle="에스파"
+                    title="윈터"
+                  />
+                  <Card_backup
+                    width={200}
+                    height={300}
+                    img_url="./sample_imgs/winter.png"
+                    bg_url="./sample_imgs/background.png"
+                    subtitle="에스파"
+                    title="윈터"
+                  />
                 </div>
               }
             />
