@@ -12,6 +12,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class SocketData {
 
-    private Integer userId;
+    private Long userId;
     private String content;
 }
