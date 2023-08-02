@@ -65,12 +65,12 @@ function Room() {
                     title="윈터"></Card_backup>
             </div>    
             <div className="Room2-1-3">
-            <Card_backup width={150}
-                    height={225}
-                    img_url="./sample_imgs/winter.png"
+            <Card_backup width={200}
+                    height={300}
+                    img_url="./sample_imgs/짱구.png"
                     bg_url="./sample_imgs/background.png"
-                    subtitle="에스파"
-                    title="윈터"></Card_backup>
+                    subtitle="떡잎 방범대"
+                    title="짱구"></Card_backup>
             </div>    
             <div className="Room2-1-4">
                 <div className="Room2-1-4-1">
