@@ -19,19 +19,17 @@ public class StompController {
 
     @MessageMapping("/msg/{roomId}")
     @SendTo("/sub/{roomId}")
-    public SocketData sendMsg(@DestinationVariable int roomId, @Payload SocketData data, @Headers Map<String, Object> attributes) throws Exception {
-        Thread.sleep(1000); // simulated delay
-
+    public SocketData sendMsg(@DestinationVariable long roomId, @Payload SocketData data, @Headers Map<String, Object> attributes) throws Exception {
 
         return data;
     }
 
     @MessageMapping("/enter/{roomId}")
     @SendTo("/sub/{roomId}")
-    public SocketData processClientEntrance(@DestinationVariable int roomId, @Payload SocketData data,
+    public SocketData processClientEntrance(@DestinationVariable long roomId, @Payload SocketData data,
                                             @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
 
-        Integer userId = data.getUserId();
+        Long userId = data.getUserId();
         String sessionId = headerAccessor.getSessionId();
         log.info(roomId + " " + userId + " " + sessionId);
         gameRoomService.processClientEntrance(roomId, userId, sessionId);

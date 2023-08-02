@@ -8,13 +8,13 @@ import lombok.*;
 @Builder(access = AccessLevel.PRIVATE)
 public class RoomResponseDto {
 
-    private Integer roomId;
+    private Long roomId;
     private String pinNumber;
     private String roomName;
-    private Integer userId;
-    private Integer deckId;
-    private Integer timeLimit;
-    private Integer capacity;
+    private Long userId;
+    private Long deckId;
+    private Long timeLimit;
+    private Long capacity;
     private String gameType;
 
 

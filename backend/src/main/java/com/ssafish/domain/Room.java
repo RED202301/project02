@@ -15,7 +15,7 @@ public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "room_id", unique = true, nullable = false)
-    private Integer roomId;
+    private Long roomId;
 
     @Column(name = "pin_number", unique = true, nullable = false)
     private String pinNumber;
@@ -24,22 +24,22 @@ public class Room {
     private String roomName;
 
     @Column(name = "user_id", unique = true, nullable = true)
-    private Integer userId;
+    private Long userId;
 
     @Column(name = "deck_id", nullable = true)
-    private Integer deckId;
+    private Long deckId;
 
     @Column(name = "time_limit", nullable = false)
-    private Integer timeLimit;
+    private Long timeLimit;
 
     @Column(name = "capacity", nullable = false)
-    private Integer capacity;
+    private Long capacity;
 
     @Column(name = "game_type", nullable = false)
     private String gameType;
 
     @Builder
-    public Room(Integer roomId, String pinNumber, String roomName, Integer userId, Integer deckId, Integer timeLimit, Integer capacity, String gameType) {
+    public Room(Long roomId, String pinNumber, String roomName, Long userId, Long deckId, Long timeLimit, Long capacity, String gameType) {
         this.roomId = roomId;
         this.pinNumber = pinNumber;
         this.roomName = roomName;

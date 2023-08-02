@@ -12,14 +12,14 @@ public class RoomRequestDto {
     @Setter
     private String pinNumber;
     private String roomName;
-    private Integer userId;
-    private Integer deckId;
-    private Integer timeLimit;
-    private Integer capacity;
+    private Long userId;
+    private Long deckId;
+    private Long timeLimit;
+    private Long capacity;
     private String gameType;
 
     @Builder
-    public RoomRequestDto(String pinNumber, String roomName, Integer userId, Integer deckId, Integer timeLimit, Integer capacity, String gameType) {
+    public RoomRequestDto(String pinNumber, String roomName, Long userId, Long deckId, Long timeLimit, Long capacity, String gameType) {
         this.pinNumber = pinNumber;
         this.roomName = roomName;
         this.userId = userId;

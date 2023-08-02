@@ -22,7 +22,7 @@ public class RoomController {
 
     private final RoomService roomService;
 
-    static Map<String, Integer> rooms = new HashMap<>();
+    static Map<String, Long> rooms = new HashMap<>();
 
 
     @PostMapping("/api/v1/room")
@@ -50,7 +50,7 @@ public class RoomController {
     public void msgToRoom(@RequestBody MsgRequest msgRequest) throws IOException {
         log.debug(msgRequest.toString());
 
-        Integer roomId = msgRequest.getRoomId();
+        Long roomId = msgRequest.getRoomId();
         String content = msgRequest.getContent();
         roomService.sendMessageToRoom(roomId, content);
     }

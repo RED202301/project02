@@ -11,7 +11,7 @@ import lombok.Getter;
 @Builder(access = AccessLevel.PRIVATE)
 public class MemberResponseDto {
 
-    private Integer userId;
+    private Long userId;
     private String nickname;
     public static MemberResponseDto from(Member user) {
         return MemberResponseDto.builder()

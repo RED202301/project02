@@ -10,11 +10,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MemberRequestDto {
 
-    private Integer userId;
+    private Long userId;
     private String nickname;
 
     @Builder
-    public MemberRequestDto(Integer userId, String nickname) {
+    public MemberRequestDto(Long userId, String nickname) {
         this.userId = userId;
         this.nickname = nickname;
     }

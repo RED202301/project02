@@ -21,16 +21,16 @@ public class RoomService {
     private final WebSocketSubscriberManager subscriberManager;
     private final SimpMessageSendingOperations messagingTemplate;
 
-    public void sendMessageToRoom(Integer roomId, String message) throws IOException {
-        Map<Integer, String> sessionIds = subscriberManager.getRoomById(roomId);
+    public void sendMessageToRoom(Long roomId, String message) throws IOException {
+        Map<Long, String> sessionIds = subscriberManager.getRoomById(roomId);
         if (sessionIds == null) {
             System.out.println("TT");
             return;
         }
-        messagingTemplate.convertAndSend("/sub/" + roomId, new SocketData(77, message));
+        messagingTemplate.convertAndSend("/sub/" + roomId, new SocketData(77L, message));
     }
 
-    public void processClientEntrance(Integer roomId, Integer userId, String sessionId) {
+    public void processClientEntrance(Long roomId, Long userId, String sessionId) {
         subscriberManager.addSubscriber(roomId, userId, sessionId);
     }
 
