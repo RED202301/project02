@@ -20,6 +20,7 @@ import io.openvidu.java.client.SessionProperties;
 
 
 @RestController
+@CrossOrigin(origins = "*")
 public class OpenviduController {
 
     @Value("${OPENVIDU_URL}")
@@ -36,12 +37,17 @@ public class OpenviduController {
         System.out.println("init");
     }
 
+//test
+    @PostMapping("/")
+    public String test() {
+        return "hello world";
+    }
+
     /**
      * @param params The Session properties
      * @return The Session ID
      */
     @PostMapping("/api/sessions")
-    @CrossOrigin(origins = "*")
     public ResponseEntity<String> initializeSession(@RequestBody(required = false) Map<String, Object> params)
             throws OpenViduJavaClientException, OpenViduHttpException {
         System.out.println("testtest");
@@ -57,7 +63,6 @@ public class OpenviduController {
      * @return The Token associated to the Connection
      */
     @PostMapping("/api/sessions/{sessionId}/connections")
-    @CrossOrigin(origins = "*")
     public ResponseEntity<String> createConnection(@PathVariable("sessionId") String sessionId,
                                                    @RequestBody(required = false) Map<String, Object> params)
             throws OpenViduJavaClientException, OpenViduHttpException {
