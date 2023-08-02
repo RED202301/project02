@@ -38,8 +38,9 @@ public class OpenviduController {
     }
 
 //test
-    @PostMapping("/test")
+    @GetMapping("/test")
     public String test() {
+        System.out.println("성공!!");
         return "hello world";
     }
 
