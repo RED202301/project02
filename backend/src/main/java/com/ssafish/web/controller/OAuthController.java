@@ -17,7 +17,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 
 @RestController
@@ -38,7 +37,6 @@ public class OAuthController {
         this.secretKey = secretKey;
     }
 
-
     @ResponseBody
     @RequestMapping("/login")
     public ResponseEntity<TokensResponse> kakaoCallback(@RequestParam String code) {
@@ -52,8 +50,9 @@ public class OAuthController {
 
         User kakaoUser = userService.findUserByKakaoId(kakaoUserInfo.getId());
 
-        System.out.println("controller access_token : " + access_token);
-        System.out.println("login Controller : " + kakaoUserInfo);
+
+        log.info("kakao access_token : " + access_token);
+        log.info("login Controller : " + kakaoUserInfo);
         log.info("jwtAccessToken : " + jwtAccessToken);
         log.info("jwtRefreshToken : " + jwtRefreshToken);
         log.info("response : " + response);
@@ -62,13 +61,13 @@ public class OAuthController {
         if (kakaoUser != null) {
             // kakao_access_token 변경 로직
             User user = userService.updateTokens(kakaoUser, jwtRefreshToken, access_token);
-
+            log.info("user : " + user);
             log.info("로그인 성공");
             return ResponseEntity.ok(response);
         } else {
             User user = userService.mapToEntity(kakaoUserInfo, jwtRefreshToken, access_token);
             userService.saveUser(user);
-            System.out.println(user);
+            log.info("user : " + user);
             log.info("회원가입 및 로그인 성공");
             return ResponseEntity.ok(response);
         }
@@ -150,9 +149,23 @@ public class OAuthController {
 
 
     @RequestMapping(value="/logout")
-    public String logout(HttpSession session) {
-        oauthservice.kakaoLogout();
-        session.invalidate();
-        return "redirect:/";
+    public String logout(HttpServletRequest request) {
+        log.info("로그아웃 요청");
+        String authorizationHeader = request.getHeader("Authorization");
+        String accessToken = "";
+
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            accessToken = authorizationHeader.substring(7);
+        } else {
+            return "Invalid access token";
+        }
+
+        Long userId = JwtProvider.getUserId(accessToken, secretKey);
+
+        log.info("accessToken: " + accessToken);
+        log.info("userId: " + userId);
+        oauthservice.kakaoLogout(userId);
+
+        return "Logout success";
     }
 }
