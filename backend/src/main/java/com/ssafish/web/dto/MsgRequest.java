@@ -8,6 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MsgRequest {
-    int roomId;
+    Long roomId;
     String content;
 }
