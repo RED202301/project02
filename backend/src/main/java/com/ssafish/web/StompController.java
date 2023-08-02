@@ -1,6 +1,6 @@
 package com.ssafish.web;
 
-import com.ssafish.service.GameRoomService;
+import com.ssafish.service.RoomService;
 import com.ssafish.web.dto.SocketData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,27 +15,25 @@ import java.util.Map;
 @Controller
 public class StompController {
 
-    private final GameRoomService gameRoomService;
+    private final RoomService gameRoomService;
 
     @MessageMapping("/msg/{roomId}")
     @SendTo("/sub/{roomId}")
-    public SocketData sendMsg(@DestinationVariable int roomId, @Payload SocketData data, @Headers Map<String, Object> attributes) throws Exception {
-        Thread.sleep(1000); // simulated delay
-
+    public SocketData sendMsg(@DestinationVariable long roomId, @Payload SocketData data, @Headers Map<String, Object> attributes) throws Exception {
 
         return data;
     }
 
     @MessageMapping("/enter/{roomId}")
     @SendTo("/sub/{roomId}")
-    public SocketData processClientEntrance(@DestinationVariable int roomId, @Payload SocketData data,
+    public SocketData processClientEntrance(@DestinationVariable long roomId, @Payload SocketData data,
                                             @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
 
-        Integer userId = data.getUserId();
+        Long userId = data.getUserId();
         String sessionId = headerAccessor.getSessionId();
         log.info(roomId + " " + userId + " " + sessionId);
         gameRoomService.processClientEntrance(roomId, userId, sessionId);
-
+        data.setContent("님의 접속을 환영합니다!");
         return data;
     }
 
