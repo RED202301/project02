@@ -69,7 +69,7 @@ tasks.named('test') {
 jib {
 
     to {
-        image = "qortn365/ssa2"
+        image = "qortn365/ssafish"
         tags = ["latest"]
         auth{
             username = "qortn365"
