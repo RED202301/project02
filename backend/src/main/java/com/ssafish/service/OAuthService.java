@@ -1,7 +1,10 @@
 package com.ssafish.service;
 
+import com.ssafish.domain.user.User;
+import com.ssafish.domain.user.UserRepository;
 import com.ssafish.web.dto.KakaoUserInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -15,6 +18,13 @@ import com.google.gson.JsonElement;
 @Service
 @Slf4j
 public class OAuthService {
+
+    private final UserRepository userRepository;
+
+    @Autowired
+    public OAuthService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public HashMap<String, String> getAccessToken (String code) {
         String access_Token = "";
@@ -33,15 +43,15 @@ public class OAuthService {
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
             StringBuilder sb = new StringBuilder();
             sb.append("grant_type=authorization_code");
-            sb.append("&client_id=83176843c4cff268729f6a1df9ef465d"); // TODO REST_API_KEY 입력
-            sb.append("&redirect_uri=http://localhost:8080/oauth/login"); // TODO 인가코드 받은 redirect_uri 입력
+            sb.append("&client_id=0c75393f80241be4aaf8ebd811934887"); // TODO REST_API_KEY 입력
+            sb.append("&redirect_uri=http://localhost:5173/login2"); // TODO 인가코드 받은 redirect_uri 입력
             sb.append("&code=" + code);
             bw.write(sb.toString());
             bw.flush();
 
             //결과 코드가 200이라면 성공
             int responseCode = conn.getResponseCode();
-            System.out.println("responseCode : " + responseCode);
+            log.info("getAccessToken responseCode : " + responseCode);
 
             //요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -51,7 +61,7 @@ public class OAuthService {
             while ((line = br.readLine()) != null) {
                 result += line;
             }
-            System.out.println("response body : " + result);
+            log.info("getAccessToken response body : " + result);
 
             //Gson 라이브러리에 포함된 클래스로 JSON파싱 객체 생성
             JsonParser parser = new JsonParser();
@@ -60,8 +70,8 @@ public class OAuthService {
             access_Token = element.getAsJsonObject().get("access_token").getAsString();
             refresh_Token = element.getAsJsonObject().get("refresh_token").getAsString();
 
-            System.out.println("access_token : " + access_Token);
-            System.out.println("refresh_token : " + refresh_Token);
+            log.info("access_token : " + access_Token);
+            log.info("refresh_token : " + refresh_Token);
 
             br.close();
             bw.close();
@@ -92,7 +102,7 @@ public class OAuthService {
 
             //결과 코드가 200이라면 성공
             int responseCode = conn.getResponseCode();
-            log.info("responseCode : " + responseCode);
+            log.info("getKakaoUserInfo responseCode : " + responseCode);
 
             //요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -102,7 +112,7 @@ public class OAuthService {
             while ((line = br.readLine()) != null) {
                 result += line;
             }
-            System.out.println("response body : " + result);
+            log.info("getKakaoUserInfo response body : " + result);
 
             //Gson 라이브러리로 JSON파싱
             JsonParser parser = new JsonParser();
@@ -125,53 +135,37 @@ public class OAuthService {
 
         return kakaoUserInfo;
     }
-//
-//    public void kakaoLogout(String access_Token) {
-//        String reqURL = "https://kapi.kakao.com/v1/user/logout";
-//        try {
-//            URL url = new URL(reqURL);
-//            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-//            conn.setRequestMethod("POST");
-//            conn.setRequestProperty("Authorization", "Bearer " + access_Token);
-//
-//            int responseCode = conn.getResponseCode();
-//            System.out.println("responseCode : " + responseCode);
-//
-//            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-//
-//            String result = "";
-//            String line = "";
-//
-//            while ((line = br.readLine()) != null) {
-//                result += line;
-//            }
-//            System.out.println(result);
-//        } catch (IOException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-//    }
 
-    public void kakaoLogout() {
-        String reqURL = "https://kauth.kakao.com/oauth/logout";
+
+    public void kakaoLogout(Long userId) {
+        String reqURL = "https://kapi.kakao.com/v1/user/logout";
+        User user = userRepository.findByKakaoId(userId);
+        String access_Token = user.getKakaoAccessToken();
+        String nickname = user.getNickname();
+
         try {
-            log.info("로그아웃 실행");
             URL url = new URL(reqURL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-            conn.setRequestMethod("GET");
+            conn.setRequestMethod("POST");
             conn.setDoOutput(true);
+            conn.setRequestProperty("Authorization", "Bearer " + access_Token);
 
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
-            StringBuilder sb = new StringBuilder();
-            sb.append("&client_id=83176843c4cff268729f6a1df9ef465d");
-            sb.append("&logout_redirect_uri=http://localhost:8080");
-            bw.write(sb.toString());
-            bw.flush();
-
-            // 왜 400에러뜨냐고 왜
             int responseCode = conn.getResponseCode();
-            System.out.println("responseCode : " + responseCode);
+            log.info("로그아웃 실행 : " + nickname);
+            log.info("responseCode : " + responseCode);
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+            String result = "";
+            String line = "";
+
+            while ((line = br.readLine()) != null) {
+                result += line;
+            }
+            log.info("logout result : " + result);
+
+            conn.disconnect();
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

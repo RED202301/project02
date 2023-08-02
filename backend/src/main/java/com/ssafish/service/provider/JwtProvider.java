@@ -9,7 +9,7 @@ import java.util.Date;
 @Slf4j
 public class JwtProvider {
 
-    private static final Long accessTokenValidTime = Duration.ofSeconds(5).toMillis();
+    private static final Long accessTokenValidTime = Duration.ofHours(12).toMillis();
     private static final Long refreshTokenValidTime = Duration.ofDays(30).toMillis();
 
     // 회원 정보 조회
