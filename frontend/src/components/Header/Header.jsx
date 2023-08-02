@@ -1,6 +1,7 @@
 import React from 'react';
 import './Header.css'
 import {Link} from'react-router-dom';
+import Logout from '../../pages/Login/logout';
 
 function Header(props){
     return(
@@ -32,7 +33,7 @@ function Header(props){
             </Link>
             <Link to=''>
             <div className='logout'>
-                로그아웃
+                <Logout/>
             </div>
             </Link>
         </div>
