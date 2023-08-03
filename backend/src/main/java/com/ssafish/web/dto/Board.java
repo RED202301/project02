@@ -1,14 +1,15 @@
 package com.ssafish.web.dto;
 
+import com.ssafish.web.dto.Phase.Phase;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Supplier;
 
 public class Board {
-    List<Supplier<?>> methods;
+    List<Phase> methods;
     List<Player> players;
     List<Long> middleDeck;
 
@@ -31,21 +32,21 @@ public class Board {
         turnTimer = Executors.newSingleThreadScheduledExecutor();
         turnTimer.schedule(this::endTurn, turnTimeLimit, TimeUnit.SECONDS);
 
-        methods.get(currentMethodIdx).get();
+        // 시작 턴 안내해야 할 경우 subscriber 들에게 메시지 전달
     }
 
     public void cancelTurnTimer() {
         if (turnTimer != null && !turnTimer.isShutdown()) {
             turnTimer.shutdownNow();
-
-            // 게임 내부 로직
-
-            // subscribers 들에게 메시지 전달
         }
     }
 
     public void endTurn() {
         cancelTurnTimer();
+
+        // 게임 내부 로직
+
+        // pub 내용을 subscriber 들에게 전달
 
         // 게임 종료 조건 분기해야 함
 
