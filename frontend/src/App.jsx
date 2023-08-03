@@ -28,7 +28,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/Login" element={<Login />} />
-            <Route path="/kakaoLogin" element={<KakaoLogin />} />
+            <Route path="/Login2" element={<KakaoLogin />} />
             <Route path="/Tutorial" element={<Tutorial />} />
             <Route path="/Main" element={<Main />} />
             <Route path="/RoomList" element={<RoomList />} />
