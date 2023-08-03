@@ -35,7 +35,7 @@ public class RoomController {
         RoomResponseDto responseDto = roomService.create(requestDto);
 
         rooms.put(uuid, responseDto.getRoomId());
-
+        
         return responseDto;
     }
 
