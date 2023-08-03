@@ -18,4 +18,7 @@ public class GameService {
     private final SimpMessageSendingOperations messagingTemplate;
     private final Map<Long, Board> boards = new ConcurrentHashMap<>();
 
+    public void autoDraw() {
+
+    }
 }
