@@ -32,9 +32,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         // 로그인일 경우 건너뛰기
         if (
-                path.startsWith("/oauth/login") || path.startsWith("/oauth/logout")
-                        || path.startsWith("/api/v1/") // 테스트용으로 모든 서블릿 요청에 대해 허용하도록 해 놓음
-                        || path.startsWith("/ssafish") // 웹 소켓 서버 handshake 를 위한 endpoint
+                path.startsWith("/oauth/login") || path.startsWith("/oauth/logout") ||  path.startsWith("/")
         ) {
             filterChain.doFilter(request, response);
             return;

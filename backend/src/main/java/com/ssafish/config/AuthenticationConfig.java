@@ -36,8 +36,8 @@ public class AuthenticationConfig {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilterBefore(new JwtFilter(secretKey), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new JwtExceptionFilter(objectMapper), JwtFilter.class)
+           //     .addFilterBefore(new JwtFilter(secretKey), UsernamePasswordAuthenticationFilter.class)
+             //   .addFilterBefore(new JwtExceptionFilter(objectMapper), JwtFilter.class)
                 .build();
     }
 }
