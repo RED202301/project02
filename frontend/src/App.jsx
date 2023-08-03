@@ -17,6 +17,7 @@ import Game from './pages/Game/Game';
 import Sample from './components/backup/samples/Parallax Depth Cards';
 import Card from './components/Card/Card';
 import Card_backup from './components/Card/Card_backup';
+import GameUI from './pages/GameUI/App';
 import MVP from './pages/MVP/MVP';
 
 function App() {
@@ -28,7 +29,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/Login" element={<Login />} />
-            <Route path="/kakaoLogin" element={<KakaoLogin />} />
+            <Route path="/Login2" element={<KakaoLogin />} />
             <Route path="/Tutorial" element={<Tutorial />} />
             <Route path="/Main" element={<Main />} />
             <Route path="/RoomList" element={<RoomList />} />
@@ -37,10 +38,11 @@ function App() {
             <Route path="/CardMarket" element={[<Header />, <CardMarket />]} />
             <Route path="/Mypage" element={[<Header />, <Mypage />]} />
             <Route path="/WebMain" element={[<Header />, <WebMain />]} />
-            <Route path="/Room" element={<Room/>}/>
-            <Route path='/main/game' element={<Game/ >}/>
+            <Route path="/Room" element={<Room />} />
+            <Route path="/main/game" element={<Game />} />
             <Route path="/Sample" element={<Sample />} />
             <Route path="/MVP" element={<MVP />} />
+            <Route path="/GameUI" element={<GameUI />} />
             <Route
               path="/Card"
               element={
