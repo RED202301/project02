@@ -2,7 +2,6 @@ package com.ssafish.service;
 
 
 import com.ssafish.common.util.WebSocketSubscriberManager;
-import com.ssafish.web.dto.Board;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
