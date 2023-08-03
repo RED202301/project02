@@ -2,11 +2,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import 카카오로그인 from './카카오로그인.png';
 import { motion } from 'framer-motion';
 import axios from "axios";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { setCookie } from "../../components/Cookie";
 
 function Login2() {
-
+  const host_URL = 'http://192.168.111.126:5000'
   // // 인가코드 받아오기
   const code = new URL(window.location.href).searchParams.get("code");
 
@@ -21,7 +21,7 @@ function Login2() {
           // 백엔드 주소 뒤에 인가코드 붙여서 GET 설정
           // 백엔드는 이 주소를 통해 뒤에 붙여져있는 인가코드를 전달 받게 된다.
           .get(
-            `http://192.168.30.193:8080/oauth/login?code=${code}`
+            host_URL + `/oauth/login?code=${code}`
           )
           // 백엔드 쪽에서 보내준 응답 확인
           .then((response) => {
