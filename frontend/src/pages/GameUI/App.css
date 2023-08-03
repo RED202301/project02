@@ -1,0 +1,40 @@
+.card {
+  border: 2px solid black;
+}
+
+/* Default styles */
+.User {
+  width: 50%;
+  height: 50%;
+}
+
+.Card {
+  width: 200px;
+  height: 300px;
+}
+
+/* Media queries for smaller screens */
+@media (max-width: 768px) {
+  .User {
+    width: 70%;
+    height: 70%;
+  }
+
+  .Card {
+    width: 150px;
+    height: 200px;
+  }
+}
+
+/* Media queries for even smaller screens */
+@media (max-width: 480px) {
+  .User {
+    width: 90%;
+    height: 90%;
+  }
+
+  .Card {
+    width: 120px;
+    height: 180px;
+  }
+}
