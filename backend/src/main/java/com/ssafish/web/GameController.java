@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.*;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,91 +21,43 @@ public class GameController {
 
     private final Map<Long, Board> boards = new ConcurrentHashMap<>();
 
-    @MessageMapping("/{roomId}/gamestart")
-    @SendTo("/sub/{roomId}")
-    public GameData gameStart(@DestinationVariable long roomId, @Payload GameData data,
-                              @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
+    @Async
+    @MessageMapping("/{roomId}/start-game")
+    public void startGame(@DestinationVariable long roomId, @Payload GameData gameData,
+                          @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
 
-        String type = data.getType();
-
-//        String sessionId = headerAccessor.getSessionId();
-//        log.info(roomId + " " + type + " " + sessionId);
-
-//        gameService.dfdfdfd(type, );
-
-        // 카드
-
-        // sub data
-        data.setType("GAME_START");
-//        data.setCards();
-
-        return data;
+        boards.get(roomId).play();
     }
 
+    @Async
+    @MessageMapping("/{roomId}/select-player")
+    public void selectPlayer(@DestinationVariable long roomId, @Payload GameData gameData,
+                             @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
 
-    @MessageMapping("/{roomId}/personchoose")
-    @SendTo("/sub/{roomId}")
-    public GameData personChoose(@DestinationVariable long roomId, @Payload GameData data,
-                                 @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
-
-        String type = data.getType();
-
-//        String sessionId = headerAccessor.getSessionId();
-//        log.info(roomId + " " + type + " " + sessionId);
-
-//        gameService.dfdfdfd(type, );
-
-        // 카드
-
-        // sub data
-        data.setType("PERSON_CHOOSE");
-//        data.setCards();
-
-        return data;
+        boards.get(roomId).handlePub(gameData);
     }
 
+    @Async
+    @MessageMapping("/{roomId}/test-player")
+    public void testPlayer(@DestinationVariable long roomId, @Payload GameData gameData,
+                           @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
 
-
-    @MessageMapping("/{roomId}/cardchoose")
-    @SendTo("/sub/{roomId}")
-    public GameData cardChoose(@DestinationVariable long roomId, @Payload GameData data,
-                               @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
-
-        String type = data.getType();
-
-//        String sessionId = headerAccessor.getSessionId();
-//        log.info(roomId + " " + type + " " + sessionId);
-
-//        gameService.dfdfdfd(type, );
-
-        // 카드
-
-        // sub data
-        data.setType("CARD_CHOOSE");
-//        data.setCards();
-
-        return data;
+        boards.get(roomId).handlePub(gameData);
     }
 
+    @Async
+    @MessageMapping("/{roomId}/select-card")
+    public void selectCard(@DestinationVariable long roomId, @Payload GameData gameData,
+                           @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
 
-    @MessageMapping("/{roomId}/replychoose")
-    @SendTo("/sub/{roomId}")
-    public GameData replyChoose(@DestinationVariable long roomId, @Payload GameData data,
-                                @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
+        boards.get(roomId).handlePub(gameData);
+    }
 
-        String type = data.getType();
+    @Async
+    @MessageMapping("/{roomId}/reply")
+    public void reply(@DestinationVariable long roomId, @Payload GameData gameData,
+                      @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
 
-//        String sessionId = headerAccessor.getSessionId();
-//        log.info(roomId + " " + type + " " + sessionId);
-
-//        gameService.dfdfdfd(type, );
-
-        // 카드
-
-        // sub data
-        data.setType("REPLY_CHOOSE");
-//        data.setCards();
-
-        return data;
+        boards.get(roomId).handlePub(gameData);
     }
 }
