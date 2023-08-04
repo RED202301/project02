@@ -1,19 +1,20 @@
 import { useState } from 'react';
+import Card from '../../components/Card/Card';
 
-function Card({ idx, selected, onClick }) {
-  return (
-    <div
-      onClick={onClick}
-      style={{
-        width: '200px',
-        height: '300px',
-        backgroundColor: 'skyblue',
-        boxSizing: 'border-box',
-        border: idx === selected && 'solid tomato 5px',
-      }}
-    ></div>
-  );
-}
+// function Card({ idx, selected, onClick }) {
+//   return (
+//     <div
+//       onClick={onClick}
+//       style={{
+//         width: '200px',
+//         height: '300px',
+//         backgroundColor: 'skyblue',
+//         boxSizing: 'border-box',
+//         border: idx === selected && 'solid tomato 5px',
+//       }}
+//     ></div>
+//   );
+// }
 
 function User({ img, idx, total, radius, onClick, selected }) {
   const angle = (idx + 1) / (total + 1);
@@ -40,21 +41,29 @@ function User({ img, idx, total, radius, onClick, selected }) {
 
 function App() {
   const [selectedUser, selectUser] = useState(-1);
-  const [selectedCard, selectCard] = useState(-1);
+  // const [selectedCard, selectCard] = useState(-1);
   const [myTurn, setMyTurn] = useState(true);
   function handleUserClick(idx) {
     return function () {
       if (myTurn) selectUser(idx);
     };
   }
-  function handleCardClick(idx) {
-    return function () {
-      if (myTurn) selectCard(idx);
-    };
-  }
+  // function handleCardClick(idx) {
+  //   return function () {
+  //     if (myTurn) selectCard(idx);
+  //   };
+  // }
   // const users = [0, 0, 0, 0];
   const users = ['./카리나.webp', './윈터.webp', './지젤.webp', './닝닝.webp'];
-  const cards = [0, 0, 0, 0];
+  function cardMaker(title, subtitle, subject) {
+    return { title, subtitle, subject };
+  }
+  const cards = [
+    cardMaker('단군왕검', '대한민국', './people_imgs/1_단군왕검.png'),
+    cardMaker('광개토대왕', '대한민국', './people_imgs/3_광개토대왕.png'),
+    cardMaker('세종대왕', '대한민국', './people_imgs/8_세종대왕.png'),
+    cardMaker('이순신', '대한민국', './people_imgs/9_이순신.png'),
+  ];
   const [view, setView] = useState(1);
   const views = [
     `rotateY(-${180 / (users.length * 2)}deg)`,
@@ -164,7 +173,7 @@ function App() {
         onClick={() => {
           if (myTurn) {
             selectUser(-1);
-            selectCard(-1);
+            // selectCard(-1);
           }
           setMyTurn(myTurn => !myTurn);
         }}
@@ -181,9 +190,18 @@ function App() {
           width: '100vw',
         }}
       >
-        {cards.map((_, idx) => {
+        {cards.map(({ title, subtitle, subject }, idx) => {
           return (
-            <Card key={idx} idx={idx} selected={selectedCard} onClick={handleCardClick(idx)} />
+            // <Card key={idx} idx={idx} selected={selectedCard} onClick={handleCardClick(idx)} />
+            <Card
+              width={'200px'}
+              height={'300px'}
+              title={title}
+              subtitle={subtitle}
+              subject={subject}
+              background={`./sample_imgs/parchment.jpg`}
+              key={idx}
+            />
           );
         })}
       </div>
