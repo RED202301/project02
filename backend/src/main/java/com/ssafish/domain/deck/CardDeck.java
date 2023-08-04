@@ -11,7 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Table(name = "Card_decks")
 @Entity
-public class Card_decks {
+public class CardDeck {
 
 
     @Id
@@ -28,7 +28,7 @@ public class Card_decks {
     private Long deckId;
 
     @Builder
-    public Card_decks(Long cardDeckId, Long cardId,Long deckId ){
+    public CardDeck(Long cardDeckId, Long cardId,Long deckId ){
         this.cardDeckId = cardDeckId;
         this.cardId = cardId;
         this.deckId = deckId;
