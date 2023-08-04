@@ -37,8 +37,12 @@ public class PersonChoosePhase extends Phase {
         );
 
         // 자동 처리 로직
-        GameData gameData = new GameData();
+        GameData gameData = GameData.builder()
+                .type(TypeEnum.SELECT_PLAYER.name())
+                .cardId(randomPlayerId(gameStatus)) // 손패에서 랜덤 카드 ID 선택
+                .build();
         gameData.setResponser(randomPlayerId(gameStatus));
+
 
         if (gameStatus.getCurrentPlayer().isBot()) { // 현재 플레이어가 봇일 경우
             turnTimer.schedule(() -> endTurn(gameData, gameStatus), randomResponseTime(turnTimeLimit), TimeUnit.SECONDS);
@@ -69,6 +73,7 @@ public class PersonChoosePhase extends Phase {
         // subscriber 들에게 메시지 전달
         messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(), gameData);
 
+
         latch.countDown();
     }
 
@@ -79,6 +84,9 @@ public class PersonChoosePhase extends Phase {
         } else if (TypeEnum.SELECT_PLAYER.name().equals(gameData.getType())) {  // 질문 대상 지목하기
             this.endTurn(gameData, gameStatus);
         }
+    }
+
+        this.endTurn(gameData, gameStatus);
     }
 
     public Integer randomPlayerId(GameStatus gameStatus) {

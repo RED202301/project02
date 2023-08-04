@@ -31,5 +31,4 @@ public class GameData {
         this.isGoFish = isGoFish;
         this.cards = cards;
     }
-
 }
