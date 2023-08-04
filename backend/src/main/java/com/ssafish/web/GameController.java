@@ -18,7 +18,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @RestController
 public class GameController {
 
-    private final GameService gameService;
     private final Map<Long, Board> boards = new ConcurrentHashMap<>();
 
     @MessageMapping("/{roomId}/gamestart")
