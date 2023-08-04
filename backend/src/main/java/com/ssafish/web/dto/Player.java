@@ -1,11 +1,20 @@
 package com.ssafish.web.dto;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.List;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public class Player {
 
-    boolean isBot;
-    long score;
-    List<Long> cardsOnHand;
-    List<Long> cardsEnrolled;
+    private int userId;
+    private String nickname;
+    private boolean isBot;
+    private long score;
+    private List<Long> cardsOnHand;
+    private List<Long> cardsEnrolled;
 }
