@@ -5,9 +5,7 @@ import com.ssafish.web.dto.GameStatus;
 import com.ssafish.web.dto.TypeEnum;
 import org.springframework.messaging.handler.annotation.Payload;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -81,6 +79,12 @@ public class PersonChoosePhase extends Phase {
 
     public void handlePub(@Payload GameData gameData, GameStatus gameStatus) {
         // pub 처리
+        if (TypeEnum.TEST_PLAYER.name().equals(gameData.getType())) {           // 질문 대상 떠보기
+            messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(), gameData);
+        } else if (TypeEnum.SELECT_PLAYER.name().equals(gameData.getType())) {  // 질문 대상 지목하기
+            this.endTurn(gameData, gameStatus);
+        }
+    }
 
         this.endTurn(gameData, gameStatus);
     }
@@ -94,3 +98,4 @@ public class PersonChoosePhase extends Phase {
         return Math.max(3, (int) (Math.random() * timeLimit / 2));
     }
 }
+

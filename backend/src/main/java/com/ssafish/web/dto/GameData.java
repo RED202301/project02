@@ -4,10 +4,8 @@ import lombok.*;
 import java.util.Map;
 
 @Getter
-@Setter
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class GameData {
 
     private String type; // 데이터 타입

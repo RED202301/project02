@@ -2,6 +2,7 @@ package com.ssafish.web.dto.Phase;
 
 import com.ssafish.web.dto.GameData;
 import com.ssafish.web.dto.GameStatus;
+import com.ssafish.web.dto.TypeEnum;
 import org.springframework.messaging.handler.annotation.Payload;
 
 import java.util.List;
@@ -28,9 +29,20 @@ public class CardChoosePhase extends Phase {
         latch = new CountDownLatch(1);
         turnTimer = Executors.newSingleThreadScheduledExecutor();
 
+        // 턴 시작을 알림
+        messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(),
+                GameData.builder()
+                        .type(TypeEnum.SELECT_CARD_TURN.name())
+                        .player(gameStatus.getCurrentPlayer().getUserId())
+                        .build()
+        );
+
+
         // 자동 처리 로직
-        GameData gameData = new GameData();
-        gameData.setCardId(randomCardId((gameStatus))); // 손패에서 랜덤 카드 ID 선택
+        GameData gameData = GameData.builder()
+                                    .type(TypeEnum.SELECT_CARD.name())
+                                    .cardId(randomCardId((gameStatus))) // 손패에서 랜덤 카드 ID 선택
+                                    .build();
 
 
         if (gameStatus.getCurrentPlayer().isBot()) { // 현재 플레이어가 봇일 경우
@@ -62,6 +74,9 @@ public class CardChoosePhase extends Phase {
 
         // subscriber 들에게 메시지 전달
         messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(), gameData);
+
+        // 다음 턴으로 진행
+        gameStatus.changeCurrentPhase();
 
         latch.countDown();
     }
