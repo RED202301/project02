@@ -20,7 +20,7 @@ public class DeckController {
     @Autowired
     CardDeckService cardDeckService;
     @GetMapping(value = "/{deckId}")
-    public ResponseEntity<DeckDetailDto> Deckdetail(@PathVariable int deckId){
+    public ResponseEntity<DeckDetailDto> deckDetail(@PathVariable int deckId){
 
         DeckDto deck = cardDeckService.deckInfo(deckId);
         List<CardDto> deckCardList = cardDeckService.deckCardList(deckId);
