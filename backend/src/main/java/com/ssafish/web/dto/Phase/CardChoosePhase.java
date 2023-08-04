@@ -4,6 +4,7 @@ import com.ssafish.web.dto.GameData;
 import com.ssafish.web.dto.GameStatus;
 import org.springframework.messaging.handler.annotation.Payload;
 
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -26,7 +27,17 @@ public class CardChoosePhase extends Phase {
 
         latch = new CountDownLatch(1);
         turnTimer = Executors.newSingleThreadScheduledExecutor();
-        turnTimer.schedule(this::endTurn, turnTimeLimit, TimeUnit.SECONDS);
+
+        // 자동 처리 로직
+        GameData gameData = new GameData();
+        gameData.setCardId(randomCardId((gameStatus))); // 손패에서 랜덤 카드 ID 선택
+
+
+        if (gameStatus.getCurrentPlayer().isBot()) { // 현재 플레이어가 봇일 경우
+            turnTimer.schedule(() -> endTurn(gameData, gameStatus), randomResponseTime(turnTimeLimit), TimeUnit.SECONDS);
+        } else {                                     // 현재 플레이어가 봇이 아닐 경우
+            turnTimer.schedule(() -> endTurn(gameData, gameStatus), turnTimeLimit, TimeUnit.SECONDS);
+        }
 
         try {
             latch.await();
@@ -43,24 +54,30 @@ public class CardChoosePhase extends Phase {
         }
     }
 
-    public void endTurn() {
+    public void endTurn(@Payload GameData gameData, GameStatus gameStatus) {
         cancelTurnTimer();
 
         // 게임 내부 로직
+        gameStatus.setCardOpen(gameData.getCardId()); // 공개 카드 반영
 
         // subscriber 들에게 메시지 전달
-
-        // 게임 종료 조건 분기해야 함
-
-
-        // 상대 지목 -> 카드 선택 -> 상대 대답 -> 상대 지목
+        messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(), gameData);
 
         latch.countDown();
     }
 
-    public void handlePub(@Payload GameData gameData) {
+    public void handlePub(@Payload GameData gameData, GameStatus gameStatus) {
         // pub 처리
 
-        this.endTurn();
+        this.endTurn(gameData, gameStatus);
+    }
+
+    public int randomCardId(GameStatus gameStatus) {
+        List<Integer> cardsOnHand = gameStatus.getCurrentPlayer().getCardsOnHand();
+        return cardsOnHand.get((int) (Math.random() * cardsOnHand.size()));
+    }
+
+    public int randomResponseTime(int timeLimit) {
+        return Math.max(3, (int) (Math.random() * timeLimit / 2));
     }
 }

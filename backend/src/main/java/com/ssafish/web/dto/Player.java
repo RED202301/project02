@@ -15,6 +15,6 @@ public class Player {
     private String nickname;
     private boolean isBot;
     private long score;
-    private List<Long> cardsOnHand;
-    private List<Long> cardsEnrolled;
+    private List<Integer> cardsOnHand;
+    private List<Integer> cardsEnrolled;
 }

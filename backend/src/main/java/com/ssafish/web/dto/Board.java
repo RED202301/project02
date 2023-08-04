@@ -19,12 +19,24 @@ public class Board {
         this.gameStatus = gameStatus;
     }
 
+    public void gameStart() {
+
+    }
+
+    public void gameOver() {
+
+    }
+
     public void play() {
+        gameStart();
+
         while (!gameStatus.isGameOver()) {
             currentPhase = gameStatus.currentPhase;
 
             gameStatus = currentPhase.startTurnTimer(gameStatus);
         }
+
+        gameOver();
     }
 
     public void handlePub(@Payload GameData gameData) {

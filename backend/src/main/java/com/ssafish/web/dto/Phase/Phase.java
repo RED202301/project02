@@ -17,7 +17,7 @@ public abstract class Phase {
     protected SimpMessageSendingOperations messagingTemplate;
     protected ScheduledExecutorService turnTimer;
     protected CountDownLatch latch;
-    protected long turnTimeLimit; // Phase 생성 시 파라미터로 받아야 함
+    protected int turnTimeLimit; // Phase 생성 시 파라미터로 받아야 함
     protected GameStatus gameStatus;
 
     public GameStatus startTurnTimer(GameStatus gameStatus) {

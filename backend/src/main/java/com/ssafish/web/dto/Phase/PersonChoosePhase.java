@@ -50,10 +50,6 @@ public class PersonChoosePhase extends Phase {
 
         // subscriber 들에게 메시지 전달
 
-        // 게임 종료 조건 분기해야 함
-
-
-        // 상대 지목 -> 카드 선택 -> 상대 대답 -> 상대 지목
 
         latch.countDown();
     }
