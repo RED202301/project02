@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @CrossOrigin("*")
@@ -20,6 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class GameController {
 
     private final Map<Long, Board> boards = new ConcurrentHashMap<>();
+    protected ScheduledExecutorService turnTimer;
 
     @Async
     @MessageMapping("/{roomId}/start-game")
