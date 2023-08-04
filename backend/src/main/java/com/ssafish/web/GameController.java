@@ -1,6 +1,6 @@
 package com.ssafish.web;
 
-import com.ssafish.service.GameService;
+import com.ssafish.web.dto.Board;
 import com.ssafish.web.dto.GameData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @CrossOrigin("*")
@@ -18,6 +19,7 @@ import java.util.Map;
 public class GameController {
 
     private final GameService gameService;
+    private final Map<Long, Board> boards = new ConcurrentHashMap<>();
 
     @MessageMapping("/{roomId}/gamestart")
     @SendTo("/sub/{roomId}")
