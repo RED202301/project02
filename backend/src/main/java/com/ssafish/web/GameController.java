@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @CrossOrigin("*")
@@ -19,92 +22,57 @@ import java.util.concurrent.ConcurrentHashMap;
 public class GameController {
 
     private final Map<Long, Board> boards = new ConcurrentHashMap<>();
+    protected ScheduledExecutorService turnTimer;
 
     @MessageMapping("/{roomId}/gamestart")
-    @SendTo("/sub/{roomId}")
-    public GameData gameStart(@DestinationVariable long roomId, @Payload GameData data,
+    public void gameStart(@DestinationVariable long roomId, @Payload GameData data,
                               @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
 
-        String type = data.getType();
-
-//        String sessionId = headerAccessor.getSessionId();
-//        log.info(roomId + " " + type + " " + sessionId);
-
-//        gameService.dfdfdfd(type, );
-
-        // 카드
-
-        // sub data
-        data.setType("GAME_START");
-//        data.setCards();
-
-        return data;
+//        String type = data.getType();
+//        Board board = boards.get(roomId);
+//        if (board != null) {
+//            turnTimer = Executors.newSingleThreadScheduledExecutor();
+//            turnTimer.schedule(board::play, 1, TimeUnit.SECONDS);
+//        }
     }
 
 
     @MessageMapping("/{roomId}/personchoose")
-    @SendTo("/sub/{roomId}")
-    public GameData personChoose(@DestinationVariable long roomId, @Payload GameData data,
-                                 @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
+    public void personChoose(@DestinationVariable long roomId, @Payload GameData data,
+                             @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
 
-        String type = data.getType();
+//        String type = data.getType();
+//        Board board = boards.get(roomId);
+//        if (board != null) {
+//            turnTimer = Executors.newSingleThreadScheduledExecutor();
+//            turnTimer.schedule(board::play, 1, TimeUnit.SECONDS);
+//        }
 
-//        String sessionId = headerAccessor.getSessionId();
-//        log.info(roomId + " " + type + " " + sessionId);
-
-//        gameService.dfdfdfd(type, );
-
-        // 카드
-
-        // sub data
-        data.setType("PERSON_CHOOSE");
-//        data.setCards();
-
-        return data;
     }
 
 
-
     @MessageMapping("/{roomId}/cardchoose")
-    @SendTo("/sub/{roomId}")
-    public GameData cardChoose(@DestinationVariable long roomId, @Payload GameData data,
-                               @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
+    public void cardChoose(@DestinationVariable long roomId, @Payload GameData data,
+                           @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
 
-        String type = data.getType();
-
-//        String sessionId = headerAccessor.getSessionId();
-//        log.info(roomId + " " + type + " " + sessionId);
-
-//        gameService.dfdfdfd(type, );
-
-        // 카드
-
-        // sub data
-        data.setType("CARD_CHOOSE");
-//        data.setCards();
-
-        return data;
+//        String type = data.getType();
+//        Board board = boards.get(roomId);
+//        if (board != null) {
+//            turnTimer = Executors.newSingleThreadScheduledExecutor();
+//            turnTimer.schedule(board::play, 1, TimeUnit.SECONDS);
+//        }
     }
 
 
     @MessageMapping("/{roomId}/replychoose")
-    @SendTo("/sub/{roomId}")
-    public GameData replyChoose(@DestinationVariable long roomId, @Payload GameData data,
-                                @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
+    public void replyChoose(@DestinationVariable long roomId, @Payload GameData data,
+                            @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
 
-        String type = data.getType();
-
-//        String sessionId = headerAccessor.getSessionId();
-//        log.info(roomId + " " + type + " " + sessionId);
-
-//        gameService.dfdfdfd(type, );
-
-        // 카드
-
-        // sub data
-        data.setType("REPLY_CHOOSE");
-//        data.setCards();
-
-        return data;
+//        String type = data.getType();
+//        Board board = boards.get(roomId);
+//        if (board != null) {
+//            turnTimer = Executors.newSingleThreadScheduledExecutor();
+//            turnTimer.schedule(board::play, 1, TimeUnit.SECONDS);
+//        }
     }
 }

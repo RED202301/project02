@@ -17,5 +17,20 @@ public class GameData {
     private Integer player; // 해당되는 사람
     private Integer requester; // 질문하는 사람
     private Integer responser; // 대답하는 사람
+    private boolean isGoFish;
     private Map<String, Object> cards; // 25장의 카드들
+
+    @Builder
+    public GameData(String type, Integer from, Integer to, Integer cardId, Integer player,
+                    Integer requester, Integer responser, boolean isGoFish, Map<String, Object> cards) {
+        this.type = type;
+        this.from = from;
+        this.to = to;
+        this.cardId = cardId;
+        this.player = player;
+        this.requester = requester;
+        this.responser = responser;
+        this.isGoFish = isGoFish;
+        this.cards = cards;
+    }
 }
