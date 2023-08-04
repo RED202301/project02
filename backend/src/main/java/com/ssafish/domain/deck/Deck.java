@@ -9,7 +9,7 @@ import javax.persistence.*;
 @ToString
 @Getter
 @Builder
-@AllArgsConstructor
+//@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "Decks")
 @Entity

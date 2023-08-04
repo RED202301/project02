@@ -25,12 +25,15 @@ public class CardDto {
 
     @Builder
     public CardDto
-            (long cardId, long userId, String mainTitle, String subTitle,String mainImgUrl ){
+            (long cardId, long userId, String mainTitle, String subTitle,String mainImgUrl,String subImgUrl,int point ){
         this.cardId = cardId;
         this.userId = userId;
         this.mainTitle = mainTitle;
         this.subTitle = subTitle;
         this.mainImgUrl = mainImgUrl;
+        this.subImgUrl = subImgUrl;
+        this.cardDescription = cardDescription;
+        this.point = point;
 
     }
 
@@ -40,6 +43,7 @@ public class CardDto {
                 .mainTitle(mainTitle)
                 .subTitle(subTitle)
                 .mainImgUrl(mainImgUrl)
+                .subImgUrl(subImgUrl)
                 .cardDescription(cardDescription)
                 .point(point)
                 .build();

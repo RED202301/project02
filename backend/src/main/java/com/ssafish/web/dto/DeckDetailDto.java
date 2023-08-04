@@ -6,7 +6,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 @ToString
 @Getter
 public class DeckDetailDto {
@@ -16,23 +16,13 @@ public class DeckDetailDto {
     private List<CardDto> cardList;
 
 
-//    @Builder
-//    public DeckDetailDto
-//            (DeckDto deck, List<CardDto> cardList){
-//        this.deck = deck;
-//        this.cardList = cardList;
-//
-//    }
+    @Builder
+    public DeckDetailDto
+            (DeckDto deck, List<CardDto> cardList){
+        this.deck = deck;
+        this.cardList = cardList;
 
-//    public Card toEntity() {
-//        return Card.builder()
-//                .userId(userId)
-//                .mainTitle(mainTitle)
-//                .subTitle(subTitle)
-//                .mainImgUrl(mainImgUrl)
-//                .cardDescription(cardDescription)
-//                .point(point)
-//                .build();
-//    }
+    }
+
 
 }
