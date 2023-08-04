@@ -8,6 +8,9 @@ import Swal from "sweetalert2";
 function Landing(){
   const host_URL = "http://192.168.30.103:5001"
   const navigate = useNavigate();
+  const REST_API_KEY = '0c75393f80241be4aaf8ebd811934887'; // RestAPI 키
+  const REDIRECT_URI = 'http://localhost:5173/login2'; // redirect 주소
+  const KAKAO_AUTH_URI = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code&prompt=login`;
   const [pinNumber, setPIN] = useState('');
   const [roomId, setRoomId] = useState(null);
   const savePIN = event => {
@@ -46,7 +49,7 @@ function Landing(){
                   const userId = response.data.userId
                   window.sessionStorage.setItem('userId', userId)
                   if (userId) {
-                    navigate('/room')
+                    navigate('/gameUI')
                   }
               }).catch((err)=>{console.log(err)})
             }})
@@ -65,6 +68,8 @@ function Landing(){
   return (
     <motion.div>
       <div className="Landing">
+        <div className='Landing_div'>
+
         <div className='LOGO'>
           <h1>Ssafish!</h1>
         </div>
@@ -79,14 +84,15 @@ function Landing(){
             </button>
           </Link>
         </div>
+        <br/>
         <div className="LOGTUTO">
-          <Link to='/Login'>
-            <span>Login</span>
+          <Link to={KAKAO_AUTH_URI}>
+            <span className='span1'>Login</span>
           </Link>
-          |
           <Link to='/Tutorial'>
-            <span>Tutorial</span>
+            <span className='span1'>Tutorial</span>
           </Link>
+        </div>
         </div>
       </div>
     </motion.div>

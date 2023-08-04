@@ -58,7 +58,7 @@ function Modal({ modal, setModal }) {
                   const userId = response.data.userId
                   window.sessionStorage.setItem('userId', userId)
                   if (userId) {
-                    navigate('/room')
+                    navigate('/gameUI')
                   }
               }).catch((err)=>{console.log(err)})
             }})
@@ -88,9 +88,9 @@ function Modal({ modal, setModal }) {
             <div className="form-container">
             <form className="form">
               <div className="form-group">
-              <button onClick={() => setModal(modal => !modal)} className="form-exit">
+              <p onClick={() => setModal(modal => !modal)} className="form-exit">
                 &times;
-              </button>
+              </p>
                 <label htmlFor="name">방 이름</label>
                 <input
                   type="text"
@@ -133,7 +133,9 @@ function Modal({ modal, setModal }) {
                   onChange={(e) => setGameType(e.target.value)}
                   required
                 />
-              <p className="form-submit-btn" onClick={Roomdata}>방 생성</p>
+                <div className='form-submit-btn1'>
+              <p className="form-submit-btn2" onClick={Roomdata}>방 생성</p>
+                </div>
               </div>
             </form>
           </div>
@@ -160,7 +162,7 @@ function Main() {
         </div>
         <div className="enter">
           <div className="enter2">
-          <Link className="enter2" to="/RoomList">
+          <Link className="enter3" to="/RoomList">
               방들어가기
             </Link>
           </div>

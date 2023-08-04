@@ -1,9 +1,9 @@
 import { Link, useNavigate } from 'react-router-dom';
-import 카카오로그인 from './카카오로그인.png';
 import { motion } from 'framer-motion';
 import axios from "axios";
 import { useEffect } from "react";
 import { setCookie } from "../../components/Cookie";
+import './kakaoLogin.css';
 
 function Login2() {
   const host_URL = 'http://192.168.111.126:5000'
@@ -49,41 +49,38 @@ function Login2() {
 
   return (
     <motion.div
-      initial={{ x: -500 }}
-      animate={{ x: 0 }}
+      // initial={{ x: -500 }}
+      // animate={{ x: 0 }}
       // transition={{
       //     type: "tween",
       //     duration: "2",
       //     delay: "0.1"
       // }}
-      className="Login"
-    >
-      <div className="Login2">
-        <div className="Logo">
-          <h1>Login!</h1>
+      className="kakaoLogin">
+        <div aria-label="Orange and tan hamster running in a metal wheel" role="img" className="wheel-and-hamster">
+          <div className="wheel"></div>
+          <div className="hamster">
+            <div className="hamster__body">
+              <div className="hamster__head">
+                <div className="hamster__ear"></div>
+                <div className="hamster__eye"></div>
+                <div className="hamster__nose"></div>
+              </div>
+              <div className="hamster__limb hamster__limb--fr"></div>
+              <div className="hamster__limb hamster__limb--fl"></div>
+              <div className="hamster__limb hamster__limb--br"></div>
+              <div className="hamster__limb hamster__limb--bl"></div>
+              <div className="hamster__tail"></div>
+            </div>
+          </div>
+          <div className="spoke"></div>
         </div>
-        <div className="kakao">
-            <img className="login_img" src={카카오로그인} alt="" />
-        </div>
-        <div className="back">
-          <Link to="/">
-            <span>➡</span>
+        
+        <div className='go2home'>
+          <Link to='/'>
+          Home
           </Link>
         </div>
-      </div>
-      <motion.div initial={{ x: -100 }} animate={{ x: 0 }} className="zzz">
-        <div className="Landing">
-          <div className="LOGO">
-            <h1>Ssafish!</h1>
-          </div>
-          <div className="PIN">
-            <input className="input" placeholder="게임 PIN"></input>
-            <Link to="">
-              <button>확인</button>
-            </Link>
-          </div>
-        </div>
-      </motion.div>
     </motion.div>
   );
 }
