@@ -3,12 +3,11 @@ package com.ssafish.domain.deck;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @ToString
 @Getter
 @Builder
-@AllArgsConstructor
+//@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "Card_decks")
 @Entity
@@ -18,15 +17,22 @@ public class Card_decks {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "card_deck_id", unique = true, nullable = false)
-    private int cardDeckId;
+    private Long cardDeckId;
 
     //@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "card_id", unique = true, nullable = false)
-    private int cardId;
+    private Long cardId;
 
     //@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "deck_id", unique = true, nullable = false)
-    private int deckId;
+    private Long deckId;
+
+    @Builder
+    public Card_decks(Long cardDeckId, Long cardId,Long deckId ){
+        this.cardDeckId = cardDeckId;
+        this.cardId = cardId;
+        this.deckId = deckId;
+    }
 
 
 
