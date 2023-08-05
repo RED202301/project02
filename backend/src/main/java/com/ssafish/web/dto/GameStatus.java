@@ -1,10 +1,11 @@
 package com.ssafish.web.dto;
 
-import com.ssafish.web.dto.Phase.Phase;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.ssafish.web.dto.Phase.*;
+import lombok.*;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -12,46 +13,52 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Getter
 @Setter
-@NoArgsConstructor
+@RequiredArgsConstructor
+@Component
+@Scope("prototype")
 public class GameStatus {
-    private int roomId;
+    private final PersonChoosePhase personChoosePhase;
+    private final CardChoosePhase cardChoosePhase;
+    private final ReplyChoosePhase replyChoosePhase;
 
-    List<Phase> phases;
-    List<Integer> playerOrder; // userId의 리스트: 플레이어들의 순서를 나타낸다
-    Map<Integer, Player> players; // key: userId, value: Player 객체
-    List<Integer> middleDeck; // 중앙 덱에 있는 cardId 리스트
-    List<Integer> onHandCards; // 플레이어들의 손에 있는 cardId 리스트
+    private long roomId;
+    private long turnTimeLimit;
 
-    Phase currentPhase;
-    Player currentPlayer;
-    Player opponentPlayer;
+    private List<Player> playerList = new ArrayList<>(); // userId의 리스트: 플레이어들의 순서를 나타낸다
+    private List<Long> middleDeck = new ArrayList<>(); // 중앙 덱에 있는 cardId 리스트
+
+    private ChoosePhase currentPhase;
+    private Player currentPlayer;
+    private Player opponentPlayer;
 
     private boolean isGameOver;
-    private int currentPhaseIdx;
     private int currentPlayerIdx;
-    private int cardOpen;
+    private long cardOpen;
 
-    public GameStatus(List<Integer> playerOrder, List<Integer> middleDeck) {
-        this.playerOrder = playerOrder;
-        this.middleDeck = middleDeck;
+    public void addPlayer(long userId, String nickname, boolean isBot) {
+        playerList.add(Player.builder()
+                .userId(userId)
+                .nickname(nickname)
+                .isBot(isBot)
+                .build());
+    }
 
-        this.players = new ConcurrentHashMap<>();
-        for (Integer userId : playerOrder) {
-            players.put(userId, new Player());
-        }
+    public void removePlayer(long userId) {
+        playerList.removeIf(e -> e.getUserId() == userId);
     }
 
     public void changeCurrentPlayer() {
-        currentPlayerIdx = (currentPlayerIdx + 1) % playerOrder.size();
-        currentPlayer = players.get(playerOrder.get(currentPlayerIdx));
+        currentPlayerIdx = (currentPlayerIdx + 1) % playerList.size();
+        currentPlayer = playerList.get(currentPlayerIdx);
     }
 
-    public void changeOpponentPlayer(int userId) {
-        opponentPlayer = players.get(userId);
+    public void changeOpponentPlayer(long userId) {
+        opponentPlayer = playerList.stream().filter(e -> e.getUserId() == userId).findAny().orElse(null);
     }
 
     public void changeCurrentPhase() {
-        currentPhaseIdx = (currentPhaseIdx + 1) % phases.size();
-        currentPhase = phases.get(currentPhaseIdx);
+        if (currentPhase.equals(personChoosePhase)) currentPhase = cardChoosePhase;
+        else if (currentPhase.equals(cardChoosePhase)) currentPhase = replyChoosePhase;
+        else if (currentPhase.equals(replyChoosePhase)) currentPhase = personChoosePhase;
     }
 }
