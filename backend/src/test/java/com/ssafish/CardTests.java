@@ -3,7 +3,7 @@ package com.ssafish;
 import com.ssafish.domain.card.Card;
 import com.ssafish.domain.card.CardsRepository;
 import com.ssafish.domain.deck.CardDeckRepository;
-import com.ssafish.domain.deck.Card_decks;
+import com.ssafish.domain.deck.CardDeck;
 import com.ssafish.domain.deck.Deck;
 import com.ssafish.domain.deck.DeckRepository;
 import com.ssafish.service.CardDeckService;
@@ -35,7 +35,7 @@ class CardTests {
     @Autowired
     CardDeckService cardDeckService;
     @Autowired
-    CardDeckRepository card_deckRepository;
+    Card_deckRepository card_deckRepository;
 
     
     //더미 데이터 저장
