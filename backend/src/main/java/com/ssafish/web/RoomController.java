@@ -1,17 +1,18 @@
 package com.ssafish.web;
 
 import com.ssafish.service.RoomService;
-import com.ssafish.web.dto.MsgRequest;
-import com.ssafish.web.dto.RoomRequestDto;
-import com.ssafish.web.dto.RoomResponseDto;
+import com.ssafish.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.handler.annotation.*;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.List;
 
 
 @Slf4j
@@ -21,6 +22,7 @@ import java.util.UUID;
 public class RoomController {
 
     private final RoomService roomService;
+    private final GameService gameService;
 
     static Map<String, Long> rooms = new HashMap<>();
 
@@ -35,6 +37,7 @@ public class RoomController {
         RoomResponseDto responseDto = roomService.create(requestDto);
 
         rooms.put(uuid, responseDto.getRoomId());
+        gameService.createGameRoom(responseDto);
         
         return responseDto;
     }
@@ -53,5 +56,20 @@ public class RoomController {
         Long roomId = msgRequest.getRoomId();
         String content = msgRequest.getContent();
         roomService.sendMessageToRoom(roomId, content);
+    }
+
+    @MessageMapping("/enter/{roomId}")
+    @SendTo("/sub/{roomId}")
+    public List<Player> processClientEntrance(@DestinationVariable long roomId, @Payload SocketData data,
+                                             @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
+
+        Long userId = data.getUserId();
+        String nickname = data.getNickname();
+        String sessionId = headerAccessor.getSessionId();
+        log.info(roomId + " " + userId + " " + sessionId);
+
+        gameService.addPlayer(roomId, userId, nickname, true);
+
+        return gameService.getPlayerList(roomId);
     }
 }

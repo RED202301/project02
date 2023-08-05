@@ -12,19 +12,19 @@ import java.util.List;
 @NoArgsConstructor
 public class Player {
 
-    private int userId;
+    private long userId;
     private String nickname;
     private boolean isBot;
     private int score;
-    private List<Integer> cardsOnHand;
-    private List<Integer> cardsEnrolled;
+    private List<Long> cardsOnHand;
+    private List<Long> cardsEnrolled;
 
     @Builder
-    public Player(int userId, String nickname, boolean isBot, int score) {
+    public Player(long userId, String nickname, boolean isBot) {
         this.userId = userId;
         this.nickname = nickname;
         this.isBot = isBot;
-        this.score = score;
+        this.score = 0;
         this.cardsOnHand = new ArrayList<>();
         this.cardsEnrolled = new ArrayList<>();
     }
