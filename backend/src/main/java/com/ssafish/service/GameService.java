@@ -1,4 +1,4 @@
-package com.ssafish.web;
+package com.ssafish.service;
 
 import com.ssafish.web.dto.*;
 import lombok.RequiredArgsConstructor;

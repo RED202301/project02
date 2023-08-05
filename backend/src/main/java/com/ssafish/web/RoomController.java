@@ -1,5 +1,6 @@
 package com.ssafish.web;
 
+import com.ssafish.service.GameService;
 import com.ssafish.service.RoomService;
 import com.ssafish.web.dto.*;
 import lombok.RequiredArgsConstructor;

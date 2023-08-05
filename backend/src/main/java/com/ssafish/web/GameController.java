@@ -1,6 +1,7 @@
 package com.ssafish.web;
 
 import com.ssafish.service.CardDeckService;
+import com.ssafish.service.GameService;
 import com.ssafish.service.RoomService;
 import com.ssafish.web.dto.CardDto;
 import com.ssafish.web.dto.GameData;
