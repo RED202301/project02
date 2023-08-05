@@ -35,7 +35,7 @@ class CardTests {
     @Autowired
     CardDeckService cardDeckService;
     @Autowired
-    CardDeckRepository cardDeckRepository;
+    Card_deckRepository card_deckRepository;
 
     
     //더미 데이터 저장
@@ -69,18 +69,18 @@ class CardTests {
     @Order(3)
     void setDefaultDeckCardsToDB(){
 
-        cardDeckRepository.deleteAllInBatch();
+        card_deckRepository.deleteAllInBatch();
 
         long decknum = 1;
         long cardIdnum =1;
         for(int i=0;i<25;i++){
 
-            CardDeck card_decks = CardDeck.builder()
+            Card_decks card_decks = Card_decks.builder()
                     .cardDeckId(cardIdnum)
                     .cardId(cardIdnum)
                     .deckId(decknum)
                     .build();
-            cardDeckRepository.save(card_decks);
+            card_deckRepository.save(card_decks);
             cardIdnum++;
 
         }
