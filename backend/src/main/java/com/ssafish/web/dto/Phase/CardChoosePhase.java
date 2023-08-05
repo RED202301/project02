@@ -12,25 +12,17 @@ import java.util.concurrent.TimeUnit;
 
 public class CardChoosePhase extends Phase {
 
-    /*
-    *
-    *
-    protected SimpMessageSendingOperations messagingTemplate;
-    protected ScheduledExecutorService turnTimer;
-    protected CountDownLatch latch;
-    protected long turnTimeLimit; // Phase 생성 시 파라미터로 받아야 함
-    protected GameStatus gameStatus;
-    *
-    * */
+    public CardChoosePhase(int roomId, int turnTimeLimit) {
+        super(roomId, turnTimeLimit);
+    }
 
     public GameStatus startTurnTimer(GameStatus gameStatus) {
-        this.gameStatus = gameStatus;
 
         latch = new CountDownLatch(1);
         turnTimer = Executors.newSingleThreadScheduledExecutor();
 
         // 턴 시작을 알림
-        messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(),
+        messagingTemplate.convertAndSend("/sub/" + roomId,
                 GameData.builder()
                         .type(TypeEnum.SELECT_CARD_TURN.name())
                         .player(gameStatus.getCurrentPlayer().getUserId())
@@ -66,14 +58,14 @@ public class CardChoosePhase extends Phase {
         }
     }
 
-    public void endTurn(@Payload GameData gameData, GameStatus gameStatus) {
+    public void endTurn(GameData gameData, GameStatus gameStatus) {
         cancelTurnTimer();
 
         // 게임 내부 로직
         gameStatus.setCardOpen(gameData.getCardId()); // 공개 카드 반영
 
         // subscriber 들에게 메시지 전달
-        messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(), gameData);
+        messagingTemplate.convertAndSend("/sub/" + roomId, gameData);
 
         // 다음 턴으로 진행
         gameStatus.changeCurrentPhase();
@@ -81,7 +73,7 @@ public class CardChoosePhase extends Phase {
         latch.countDown();
     }
 
-    public void handlePub(@Payload GameData gameData, GameStatus gameStatus) {
+    public void handlePub(GameData gameData, GameStatus gameStatus) {
         // pub 처리
 
         this.endTurn(gameData, gameStatus);

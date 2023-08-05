@@ -20,6 +20,11 @@ public class Board {
     }
 
     public void gameStart() {
+        // Card List 받아서 뿌려주기
+
+        // User List 바탕으로 gameStatus init
+
+        // phaseList 채우기
 
     }
 
@@ -39,8 +44,8 @@ public class Board {
         gameOver();
     }
 
-    public void handlePub(@Payload GameData gameData) {
+    public void handlePub(GameData gameData) {
         // pub 처리
-        currentPhase.handlePub(gameData);
+        currentPhase.handlePub(gameData, gameStatus);
     }
 }

@@ -12,24 +12,16 @@ import java.util.concurrent.TimeUnit;
 
 public class PersonChoosePhase extends Phase {
 
-    /*
-    *
-    *
-    protected SimpMessageSendingOperations messagingTemplate;
-    protected ScheduledExecutorService turnTimer;
-    protected CountDownLatch latch;
-    protected long turnTimeLimit; // Phase 생성 시 파라미터로 받아야 함
-    protected GameStatus gameStatus;
-    *
-    * */
+    public PersonChoosePhase(int roomId, int turnTimeLimit) {
+        super(roomId, turnTimeLimit);
+    }
 
     public GameStatus startTurnTimer(GameStatus gameStatus) {
-        this.gameStatus = gameStatus;
 
         latch = new CountDownLatch(1);
         turnTimer = Executors.newSingleThreadScheduledExecutor();
 
-        messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(),
+        messagingTemplate.convertAndSend("/sub/" + roomId,
                 GameData.builder()
                         .type(TypeEnum.SELECT_PLAYER_TURN.name())
                         .player(gameStatus.getCurrentPlayer().getUserId())
@@ -64,14 +56,14 @@ public class PersonChoosePhase extends Phase {
         }
     }
 
-    public void endTurn(@Payload GameData gameData, GameStatus gameStatus) {
+    public void endTurn(GameData gameData, GameStatus gameStatus) {
         cancelTurnTimer();
 
         // 게임 내부 로직
         gameStatus.changeOpponentPlayer(gameData.getResponser());
 
         // subscriber 들에게 메시지 전달
-        messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(), gameData);
+        messagingTemplate.convertAndSend("/sub/" + roomId, gameData);
 
 
         latch.countDown();
@@ -80,13 +72,10 @@ public class PersonChoosePhase extends Phase {
     public void handlePub(@Payload GameData gameData, GameStatus gameStatus) {
         // pub 처리
         if (TypeEnum.TEST_PLAYER.name().equals(gameData.getType())) {           // 질문 대상 떠보기
-            messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(), gameData);
+            messagingTemplate.convertAndSend("/sub/" + roomId, gameData);
         } else if (TypeEnum.SELECT_PLAYER.name().equals(gameData.getType())) {  // 질문 대상 지목하기
             this.endTurn(gameData, gameStatus);
         }
-    }
-
-        this.endTurn(gameData, gameStatus);
     }
 
     public Integer randomPlayerId(GameStatus gameStatus) {
