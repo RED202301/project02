@@ -3,7 +3,7 @@ package com.ssafish;
 import com.ssafish.domain.card.Card;
 import com.ssafish.domain.card.CardsRepository;
 import com.ssafish.domain.deck.CardDeckRepository;
-import com.ssafish.domain.deck.Card_decks;
+import com.ssafish.domain.deck.CardDeck;
 import com.ssafish.domain.deck.Deck;
 import com.ssafish.domain.deck.DeckRepository;
 import com.ssafish.service.CardDeckService;
@@ -35,7 +35,7 @@ class CardTests {
     @Autowired
     CardDeckService cardDeckService;
     @Autowired
-    CardDeckRepository card_deckRepository;
+    CardDeckRepository cardDeckRepository;
 
     
     //더미 데이터 저장
@@ -69,18 +69,18 @@ class CardTests {
     @Order(3)
     void setDefaultDeckCardsToDB(){
 
-        card_deckRepository.deleteAllInBatch();
+        cardDeckRepository.deleteAllInBatch();
 
         long decknum = 1;
         long cardIdnum =1;
         for(int i=0;i<25;i++){
 
-            Card_decks card_decks = Card_decks.builder()
+            CardDeck card_decks = CardDeck.builder()
                     .cardDeckId(cardIdnum)
                     .cardId(cardIdnum)
                     .deckId(decknum)
                     .build();
-            card_deckRepository.save(card_decks);
+            cardDeckRepository.save(card_decks);
             cardIdnum++;
 
         }
