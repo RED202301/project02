@@ -2,8 +2,8 @@ package com.ssafish;
 
 import com.ssafish.domain.card.Card;
 import com.ssafish.domain.card.CardsRepository;
+import com.ssafish.domain.deck.CardDeck;
 import com.ssafish.domain.deck.CardDeckRepository;
-import com.ssafish.domain.deck.Card_decks;
 import com.ssafish.domain.deck.Deck;
 import com.ssafish.domain.deck.DeckRepository;
 import com.ssafish.service.CardDeckService;
@@ -75,7 +75,7 @@ class CardTests {
         long cardIdnum =1;
         for(int i=0;i<25;i++){
 
-            Card_decks card_decks = Card_decks.builder()
+            CardDeck card_decks = CardDeck.builder()
                     .cardDeckId(cardIdnum)
                     .cardId(cardIdnum)
                     .deckId(decknum)
