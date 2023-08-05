@@ -2,26 +2,32 @@ package com.ssafish.web.dto.Phase;
 
 import com.ssafish.web.dto.GameData;
 import com.ssafish.web.dto.GameStatus;
+import com.ssafish.web.dto.Player;
 import com.ssafish.web.dto.TypeEnum;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Scope;
 import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class PersonChoosePhase extends Phase {
+@RequiredArgsConstructor
+@Component
+public class PersonChoosePhase extends Phase implements ChoosePhase {
 
-    public PersonChoosePhase(int roomId, int turnTimeLimit) {
-        super(roomId, turnTimeLimit);
-    }
+    protected final SimpMessageSendingOperations messagingTemplate;
 
     public GameStatus startTurnTimer(GameStatus gameStatus) {
 
         latch = new CountDownLatch(1);
         turnTimer = Executors.newSingleThreadScheduledExecutor();
 
-        messagingTemplate.convertAndSend("/sub/" + roomId,
+        messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(),
                 GameData.builder()
                         .type(TypeEnum.SELECT_PLAYER_TURN.name())
                         .player(gameStatus.getCurrentPlayer().getUserId())
@@ -37,9 +43,9 @@ public class PersonChoosePhase extends Phase {
 
 
         if (gameStatus.getCurrentPlayer().isBot()) { // 현재 플레이어가 봇일 경우
-            turnTimer.schedule(() -> endTurn(gameData, gameStatus), randomResponseTime(turnTimeLimit), TimeUnit.SECONDS);
+            turnTimer.schedule(() -> endTurn(gameData, gameStatus), randomResponseTime(gameStatus.getTurnTimeLimit()), TimeUnit.SECONDS);
         } else {                                     // 현재 플레이어가 봇이 아닐 경우
-            turnTimer.schedule(() -> endTurn(gameData, gameStatus), turnTimeLimit, TimeUnit.SECONDS);
+            turnTimer.schedule(() -> endTurn(gameData, gameStatus), gameStatus.getTurnTimeLimit(), TimeUnit.SECONDS);
         }
         try {
             latch.await();
@@ -63,7 +69,7 @@ public class PersonChoosePhase extends Phase {
         gameStatus.changeOpponentPlayer(gameData.getResponser());
 
         // subscriber 들에게 메시지 전달
-        messagingTemplate.convertAndSend("/sub/" + roomId, gameData);
+        messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(), gameData);
 
 
         latch.countDown();
@@ -72,18 +78,18 @@ public class PersonChoosePhase extends Phase {
     public void handlePub(@Payload GameData gameData, GameStatus gameStatus) {
         // pub 처리
         if (TypeEnum.TEST_PLAYER.name().equals(gameData.getType())) {           // 질문 대상 떠보기
-            messagingTemplate.convertAndSend("/sub/" + roomId, gameData);
+            messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(), gameData);
         } else if (TypeEnum.SELECT_PLAYER.name().equals(gameData.getType())) {  // 질문 대상 지목하기
             this.endTurn(gameData, gameStatus);
         }
     }
 
-    public Integer randomPlayerId(GameStatus gameStatus) {
-        List<Integer> playerOrder = gameStatus.getPlayerOrder();
-        return playerOrder.get((int) (Math.random() * playerOrder.size()));
+    public long randomPlayerId(GameStatus gameStatus) {
+        List<Player> playerList = gameStatus.getPlayerList();
+        return playerList.get((int) (Math.random() * playerList.size())).getUserId();
     }
 
-    public int randomResponseTime(int timeLimit) {
+    public long randomResponseTime(long timeLimit) {
         return Math.max(3, (int) (Math.random() * timeLimit / 2));
     }
 }
