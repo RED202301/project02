@@ -44,9 +44,7 @@ public class CardDeckService {
         List<Card> d = cardsRepository.findCardDeckList(deckId);
 
         List<CardDto> cardList = new ArrayList<>();
-        for(int i=0;i< d.size();i++){
-            cardList.add(d.get(i).toDto());
-        }
+        d.forEach((card) -> cardList.add(card.toDto()));
         return cardList;
     }
 
