@@ -35,7 +35,7 @@ class CardTests {
     @Autowired
     CardDeckService cardDeckService;
     @Autowired
-    CardDeckRepository card_deckRepository;
+    Card_deckRepository card_deckRepository;
 
     
     //더미 데이터 저장
