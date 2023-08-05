@@ -13,25 +13,18 @@ import java.util.concurrent.TimeUnit;
 
 public class ReplyChoosePhase extends Phase {
 
-    /*
-    *
-    *
-    protected SimpMessageSendingOperations messagingTemplate;
-    protected ScheduledExecutorService turnTimer;
-    protected CountDownLatch latch;
-    protected long turnTimeLimit; // Phase 생성 시 파라미터로 받아야 함
-    protected GameStatus gameStatus;
-    *
-    * */
+    public ReplyChoosePhase(int roomId, int turnTimeLimit) {
+        super(roomId, turnTimeLimit);
+    }
 
+    @Override
     public GameStatus startTurnTimer(GameStatus gameStatus) {
-        this.gameStatus = gameStatus;
 
         latch = new CountDownLatch(1);
         turnTimer = Executors.newSingleThreadScheduledExecutor();
 
         // 턴 시작을 알림
-        messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(),
+        messagingTemplate.convertAndSend("/sub/" + roomId,
                 GameData.builder()
                         .type(TypeEnum.REPLY_TURN.name())
                         .player(gameStatus.getOpponentPlayer().getUserId())
@@ -69,7 +62,10 @@ public class ReplyChoosePhase extends Phase {
         }
     }
 
-    public void endTurn(@Payload GameData gameData, GameStatus gameStatus) {
+    @Override
+    public void endTurn(GameData gameData, GameStatus gameStatus) {
+        int delaySecond = 0;
+
         cancelTurnTimer();
 
         ScheduledExecutorService turnTimer2 = Executors.newSingleThreadScheduledExecutor();
@@ -81,7 +77,7 @@ public class ReplyChoosePhase extends Phase {
         List<Integer> enrollCurrent = gameStatus.getCurrentPlayer().getCardsEnrolled();
         List<Integer> middleDeck = gameStatus.getMiddleDeck();
 
-        messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(), gameData);
+        messagingTemplate.convertAndSend("/sub/" + roomId, gameData);
 
         if (gameData.isGoFish()) {
         // isGoFish = true면 짝인 카드가 없다
@@ -89,7 +85,7 @@ public class ReplyChoosePhase extends Phase {
             // 중앙 덱에 카드가 있으면 카드 드로우
                 Integer cardDraw = middleDeck.remove(middleDeck.size() - 1);
 
-                turnTimer2.schedule(() -> sendAutoDraw(gameStatus, cardDraw), 2, TimeUnit.SECONDS);
+                turnTimer2.schedule(() -> sendAutoDraw(gameStatus, cardDraw), 2 * ++delaySecond, TimeUnit.SECONDS);
                 // 카드가 requester 손패로 이동
                 if (!handCurrent.contains(cardDraw)) {
                     handCurrent.add(cardDraw);
@@ -98,7 +94,7 @@ public class ReplyChoosePhase extends Phase {
                     handCurrent.remove(cardDraw);
                     enrollCurrent.add(cardDraw);
 
-                    turnTimer2.schedule(() -> sendEnroll(gameStatus.getCurrentPlayer().getUserId(), cardDraw), 4, TimeUnit.SECONDS);
+                    turnTimer2.schedule(() -> sendEnroll(gameStatus.getCurrentPlayer().getUserId(), cardDraw), 2 * ++delaySecond, TimeUnit.SECONDS);
 
                     if (handCurrent.isEmpty()) {
                         gameStatus.setGameOver(true);
@@ -117,12 +113,12 @@ public class ReplyChoosePhase extends Phase {
             handOpponent.remove(cardOpen);
             handCurrent.remove(cardOpen);
 
-            turnTimer2.schedule(() -> sendCardMove(gameStatus), 2, TimeUnit.SECONDS);
+            turnTimer2.schedule(() -> sendCardMove(gameStatus), 2 * ++delaySecond, TimeUnit.SECONDS);
 
             // 짝 맞춰 플레이어의 등록패로 이동
             enrollCurrent.add(cardOpen);
 
-            turnTimer2.schedule(() -> sendEnroll(gameStatus.getCurrentPlayer().getUserId(), cardOpen), 4, TimeUnit.SECONDS);
+            turnTimer2.schedule(() -> sendEnroll(gameStatus.getCurrentPlayer().getUserId(), cardOpen), 2 * ++delaySecond, TimeUnit.SECONDS);
 
             if (handCurrent.isEmpty() || handOpponent.isEmpty()) {
                 gameStatus.setGameOver(true);
@@ -132,10 +128,11 @@ public class ReplyChoosePhase extends Phase {
             gameStatus.changeCurrentPhase();
         }
 
-        latch.countDown();
+        turnTimer2.schedule(latch::countDown, 2 * delaySecond + 1, TimeUnit.SECONDS);
     }
 
-    public void handlePub(@Payload GameData gameData, GameStatus gameStatus) {
+    @Override
+    public void handlePub(GameData gameData, GameStatus gameStatus) {
         // pub 처리
 
         this.endTurn(gameData, gameStatus);
@@ -161,7 +158,7 @@ public class ReplyChoosePhase extends Phase {
     }
 
     public void sendEnroll(int userId, int cardId) {
-        messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(),
+        messagingTemplate.convertAndSend("/sub/" + roomId,
                 GameData.builder()
                         .type(TypeEnum.ENROLL.name())
                         .player(userId)
@@ -171,7 +168,7 @@ public class ReplyChoosePhase extends Phase {
     }
 
     public void sendCardMove(GameStatus gameStatus) {
-        messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(),
+        messagingTemplate.convertAndSend("/sub/" + roomId,
                 GameData.builder()
                         .type(TypeEnum.CARD_MOVE.name())
                         .from(gameStatus.getOpponentPlayer().getUserId())
