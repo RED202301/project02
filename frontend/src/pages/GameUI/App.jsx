@@ -1,20 +1,21 @@
 import { useState } from 'react';
-import './App.css';
+import Card from '../../components/Card/Card';
 
-function Card({ idx, selected, onClick }) {
-  return (
-    <div
-      onClick={onClick}
-      style={{
-        width: '10vw',
-        height: '30vh',
-        backgroundColor: 'skyblue',
-        boxSizing: 'border-box',
-        border: idx === selected && 'solid tomato 5px',
-      }}
-    ></div>
-  );
-}
+// function Card({ idx, selected, onClick }) {
+//   return (
+//     <div
+//       onClick={onClick}
+//       style={{
+//         width: '200px',
+//         height: '300px',
+//         backgroundColor: 'skyblue',
+//         boxSizing: 'border-box',
+//         border: idx === selected && 'solid tomato 5px',
+//       }}
+//     ></div>
+//   );
+// }
+
 
 // function CardCollection() {
 //   return (
@@ -29,14 +30,29 @@ function Card({ idx, selected, onClick }) {
 //     </div>
 //   );
 // }
-function collectioncard() {
+function Collectioncard({ idx, radius, total }) {
+  const angle = (idx + 1) / (total+1) // Calculate the angle in degrees
+
+  // const x = radius * Math.cos(angle * (Math.PI / 180));
+  // const z = -radius * Math.sin(angle * (Math.PI / 180));
+
   return (
-    <div style={{
-      width: '5px',
-      height: '7.5px',
-      backgroundColor: 'white',
-    }}></div>
-  )
+    <div
+      style={{
+        width: '100px',
+        height: '100px',
+        backgroundColor: 'white',
+        border:"solid black 2px",
+        position: 'absolute',
+        top: '45%', // Adjust the top position to center vertically
+        left: '50%', // Adjust the left position to center horizontally
+        translate: `${radius * Math.cos(angle * Math.PI) * 1.5}vw 45vw ${
+          -radius * Math.sin(angle * Math.PI) * 1.5 
+        }vw`,
+        transform: `rotateY(${angle * 180 + 90}deg)`,
+      }}
+    />
+  );
 }
 
 function User({ img, idx, total, radius, onClick, selected}) {
@@ -46,7 +62,7 @@ function User({ img, idx, total, radius, onClick, selected}) {
   const starcount = "🐬 X " + point;
   
   return (
-    
+
     <div
       onClick={onClick}
       style={{
@@ -87,18 +103,28 @@ function User({ img, idx, total, radius, onClick, selected}) {
       fontSize: '15px',
       color: 'white',
     }}>수집한 물고기 : {starcount}</p></div>
-    <div style={{
-      // border: 'solid white 2px',
-      width: '180px',
-      height: '50px',
-      float: 'left',
-      
-    }}><p style={{
-      transform: `rotateY(${angle * 180 + 90}deg)`,
-      fontWeight: 'bold',
-      fontSize: '15px',
-      color: 'white',
-    }}><collectioncards/></p></div>
+      {/* <div style={{ width: '180px', height: '50px', float: 'left' }}>
+        <p style={{ transform: `rotateY(${angle * 180 + 90}deg)`, fontWeight: 'bold', fontSize: '15px', color: 'white' }}>{username}</p>
+        <p style={{ transform: `rotateY(${angle * 180 + 90}deg)`, fontWeight: 'bold', fontSize: '15px', color: 'white' }}>수집한 물고기 : {starcount}</p>
+      </div> */}
+
+      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+        {Array.from({ length: 1 }, (_, i) => (
+          <div
+            key={i}
+            style={{
+              position: 'absolute',
+              width: '120px', // width 변경
+              height: '120px', // height 변경
+              backgroundColor: 'white',
+              marginTop: '1000px',
+              // zIndex: '1',
+            }}
+          />
+        ))}
+      </div>
+
+=
     </div>
 
   );
@@ -106,7 +132,7 @@ function User({ img, idx, total, radius, onClick, selected}) {
 
 function App() {
   const [selectedUser, selectUser] = useState(-1);
-  const [selectedCard, selectCard] = useState(-1);
+  // const [selectedCard, selectCard] = useState(-1);
   const [myTurn, setMyTurn] = useState(true);
   // const [myMike, setMyMike] = useState(true);
   function handleUserClick(idx) {
@@ -114,17 +140,23 @@ function App() {
       if (myTurn) selectUser(idx);
     };
   }
-  function handleCardClick(idx) {
-    return function () {
-      if (myTurn) selectCard(idx);
-    };
-  }
-  // fun
-  // view시점이동
+  // function handleCardClick(idx) {
+  //   return function () {
+  //     if (myTurn) selectCard(idx);
+  //   };
+  // }
   // const users = [0, 0, 0, 0];
+  const cardcols = [0, 1, 2, 3];
   const users = ['./카리나.webp', './윈터.webp', './지젤.webp', './닝닝.webp'];
-  const cards = [0, 0, 0, 0, 0];
-  // const collections = [0, 0, 0, 0, 0];
+  function cardMaker(title, subtitle, subject) {
+    return { title, subtitle, subject };
+  }
+  const cards = [
+    cardMaker('단군왕검', '대한민국', './people_imgs/1_단군왕검.png'),
+    cardMaker('광개토대왕', '대한민국', './people_imgs/3_광개토대왕.png'),
+    cardMaker('세종대왕', '대한민국', './people_imgs/8_세종대왕.png'),
+    cardMaker('이순신', '대한민국', './people_imgs/9_이순신.png'),
+  ];
   const [view, setView] = useState(1);
   const views = [
     `rotateY(-${180 / (users.length * 0.7)}deg)`,
@@ -140,7 +172,7 @@ function App() {
       height: '100%',
       // borderRadius: '50%',
       backgroundColor: 'tomato',
-      // backgroundImage: 'url(./backs.png)',
+      backgroundImage: 'url(./backs.png)',
       // translate: '0px 50vh 0vh',
       // transformStyle: 'preserve-3d',
       // transform: 'rotateX(90deg)',
@@ -230,8 +262,32 @@ function App() {
                 transformStyle: 'preserve-3d',
                 transform: 'rotateX(90deg)',
                 left: '4%',
+                // zIndex: '2',
               }}
-            ></div>
+            > <div style={{
+               width: '60vw', 
+               height: '42vh',
+               position: 'absolute', 
+              //  display: 'flex', 
+               top: 0 ,
+  
+              //  justifyContent: 'center',
+              //  alignItems: 'center',
+              //  transition: 'all 1s',
+              //  transform: views[view],
+               }}>
+            {/* {cardcols.map((idx,index, arr) => (
+              <Collectioncard
+                idx={idx}
+                key={idx}
+                total = {arr.length}
+                radius={100}
+              />
+            ))} */}
+          </div>
+              
+            </div>
+
           </div>
         </div>
 
@@ -279,7 +335,7 @@ function App() {
         onClick={() => {
           if (myTurn) {
             selectUser(-1);
-            selectCard(-1);
+            // selectCard(-1);
           }
           setMyTurn(myTurn => !myTurn);
         }}
@@ -336,6 +392,17 @@ function App() {
         }}>
           {myTurn ? '🔈' : '🔊'}</button>
         </div>
+        {/* <div
+        style={{
+          position: 'absolute',
+          width: '200px',
+          height: '200px',
+          top: '70%',
+          left: '50%',
+          marginLeft: '-100px', // 가로 중앙 정렬
+          backgroundColor: 'white',
+        }}
+      ></div> */}
       <div
         style={{
           position: 'absolute',
@@ -349,12 +416,11 @@ function App() {
           
         }}
       >
-        {cards.map((_, idx) => {
+        {cards.map(({ title, subtitle, subject }, idx) => {
           return (
             <Card key={idx} idx={idx} selected={selectedCard} onClick={handleCardClick(idx)}> </Card>
             );
           })}
-
 
       </div>
     </div>

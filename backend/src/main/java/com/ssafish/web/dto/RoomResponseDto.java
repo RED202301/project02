@@ -3,6 +3,7 @@ package com.ssafish.web.dto;
 import com.ssafish.domain.Room;
 import lombok.*;
 
+@ToString
 @Getter
 @AllArgsConstructor
 @Builder(access = AccessLevel.PRIVATE)

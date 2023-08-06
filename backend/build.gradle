@@ -59,6 +59,11 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.7'
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
+    //swagger
+    // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.7.0'
+
+
 
 
 }
@@ -69,7 +74,10 @@ tasks.named('test') {
 jib {
 
     to {
-        image = "qortn365/ssafish"
+        //ops
+        //image = "qortn365/ssafish"
+        //dev
+        image = "qortn365/ssafish_dev"
         tags = ["latest"]
         auth{
             username = "qortn365"
