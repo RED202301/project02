@@ -23,9 +23,10 @@ public class PersonChoosePhase extends Phase implements ChoosePhase {
     protected final SimpMessageSendingOperations messagingTemplate;
 
     public GameStatus startTurnTimer(GameStatus gameStatus) {
+        awaitSecond(1L);
 
-        latch = new CountDownLatch(1);
         turnTimer = Executors.newSingleThreadScheduledExecutor();
+        latch = new CountDownLatch(1);
 
         messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(),
                 GameData.builder()
@@ -37,9 +38,9 @@ public class PersonChoosePhase extends Phase implements ChoosePhase {
         // 자동 처리 로직
         GameData gameData = GameData.builder()
                 .type(TypeEnum.SELECT_PLAYER.name())
-                .cardId(randomPlayerId(gameStatus)) // 손패에서 랜덤 카드 ID 선택
+                .requester(gameStatus.getCurrentPlayer().getUserId())
+                .responser(randomPlayerId(gameStatus))
                 .build();
-        gameData.setResponser(randomPlayerId(gameStatus));
 
 
         if (gameStatus.getCurrentPlayer().isBot()) { // 현재 플레이어가 봇일 경우
@@ -52,7 +53,6 @@ public class PersonChoosePhase extends Phase implements ChoosePhase {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
         return gameStatus;
     }
 
@@ -67,10 +67,10 @@ public class PersonChoosePhase extends Phase implements ChoosePhase {
 
         // 게임 내부 로직
         gameStatus.changeOpponentPlayer(gameData.getResponser());
+        gameStatus.changeCurrentPhase();
 
         // subscriber 들에게 메시지 전달
         messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(), gameData);
-
 
         latch.countDown();
     }
@@ -85,8 +85,14 @@ public class PersonChoosePhase extends Phase implements ChoosePhase {
     }
 
     public long randomPlayerId(GameStatus gameStatus) {
+        Player opponentPlayer;
+        Player currentPlayer = gameStatus.getCurrentPlayer();
         List<Player> playerList = gameStatus.getPlayerList();
-        return playerList.get((int) (Math.random() * playerList.size())).getUserId();
+        do {
+            opponentPlayer = playerList.get((int) (Math.random() * playerList.size()));
+        } while (currentPlayer.equals(opponentPlayer));
+
+        return opponentPlayer.getUserId();
     }
 
     public long randomResponseTime(long timeLimit) {

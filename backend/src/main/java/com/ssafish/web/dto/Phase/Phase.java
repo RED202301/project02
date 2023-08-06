@@ -22,4 +22,15 @@ import java.util.concurrent.TimeUnit;
 public abstract class Phase {
     protected ScheduledExecutorService turnTimer;
     protected CountDownLatch latch;
+
+    protected void awaitSecond(long second) {
+        ScheduledExecutorService timer = Executors.newSingleThreadScheduledExecutor();
+        latch = new CountDownLatch(1);
+        timer.schedule(latch::countDown, second, TimeUnit.SECONDS);
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }
