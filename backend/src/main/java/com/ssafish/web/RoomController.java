@@ -39,20 +39,20 @@ public class RoomController {
 
         rooms.put(uuid, responseDto.getRoomId());
         gameService.createGameRoom(responseDto);
-        
+        log.info(responseDto.toString());
         return responseDto;
     }
 
     @GetMapping("/api/v1/room/id/{pinNumber}")
     public RoomResponseDto findByPinNumber(@PathVariable String pinNumber) {
-        log.debug(pinNumber);
+        log.info(pinNumber);
 
         return roomService.findByPinNumber(pinNumber);
     }
 
     @PostMapping("/api/v1/room/msg")
     public void msgToRoom(@RequestBody MsgRequest msgRequest) throws IOException {
-        log.debug(msgRequest.toString());
+        log.info(msgRequest.toString());
 
         Long roomId = msgRequest.getRoomId();
         String content = msgRequest.getContent();
@@ -66,10 +66,11 @@ public class RoomController {
 
         Long userId = data.getUserId();
         String nickname = data.getNickname();
+        boolean isBot = data.isBot();
         String sessionId = headerAccessor.getSessionId();
         log.info(roomId + " " + userId + " " + sessionId);
 
-        gameService.addPlayer(roomId, userId, nickname, true);
+        gameService.addPlayer(roomId, userId, nickname, isBot);
 
         return gameService.getPlayerList(roomId);
     }

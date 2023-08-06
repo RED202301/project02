@@ -2,6 +2,7 @@ package com.ssafish.service;
 
 import com.ssafish.web.dto.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class GameService {
@@ -19,6 +21,7 @@ public class GameService {
     private final Map<Long, Board> boards = new ConcurrentHashMap<>();
 
     public void createGameRoom(RoomResponseDto responseDto) {
+        log.info("createGameRoom invoke");
         Board board = boardFactory.getObject();
 
         GameStatus gameStatus = gameStatusFactory.getObject();
@@ -31,6 +34,7 @@ public class GameService {
         board.setCapacity(responseDto.getCapacity());
 
         boards.put(responseDto.getRoomId(), board);
+        log.info(boards.get(responseDto.getRoomId()).toString());
     }
 
     public Board getGameRoomByRoomId(long userId) {
@@ -49,23 +53,24 @@ public class GameService {
         return boards.get(roomId).getGameStatus().getPlayerList();
     }
 
-    public void startGame(int roomId, GameData gameData) {
+    public void startGame(long roomId, GameData gameData) {
+        boards.keySet().forEach(System.out::println);
         boards.get(roomId).play(gameData);
     }
 
-    public void selectPlayer(int roomId, GameData gameData) {
+    public void selectPlayer(long roomId, GameData gameData) {
         boards.get(roomId).handlePub(gameData);
     }
 
-    public void testPlayer(int roomId, GameData gameData) {
+    public void testPlayer(long roomId, GameData gameData) {
         boards.get(roomId).handlePub(gameData);
     }
 
-    public void selectCard(int roomId, GameData gameData) {
+    public void selectCard(long roomId, GameData gameData) {
         boards.get(roomId).handlePub(gameData);
     }
 
-    public void reply(int roomId, GameData gameData) {
+    public void reply(long roomId, GameData gameData) {
         boards.get(roomId).handlePub(gameData);
     }
 }

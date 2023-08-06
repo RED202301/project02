@@ -22,9 +22,10 @@ public class CardChoosePhase extends Phase implements ChoosePhase {
     protected final SimpMessageSendingOperations messagingTemplate;
 
     public GameStatus startTurnTimer(GameStatus gameStatus) {
+        awaitSecond(1L);
 
-        latch = new CountDownLatch(1);
         turnTimer = Executors.newSingleThreadScheduledExecutor();
+        latch = new CountDownLatch(1);
 
         // 턴 시작을 알림
         messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(),
@@ -38,6 +39,7 @@ public class CardChoosePhase extends Phase implements ChoosePhase {
         // 자동 처리 로직
         GameData gameData = GameData.builder()
                                     .type(TypeEnum.SELECT_CARD.name())
+                                    .player(gameStatus.getCurrentPlayer().getUserId())
                                     .cardId(randomCardId((gameStatus))) // 손패에서 랜덤 카드 ID 선택
                                     .build();
 
@@ -68,12 +70,11 @@ public class CardChoosePhase extends Phase implements ChoosePhase {
 
         // 게임 내부 로직
         gameStatus.setCardOpen(gameData.getCardId()); // 공개 카드 반영
+        gameStatus.changeCurrentPhase();
 
         // subscriber 들에게 메시지 전달
         messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(), gameData);
 
-        // 다음 턴으로 진행
-        gameStatus.changeCurrentPhase();
 
         latch.countDown();
     }
