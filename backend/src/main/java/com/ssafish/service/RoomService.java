@@ -27,7 +27,7 @@ public class RoomService {
             System.out.println("TT");
             return;
         }
-        messagingTemplate.convertAndSend("/sub/" + roomId, new SocketData(77L, message));
+        messagingTemplate.convertAndSend("/sub/" + roomId, new SocketData(77L, message, true));
     }
 
     public void processClientEntrance(Long roomId, Long userId, String sessionId) {
