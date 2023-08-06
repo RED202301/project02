@@ -73,12 +73,12 @@ tasks.named('test') {
 }
 jib {
 
-    to {
-        image = "qortn365/ssafish"
-        tags = ["latest"]
-        auth{
-            username = "qortn365"
-            password = "livecream0102!!"
-        }
-    }
+//    to {
+//        image = "qortn365/ssafish"
+//        tags = ["latest"]
+//        auth{
+//            username = "qortn365"
+//            password = "livecream0102!!"
+//        }
+//    }
 }
