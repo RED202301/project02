@@ -1,23 +1,102 @@
-.CardWapper{
-    width: 100%;
-    height: 100%;
-    border: solid black 5px;
-    border-radius: 20px;
-    font-size: 10%;
+@font-face {
+    font-family: 'BlackHanSans-Regular';
+    src: url('./src/assets/BlackHanSans-Regular.ttf') format('truetype');
+}
 
-    transform-style: preserve-3d;
-    // transform: rotateY( 180deg );
-    transition: all 1s;
+.Card {
+    // 드래그 못하게 하기
+    -ms-user-select: none; 
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
     
+    // 3d 처리
+    transform-style: preserve-3d;
+    
+    // 사이즈
+    box-sizing: border-box;
+    width: var(--width);
+    height: var(--height);
 
-    * {
-        --innerborder-radius: 15px;
-        
-        @font-face {
-            font-family: 'Black_Han_Sans';
-            src: url('./src/assets/BlackHanSans-Regular.ttf') format('truetype');
-        }      
-        --title-size: 20em;
-        --subtitle-size: 10em;
-    }   
+    // 배경
+    background-color: white;
+
+    // 테두리
+    --border-layer: calc(var(--width) * 1 / 60);
+    --border: calc(var(--border-layer) * 3);
+    --inner-width: calc( var(--width) - 2 * var(--border) );
+    --inner-height: calc( var(--height) - 2 * var(--border) );
+    
+    border-radius: var(--border);
+    box-shadow:  
+    inset 0 0 0 var(--border-layer) #FFF, 
+    // inset 0 0 0 calc(var(--border-layer) * 1) #ccccff, 
+    // inset 0 0 0 calc(var(--border-layer) * 2) #ddddff, 
+    // inset 0 0 0 calc(var(--border-layer) * 3) #ccccff,
+    // inset 0 0 0 calc(var(--border-layer) * 2) #fff, 
+    // inset 0 0 0 calc(var(--border-layer) * 3) #000,
+    ;
+
+
+
+    // 내부 컴포넌트 배치
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    // 글자 크기
+    .title, .subtitle {
+        white-space: nowrap;
+        position: absolute;
+        color:#fff;
+        -webkit-text-stroke: #000 1px;
+    }
+
+    .title{
+        font-size: var(--inner-width);
+        transform: scale( calc( 1 / var(--title-length)));
+    }
+    .subtitle{
+        font-size: calc( var(--inner-width) / 2);
+        transform: scale( calc( 1 / var(--subtitle-length)));
+    }
+    .titleWrapper, .subtitleWrapper{
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: 'BlackHanSans-Regular';
+    }
+    .subtitleWrapper{
+        top: calc(var(--inner-height)/2 - var(--inner-width) / var(--title-length) - var(--inner-width) / var(--subtitle-length) / 4 );
+    }
+    .titleWrapper{
+        top: calc(var(--inner-height)/2 - var(--inner-width) / var(--title-length) / 2);
+    }
+
+    .Background, .Subject, .Foreground {
+        position: absolute;
+        width: var(--inner-width);
+        height: var(--inner-height);
+        // width: var(--width);
+        // height: var(--height);
+        // border-radius: var(--border);
+
+        background-size: cover;
+        transform: translateX(calc( -var(--offsetX) * var(--inner-height) )) translateY(calc( -var(--offsetY) * var(--inner-height) ));
+    }
+    // .Background{
+    //     width: calc(var(--inner-width)/2);
+    //     height: calc(var(--inner-height)/2);
+    // }
+    // .Subject{
+    //     width: calc(var(--inner-width)/3);
+    //     height: calc(var(--inner-height)/3);
+    // }
+    // .Foreground{
+    //     width: calc(var(--inner-width)/4);
+    //     height: calc(var(--inner-height)/4);
+    // }
+
 }
