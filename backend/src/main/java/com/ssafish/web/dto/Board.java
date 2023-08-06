@@ -7,9 +7,11 @@ import com.ssafish.web.dto.Phase.Phase;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+@ToString
 @Getter
 @Setter
 @RequiredArgsConstructor

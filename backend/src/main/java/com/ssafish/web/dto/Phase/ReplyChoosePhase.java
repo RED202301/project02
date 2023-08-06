@@ -23,9 +23,10 @@ public class ReplyChoosePhase extends Phase implements ChoosePhase {
 
     @Override
     public GameStatus startTurnTimer(GameStatus gameStatus) {
+        awaitSecond(1L);
 
-        latch = new CountDownLatch(1);
         turnTimer = Executors.newSingleThreadScheduledExecutor();
+        latch = new CountDownLatch(1);
 
         // 턴 시작을 알림
         messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(),
@@ -104,12 +105,10 @@ public class ReplyChoosePhase extends Phase implements ChoosePhase {
                         gameStatus.setGameOver(true);
                     }
                 }
-            } else {
-            // 없으면 지목 대상 선택 페이즈 + 다음 사람턴
-                //
-                gameStatus.changeCurrentPhase();
-                gameStatus.changeCurrentPlayer();
             }
+            // 지목 대상 선택 페이즈 + 다음 사람 턴
+            gameStatus.changeCurrentPhase();
+            gameStatus.changeCurrentPlayer();
         } else {
         // isGoFish = false면 짝인 카드가 있다
             // 카드를 상대 플레이어에게서 삭제, 현재 플레이어에게서도 삭제

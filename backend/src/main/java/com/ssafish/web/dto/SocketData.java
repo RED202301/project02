@@ -14,4 +14,5 @@ public class SocketData {
 
     private Long userId;
     private String nickname;
+    private boolean isBot;
 }
