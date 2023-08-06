@@ -13,5 +13,5 @@ import lombok.Setter;
 public class SocketData {
 
     private Long userId;
-    private String content;
+    private String nickname;
 }
