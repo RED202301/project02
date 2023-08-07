@@ -25,7 +25,7 @@ public class CardDto {
 
     @Builder
     public CardDto
-            (long cardId, long userId, String mainTitle, String subTitle,String mainImgUrl,String subImgUrl,int point ){
+            (long cardId, long userId, String mainTitle, String subTitle, String mainImgUrl, String subImgUrl, String cardDescription, int point ){
         this.cardId = cardId;
         this.userId = userId;
         this.mainTitle = mainTitle;
