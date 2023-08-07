@@ -26,6 +26,7 @@ public class GameStatus {
 
     private List<Player> playerList = new ArrayList<>(); // userId의 리스트: 플레이어들의 순서를 나타낸다
     private List<Long> middleDeck = new ArrayList<>(); // 중앙 덱에 있는 cardId 리스트
+    private Map<Long, Integer> pointMap;
 
     private ChoosePhase currentPhase;
     private Player currentPlayer;

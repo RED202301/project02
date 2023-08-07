@@ -1,6 +1,8 @@
 package com.ssafish.web;
 
 import com.ssafish.common.util.WebSocketSubscriberManager;
+import com.ssafish.service.GameService;
+import com.ssafish.web.dto.Board;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
@@ -23,9 +25,10 @@ import java.util.concurrent.ScheduledFuture;
 public class DisconnectHandler implements ApplicationListener<AbstractSubProtocolEvent> {
 
     private final WebSocketSubscriberManager subscriberManager;
+    private final GameService gameService;
+    private final long DISCONNECT_DELAY = 5_000;
     private TaskScheduler taskScheduler = new ConcurrentTaskScheduler();
     private Map<String, ScheduledFuture<?>> disconnectTasks = new ConcurrentHashMap<>();
-    private static final long DISCONNECT_DELAY = 5_000;
 
     @Override
     public void onApplicationEvent(AbstractSubProtocolEvent event) {
@@ -52,6 +55,10 @@ public class DisconnectHandler implements ApplicationListener<AbstractSubProtoco
         subscriberManager.removeSubscriber(sessionId);
         log.info("Client with sessionId " + sessionId + " disconnected.");
         disconnectTasks.remove(sessionId);
+
+        long roomId = subscriberManager.getRoomIdBySessionId(sessionId);
+        long userId = subscriberManager.getUserIdBySessionId(sessionId);
+        Board room = gameService.getGameRoomByRoomId(roomId);
     }
 
     public void cancelDisconnectTask(String sessionId) {
