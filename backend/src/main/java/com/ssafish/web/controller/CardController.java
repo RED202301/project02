@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/deck")
+@RequestMapping("/deck")
 @CrossOrigin("*")
 @Slf4j
-public class DeckController {
+public class CardController {
 
     @Autowired
     CardDeckService cardDeckService;
