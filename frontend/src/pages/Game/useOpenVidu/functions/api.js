@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const APPLICATION_SERVER_URL = 'http://192.168.30.141:5000';
+const APPLICATION_SERVER_URL = 'http://192.168.30.200:5001';
 
 async function getSession(sessionId) {
   const response = await axios.post(

@@ -8,7 +8,7 @@ function Game() {
   const sessionId = 'SessionA';
   const myUserName = 'Participant' + Math.floor(Math.random() * 100);
   const { subs, publisher, session, openViduInitializer } = useOpenVidu({ sessionId, myUserName });
-  useEffect(() => openViduInitializer(), []);
+  useEffect(() => {openViduInitializer()}, []);
 
   return (
     <div>
