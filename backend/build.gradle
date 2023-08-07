@@ -76,10 +76,10 @@ tasks.named('test') {
 jib {
 
     to {
-        //ops
+        // ops
         image = "qortn365/ssafish"
-        //dev
-        //image = "qortn365/ssafish_dev"
+        // dev
+        // image = "qortn365/ssafish_dev"
         tags = ["latest"]
         auth{
             username = "qortn365"
