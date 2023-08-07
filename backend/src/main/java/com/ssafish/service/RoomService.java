@@ -21,7 +21,7 @@ public class RoomService {
     private final WebSocketSubscriberManager subscriberManager;
     private final SimpMessageSendingOperations messagingTemplate;
 
-    public void sendMessageToRoom(Long roomId, String message) throws IOException {
+    public void sendMessageToRoom(Long roomId, String message) {
         Map<Long, String> sessionIds = subscriberManager.getRoomById(roomId);
         if (sessionIds == null) {
             System.out.println("TT");
