@@ -108,7 +108,7 @@ class CardTests {
 
         //프로퍼티에 추가해야할 내용, 구분자 리눅스에 맞게 확인하기
         //app.fileupload.uploadPath=C:\\SSAFY\\springboot\\springboot\\BoardWebFileUploadSpringBootMybatisVueVuex\\src\\main\\resources\\static
-
+// http://i9e202.p.ssafy.io/home/ubuntu/ssafish/cardMainImage/people_imgs/1_%EB%8B%A8%EA%B5%B0%EC%99%95%EA%B2%80.png
         //String uploadPath = "http://i9e202.p.ssafy.io/home/ubuntu/ssafish/cardMainImage";
         String uploadPath = "D:/E202/cardMainImage";
 
