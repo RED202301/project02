@@ -1,22 +1,13 @@
 package com.ssafish.web;
 
+import io.openvidu.java.client.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import java.util.Map;
-
-import org.springframework.web.bind.annotation.*;
-
-import io.openvidu.java.client.Connection;
-import io.openvidu.java.client.ConnectionProperties;
-import io.openvidu.java.client.OpenVidu;
-import io.openvidu.java.client.OpenViduHttpException;
-import io.openvidu.java.client.OpenViduJavaClientException;
-import io.openvidu.java.client.Session;
-import io.openvidu.java.client.SessionProperties;
 
 
 @RestController
@@ -38,7 +29,7 @@ public class OpenviduController {
     }
 
 //test
-    @GetMapping("/test")
+    @GetMapping("/api/test")
     public String test() {
         System.out.println("성공!!");
         return "hello world";
