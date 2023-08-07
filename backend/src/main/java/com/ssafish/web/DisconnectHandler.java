@@ -3,6 +3,7 @@ package com.ssafish.web;
 import com.ssafish.common.util.WebSocketSubscriberManager;
 import com.ssafish.service.GameService;
 import com.ssafish.web.dto.Board;
+import com.ssafish.web.dto.Player;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
@@ -15,6 +16,7 @@ import org.springframework.web.socket.messaging.SessionConnectEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
@@ -59,6 +61,13 @@ public class DisconnectHandler implements ApplicationListener<AbstractSubProtoco
         long roomId = subscriberManager.getRoomIdBySessionId(sessionId);
         long userId = subscriberManager.getUserIdBySessionId(sessionId);
         Board room = gameService.getGameRoomByRoomId(roomId);
+        if (room.isStarted()) {
+            List<Player> playerList = room.getGameStatus().getPlayerList();
+            Player player = playerList.stream().filter(e -> e.getUserId() == userId).findAny().orElseThrow();
+            player.setBot(true);
+        } else {
+
+        }
     }
 
     public void cancelDisconnectTask(String sessionId) {
