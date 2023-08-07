@@ -27,6 +27,7 @@ public class GameService {
         GameStatus gameStatus = gameStatusFactory.getObject();
         gameStatus.setRoomId(responseDto.getRoomId());
         gameStatus.setTurnTimeLimit(responseDto.getTimeLimit());
+        gameStatus.setPointMap(new ConcurrentHashMap<>());
 
         board.setGameStatus(gameStatus);
         board.setDeckId(responseDto.getDeckId());
@@ -34,7 +35,7 @@ public class GameService {
         board.setCapacity(responseDto.getCapacity());
 
         boards.put(responseDto.getRoomId(), board);
-        log.info(boards.get(responseDto.getRoomId()).toString());
+        log.info("생성된 방 번호: " + boards.get(responseDto.getRoomId()).toString());
     }
 
     public Board getGameRoomByRoomId(long roomId) {

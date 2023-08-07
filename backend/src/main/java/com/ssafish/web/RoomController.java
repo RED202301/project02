@@ -51,7 +51,7 @@ public class RoomController {
     }
 
     @PostMapping("/api/v1/room/msg")
-    public void msgToRoom(@RequestBody MsgRequest msgRequest) throws IOException {
+    public void msgToRoom(@RequestBody MsgData msgRequest) throws IOException {
         log.info(msgRequest.toString());
 
         Long roomId = msgRequest.getRoomId();
