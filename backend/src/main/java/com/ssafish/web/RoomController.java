@@ -53,7 +53,7 @@ public class RoomController {
     }
 
     @PostMapping("/api/v1/room/msg")
-    public void msgToRoom(@RequestBody MsgRequest msgRequest) throws IOException {
+    public void msgToRoom(@RequestBody MsgData msgRequest) throws IOException {
         log.info(msgRequest.toString());
 
         Long roomId = msgRequest.getRoomId();
@@ -70,9 +70,9 @@ public class RoomController {
         String nickname = data.getNickname();
         boolean isBot = data.isBot();
         String sessionId = headerAccessor.getSessionId();
-        log.info(roomId + " " + userId + " " + sessionId);
-
+        log.info(roomId + " 번 방에 user Id " + userId + " 인 유저가 입장 -> session ID: " + sessionId);
         try {
+            roomService.processClientEntrance(roomId, userId, sessionId);
             gameService.addPlayer(roomId, userId, nickname, isBot);
             return ResponseEntity.ok(gameService.getPlayerList(roomId));
         } catch (IllegalStateException e) {
