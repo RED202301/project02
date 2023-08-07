@@ -76,6 +76,7 @@ tasks.named('test') {
 jib {
 
     to {
+        // test 1
         //ops
         image = "qortn365/ssafish"
         //dev
