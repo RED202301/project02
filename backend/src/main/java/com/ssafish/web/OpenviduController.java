@@ -11,7 +11,7 @@ import java.util.Map;
 
 
 @RestController
-// @CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*")
 public class OpenviduController {
 
     @Value("${OPENVIDU_URL}")
