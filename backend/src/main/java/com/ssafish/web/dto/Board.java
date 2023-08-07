@@ -37,7 +37,7 @@ public class Board {
             currentPhase.startTurnTimer(gameStatus);
         }
 
-        gameOverPhase.run();
+        gameOverPhase.run(gameStatus);
     }
 
     public void handlePub(GameData gameData) {

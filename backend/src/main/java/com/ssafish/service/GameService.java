@@ -37,8 +37,8 @@ public class GameService {
         log.info(boards.get(responseDto.getRoomId()).toString());
     }
 
-    public Board getGameRoomByRoomId(long userId) {
-        return boards.get(userId);
+    public Board getGameRoomByRoomId(long roomId) {
+        return boards.get(roomId);
     }
 
     public void addPlayer(long roomId, long userId, String nickname, boolean isBot) {

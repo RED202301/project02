@@ -70,6 +70,7 @@ public class RoomController {
         String sessionId = headerAccessor.getSessionId();
         log.info(roomId + " " + userId + " " + sessionId);
 
+        roomService.processClientEntrance(roomId, userId, sessionId);
         gameService.addPlayer(roomId, userId, nickname, isBot);
 
         return gameService.getPlayerList(roomId);

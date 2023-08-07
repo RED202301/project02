@@ -17,10 +17,11 @@ public class GameData {
     private long responser; // 대답하는 사람
     private boolean isGoFish;
     private List<CardDto> cards; // 25장의 카드들
+    private List<Player> players;
 
     @Builder
     public GameData(String type, long from, long to, long cardId, long player,
-                    long requester, long responser, boolean isGoFish, List<CardDto> cards) {
+                    long requester, long responser, boolean isGoFish, List<CardDto> cards, List<Player> players) {
         this.type = type;
         this.from = from;
         this.to = to;
@@ -30,5 +31,6 @@ public class GameData {
         this.responser = responser;
         this.isGoFish = isGoFish;
         this.cards = cards;
+        this.players = players;
     }
 }
