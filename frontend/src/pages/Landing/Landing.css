@@ -3,7 +3,8 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background-image: url(../../assets/보드게임카페6.jpg);
+    /* background-image: url(../../assets/보드게임카페6.jpg); */
+    background-image: url(../../assets/보드게임카페12.svg);
     height: 100vh;
     width: 100vw;
     background-size: cover;
@@ -15,13 +16,17 @@
 }
 
 .Landing_div{
-  /* background-color: #4925177e; */
-  background: linear-gradient(#492517a7,#4925177e) padding-box;
-  border-radius: 15px;
+  background-color: #64463a7e;
+  /* background-image: url('../../assets/레고배경3.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center; */
+  /* background: linear-gradient(#492517a7,#4925177e) padding-box; */
+  border-radius: 20px;
   padding: 50px;
   padding-top: 20px;
+  box-shadow:20px 20px 50px rgba(0, 0, 0, 0.5);
 }
-
 .span1 {
   font-weight: 500;
   color: rgba(255, 255, 255, 0.914);
@@ -113,6 +118,8 @@ input:hover {
     top: 13px;
     transition: 0.3s;
     pointer-events: none;
+    color: white;
+    font-weight: 400;
   }
   
   .input {
@@ -143,7 +150,7 @@ input:hover {
   input:-webkit-autofill:focus,
   input:-webkit-autofill:active {
   transition: background-color 5000s;
-  -webkit-text-fill-color: #fff !important;
+  -webkit-text-fill-color: black !important;
   }
 
   .container .input:valid ~ .label,

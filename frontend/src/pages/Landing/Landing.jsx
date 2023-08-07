@@ -12,7 +12,7 @@ function Landing(){
   const REDIRECT_URI = 'http://localhost:5173/login2'; // redirect 주소
   const KAKAO_AUTH_URI = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code&prompt=login`;
   const [pinNumber, setPIN] = useState('');
-  const [roomId, setRoomId] = useState(null);
+  // const [roomId, setRoomId] = useState(null);
   const savePIN = event => {
     setPIN(event.target.value);
     // console.log(event.target.value);
@@ -47,7 +47,9 @@ function Landing(){
                 .then((response) => {
                   console.log(response.data)
                   const userId = response.data.userId
+                  const nickname = response.data.nickname
                   window.sessionStorage.setItem('userId', userId)
+                  window.sessionStorage.setItem('nickname', nickname)
                   if (userId) {
                     navigate('/gameUI')
                   }

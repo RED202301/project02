@@ -29,8 +29,10 @@ function Login2() {
             // 이때,
             const accessToken = response.data.accessToken
             const refreshToken = response.data.refreshToken;
+            const userId = response.data.userId;
 
             window.localStorage.setItem("accessToken", accessToken);
+            window.localStorage.setItem("userId", userId);
             setCookie("refreshToken", refreshToken, {
               httpOnly: true,
             })

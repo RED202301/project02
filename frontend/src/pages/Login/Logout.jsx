@@ -16,6 +16,7 @@ function Logout(){
       .then((response) => {
         console.log("응답 확인", response);
         localStorage.removeItem("accessToken");
+        localStorage.removeItem("userId");
         removeCookie('refreshToken'); // 쿠키를 삭제
         location.reload();
         window.location.replace('/')
