@@ -42,6 +42,7 @@ public class ReplyChoosePhase extends Phase implements ChoosePhase {
                 .type(TypeEnum.REPLY.name())
                 .requester(gameStatus.getCurrentPlayer().getUserId())
                 .responser(gameStatus.getOpponentPlayer().getUserId())
+                .cardId(gameStatus.getCardOpen())
                 .isGoFish(this.isGoFish(gameStatus))
                 .build();
 
