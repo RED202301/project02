@@ -46,8 +46,6 @@ public class OAuthController {
 
         String jwtAccessToken = JwtProvider.createAccessToken(kakaoUserInfo.getId(), secretKey);
         String jwtRefreshToken = JwtProvider.createRefreshToken(kakaoUserInfo.getId(), secretKey);
-        TokensResponse response = new TokensResponse(jwtAccessToken, jwtRefreshToken);
-
         User kakaoUser = userService.findUserByKakaoId(kakaoUserInfo.getId());
 
 
@@ -55,52 +53,24 @@ public class OAuthController {
         log.info("login Controller : " + kakaoUserInfo);
         log.info("jwtAccessToken : " + jwtAccessToken);
         log.info("jwtRefreshToken : " + jwtRefreshToken);
-        log.info("response : " + response);
 
 
         if (kakaoUser != null) {
             // kakao_access_token 변경 로직
             User user = userService.updateTokens(kakaoUser, jwtRefreshToken, access_token);
+            TokensResponse response = new TokensResponse(jwtAccessToken, jwtRefreshToken, user.getUserId());
             log.info("user : " + user);
             log.info("로그인 성공");
             return ResponseEntity.ok(response);
         } else {
             User user = userService.mapToEntity(kakaoUserInfo, jwtRefreshToken, access_token);
             userService.saveUser(user);
+            TokensResponse response = new TokensResponse(jwtAccessToken, jwtRefreshToken, user.getUserId());
             log.info("user : " + user);
             log.info("회원가입 및 로그인 성공");
             return ResponseEntity.ok(response);
         }
     }
-
-
-//    @PostMapping("/refresh")
-//    public ResponseEntity<?> refreshAccessToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
-//        try {
-//            log.info(refreshTokenRequest.toString());
-//            String refreshToken = refreshTokenRequest.getRefreshToken();
-//            log.info(refreshToken.toString());
-//
-//            // 리프레시 토큰 유효성 검사
-//            if (JwtProvider.isRefreshToken(refreshToken, secretKey)) {
-//                // 리프레시 토큰이 유효하다면, 유저 정보를 가져오거나 해당 토큰에 연결된 유저 정보를 데이터베이스에서 조회
-//
-//                // 유저 정보를 바탕으로 새로운 액세스 토큰 발급
-//                Long userId = JwtProvider.getUserId(refreshToken, secretKey);
-//                String newAccessToken = JwtProvider.createAccessToken(userId, secretKey);
-//
-//                // 새로운 액세스 토큰을 클라이언트에게 전달
-//                return ResponseEntity.ok(new TokensResponse(newAccessToken, refreshToken));
-//            } else {
-//                // 리프레시 토큰이 유효하지 않을 경우, 클라이언트에게 인증 실패 응답 전달
-//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token");
-//            }
-//        } catch (JwtException e) {
-//            // 토큰 파싱이 실패하거나 유효하지 않은 토큰일 경우, 클라이언트에게 인증 실패 응답 전달
-//            log.error("refresh failed");
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token");
-//        }
-//    }
 
     @PostMapping("/refresh")
     public ResponseEntity<?> refreshAccessToken(HttpServletRequest request) {
@@ -123,7 +93,7 @@ public class OAuthController {
                 String newAccessToken = JwtProvider.createAccessToken(userId, secretKey);
 
                 // 새로운 액세스 토큰을 클라이언트에게 전달
-                return ResponseEntity.ok(new TokensResponse(newAccessToken, refreshToken));
+                return ResponseEntity.ok(new TokensResponse(newAccessToken, refreshToken, userService.findUserByKakaoId(userId).getUserId()));
             } else {
                 // 리프레시 토큰이 유효하지 않을 경우, 클라이언트에게 인증 실패 응답 전달
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token");
