@@ -25,9 +25,10 @@ public class GameStartPhase extends Phase {
         // 중앙 덱 섞어서 세팅해놓는다
         List<CardDto> cardList = gameData.getCards();
         List<Long> middleDeck = gameStatus.getMiddleDeck();
-        cardList.stream().map(CardDto::getCardId).forEach(e -> {
-            middleDeck.add(e);
-            middleDeck.add(e);
+        cardList.forEach(e -> {
+            middleDeck.add(e.getCardId());
+            middleDeck.add(e.getCardId());
+            gameStatus.getPointMap().put(e.getCardId(), e.getPoint());
         });
         Collections.shuffle(middleDeck);
 

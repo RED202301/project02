@@ -15,7 +15,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "card_deck_id", unique = true, nullable = false)
+    @Column(name = "user_id", unique = true, nullable = false)
     private Long userId;
 
     @Column(name = "nickname", length=10)
