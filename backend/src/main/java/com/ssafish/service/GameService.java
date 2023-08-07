@@ -35,7 +35,7 @@ public class GameService {
         board.setCapacity(responseDto.getCapacity());
 
         boards.put(responseDto.getRoomId(), board);
-        log.info("생성된 방 번호: " + boards.get(responseDto.getRoomId()).toString());
+        log.info("생성된 방 정보: " + boards.get(responseDto.getRoomId()).toString());
     }
 
     public Board getGameRoomByRoomId(long roomId) {
