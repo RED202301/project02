@@ -27,6 +27,7 @@ public class GameService {
         GameStatus gameStatus = gameStatusFactory.getObject();
         gameStatus.setRoomId(responseDto.getRoomId());
         gameStatus.setTurnTimeLimit(responseDto.getTimeLimit());
+        gameStatus.setPointMap(new ConcurrentHashMap<>());
 
         board.setGameStatus(gameStatus);
         board.setDeckId(responseDto.getDeckId());
@@ -34,7 +35,7 @@ public class GameService {
         board.setCapacity(responseDto.getCapacity());
 
         boards.put(responseDto.getRoomId(), board);
-        log.info(boards.get(responseDto.getRoomId()).toString());
+        log.info("생성된 방 정보: " + boards.get(responseDto.getRoomId()).toString());
     }
 
     public Board getGameRoomByRoomId(long roomId) {
@@ -55,9 +56,12 @@ public class GameService {
             // 유저가 그 방에 없으면 플레이어 입장 (추가 필요)
             if (!already) {
                 board.addPlayer(userId, nickname, isBot);
+            } else {
+                throw new IllegalStateException("User already exists in the room."); // 예외 던지기
             }
+        } else {
+            throw new IllegalStateException("Cannot add player to the room."); // 예외 던지기
         }
-        // 에러 던지기
     }
 
     public void removePlayer(long roomId, long userId) {
