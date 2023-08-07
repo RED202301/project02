@@ -6,9 +6,11 @@ import lombok.Data;
 public class TokensResponse {
     private String accessToken;
     private String refreshToken;
+    private long userId;
 
-    public TokensResponse(String accessToken, String refreshToken) {
+    public TokensResponse(String accessToken, String refreshToken, long userId) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
+        this.userId = userId;
     }
 }
