@@ -20,15 +20,17 @@ import org.springframework.stereotype.Component;
 public class Board {
     private final GameStartPhase gameStartPhase;
     private final GameOverPhase gameOverPhase;
+    private long userId;
     private long deckId;
     private long timeLimit;
     private long capacity;
+    private boolean isStarted = false;
     private GameStatus gameStatus;
     private ChoosePhase currentPhase;
 
 
     public void play(GameData gameData) {
-
+        isStarted = true;
         gameStartPhase.run(gameData, gameStatus);
 
         while (!gameStatus.isGameOver()) {
@@ -38,6 +40,7 @@ public class Board {
         }
 
         gameOverPhase.run();
+        isStarted = false;
     }
 
     public void handlePub(GameData gameData) {

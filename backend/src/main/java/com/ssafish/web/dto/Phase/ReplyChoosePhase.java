@@ -117,6 +117,7 @@ public class ReplyChoosePhase extends Phase implements ChoosePhase {
             handOpponent.remove(cardOpen);
             handCurrent.remove(cardOpen);
 
+
             turnTimer2.schedule(() -> sendCardMove(gameStatus), 2 * ++delaySecond, TimeUnit.SECONDS);
 
             // 짝 맞춰 플레이어의 등록패로 이동
