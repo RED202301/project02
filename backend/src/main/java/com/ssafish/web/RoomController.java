@@ -72,6 +72,7 @@ public class RoomController {
 
         roomService.processClientEntrance(roomId, userId, sessionId);
         gameService.addPlayer(roomId, userId, nickname, isBot);
+        // 인원 수 제한 로직 필요
 
         return gameService.getPlayerList(roomId);
     }

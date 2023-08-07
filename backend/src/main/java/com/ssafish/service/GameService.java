@@ -42,7 +42,22 @@ public class GameService {
     }
 
     public void addPlayer(long roomId, long userId, String nickname, boolean isBot) {
-        boards.get(roomId).addPlayer(userId, nickname, isBot);
+        Board board = boards.get(roomId);
+        boolean already = false;
+        if (board.getGameStatus().getPlayerList().size() < board.getCapacity() && !board.isStarted()) {
+            // 인원수를 넘지 않고 아직 시작하지 않았으며
+            for (Player player : board.getGameStatus().getPlayerList()) {
+                if (userId == player.getUserId()) {
+                    already = true;
+                    break; // 이미 찾았으므로 더 이상 반복할 필요가 없음
+                }
+            }
+            // 유저가 그 방에 없으면 플레이어 입장 (추가 필요)
+            if (!already) {
+                board.addPlayer(userId, nickname, isBot);
+            }
+        }
+        // 에러 던지기
     }
 
     public void removePlayer(long roomId, long userId) {
