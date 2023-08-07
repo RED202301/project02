@@ -68,7 +68,7 @@ public class RoomController {
         String nickname = data.getNickname();
         boolean isBot = data.isBot();
         String sessionId = headerAccessor.getSessionId();
-        log.info(roomId + " " + userId + " " + sessionId);
+        log.info(roomId + " 번 방에 user Id " + userId + " 인 유저가 입장 -> session ID: " + sessionId);
 
         roomService.processClientEntrance(roomId, userId, sessionId);
         gameService.addPlayer(roomId, userId, nickname, isBot);
