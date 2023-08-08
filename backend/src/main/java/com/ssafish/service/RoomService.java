@@ -47,4 +47,8 @@ public class RoomService {
     public RoomResponseDto findByPinNumber(String pinNumber) {
         return RoomResponseDto.from(roomRepository.findByPinNumber(pinNumber));
     }
+
+    public RoomResponseDto findByRoomId(long roomId) {
+        return RoomResponseDto.from(roomRepository.findByRoomId(roomId));
+    }
 }
