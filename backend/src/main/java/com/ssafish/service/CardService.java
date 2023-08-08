@@ -2,6 +2,8 @@ package com.ssafish.service;
 
 import com.ssafish.domain.card.Card;
 import com.ssafish.domain.card.CardsRepository;
+import com.ssafish.domain.card.UserCard;
+import com.ssafish.domain.card.UserCardRepository;
 import com.ssafish.web.dto.CardDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,9 @@ public class CardService {
 
     @Autowired
     CardsRepository cardsRepository;
+
+    @Autowired
+    UserCardRepository userCardRepository;
 
     //해당 덱의 정보 읽어오기
 //    public DeckDto deckInfo(long deckId){
@@ -58,26 +63,14 @@ public class CardService {
 
         try {
             System.out.println("ser1 "+imagefile);
-            //파일 주소 받아오기
-            //MultipartFile imagefile = image.getFile("file");
-
             //uploadPath 주소 spring 내부 파일로 볼륨동기화해서 저장하고 읽어오기[수정 필요]
-
-            /* for eclipse development code */
-//		String uploadPath = "F:" + File.separator + "SSAFY" + File.separator + "ssafy6_sts3_boot"
-//				+ File.separator + "BoardFileUploadSpringBootMyBatis"
-//				+ File.separator + "src"
-//				+ File.separator + "main"
-//				+ File.separator + "resources"
-//				+ File.separator + "static";
-
 
             String uploadPath = "/home/ubuntu/ssafish/cardMainImage"; //
             //String uploadPath = "https://i9e202.p.ssafy.io/card_images/cardMainImage"; //
             //String uploadFolder = "cardMainImage";
 
             //이미지 전체가 저장될 경로
-            File uploadDir = new File(uploadPath); // 수정
+            //File uploadDir = new File(uploadPath); // 수정
             //if (!uploadDir.exists()) uploadDir.mkdir();
 
             String filename = imagefile.getOriginalFilename();
@@ -97,10 +90,15 @@ public class CardService {
             //https://i9e202.p.ssafy.io/card_images/people_imgs/1_%EB%8B%A8%EA%B5%B0%EC%99%95%EA%B2%80.png
             String downloadPath = "https://i9e202.p.ssafy.io/card_images/cardMainImage/";
 
-            // inputcardDto.setCardId(uuid);
+            //DB에 저장
             inputcardDto.setMainImgUrl(downloadPath + saveFileName);
             Card card = inputcardDto.toEntity();
             cardsRepository.save(card);
+
+            UserCard userCard = UserCard.builder()
+                    .userId(inputcardDto.getUserId())
+                    .build();
+            userCardRepository.save(userCard);
 
             cardDto.setResult(SUCCESS);
 

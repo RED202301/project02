@@ -1,18 +1,16 @@
 package com.ssafish.domain.user;
 
-import java.util.*;
-
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
-@Entity
+@ToString
+@Getter
 @Data
 @Table(name = "User")
 @NoArgsConstructor
-
+@Entity
 public class User {
 
     @Id
@@ -32,8 +30,8 @@ public class User {
     @Column(name = "profile_img_url")
     private String profileImgUrl;
 
-    @Column(name = "thumnail_img_url")
-    private String thumnailImgUrl;
+    @Column(name = "thumbnail_img_url")
+    private String thumbnailImgUrl;  //오타수정 thumbnailImgUrl
 
     @Column(name = "is_default_image")
     private boolean isDefaultImage;
@@ -59,12 +57,26 @@ public class User {
 
     @Column(name = "create_date")
     @Temporal(TemporalType.DATE)
-    private Date createdDate;
+    private LocalDateTime createdDate; //Date -> LocalDateTime
 
     @Builder
-    User(Long userId, String nickname) {
+    public User(long userId, long kakaoId, String nickname, String profileImgUrl,
+         String thumbnailImgUrl, String email, String refreshToken, String kakaoAccessToken,
+         boolean isDefaultImage, boolean isLogin, int totalPoint , int playCount, LocalDateTime createdDate) {
+
         this.userId = userId;
+        this.kakaoId = kakaoId;
         this.nickname = nickname;
+        this.profileImgUrl = profileImgUrl;
+        this.thumbnailImgUrl = thumbnailImgUrl;
+        this.email = email;
+        this.refreshToken = refreshToken;
+        this.kakaoAccessToken = kakaoAccessToken;
+        this.isDefaultImage = isDefaultImage;
+        this.isLogin = isLogin;
+        this.totalPoint = totalPoint;
+        this.playCount = playCount;
+        this.createdDate = createdDate;
     }
 
 }
