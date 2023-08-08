@@ -4,8 +4,7 @@ import com.ssafish.web.dto.GameData;
 import com.ssafish.web.dto.GameStatus;
 import com.ssafish.web.dto.TypeEnum;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Scope;
-import org.springframework.messaging.handler.annotation.Payload;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +14,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class ReplyChoosePhase extends Phase implements ChoosePhase {
@@ -99,6 +99,7 @@ public class ReplyChoosePhase extends Phase implements ChoosePhase {
                 // 짝이 있다면 등록패로 이동
                     handCurrent.remove(cardDraw);
                     enrollCurrent.add(cardDraw);
+                    gameStatus.getCheatSheet().remove(cardDraw);
 
                     turnTimer2.schedule(() -> sendEnroll(gameStatus, gameStatus.getCurrentPlayer().getUserId(), cardDraw), 2 * ++delaySecond, TimeUnit.SECONDS);
 
@@ -122,6 +123,7 @@ public class ReplyChoosePhase extends Phase implements ChoosePhase {
 
             // 짝 맞춰 플레이어의 등록패로 이동
             enrollCurrent.add(cardOpen);
+            gameStatus.getCheatSheet().remove(cardOpen);
 
             turnTimer2.schedule(() -> sendEnroll(gameStatus, gameStatus.getCurrentPlayer().getUserId(), cardOpen), 2 * ++delaySecond, TimeUnit.SECONDS);
 
