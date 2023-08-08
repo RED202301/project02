@@ -4,9 +4,11 @@ import axios from "axios";
 import { useEffect } from "react";
 import { setCookie } from "../../components/Cookie";
 import './kakaoLogin.css';
+import Swal from "sweetalert2";
+
 
 function Login2() {
-  const host_URL = 'http://192.168.111.126:5000'
+  const host_URL = 'http://192.168.30.193:5001'
   // // 인가코드 받아오기
   const code = new URL(window.location.href).searchParams.get("code");
 
@@ -30,21 +32,62 @@ function Login2() {
             const accessToken = response.data.accessToken
             const refreshToken = response.data.refreshToken;
             const userId = response.data.userId;
+            const nickname = response.data.nickname;
 
             window.localStorage.setItem("accessToken", accessToken);
+            window.localStorage.setItem("nickname", nickname);
             window.localStorage.setItem("userId", userId);
             setCookie("refreshToken", refreshToken, {
               httpOnly: true,
             })
             // console.log(accesstoken);
             // 만약, 유저정보를 잘 불러왔다면 navigate를 사용해 프론트엔드에서 설정한 마이페이지 경로를 설정해서 이동시킨다.
-            if (accessToken) {
-              navigate("../main");
-          }})
+            // 닉네임이 null이라면, 닉네임 등록 후 메인페이지 / 닉네임이 있다면, 바로 메인페이지
+            if (!nickname){
+                Swal.fire({
+                  text: '닉네임을 입력 해 주세요',
+                  input:'text',
+                  confirmButtonText: "등록",})
+                  //닉네임이 입력 됐을 때,                   
+                   .then((res) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (res.isConfirmed) {
+                      console.log(res.value)
+                      axios.put(host_URL+"/oauth/change-nickname",{
+                      userId: window.localStorage.getItem('userId'),
+                      nickname: res.value}
+                      )//api 요청이 성공 했을 때,
+                      .then((response) => {
+                        console.log(response.data)
+                        const nickname = response.data.nickname
+                        window.localStorage.setItem('nickname', nickname)
+                        if (accessToken) {
+                          navigate('../main')
+                        }
+                        //api 요청이 실패 했을 때,
+                    }).catch((err)=>{
+                      console.log(err)
+                      navigate('../')
+                    })
+              }})//닉네임이 입력 되지 않았을 때,
+              .catch(()=>{
+                navigate('../')
+              })
+          }
+          //닉네임이 원래 등록되어 있을 때,
+            else {
+              if (accessToken){
+                navigate('../main')
+                  }
+                 }
+            })
         console.log(res);
-      } catch (e) {
+      } 
+      //로그인 자체가 실패 했을 때,
+      catch (e) {
         // 에러 발생 시, 에러 응답 출력
         console.error(e);
+        navigate('../')
       }
     })();
   }, []);

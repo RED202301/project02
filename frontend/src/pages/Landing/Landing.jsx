@@ -6,7 +6,7 @@ import axios from 'axios';
 import Swal from "sweetalert2";
 
 function Landing(){
-  const host_URL = "http://192.168.30.103:5001"
+  const host_URL = "http://192.168.30.193:5001"
   const navigate = useNavigate();
   const REST_API_KEY = '0c75393f80241be4aaf8ebd811934887'; // RestAPI 키
   const REDIRECT_URI = 'http://localhost:5173/login2'; // redirect 주소
@@ -17,6 +17,15 @@ function Landing(){
     setPIN(event.target.value);
     // console.log(event.target.value);
   };
+
+  // function send(){
+  //   stompClient = Stomp.over(socket);
+  //   console.log('sending');
+  //   const dd 
+
+  //   stompClient.send('/pub/')
+  // }
+
   //핀번호 입력창에 핀번호 입력하고 확인 버튼(get 요청)
   const buttonClick = () => {
     console.log({ pinNumber })
@@ -41,19 +50,40 @@ function Landing(){
               // confirm 버튼을 눌렀다면 입력값을 가지고 post 요청
               if (res.isConfirmed) {
                 console.log(res.value)
-                axios.post(host_URL+"/api/v1/user",{
+                axios.post(host_URL+"/api/v1/guest",{
                 nickname: res.value}
                 )
+                //요청이 성공했다면, userId, 닉네임 저장하고
                 .then((response) => {
                   console.log(response.data)
                   const userId = response.data.userId
                   const nickname = response.data.nickname
                   window.sessionStorage.setItem('userId', userId)
                   window.sessionStorage.setItem('nickname', nickname)
-                  if (userId) {
-                    navigate('/gameUI')
-                  }
-              }).catch((err)=>{console.log(err)})
+                  //userId가 저장됐다면, 방으로 입장 요청
+                  // if (userId) {
+                  //   axios.get(host_URL+`/enter/${roomId}`)
+                  //   //입장 요청 성공 -> 입장
+                  //     .then((response) => {
+                        
+                  //     })
+                  //     // 입장 요청 실패 -> 정원 초과 알림
+                  //     .catch((e)=>{console.log(e)
+                  //       Swal.fire({
+                  //         icon: "warning",
+                  //         title: "정원 초과",
+                  //         text: `다른 방을 이용해주세요`,
+                  //         confirmButtonText: "확인",})
+                  //     })
+                  // }
+              }).catch((err)=>{
+                console.log(err)
+                Swal.fire({
+                  icon: "warning",
+                  title: "닉네임 중복",
+                  text: `닉네임을 다시 입력해주세요`,
+                  confirmButtonText: "확인",})
+              })
             }})
        }
       })

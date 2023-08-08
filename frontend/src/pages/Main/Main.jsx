@@ -5,11 +5,10 @@ import { Link } from 'react-router-dom';
 import axios from "axios";
 // import useDidMountEffect from '../../components/useDidMountEffect';
 import {useNavigate } from 'react-router-dom';
-import Swal from "sweetalert2";
 // import Cccc from './cccc'
 
 function Modal({ modal, setModal }) {
-  const host_URL= "http://192.168.30.103:5001"
+  const host_URL= "http://192.168.30.193:5001"
   // const [roomId, setRoomId] = useState(null);
   // const [pinNumber, setPIN] = useState('');
 
@@ -17,7 +16,7 @@ function Modal({ modal, setModal }) {
   const [timeLimit, setTimeLimit] = useState(0);
   const [capacity, setCapacity] = useState(0);
   const [gameType, setGameType] = useState("");
-  const [deckId, setDeckId] = useState(0);
+  const [deckId, setDeckId] = useState(1);
   const navigate = useNavigate();
   // useDidMountEffect(() => {
   //   console.log(name, timeLimit, capacity, gameType)
@@ -44,30 +43,7 @@ function Modal({ modal, setModal }) {
         window.sessionStorage.setItem('roomId', roomId)
         window.sessionStorage.setItem('pinNumber', pinNumber)
         if (roomId){
-          Swal.fire({
-            text: '닉네임을 입력 해 주세요',
-            input:'text',
-            showCancelButton: true,
-            confirmButtonText: "등록",
-            cancelButtonText: "취소",
-             }).then((res) => {
-              /* Read more about isConfirmed, isDenied below */
-              if (res.isConfirmed) {
-                console.log(res.value)
-                axios.post(host_URL+"/api/v1/user",{
-                nickname: res.value}
-                )
-                .then((response) => {
-                  console.log(response.data)
-                  const userId = response.data.userId
-                  const nickname = response.data.nickname
-                  window.sessionStorage.setItem('userId', userId)
-                  window.sessionStorage.setItem('nickname', nickname)
-                  if (userId) {
-                    navigate('/gameUI')
-                  }
-              }).catch((err)=>{console.log(err)})
-            }})
+          navigate('/gameUI')
         }
       })
       .catch((error) => {
