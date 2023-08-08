@@ -55,7 +55,26 @@ pipeline {
                 }
             }
         }
+
+
     }
+
+    post {
+        always {
+            cleanWs(deleteDirs: true, cleanWhenFailure : true)
+                    // patterns: [
+                    //                     // Set patterns to exclude specific files or directories from cleanup
+                   //                     [pattern: '.gradle', type: 'EXCLUDE'],
+                   //                     [pattern: 'build/**', type: 'INCLUDE']
+                   //           ]
+
+        }
+
+
+
+    }
+
+
 }
 
 

@@ -4,6 +4,7 @@ import com.ssafish.domain.user.User;
 import com.ssafish.service.OAuthService;
 import com.ssafish.service.UserService;
 import com.ssafish.service.provider.JwtProvider;
+import com.ssafish.web.dto.ChangeNicknameDto;
 import com.ssafish.web.dto.KakaoUserInfo;
 import com.ssafish.web.dto.TokensResponse;
 import io.jsonwebtoken.JwtException;
@@ -59,6 +60,7 @@ public class OAuthController {
             // kakao_access_token 변경 로직
             User user = userService.updateTokens(kakaoUser, jwtRefreshToken, access_token);
             TokensResponse response = new TokensResponse(jwtAccessToken, jwtRefreshToken, user.getUserId());
+            response.setNickname(user.getNickname());
             log.info("user : " + user);
             log.info("로그인 성공");
             return ResponseEntity.ok(response);
@@ -66,6 +68,7 @@ public class OAuthController {
             User user = userService.mapToEntity(kakaoUserInfo, jwtRefreshToken, access_token);
             userService.saveUser(user);
             TokensResponse response = new TokensResponse(jwtAccessToken, jwtRefreshToken, user.getUserId());
+            response.setNickname(user.getNickname());
             log.info("user : " + user);
             log.info("회원가입 및 로그인 성공");
             return ResponseEntity.ok(response);
@@ -105,7 +108,16 @@ public class OAuthController {
         }
     }
 
-
+    @ResponseBody
+    @PutMapping("/change-nickname")
+    public ResponseEntity<String> changeUserNickname(@RequestBody ChangeNicknameDto request) {
+        try {
+            userService.changeNickname(request.getUserId(), request.getNickname());
+            return ResponseEntity.ok("Nickname changed successfully.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+        }
+    }
 
 
     @GetMapping("/userinfo")

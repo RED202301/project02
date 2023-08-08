@@ -5,6 +5,8 @@ import com.ssafish.service.RoomService;
 import com.ssafish.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.*;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.web.bind.annotation.*;
@@ -61,7 +63,7 @@ public class RoomController {
 
     @MessageMapping("/enter/{roomId}")
     @SendTo("/sub/{roomId}")
-    public List<Player> processClientEntrance(@DestinationVariable long roomId, @Payload SocketData data,
+    public ResponseEntity<Object> processClientEntrance(@DestinationVariable long roomId, @Payload SocketData data,
                                              @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
 
         Long userId = data.getUserId();
@@ -69,11 +71,13 @@ public class RoomController {
         boolean isBot = data.isBot();
         String sessionId = headerAccessor.getSessionId();
         log.info(roomId + " 번 방에 user Id " + userId + " 인 유저가 입장 -> session ID: " + sessionId);
-
-        roomService.processClientEntrance(roomId, userId, sessionId);
-        gameService.addPlayer(roomId, userId, nickname, isBot);
-        // 인원 수 제한 로직 필요
-
-        return gameService.getPlayerList(roomId);
+        try {
+            roomService.processClientEntrance(roomId, userId, sessionId);
+            gameService.addPlayer(roomId, userId, nickname, isBot);
+            return ResponseEntity.ok(gameService.getPlayerList(roomId));
+        } catch (IllegalStateException e) {
+            log.error("Failed to add player to the room: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e); // 예외 상황에 대한 응답 생성 및 반환
+        }
     }
 }
