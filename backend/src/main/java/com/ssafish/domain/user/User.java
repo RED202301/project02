@@ -1,9 +1,9 @@
 package com.ssafish.domain.user;
 
+import com.ssafish.domain.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @ToString
 @Getter
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Table(name = "User")
 @NoArgsConstructor
 @Entity
-public class User {
+public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,14 +55,14 @@ public class User {
     @Column(name = "play_count")
     private int playCount;
 
-    @Column(name = "create_date")
-    @Temporal(TemporalType.DATE)
-    private LocalDateTime createdDate; //Date -> LocalDateTime
+//    @Column(name = "create_date")
+//    @Temporal(TemporalType.DATE)
+//    private LocalDateTime createdDate; //Date -> LocalDateTime
 
     @Builder
     public User(long userId, long kakaoId, String nickname, String profileImgUrl,
          String thumbnailImgUrl, String email, String refreshToken, String kakaoAccessToken,
-         boolean isDefaultImage, boolean isLogin, int totalPoint , int playCount, LocalDateTime createdDate) {
+         boolean isDefaultImage, boolean isLogin, int totalPoint , int playCount) {
 
         this.userId = userId;
         this.kakaoId = kakaoId;
@@ -76,7 +76,6 @@ public class User {
         this.isLogin = isLogin;
         this.totalPoint = totalPoint;
         this.playCount = playCount;
-        this.createdDate = createdDate;
     }
 
 }

@@ -64,7 +64,6 @@ public class UserDto {
                 .isLogin(isLogin)
                 .totalPoint(totalPoint)
                 .playCount(playCount)
-                .createdDate(createdDate)
                 .build();
     }
 

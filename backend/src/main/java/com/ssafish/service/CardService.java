@@ -84,7 +84,7 @@ public class CardService {
 
             destFile = new File(uploadPath +"/" + saveFileName);
             System.out.println("here error!");
-            //imagefile.transferTo(destFile); //이미지 저장
+            imagefile.transferTo(destFile); //이미지 저장
             System.out.println("!!!");
             //내려줄 주소 형식
             //https://i9e202.p.ssafy.io/card_images/people_imgs/1_%EB%8B%A8%EA%B5%B0%EC%99%95%EA%B2%80.png
