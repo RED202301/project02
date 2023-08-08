@@ -38,6 +38,25 @@ public class GameService {
         log.info("생성된 방 정보: " + boards.get(responseDto.getRoomId()).toString());
     }
 
+    public void changeGameRoom(RoomResponseDto responseDto) {
+        log.info("changeGameRoom invoke");
+        Board board = boards.get(responseDto.getRoomId());
+
+        if (board != null) {
+            GameStatus gameStatus = board.getGameStatus();
+            gameStatus.setTurnTimeLimit(responseDto.getTimeLimit());
+
+            board.setDeckId(responseDto.getDeckId());
+            board.setCapacity(responseDto.getCapacity());
+            board.setTimeLimit(responseDto.getTimeLimit());
+
+            log.info("변경된 방 정보: " + board);
+        } else {
+            log.warn("변경할 방이 없습니다. roomId: " + responseDto.getRoomId());
+            throw new IllegalArgumentException("room not found.");
+        }
+    }
+
     public Board getGameRoomByRoomId(long roomId) {
         return boards.get(roomId);
     }

@@ -63,7 +63,7 @@ public class OAuthController {
             response.setNickname(user.getNickname());
             log.info("user : " + user);
             log.info("로그인 성공");
-            return ResponseEntity.ok(response);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
         } else {
             User user = userService.mapToEntity(kakaoUserInfo, jwtRefreshToken, access_token);
             userService.saveUser(user);
@@ -71,12 +71,12 @@ public class OAuthController {
             response.setNickname(user.getNickname());
             log.info("user : " + user);
             log.info("회원가입 및 로그인 성공");
-            return ResponseEntity.ok(response);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
         }
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<?> refreshAccessToken(HttpServletRequest request) {
+    public ResponseEntity<Object> refreshAccessToken(HttpServletRequest request) {
         try {
             String authorizationHeader = request.getHeader("Authorization");
             String refreshToken = "";
@@ -96,7 +96,7 @@ public class OAuthController {
                 String newAccessToken = JwtProvider.createAccessToken(userId, secretKey);
 
                 // 새로운 액세스 토큰을 클라이언트에게 전달
-                return ResponseEntity.ok(new TokensResponse(newAccessToken, refreshToken, userService.findUserByKakaoId(userId).getUserId()));
+                return ResponseEntity.status(HttpStatus.OK).body(new TokensResponse(newAccessToken, refreshToken, userService.findUserByKakaoId(userId).getUserId()));
             } else {
                 // 리프레시 토큰이 유효하지 않을 경우, 클라이언트에게 인증 실패 응답 전달
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token");
@@ -115,7 +115,7 @@ public class OAuthController {
             // 닉네임 중복 체크
             if (userService.isAvailable(request.getNickname())) {
                 userService.changeNickname(request.getUserId(), request.getNickname());
-                return ResponseEntity.ok("Nickname changed successfully.");
+                return ResponseEntity.status(HttpStatus.OK).body("Nickname changed successfully.");
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Nickname is already taken.");
             }
@@ -136,7 +136,7 @@ public class OAuthController {
 
 
     @RequestMapping(value="/logout")
-    public String logout(HttpServletRequest request) {
+    public ResponseEntity<Object> logout(HttpServletRequest request) {
         log.info("로그아웃 요청");
         String authorizationHeader = request.getHeader("Authorization");
         String accessToken = "";
@@ -144,7 +144,7 @@ public class OAuthController {
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             accessToken = authorizationHeader.substring(7);
         } else {
-            return "Invalid access token";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid access token");
         }
 
         Long userId = JwtProvider.getUserId(accessToken, secretKey);
@@ -153,6 +153,6 @@ public class OAuthController {
         log.info("userId: " + userId);
         oauthservice.kakaoLogout(userId);
 
-        return "Logout success";
+        return ResponseEntity.status(HttpStatus.OK).body("Logout success");
     }
 }
