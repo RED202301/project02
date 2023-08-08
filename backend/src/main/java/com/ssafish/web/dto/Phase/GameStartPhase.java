@@ -2,6 +2,7 @@ package com.ssafish.web.dto.Phase;
 
 import com.ssafish.web.dto.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Component;
 
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class GameStartPhase extends Phase {
@@ -31,7 +33,7 @@ public class GameStartPhase extends Phase {
             gameStatus.getPointMap().put(e.getCardId(), e.getPoint());
         });
         Collections.shuffle(middleDeck);
-
+        log.info(gameStatus.getRoomId() + "번 방의 중앙 덱 카드 개수: " + middleDeck.size());
 
         // 각 플레이어에게 카드를 1장씩 주는 작업을 5번 반복한다
         // 서버 내부적으로는 1초 이내에 완료되지만, 이벤트 전달은 초 단위의 딜레이를 두고 이뤄진다
@@ -52,7 +54,7 @@ public class GameStartPhase extends Phase {
                     // 짝이 있다면 등록패로 이동
                     handCurrent.remove(cardDraw);
                     enrollCurrent.add(cardDraw);
-
+                    gameStatus.getCheatSheet().remove(cardDraw);
                     turnTimer.schedule(() -> sendEnroll(gameStatus, player.getUserId(), cardDraw), 2L * delaySec + 1L, TimeUnit.SECONDS);
                 }
             }
