@@ -59,6 +59,11 @@ public class GameService {
         }
     }
 
+    public void deleteGameRoom(long roomId) {
+        boards.remove(roomId);
+        log.info("삭제된 방 정보: " + roomId);
+    }
+
     public Board getGameRoomByRoomId(long roomId) {
         return boards.get(roomId);
     }
