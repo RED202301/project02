@@ -3,19 +3,17 @@ package com.ssafish.web.dto.Phase;
 import com.ssafish.web.dto.GameData;
 import com.ssafish.web.dto.GameStatus;
 import com.ssafish.web.dto.TypeEnum;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Scope;
-import org.springframework.messaging.handler.annotation.Payload;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class CardChoosePhase extends Phase implements ChoosePhase {
@@ -70,6 +68,7 @@ public class CardChoosePhase extends Phase implements ChoosePhase {
 
         // 게임 내부 로직
         gameStatus.setCardOpen(gameData.getCardId()); // 공개 카드 반영
+        gameStatus.getCheatSheet().put(gameData.getCardId(), gameData.getPlayer()); // 공개 카드 Map 에 추가
         gameStatus.changeCurrentPhase();
 
         // subscriber 들에게 메시지 전달

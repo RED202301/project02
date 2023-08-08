@@ -28,6 +28,7 @@ public class GameService {
         gameStatus.setRoomId(responseDto.getRoomId());
         gameStatus.setTurnTimeLimit(responseDto.getTimeLimit());
         gameStatus.setPointMap(new ConcurrentHashMap<>());
+        gameStatus.setCheatSheet(new ConcurrentHashMap<>());
 
         board.setGameStatus(gameStatus);
         board.setDeckId(responseDto.getDeckId());
