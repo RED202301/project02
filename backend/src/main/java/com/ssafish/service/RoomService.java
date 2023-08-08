@@ -56,6 +56,11 @@ public class RoomService {
         return RoomResponseDto.from(changeRoom);
     }
 
+    @Transactional
+    public void deleteById(long roomId) {
+        roomRepository.deleteById(roomId);
+    }
+
     public RoomResponseDto findByPinNumber(String pinNumber) {
         return RoomResponseDto.from(roomRepository.findByPinNumber(pinNumber));
     }
