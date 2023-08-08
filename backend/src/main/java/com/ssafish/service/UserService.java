@@ -3,8 +3,11 @@ package com.ssafish.service;
 import com.ssafish.domain.user.User;
 import com.ssafish.domain.user.UserRepository;
 import com.ssafish.web.dto.KakaoUserInfo;
+import com.ssafish.web.dto.UserRequestDto;
+import com.ssafish.web.dto.UserResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {
@@ -54,5 +57,10 @@ public class UserService {
 
         user.setNickname(newNickname);
         userRepository.save(user);
+    }
+
+    @Transactional
+    public UserResponseDto create(UserRequestDto requestDto) {
+        return UserResponseDto.from(userRepository.save(requestDto.toEntity()));
     }
 }
