@@ -1,7 +1,9 @@
 package com.ssafish.web;
 
+import com.ssafish.domain.Room;
 import com.ssafish.service.GameService;
 import com.ssafish.service.RoomService;
+import com.ssafish.service.UserService;
 import com.ssafish.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +28,7 @@ public class RoomController {
 
     private final RoomService roomService;
     private final GameService gameService;
+    private final UserService userService;
 
     static Map<String, Long> rooms = new HashMap<>();
 
@@ -43,6 +46,17 @@ public class RoomController {
         gameService.createGameRoom(responseDto);
         log.info(responseDto.toString());
         return responseDto;
+    }
+
+    @DeleteMapping("/api/v1/room/{roomId}")
+    public void deleteById(@PathVariable long roomId) {
+
+        try {
+            roomService.deleteById(roomId);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @GetMapping("/api/v1/room/id/{pinNumber}")

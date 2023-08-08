@@ -1,6 +1,8 @@
 package com.ssafish.domain.user;
 
 import java.util.*;
+
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,7 +23,7 @@ public class User {
     @Column(name = "username", length=10)
     private String username;
 
-    @Column(name = "nickname", length=10)
+    @Column(name = "nickname", unique = true, length=10)
     private String nickname;
 
     @Column(name = "kakao_id")
@@ -58,5 +60,11 @@ public class User {
     @Column(name = "create_date")
     @Temporal(TemporalType.DATE)
     private Date createdDate;
+
+    @Builder
+    User(Long userId, String nickname) {
+        this.userId = userId;
+        this.nickname = nickname;
+    }
 
 }

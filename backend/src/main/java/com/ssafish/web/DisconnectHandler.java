@@ -4,10 +4,13 @@ import com.ssafish.common.util.WebSocketSubscriberManager;
 import com.ssafish.service.GameService;
 import com.ssafish.service.RoomService;
 import com.ssafish.web.dto.Board;
+import com.ssafish.web.dto.GameData;
 import com.ssafish.web.dto.Player;
+import com.ssafish.web.dto.TypeEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
@@ -22,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -31,6 +35,8 @@ public class DisconnectHandler implements ApplicationListener<AbstractSubProtoco
     private final WebSocketSubscriberManager subscriberManager;
     private final RoomService roomService;
     private final GameService gameService;
+
+    private final SimpMessageSendingOperations messagingTemplate;
     private final long DISCONNECT_DELAY = 5_000;
     private TaskScheduler taskScheduler = new ConcurrentTaskScheduler();
     private Map<String, ScheduledFuture<?>> disconnectTasks = new ConcurrentHashMap<>();
@@ -79,6 +85,23 @@ public class DisconnectHandler implements ApplicationListener<AbstractSubProtoco
             roomService.sendMessageToRoom(roomId, player.getNickname() + "님이 방을 나갔습니다!");
         }
         log.info("현재 대기실(게임방) 인원 수: " + playerList.size());
+
+        if (room.getUserId() == player.getUserId()) { // 방장이 퇴장한 경우
+            List<Player> personList = playerList.stream().filter(e -> !e.isBot()).collect(Collectors.toList());
+            if (personList.size() == 0) { // 없는 경우 -> 방 폭파
+                gameService.deleteGameRoom(roomId);
+                roomService.deleteById(roomId);
+                log.info("삭제된 방 번호: " + roomId);
+            } else { // 방에 잔여 인원이 있는 경우 -> 그 사람 중 하나를 방장으로
+                Player newLeader = personList.get((int) (Math.random() * personList.size()));
+                room.setUserId(newLeader.getUserId());
+                messagingTemplate.convertAndSend("/sub/" + roomId, GameData.builder()
+                        .type(TypeEnum.ROOM_LEADER.name())
+                        .player(newLeader.getUserId())
+                        .build());
+                log.info(roomId + "번 방의 새로운 방장 userId: " + newLeader.getUserId());
+            }
+        }
 
         subscriberManager.removeSubscriber(sessionId);
     }

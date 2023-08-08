@@ -5,7 +5,7 @@ import com.ssafish.web.dto.GameStatus;
 import com.ssafish.web.dto.Player;
 import com.ssafish.web.dto.TypeEnum;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Scope;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Component;
@@ -13,9 +13,9 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class PersonChoosePhase extends Phase implements ChoosePhase {
