@@ -1,6 +1,7 @@
 package com.ssafish.service;
 
 import com.ssafish.common.util.WebSocketSubscriberManager;
+import com.ssafish.domain.Room;
 import com.ssafish.domain.RoomRepository;
 import com.ssafish.web.dto.RoomRequestDto;
 import com.ssafish.web.dto.RoomResponseDto;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.Map;
@@ -40,8 +42,18 @@ public class RoomService {
     }
 
     @Transactional
-    public void deleteById(long roomId) throws IllegalArgumentException {
-        roomRepository.deleteById(roomId);
+    public RoomResponseDto change(RoomRequestDto requestDto, long roomId) {
+        Room changeRoom = roomRepository.findById(roomId)
+                .orElseThrow(() -> new IllegalArgumentException("Room not found"));
+
+        // 값 업데이트
+        changeRoom.setRoomName(requestDto.getRoomName());
+        changeRoom.setCapacity(requestDto.getCapacity());
+        changeRoom.setTimeLimit(requestDto.getTimeLimit());
+        changeRoom.setDeckId(requestDto.getDeckId());
+
+        // 변경된 엔티티를 RoomResponseDto로 변환하여 반환 // 두번인지 확인
+        return RoomResponseDto.from(changeRoom);
     }
 
     public RoomResponseDto findByPinNumber(String pinNumber) {

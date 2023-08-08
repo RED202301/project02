@@ -23,7 +23,7 @@ public class GuestController {
     public ResponseEntity<Object> create(@RequestBody UserRequestDto requestDto) {
         // 닉네임 중복 체크
         if (userService.isAvailable(requestDto.getNickname())) {
-            return ResponseEntity.ok(userService.create(requestDto));
+            return ResponseEntity.status(HttpStatus.OK).body(userService.create(requestDto));
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Nickname is already taken.");
         }
