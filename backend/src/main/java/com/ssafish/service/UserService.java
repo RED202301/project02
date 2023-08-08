@@ -59,6 +59,10 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public boolean isAvailable(String nickname) {
+        return userRepository.findByNickname(nickname) == null;
+    }
+
     @Transactional
     public UserResponseDto create(UserRequestDto requestDto) {
         return UserResponseDto.from(userRepository.save(requestDto.toEntity()));

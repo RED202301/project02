@@ -112,8 +112,13 @@ public class OAuthController {
     @PutMapping("/change-nickname")
     public ResponseEntity<String> changeUserNickname(@RequestBody ChangeNicknameDto request) {
         try {
-            userService.changeNickname(request.getUserId(), request.getNickname());
-            return ResponseEntity.ok("Nickname changed successfully.");
+            // 닉네임 중복 체크
+            if (userService.isAvailable(request.getNickname())) {
+                userService.changeNickname(request.getUserId(), request.getNickname());
+                return ResponseEntity.ok("Nickname changed successfully.");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Nickname is already taken.");
+            }
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
         }
