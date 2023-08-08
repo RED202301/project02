@@ -9,7 +9,7 @@ function Game() {
   const myUserName = 'Participant' + Math.floor(Math.random() * 100);
   const { subs, publisher, session, openViduInitializer } = useOpenVidu({ sessionId, myUserName });
   useEffect(() => {openViduInitializer()}, []);
-
+  console.log("!@#!$$@QSGAGXCHQE%ARSGDZFD!@#$@#",publisher)
   return (
     <div className='App'
     style={{
@@ -34,6 +34,7 @@ function Game() {
       }}>
       {publisher ? <Publisher streamManager={publisher} session={session} /> : null}
       </div>
+
       </div>
     </div>
   );

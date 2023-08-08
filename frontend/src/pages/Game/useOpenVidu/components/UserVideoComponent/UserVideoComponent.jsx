@@ -1,177 +1,262 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { Component } from 'react';
 import {
-  ImageSegmenter,
-  FilesetResolver,
-} from 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.2';
-// import AudioToggler from '../../components/Publisher/Controller/AudioToggler/AudioToggler';
-// import VideoToggler from '../../components/Publisher/Controller/VideoToggler/VideoToggler';
-// import LeaveButton from '../../components/Publisher/Controller/LeaveButton/LeaveButton';
+    ImageSegmenter,
+    FilesetResolver,
+  } from 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.2';
+  
+export default class OpenViduVideoComponent extends Component {
 
-function OpenViduVideoComponent({ streamManager, session }) {
-  const videoRef = useRef();
-  const [imageSegmenter, setImageSegmenter] = useState(null);
-  const [labels, setLabels] = useState([]);
-  const [runningMode, setRunningMode] = useState('VIDEO'); // Set running mode to VIDEO initially
-  const canvasRef = useRef(null);
-  const canvasCtxRef = useRef(null);
-  const legendColors = [
-    [255, 0, 0, 0], // Vivid Yellow
-    [0, 0, 0, 0], // Strong Purple
-    // ... rest of the legend color array
-  ];
-  useEffect(() => {
-    streamManager.addVideoElement(videoRef.current);
-  }, []);
-
-  useEffect(() => {
-    const createImageSegmenter = async () => {
-      const audio = await FilesetResolver.forVisionTasks(
-        'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.2/wasm'
-      );
-
-      const newImageSegmenter = await ImageSegmenter.createFromOptions(
-        audio,
-        {
-          baseOptions: {
-            modelAssetPath:
-              'https://storage.googleapis.com/mediapipe-models/image_segmenter/deeplab_v3/float32/1/deeplab_v3.tflite',
-            delegate: 'GPU',
-          },
-          runningMode: runningMode,
-          outputCategoryMask: true,
-          outputConfidenceMasks: false,
+    constructor(props) {
+        super(props);
+    
+        this.state = {
+          imageSegmenter: null,
+          labels: [],
+          webcamRunning: false,
+          runningMode: 'IMAGE',
+        };
+    
+        this.canvasClickRef = React.createRef();
+        this.videoRef = React.createRef();
+        this.canvasRef = React.createRef();
+        this.canvasCtxRef = React.createRef();
+    
+        this.legendColors = [
+          [255, 0, 0, 0], // Vivid Yellow
+          [0, 0, 0, 0], // Strong Purple
+          // ... 나머지 레전드 컬러 배열
+        ];
+      }
+    
+      componentDidMount() {
+        if (this.props && !!this.videoRef) {
+            this.props.streamManager.addVideoElement(this.videoRef.current);
+            this.createImageSegmenter();
         }
-      );
-
-      setImageSegmenter(newImageSegmenter);
-      setLabels(newImageSegmenter.getLabels());
-    };
-
-    createImageSegmenter();
-  }, [runningMode]);
-
-  useEffect(() => {
-    const enableCam = async () => {
-      if (!imageSegmenter) {
-        return;
       }
-
-      const constraints = {
-        video: true,
+    
+      createImageSegmenter = async () => {
+        const audio = await FilesetResolver.forVisionTasks(
+          'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.2/wasm'
+        );
+    
+        const newImageSegmenter = await ImageSegmenter.createFromOptions(
+          audio,
+          {
+            baseOptions: {
+              modelAssetPath:
+                'https://storage.googleapis.com/mediapipe-models/image_segmenter/deeplab_v3/float32/1/deeplab_v3.tflite',
+              delegate: 'GPU',
+            },
+            runningMode: this.state.runningMode,
+            outputCategoryMask: true,
+            outputConfidenceMasks: false,
+          }
+        );
+    
+        this.setState({
+          imageSegmenter: newImageSegmenter,
+          labels: newImageSegmenter.getLabels(),
+        });
       };
+    
+      handleClick = async (event) => {
+        if (!this.state.imageSegmenter) {
+          return;
+        }
+        const canvasClick = this.canvasClickRef.current;
+        const cxt = canvasClick.getContext('2d', { willReadFrequently: true });
+        canvasClick.width = event.target.naturalWidth;
+        canvasClick.height = event.target.naturalHeight;
+        const image = new Image();
+        image.src = event.target.src;
+        image.onload = () => {
+          cxt.clearRect(0, 0, canvasClick.width, canvasClick.height);
+          cxt.drawImage(image, 0, 0, canvasClick.width, canvasClick.height);
+          event.target.style.opacity = 0;
+    
+          if (this.state.runningMode === 'VIDEO') {
+            this.setState({ runningMode: 'IMAGE' }, () => {
+              this.state.imageSegmenter.setOptions({
+                runningMode: 'IMAGE',
+              });
+            });
+          }
+    
+          this.state.imageSegmenter.segment(image, this.callback);
+        };
+      };
+    
+      callback = (result) => {
+        const cxt = this.canvasClickRef.current.getContext('2d', { willReadFrequently: true });
+        const { width, height } = result.categoryMask;
+        const imageData = cxt.getImageData(0, 0, width, height).data;
+        cxt.clearRect(0, 0, width, height);
+        const mask = result.categoryMask.getAsUint8Array();
+        let category = ''; // 카테고리 변수 초기화
+        for (let i in mask) {
+          if (mask[i] > 0) {
+            category = this.state.labels[mask[i]];
+          }
+          const legendColor = this.legendColors[mask[i] % this.legendColors.length];
+          imageData[i * 4] = (legendColor[0] + imageData[i * 4]) / 2;
+          imageData[i * 4 + 1] = (legendColor[1] + imageData[i * 4 + 1]) / 2;
+          imageData[i * 4 + 2] = (legendColor[2] + imageData[i * 4 + 2]) / 2;
+          imageData[i * 4 + 3] = (legendColor[3] + imageData[i * 4 + 3]) / 2;
+        }
+        const uint8Array = new Uint8ClampedArray(imageData.buffer);
+        const dataNew = new ImageData(uint8Array, width, height);
+        cxt.putImageData(dataNew, 0, 0);
+        const p = event.target.parentNode.getElementsByClassName(
+          'classification'
+        )[0];
+        p.classList.remove('removed');
+        p.innerText = 'Category: ' + category;
+      };
+    
+      callbackForVideo = (result) => {
+        const imageData = this.canvasCtxRef.current.getImageData(
+          0,
+          0,
+          this.videoRef.current.videoWidth,
+          this.videoRef.current.videoHeight
+        ).data;
+        let j = 0;
+        const mask = result.categoryMask.getAsFloat32Array();
+        for (let i = 0; i < mask.length; ++i) {
+          const maskVal = Math.round(mask[i] * 255.0);
+          const legendColor = this.legendColors[maskVal % this.legendColors.length];
+    
+          if (maskVal === 0) {
+            imageData[j] = legendColor[0];
+            imageData[j + 1] = legendColor[1];
+            imageData[j + 2] = legendColor[2];
+            imageData[j + 3] = legendColor[3];
+          }
+    
+          j += 4;
+        }
+        const uint8Array = new Uint8ClampedArray(imageData.buffer);
+        const dataNew = new ImageData(
+          uint8Array,
+          this.videoRef.current.videoWidth,
+          this.videoRef.current.videoHeight
+        );
+        this.canvasCtxRef.current.putImageData(dataNew, 0, 0);
+        if (this.state.webcamRunning === true) {
+          window.requestAnimationFrame(this.predictWebcam);
+        }
+      };
+    
+      enableCam = async () => {
+        if (!this.state.imageSegmenter) {
+          return;
+        }
+    
 
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia(constraints);
-        videoRef.current.srcObject = stream;
-        videoRef.current.addEventListener('loadeddata', predictWebcam);
+        this.setState({ webcamRunning: true });
 
-        // Initialize canvas context
-        canvasCtxRef.current = canvasRef.current.getContext('2d');
-      } catch (error) {
-        console.warn('getUserMedia() is not supported by your browser');
-      }
-    };
+    
+        const constraints = {
+          video: true,
+        };
+    
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia(constraints);
+          this.videoRef.current.srcObject = stream;
+          this.videoRef.current.addEventListener('loadeddata', this.predictWebcam);
+    
+          this.canvasCtxRef.current = this.canvasRef.current.getContext('2d', { willReadFrequently: true });
+        } catch (error) {
+          console.warn('getUserMedia() is not supported by your browser');
+        }
+      };
+    
+      predictWebcam = () => {
+        if (
+          this.videoRef.current.currentTime ===
+          this.videoRef.current.lastWebcamTime
+        ) {
+          if (this.state.webcamRunning === true) {
+            window.requestAnimationFrame(this.predictWebcam);
+          }
+          return;
+        }
+        this.videoRef.current.lastWebcamTime = this.videoRef.current.currentTime;
+        this.canvasCtxRef.current.drawImage(
+          this.videoRef.current,
+          0,
+          0,
+          this.videoRef.current.videoWidth,
+          this.videoRef.current.videoHeight
+        );
+        if (!this.state.imageSegmenter) {
+          return;
+        }
+        if (this.state.runningMode === 'IMAGE') {
+          this.setState({ runningMode: 'LIVE_STREAM' }, () => {
+            this.state.imageSegmenter.setOptions({
+              runningMode: 'LIVE_STREAM',
+            });
+          });
+        }
+        const startTimeMs = performance.now();
+        this.state.imageSegmenter.segmentForVideo(
+          this.videoRef.current,
+          startTimeMs,
+          this.callbackForVideo
+        );
+      };
+    
 
-    enableCam();
-  }, [imageSegmenter]);
-
-  const predictWebcam = () => {
-    if (
-      videoRef.current.currentTime ===
-      videoRef.current.lastWebcamTime
-    ) {
-      window.requestAnimationFrame(predictWebcam);
-      return;
+    componentDidUpdate(props) {
+        if (props && !!this.videoRef) {
+            this.props.streamManager.addVideoElement(this.videoRef.current);
+        }
     }
-    videoRef.current.lastWebcamTime = videoRef.current.currentTime;
-    canvasCtxRef.current.drawImage(
-      videoRef.current,
-      0,
-      0,
-      videoRef.current.videoWidth,
-      videoRef.current.videoHeight
-    );
-    if (!imageSegmenter) {
-      return;
-    }
-    if (runningMode === 'IMAGE') {
-      setRunningMode('VIDEO');
-      imageSegmenter.setOptions({
-        runningMode: 'VIDEO',
-      });
-    }
-    const startTimeMs = performance.now();
-    imageSegmenter.segmentForVideo(
-      videoRef.current,
-      startTimeMs,
-      callbackForVideo
-    );
-  };
-  const callbackForVideo = (result) => {
-    const imageData = canvasCtxRef.current.getImageData(
-      0,
-      0,
-      videoRef.current.videoWidth,
-      videoRef.current.videoHeight
-    ).data;
-      const mask = result.categoryMask.getAsFloat32Array();
-    let j = 0;
-    for (let i = 0; i < mask.length; ++i) {
-      const maskVal = Math.round(mask[i] * 255.0);
-      const legendColor = legendColors[maskVal % legendColors.length];
 
-      // Apply color only to the background and maintain original video pixel for other parts
-      if (maskVal === 0) {
-        imageData[j] = legendColor[0];
-        imageData[j + 1] = legendColor[1];
-        imageData[j + 2] = legendColor[2];
-        imageData[j + 3] = legendColor[3];
-      }
-      
-      j += 4;
-    }
-    const uint8Array = new Uint8ClampedArray(imageData.buffer);
-    const dataNew = new ImageData(
-      uint8Array,
-      videoRef.current.videoWidth,
-      videoRef.current.videoHeight
-      );
-      canvasCtxRef.current.putImageData(dataNew, 0, 0);
-      window.requestAnimationFrame(predictWebcam);
-    };
-    console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',videoRef)
-
-    return (
-      <div style={{
-      display: 'flex',
-      width: '400px',
-      height:'600px'
-    }}>
-      <section id="demos" className="invisible">
-        <div className="webcam-container">
-          <canvas
-            id="canvas"
-            ref={canvasRef}
-            width="300px"
-            height="300px"
-            style={{ position: 'absolute', zIndex: 1 }}
+  render() {
+    const { webcamRunning } = this.state;
+  return (
+    <div style={{ display: 'flex', width: '200px', height: '200px', position: 'relative' }}>
+        <section id="demos" className="invisible">
+          <div className="webcam-container">
+            <canvas
+              id="canvas"
+              ref={this.canvasRef}
+              width="300px"
+              height="300px"
+              
+              style={{ position: 'absolute', zIndex: 1 }}
             ></canvas>
-          <div className="webcam" style={{ position: 'relative', zIndex: 2 }}>
-            <video
-              id="webcam"
-              ref={videoRef}
-              autoPlay
-              style={{ display: 'none' }}
-            ></video>
+            <div className="webcam" style={{ position: 'relative', zIndex: 2 }}>
 
+              {/* Display local webcam video */}
+              <video
+                id="webcam"
+                ref={this.videoRef}
+                autoPlay
+                style={{ display: 'none', left: '200px' }}
+              ></video>
+              <button
+                id="webcamButton"
+                className="mdc-button mdc-button--raised"
+                onClick={this.enableCam}
+              >
+                <span className="mdc-button__ripple"></span>
+                <span className="mdc-button__label">
+                  {webcamRunning ? '세그멘테이션 비활성화' : '웹캠 활성화'}
+                </span>
+              </button>
+            </div>
           </div>
-        </div>
-      </section>
-    </div>
+        </section>
+      </div>
   );
-}
+}}
 
-export default function UserVideoComponent({ streamManager }) {
+export function UserVideoComponent({ streamManager }) {
+
   const clientData = JSON.parse(streamManager.stream.connection.data);
   return (
     <div>
@@ -179,6 +264,7 @@ export default function UserVideoComponent({ streamManager }) {
       <OpenViduVideoComponent {...{ streamManager }} />
     </div>
   );
+
 }
 
 // import { useEffect, useRef } from 'react';
