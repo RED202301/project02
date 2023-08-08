@@ -47,17 +47,18 @@ public class DisconnectHandler implements ApplicationListener<AbstractSubProtoco
         String sessionId = headerAccessor.getSessionId();
 
         if (event instanceof SessionDisconnectEvent) {
-            log.info("DISCONNECT");
+            log.info("DISCONNECT 된 session ID: " + sessionId);
             if (subscriberManager.isExist(sessionId)) {
-                System.out.println("EXIST");
-                ScheduledFuture<?> disconnectTask = taskScheduler.schedule(() -> {
-                    handleDisconnect(sessionId);
-                }, new Date(System.currentTimeMillis() + DISCONNECT_DELAY));
+                log.info("subscriberManager 에 의해 관리되고 있는 session ID: " + sessionId);
+                ScheduledFuture<?> disconnectTask = taskScheduler.schedule(
+                        () -> handleDisconnect(sessionId),
+                        new Date(System.currentTimeMillis() + DISCONNECT_DELAY)
+                );
 
                 disconnectTasks.put(sessionId, disconnectTask);
             }
         } else if (event instanceof SessionConnectEvent) {
-            log.info("CONNECT");
+            log.info("CONNECT 된 session ID: " + sessionId);
             if (subscriberManager.isExist(sessionId) && disconnectTasks.get(sessionId) != null) {
                 cancelDisconnectTask(sessionId);
             }
@@ -84,10 +85,10 @@ public class DisconnectHandler implements ApplicationListener<AbstractSubProtoco
             log.info("대기실에서 퇴장 처리된 플레이어 userId: " + player.getUserId());
             roomService.sendMessageToRoom(roomId, player.getNickname() + "님이 방을 나갔습니다!");
         }
-        log.info("현재 대기실(게임방) 인원 수: " + playerList.size());
-
+        log.info(roomId + "번 방의 방장 userId: " + room.getUserId() + " " + "세션 종료된 userId: " + userId);
         if (room.getUserId() == player.getUserId()) { // 방장이 퇴장한 경우
             List<Player> personList = playerList.stream().filter(e -> !e.isBot()).collect(Collectors.toList());
+            log.info("현재 대기실(게임방) 인원 수: " + personList.size());
             if (personList.size() == 0) { // 없는 경우 -> 방 폭파
                 gameService.deleteGameRoom(roomId);
                 roomService.deleteById(roomId);

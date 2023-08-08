@@ -7,11 +7,11 @@ import java.util.concurrent.ScheduledExecutorService;
 
 public interface ChoosePhase {
 
-    GameStatus startTurnTimer(GameStatus gameStatus);
+    void startTurnTimer(GameStatus gameStatus, ScheduledExecutorService turnTimer);
 
-    void cancelTurnTimer();
+    void cancelTurnTimer(ScheduledExecutorService turnTimer);
 
-    void endTurn(GameData gameData, GameStatus gameStatus);
+    void endTurn(GameData gameData, GameStatus gameStatus, ScheduledExecutorService turnTimer);
 
-    void handlePub(GameData gameData, GameStatus gameStatus);
+    void handlePub(GameData gameData, GameStatus gameStatus, ScheduledExecutorService turnTimer);
 }
