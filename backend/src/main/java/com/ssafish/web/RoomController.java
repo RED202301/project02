@@ -1,7 +1,9 @@
 package com.ssafish.web;
 
+import com.ssafish.domain.Room;
 import com.ssafish.service.GameService;
 import com.ssafish.service.RoomService;
+import com.ssafish.service.UserService;
 import com.ssafish.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +28,7 @@ public class RoomController {
 
     private final RoomService roomService;
     private final GameService gameService;
+    private final UserService userService;
 
     static Map<String, Long> rooms = new HashMap<>();
 
@@ -81,14 +84,24 @@ public class RoomController {
         String nickname = data.getNickname();
         boolean isBot = data.isBot();
         String sessionId = headerAccessor.getSessionId();
+        RoomResponseDto room = roomService.findByRoomId(roomId);
+
         log.info(roomId + " 번 방에 user Id " + userId + " 인 유저가 입장 -> session ID: " + sessionId);
+
         try {
             roomService.processClientEntrance(roomId, userId, sessionId);
             gameService.addPlayer(roomId, userId, nickname, isBot);
-            return ResponseEntity.ok(gameService.getPlayerList(roomId));
+
+            Map<String, Object> responseMap = new HashMap<>();
+            responseMap.put("playerList", gameService.getPlayerList(roomId));
+            responseMap.put("hostUserId", room.getUserId());
+
+            return ResponseEntity.ok(responseMap);
         } catch (IllegalStateException e) {
             log.error("Failed to add player to the room: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e); // 예외 상황에 대한 응답 생성 및 반환
+            Map<String, Object> errorResponseMap = new HashMap<>();
+            errorResponseMap.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseMap); // 예외 상황에 대한 응답 생성 및 반환
         }
     }
 }
