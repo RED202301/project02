@@ -20,7 +20,6 @@ import java.util.concurrent.TimeUnit;
 
 
 public abstract class Phase {
-    protected ScheduledExecutorService turnTimer;
     protected CountDownLatch latch;
 
     protected void awaitSecond(long second) {

@@ -29,7 +29,7 @@ public class RoomService {
             System.out.println("TT");
             return;
         }
-        messagingTemplate.convertAndSend("/sub/" + roomId, new SocketData(77L, message, true));
+        messagingTemplate.convertAndSend("/sub/" + roomId, message);
     }
 
     public void processClientEntrance(Long roomId, Long userId, String sessionId) {
@@ -54,6 +54,11 @@ public class RoomService {
 
         // 변경된 엔티티를 RoomResponseDto로 변환하여 반환 // 두번인지 확인
         return RoomResponseDto.from(changeRoom);
+    }
+
+    @Transactional
+    public void deleteById(long roomId) {
+        roomRepository.deleteById(roomId);
     }
 
     public RoomResponseDto findByPinNumber(String pinNumber) {
