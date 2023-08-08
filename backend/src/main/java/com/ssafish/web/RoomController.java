@@ -48,14 +48,15 @@ public class RoomController {
         return responseDto;
     }
 
-    @PostMapping("/api/v1/user")
-    public ResponseEntity<Object> create(@RequestBody UserRequestDto requestDto) {
-        // 닉네임 중복 체크
-        if (userService.isAvailable(requestDto.getNickname())) {
-            return ResponseEntity.ok(userService.create(requestDto));
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Nickname is already taken.");
+    @DeleteMapping("/api/v1/room/{roomId}")
+    public void deleteById(@PathVariable long roomId) {
+
+        try {
+            roomService.deleteById(roomId);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
         }
+
     }
 
     @GetMapping("/api/v1/room/id/{pinNumber}")

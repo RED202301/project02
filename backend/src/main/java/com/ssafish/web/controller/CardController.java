@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/deck")
+@RequestMapping("/api/card")
 @CrossOrigin("*")
 @Slf4j
 public class CardController {
