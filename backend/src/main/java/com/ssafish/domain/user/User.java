@@ -18,6 +18,9 @@ public class User {
     @Column(name = "user_id", unique = true, nullable = false)
     private Long userId;
 
+    @Column(name = "username", length=10)
+    private String username;
+
     @Column(name = "nickname", length=10)
     private String nickname;
 
