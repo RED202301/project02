@@ -26,7 +26,7 @@ public class UserService {
         user.setRefreshToken(refreshToken);
         user.setKakaoAccessToken(kakaoAccessToken);
         user.setProfileImgUrl(kakaoUserInfo.getProfileImgUrl());
-        user.setThumnailImgUrl(kakaoUserInfo.getThumnailImgUrl());
+        user.setThumbnailImgUrl(kakaoUserInfo.getThumnailImgUrl());
         user.setEmail(kakaoUserInfo.getEmail());
         return user;
     }
