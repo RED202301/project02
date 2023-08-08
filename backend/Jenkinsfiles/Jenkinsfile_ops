@@ -13,6 +13,7 @@ pipeline {
         }
         stage('Build') { //war 파일로 빌드된다.
             steps {
+                cleanWs()
 
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-key',
                                  usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
