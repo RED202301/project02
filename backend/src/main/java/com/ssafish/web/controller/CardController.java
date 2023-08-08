@@ -2,6 +2,7 @@ package com.ssafish.web.controller;
 
 import com.ssafish.service.CardService;
 import com.ssafish.web.dto.CardDto;
+import com.ssafish.web.dto.UserDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,6 @@ public class CardController {
 
 
         cardDto = cardService.cardInsert(cardDto, request);
-
         log.info("resopnse card info" + cardDto);
 
         if(cardDto.getResult() == 1){
