@@ -1,46 +1,36 @@
 package com.ssafish.web.dto.Phase;
 
+import com.ssafish.service.RoomService;
+import com.ssafish.web.dto.GameData;
+import com.ssafish.web.dto.GameStatus;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Scope;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Component;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-@RequiredArgsConstructor
+
 public abstract class Phase {
+    protected ScheduledExecutorService turnTimer;
+    protected CountDownLatch latch;
 
-    private final ApplicationEventPublisher applicationEventPublisher;
-    private ScheduledExecutorService turnTimer;
-    private long turnTimeLimit; // Phase 생성 시 파라미터로 받아야 함
-
-    public void startTurnTimer() {
-        turnTimer = Executors.newSingleThreadScheduledExecutor();
-        turnTimer.schedule(this::endTurn, turnTimeLimit, TimeUnit.SECONDS);
-
-        // 시작 턴 안내해야 할 경우 subscriber 들에게 메시지 전달
-    }
-
-    public void cancelTurnTimer() {
-        if (turnTimer != null && !turnTimer.isShutdown()) {
-            turnTimer.shutdownNow();
+    protected void awaitSecond(long second) {
+        ScheduledExecutorService timer = Executors.newSingleThreadScheduledExecutor();
+        latch = new CountDownLatch(1);
+        timer.schedule(latch::countDown, second, TimeUnit.SECONDS);
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-    }
-
-    public void endTurn() {
-        cancelTurnTimer();
-
-        // 게임 내부 로직 처리
-
-        // pub 내용을 subscriber 들에게 전달
-
-        // 게임 종료 조건 분기해야 함
-
-        if (true) { // 현재 종료되는 턴이 '상대가 대답하는 턴'일 때
-        }
-        // 현재 메소드 변경
-        // 상대 지목 -> 카드 선택 -> 상대 대답 -> 상대 지목
-
-        startTurnTimer();
     }
 }

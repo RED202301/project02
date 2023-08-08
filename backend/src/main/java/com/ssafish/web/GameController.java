@@ -1,14 +1,21 @@
 package com.ssafish.web;
 
+import com.ssafish.service.CardDeckService;
 import com.ssafish.service.GameService;
+import com.ssafish.service.RoomService;
+import com.ssafish.web.dto.Board;
+import com.ssafish.web.dto.CardDto;
 import com.ssafish.web.dto.GameData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.*;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -17,93 +24,69 @@ import java.util.Map;
 @RestController
 public class GameController {
 
+    private final CardDeckService cardDeckService;
+    private final RoomService roomService;
     private final GameService gameService;
 
-    @MessageMapping("/{roomId}/gamestart")
-    @SendTo("/sub/{roomId}")
-    public GameData gameStart(@DestinationVariable long roomId, @Payload GameData data,
-                              @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
+    @Async
+    @MessageMapping("/{roomId}/start-game")
+    public void startGame(@DestinationVariable int roomId, @Payload GameData gameData,
+                          @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
 
-        String type = data.getType();
+        Board board = gameService.getGameRoomByRoomId(roomId);
+        long deckId = board.getDeckId();
+        List<CardDto> cardList = cardDeckService.deckCardList(deckId);
+        Collections.shuffle(cardList);
 
-//        String sessionId = headerAccessor.getSessionId();
-//        log.info(roomId + " " + type + " " + sessionId);
+        // 인원 수에 따라 카드 수와 별점 조절
 
-//        gameService.dfdfdfd(type, );
+        if (board.getGameStatus().getPlayerList().size() < 4) {
+            cardList = cardList.subList(0, 15);
+        }
+        int cardSize = cardList.size();
+        for (int idx = 0; idx < cardSize; idx++) {
+            if (idx * 5 < cardSize) {
+                cardList.get(idx).setPoint(3);
+            } else if (idx * 5 < cardSize * 3) {
+                cardList.get(idx).setPoint(2);
+            } else {
+                cardList.get(idx).setPoint(1);
+            }
+        }
+        gameData.setCards(cardList);
 
-        // 카드
-
-        // sub data
-        data.setType("GAME_START");
-//        data.setCards();
-
-        return data;
+        gameService.startGame(roomId, gameData);
     }
 
+    @Async
+    @MessageMapping("/{roomId}/select-player")
+    public void selectPlayer(@DestinationVariable int roomId, @Payload GameData gameData,
+                             @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
 
-    @MessageMapping("/{roomId}/personchoose")
-    @SendTo("/sub/{roomId}")
-    public GameData personChoose(@DestinationVariable long roomId, @Payload GameData data,
-                                 @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
-
-        String type = data.getType();
-
-//        String sessionId = headerAccessor.getSessionId();
-//        log.info(roomId + " " + type + " " + sessionId);
-
-//        gameService.dfdfdfd(type, );
-
-        // 카드
-
-        // sub data
-        data.setType("PERSON_CHOOSE");
-//        data.setCards();
-
-        return data;
+        gameService.selectPlayer(roomId, gameData);
     }
 
+    @Async
+    @MessageMapping("/{roomId}/test-player")
+    public void testPlayer(@DestinationVariable int roomId, @Payload GameData gameData,
+                           @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
 
-
-    @MessageMapping("/{roomId}/cardchoose")
-    @SendTo("/sub/{roomId}")
-    public GameData cardChoose(@DestinationVariable long roomId, @Payload GameData data,
-                               @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
-
-        String type = data.getType();
-
-//        String sessionId = headerAccessor.getSessionId();
-//        log.info(roomId + " " + type + " " + sessionId);
-
-//        gameService.dfdfdfd(type, );
-
-        // 카드
-
-        // sub data
-        data.setType("CARD_CHOOSE");
-//        data.setCards();
-
-        return data;
+        gameService.testPlayer(roomId, gameData);
     }
 
+    @Async
+    @MessageMapping("/{roomId}/select-card")
+    public void selectCard(@DestinationVariable int roomId, @Payload GameData gameData,
+                           @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
 
-    @MessageMapping("/{roomId}/replychoose")
-    @SendTo("/sub/{roomId}")
-    public GameData replyChoose(@DestinationVariable long roomId, @Payload GameData data,
-                                @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
+        gameService.selectCard(roomId, gameData);
+    }
 
-        String type = data.getType();
+    @Async
+    @MessageMapping("/{roomId}/reply")
+    public void reply(@DestinationVariable int roomId, @Payload GameData gameData,
+                      @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
 
-//        String sessionId = headerAccessor.getSessionId();
-//        log.info(roomId + " " + type + " " + sessionId);
-
-//        gameService.dfdfdfd(type, );
-
-        // 카드
-
-        // sub data
-        data.setType("REPLY_CHOOSE");
-//        data.setCards();
-
-        return data;
+        gameService.reply(roomId, gameData);
     }
 }

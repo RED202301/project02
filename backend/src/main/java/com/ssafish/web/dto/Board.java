@@ -1,38 +1,58 @@
 package com.ssafish.web.dto;
 
+import com.ssafish.web.dto.Phase.ChoosePhase;
+import com.ssafish.web.dto.Phase.GameOverPhase;
+import com.ssafish.web.dto.Phase.GameStartPhase;
 import com.ssafish.web.dto.Phase.Phase;
-import com.ssafish.web.dto.Phase.PhaseEnum;
-import org.springframework.context.event.EventListener;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
+@ToString
+@Getter
+@Setter
+@RequiredArgsConstructor
+@Component
+@Scope("prototype")
 public class Board {
-    List<Phase> phases;
-    List<Player> players;
-    List<Long> middleDeck;
+    private final GameStartPhase gameStartPhase;
+    private final GameOverPhase gameOverPhase;
+    private long userId;
+    private long deckId;
+    private long timeLimit;
+    private long capacity;
+    private boolean isStarted = false;
+    private GameStatus gameStatus;
+    private ChoosePhase currentPhase;
 
-    int currentPhaseIdx;
-    int currentPlayerIdx;
-    int opponentPlayerIdx;
-    Long cardOpen;
 
-    private long turnTimeLimit; // Board 생성 시 파라미터로 받아야 함
+    public void play(GameData gameData) {
+        isStarted = true;
+        gameStartPhase.run(gameData, gameStatus);
 
-    Board(long timeLimit, List<Long> cardIdList) { // 게임 시작 시 게임판 세팅
-        this.turnTimeLimit = timeLimit;
-        middleDeck = cardIdList;
-        phases = new ArrayList<>();
+        while (!gameStatus.isGameOver()) {
+            currentPhase = gameStatus.getCurrentPhase();
+
+            currentPhase.startTurnTimer(gameStatus);
+        }
+
+        gameOverPhase.run(gameStatus);
+        isStarted = false;
     }
 
-    private void changeCurrentPhase() {
-        currentPhaseIdx = (currentPhaseIdx + 1) % phases.size();
+    public void handlePub(GameData gameData) {
+        // pub 처리
+        currentPhase.handlePub(gameData, gameStatus);
     }
 
-    private void changeCurrentPlayer() {
-        currentPlayerIdx = (currentPlayerIdx + 1) % players.size();
+    public void addPlayer(long userId, String nickname, boolean isBot) {
+        gameStatus.addPlayer(userId, nickname, isBot);
+    }
+
+    public void removePlayer(long userId) {
+        gameStatus.removePlayer(userId);
     }
 }

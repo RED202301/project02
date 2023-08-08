@@ -19,7 +19,7 @@ public class UserService {
     public static User mapToEntity(KakaoUserInfo kakaoUserInfo, String refreshToken, String kakaoAccessToken) {
         User user = new User();
         user.setKakaoId(kakaoUserInfo.getId());
-        user.setNickname(kakaoUserInfo.getNickname());
+        user.setUsername(kakaoUserInfo.getNickname());
         user.setRefreshToken(refreshToken);
         user.setKakaoAccessToken(kakaoAccessToken);
         user.setProfileImgUrl(kakaoUserInfo.getProfileImgUrl());
@@ -40,5 +40,19 @@ public class UserService {
 
     public User saveUser(User user) {
         return userRepository.save(user);
+    }
+
+    public void changeNickname(Long userId, String newNickname) {
+        if (userId == null) {
+            throw new IllegalArgumentException("User ID cannot be null.");
+        }
+
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            throw new IllegalArgumentException("User not found with ID: " + userId);
+        }
+
+        user.setNickname(newNickname);
+        userRepository.save(user);
     }
 }

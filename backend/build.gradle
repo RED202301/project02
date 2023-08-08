@@ -48,6 +48,8 @@ dependencies {
     //웹소켓
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+
     //openvidu
     // https://mvnrepository.com/artifact/io.openvidu/openvidu-java-client
     implementation group: 'io.openvidu', name: 'openvidu-java-client', version: '2.28.0'
@@ -59,6 +61,11 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.7'
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
+    //swagger
+    // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.7.0'
+
+
 
 
 }
@@ -69,7 +76,10 @@ tasks.named('test') {
 jib {
 
     to {
+        //ops
         image = "qortn365/ssafish"
+        //dev
+        //image = "qortn365/ssafish_dev"
         tags = ["latest"]
         auth{
             username = "qortn365"
