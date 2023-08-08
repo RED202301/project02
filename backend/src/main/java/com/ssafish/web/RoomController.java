@@ -48,6 +48,16 @@ public class RoomController {
         return responseDto;
     }
 
+    @GetMapping("/api/v1/room/{roomId}")
+    public ResponseEntity<Object> findByRoomId(@PathVariable long roomId) {
+        try {
+            RoomResponseDto responseDto = roomService.findByRoomId(roomId);
+            return ResponseEntity.ok(responseDto);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
+        }
+    }
+
     @DeleteMapping("/api/v1/room/{roomId}")
     public void deleteById(@PathVariable long roomId) {
 
@@ -67,7 +77,7 @@ public class RoomController {
     }
 
     @PostMapping("/api/v1/room/msg")
-    public void msgToRoom(@RequestBody MsgData msgRequest) throws IOException {
+    public void msgToRoom(@RequestBody MsgData msgRequest) {
         log.info(msgRequest.toString());
 
         Long roomId = msgRequest.getRoomId();
@@ -95,7 +105,6 @@ public class RoomController {
             Map<String, Object> responseMap = new HashMap<>();
             responseMap.put("playerList", gameService.getPlayerList(roomId));
             responseMap.put("hostUserId", room.getUserId());
-
             return ResponseEntity.ok(responseMap);
         } catch (IllegalStateException e) {
             log.error("Failed to add player to the room: " + e.getMessage());
