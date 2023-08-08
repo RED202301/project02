@@ -43,6 +43,17 @@ public class RoomController {
         return responseDto;
     }
 
+    @DeleteMapping("/api/v1/room/{roomId}")
+    public void deleteById(@PathVariable long roomId) {
+
+        try {
+            roomService.deleteById(roomId);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     @GetMapping("/api/v1/room/id/{pinNumber}")
     public RoomResponseDto findByPinNumber(@PathVariable String pinNumber) {
         log.info(pinNumber);

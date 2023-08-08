@@ -4,6 +4,7 @@ import com.ssafish.web.dto.GameData;
 import com.ssafish.web.dto.GameStatus;
 import com.ssafish.web.dto.Player;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
-
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class GameOverPhase extends Phase {

@@ -28,6 +28,7 @@ public class GameService {
         gameStatus.setRoomId(responseDto.getRoomId());
         gameStatus.setTurnTimeLimit(responseDto.getTimeLimit());
         gameStatus.setPointMap(new ConcurrentHashMap<>());
+        gameStatus.setCheatSheet(new ConcurrentHashMap<>());
 
         board.setGameStatus(gameStatus);
         board.setDeckId(responseDto.getDeckId());
@@ -36,6 +37,11 @@ public class GameService {
 
         boards.put(responseDto.getRoomId(), board);
         log.info("생성된 방 정보: " + boards.get(responseDto.getRoomId()).toString());
+    }
+
+    public void deleteGameRoom(long roomId) {
+        boards.remove(roomId);
+        log.info("삭제된 방 정보: " + roomId);
     }
 
     public Board getGameRoomByRoomId(long roomId) {
