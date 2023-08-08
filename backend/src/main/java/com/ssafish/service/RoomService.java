@@ -39,6 +39,11 @@ public class RoomService {
         return RoomResponseDto.from(roomRepository.save(requestDto.toEntity()));
     }
 
+    @Transactional
+    public void deleteById(long roomId) throws IllegalArgumentException {
+        roomRepository.deleteById(roomId);
+    }
+
     public RoomResponseDto findByPinNumber(String pinNumber) {
         return RoomResponseDto.from(roomRepository.findByPinNumber(pinNumber));
     }

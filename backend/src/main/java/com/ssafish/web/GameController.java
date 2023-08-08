@@ -43,6 +43,7 @@ public class GameController {
         if (board.getGameStatus().getPlayerList().size() < 4) {
             cardList = cardList.subList(0, 15);
         }
+        log.info(roomId + "번 방에 전달된 카드 목록: " + cardList);
         int cardSize = cardList.size();
         for (int idx = 0; idx < cardSize; idx++) {
             if (idx * 5 < cardSize) {
