@@ -64,8 +64,9 @@ public class CardService {
         try {
             System.out.println("ser1 "+imagefile);
             //uploadPath 주소 spring 내부 파일로 볼륨동기화해서 저장하고 읽어오기[수정 필요]
-
-            String uploadPath = "/home/ubuntu/ssafish/cardMainImage"; //
+            ///home/ubuntu/ssafish/cardMainImage
+            String uploadPath = File.separator + "home" + File.separator+"ubuntu"+ File.separator+
+                    "ssafish"+ File.separator+"cardMainImage"; //
             //String uploadPath = "https://i9e202.p.ssafy.io/card_images/cardMainImage"; //
             //String uploadFolder = "cardMainImage";
 
@@ -82,8 +83,8 @@ public class CardService {
             //하지만 다시내려 줄때는 nginx에 설정된 형태로 내려 줘야한다.
 
 
-            destFile = new File(uploadPath +"/" + saveFileName);
-            System.out.println("here error!");
+            destFile = new File(uploadPath + File.separator + saveFileName);
+            System.out.println("here error! :" + destFile);
             imagefile.transferTo(destFile); //이미지 저장
             System.out.println("!!!");
             //내려줄 주소 형식
