@@ -39,13 +39,13 @@ public class CardController {
 
 
         cardDto = cardService.cardInsert(cardDto, request);
-        log.info("resopnse card info" + cardDto);
+
 
         if(cardDto.getResult() == 1){
-
+            log.info("resopnse card info" + cardDto);
             return ResponseEntity.ok().body(cardDto); //정상결과 출력
         }else{
-
+            log.info("sdf");
             return ResponseEntity.notFound().build();
         }
 
