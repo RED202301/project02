@@ -132,7 +132,7 @@ class CardTests {
         //app.fileupload.uploadPath=C:\\SSAFY\\springboot\\springboot\\BoardWebFileUploadSpringBootMybatisVueVuex\\src\\main\\resources\\static
 // https://i9e202.p.ssafy.io/card_images/people_imgs/1_%EB%8B%A8%EA%B5%B0%EC%99%95%EA%B2%80.png
         //String uploadPath = "http://i9e202.p.ssafy.io/home/ubuntu/ssafish/cardMainImage";
-        String uploadPath = "https://i9e202.p.ssafy.io/card_images";
+        String uploadPath = "https://i9e202.p.ssafy.io/main_images";
 
         String [] mainImgUrl = {"/people_imgs/1_단군왕검.png","/people_imgs/2_공자.png","/people_imgs/3_광개토대왕.png", "/people_imgs/4_나폴레옹.png",
                 "/people_imgs/5_뉴턴.png", "/people_imgs/6_데카르트.png","/people_imgs/7_레오나르도다빈치.png","/people_imgs/8_세종대왕.png",
