@@ -68,14 +68,14 @@ public class CardService {
             System.out.println("ser1 "+imagefile);
             //uploadPath 주소 spring 내부 파일로 볼륨동기화해서 저장하고 읽어오기[수정 필요]
             ///home/ubuntu/ssafish/cardMainImage
-            String uploadPath = File.separator + "home" + File.separator+"ubuntu"+ File.separator+
+            String uploadPath = File.separator + "home" + File.separator+
                     "ssafish"+ File.separator+"cardMainImage"; //
             //String uploadPath = "https://i9e202.p.ssafy.io/card_images/cardMainImage"; //
             //String uploadFolder = "cardMainImage";
 
             //이미지 전체가 저장될 경로
-            //File uploadDir = new File(uploadPath); // 수정
-            //if (!uploadDir.exists()) uploadDir.mkdir();
+            File uploadDir = new File(uploadPath); // 수정
+            if (!uploadDir.exists()) uploadDir.mkdir();
 
             String filename = imagefile.getOriginalFilename();
             System.out.println(filename);
@@ -88,18 +88,18 @@ public class CardService {
 
             destFile = new File(uploadPath + File.separator + saveFileName);
             //System.out.println("here error! :" + destFile);
-            log.info("here error! :" + destFile);
+            log.info("here error! :" + destFile.getPath());
             imagefile.transferTo(destFile); //이미지 저장
 
             log.info("new test" );
             System.out.println("new test");
-            
+
 
            //System.out.println("!!!123");
             log.info("here" );
-            destFile2 = new File("/home/ubuntu/ssafish/cardMainImage");
+            destFile2 = new File("/home/ssafish/cardMainImage");
             imagefile.transferTo(destFile2); //이미지 저장
-            log.info("destFile2: " + destFile2);
+            log.info("destFile2: " + destFile2.getPath());
             System.out.println("!!!");
             //내려줄 주소 형식
             //https://i9e202.p.ssafy.io/card_images/people_imgs/1_%EB%8B%A8%EA%B5%B0%EC%99%95%EA%B2%80.png
