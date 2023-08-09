@@ -14,7 +14,7 @@ pipeline {
             }
         }
 
-        
+
 
         stage('Build') { //war 파일로 빌드된다.
             steps {
