@@ -42,7 +42,7 @@
   margin-left: 15px;
   border: 2px ;
   width: 200px;
-  height: 350px;
+  height: 300px;
   
 
 }
@@ -69,6 +69,92 @@
 
   
 }
+.star-container {
+  display: flex;
+  justify-content: flex-end;
+  /* margin-top: 10px; */
+}
+
+.star {
+  font-size: 24px;
+  color: gray;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.yellow {
+  color: yellow;
+}
+.margincard {
+  margin-left: 250px;
+  margin-top: -400px;
+}
+.yellow-star {
+  color: yellow;
+
+}
+.shortdiv {
+  margin-top: 10px;
+}
+.cardx {
+  border: 2px solid black;
+  border-radius: 6px;
+  width: 200px;
+  height: 330px;
+  background-color: khaki;
+  position: relative; /* Make sure the position is relative */
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
+}
+
+.cardx:before,
+.cardx:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 44%; /* Adjust the height of the top and bottom sections */
+}
+
+.cardx:before {
+  background-color: olive;
+  top: 0;
+}
+
+.cardx:after {
+  background-color: yellowgreen;
+  bottom: 0;
+}
+
+.cardx .middle-section {
+  background-color: greenyellow;
+  position: absolute;
+  top: 40%; /* Adjust the position to place it between the top and bottom sections */
+  width: 100%;
+  height: 16%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cardx .content {
+  position: relative;
+  /* padding: 5px; */
+  z-index: 1;
+  padding-left: 10px;
+  padding-top: 10px;
+  font-weight: bold;
+
+}
+
+.cardtitle {
+  text-align: center;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: whitesmoke;
+  font-size: 20px;
+}
+
+/* Rest of your existing CSS */
+
 
 .imagebox {
   border: 2px solid black;
