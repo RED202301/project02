@@ -90,13 +90,13 @@ public class CardService {
 
             log.info("store image" );
 
-            destFile2 = new File("/home/ssafish/cardMainImage"+ saveFileName);
+            destFile2 = new File("/home/ssafish/cardMainImage/"+ saveFileName);
             imagefile.transferTo(destFile2); //이미지 저장
             log.info("store image 2: " + destFile2.getPath());
 
-            destFile = new File(uploadPath + File.separator + saveFileName);
-            log.info("store image 1:" + destFile.getPath());
-            imagefile.transferTo(destFile); //이미지 저장
+//            destFile = new File(uploadPath + File.separator + saveFileName);
+//            log.info("store image 1:" + destFile.getPath());
+//            imagefile.transferTo(destFile); //이미지 저장
 
 
 
