@@ -25,6 +25,7 @@ pipeline {
                             chmod u+x ./gradlew
                             ./gradlew clean bootJar
                          cd ../frontend
+                            npm install
                             npm run build
                         """
                     }
@@ -67,7 +68,7 @@ pipeline {
                     docker run -d -t -p 5001:5001 -v ssafish-cards:/home/ssafish/cardMainImage -v /home/ubuntu/ssafish/cardMainImage:/home/ssafish/cardMainImage  --rm --name ${dockerImageName} ${dockerRepository}/${dockerImageName}:latest;'
 
                     'docker rm -f ${dockerImageNameFront} &&
-                     docker run -d -t -p 5001:5001 --rm --name ${dockerImageNameFront} ${dockerRepository}/${dockerImageNameFront};'
+                     docker run -d -t -p 5173:5173 --rm --name ${dockerImageNameFront} ${dockerRepository}/${dockerImageNameFront};'
                     """
 
                 }
