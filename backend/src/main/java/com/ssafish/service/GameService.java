@@ -71,9 +71,10 @@ public class GameService {
     public void addPlayer(long roomId, long userId, String nickname, boolean isBot) {
         Board board = boards.get(roomId);
         boolean already = false;
-        if (board.getGameStatus().getPlayerList().size() < board.getCapacity() && !board.isStarted()) {
+        List<Player> playerList = board.getGameStatus().getPlayerList();
+        if (playerList.size() < board.getCapacity() && !board.isStarted()) {
             // 인원수를 넘지 않고 아직 시작하지 않았으며
-            for (Player player : board.getGameStatus().getPlayerList()) {
+            for (Player player : playerList) {
                 if (userId == player.getUserId()) {
                     already = true;
                     break; // 이미 찾았으므로 더 이상 반복할 필요가 없음

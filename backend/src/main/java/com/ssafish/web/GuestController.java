@@ -22,10 +22,15 @@ public class GuestController {
     @PostMapping("/api/v1/guest")
     public ResponseEntity<Object> create(@RequestBody UserRequestDto requestDto) {
         // 닉네임 중복 체크
-        if (userService.isAvailable(requestDto.getNickname())) {
-            return ResponseEntity.status(HttpStatus.OK).body(userService.create(requestDto));
+        String nickname = requestDto.getNickname();
+        if (nickname.length() > 10) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Too long nickname.");
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Nickname is already taken.");
+            if (userService.isAvailable(nickname)) {
+                return ResponseEntity.status(HttpStatus.OK).body(userService.create(requestDto));
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Nickname is already taken.");
+            }
         }
     }
 }
