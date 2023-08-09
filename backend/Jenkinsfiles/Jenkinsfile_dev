@@ -20,7 +20,7 @@ pipeline {
                                  usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     script {
                         sh """
-                        cd /var/jenkins_home/workspace/ssafish/backend
+                        cd /var/jenkins_home/workspace/ssafish_dev/backend
                             chmod u+x ./gradlew
                             ./gradlew clean bootJar
                         """
@@ -34,7 +34,7 @@ pipeline {
                                  usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     script {
                         sh """
-                        cd /var/jenkins_home/workspace/ssafish/backend
+                        cd /var/jenkins_home/workspace/ssafish_dev/backend
                            ./gradlew jib -Pdocker.repository=${dockerRepository} \
                            -Pdocker.repository.username=${USERNAME} \
                            -Pdocker.repository.password=${PASSWORD} \
