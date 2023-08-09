@@ -91,15 +91,12 @@ public class CardService {
             log.info("here error! :" + destFile.getPath());
             imagefile.transferTo(destFile); //이미지 저장
 
-            log.info("new test" );
-            System.out.println("new test");
-
 
            //System.out.println("!!!123");
-            log.info("here" );
+            log.info("stoer image" );
             destFile2 = new File("/home/ssafish/cardMainImage");
             imagefile.transferTo(destFile2); //이미지 저장
-            log.info("destFile2: " + destFile2.getPath());
+            log.info("storimage 2: " + destFile2.getPath());
             System.out.println("!!!");
             //내려줄 주소 형식
             //https://i9e202.p.ssafy.io/card_images/people_imgs/1_%EB%8B%A8%EA%B5%B0%EC%99%95%EA%B2%80.png
