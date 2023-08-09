@@ -24,7 +24,9 @@ pipeline {
                         cd /var/jenkins_home/workspace/ssafish_dev/backend
                             chmod u+x ./gradlew
                             ./gradlew clean bootJar
-                         cd ../frontend
+                            """
+                         sh """
+                         cd /var/jenkins_home/workspace/ssafish_dev/frontend
                             npm install
                             npm run build
                         """
