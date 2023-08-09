@@ -61,7 +61,7 @@ pipeline {
                         sh """
                         cd /var/jenkins_home/workspace/ssafish_dev/frontend
 
-                        docker build -t ${dockerRepository}/${dockerImageNameFront}
+                        docker build -t ${dockerRepository}/${dockerImageNameFront} .
                         docker login
                         docker push ${dockerRepository}/${dockerRepository}/${dockerImageNameFront}
 
