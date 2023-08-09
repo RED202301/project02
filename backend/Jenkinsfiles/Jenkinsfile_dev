@@ -13,8 +13,18 @@ pipeline {
                 checkout scm
             }
         }
+
+        stage('Verify Node.js') {
+                steps {
+                    sh 'echo $PATH'
+                    sh 'which node'
+                    sh 'which npm'
+                }
+            }
+
         stage('Build') { //war 파일로 빌드된다.
             steps {
+
 
 
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-key',
