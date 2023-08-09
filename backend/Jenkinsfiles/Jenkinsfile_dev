@@ -63,7 +63,7 @@ pipeline {
 
                         docker build -t ${dockerRepository}/${dockerImageNameFront} .
                         docker login
-                        docker push ${dockerRepository}/${dockerRepository}/${dockerImageNameFront}
+                        docker push ${dockerRepository}/${dockerImageNameFront}
 
                         """
                     }
