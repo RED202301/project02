@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Checkout'){
             steps {
-                cleanWs()
+
                 checkout scm
             }
         }
@@ -47,12 +47,12 @@ pipeline {
             }
         }
         // jenkins 캐시제거
-        stage('Cleanup') {
-                    steps {
-                        // Clean up workspace before deployment
-                        cleanWs(deleteDirs: true)
-                    }
-        }
+ //       stage('Cleanup') {
+  //                  steps {
+   //                     // Clean up workspace before deployment
+    //                    cleanWs(deleteDirs: true)
+     //               }
+       // }
 
 
         stage('Deploy'){// ec2에 배포된다. 즉 이미지를 받아서 실행한다x.
@@ -68,19 +68,19 @@ pipeline {
         }
     }
 
-    post {
-        always {
-            cleanWs(deleteDirs: true, cleanWhenFailure : true)
+//    post {
+ //       always {
+   //         cleanWs(deleteDirs: true, cleanWhenFailure : true)
            // patterns: [
            //                     // Set patterns to exclude specific files or directories from cleanup
            //                     [pattern: '.gradle', type: 'EXCLUDE'],
            //                     [pattern: 'build/**', type: 'INCLUDE']
             //                ]
 
-        }
+     //   }
 
 
-    }
+   // }/
 }
 
 
