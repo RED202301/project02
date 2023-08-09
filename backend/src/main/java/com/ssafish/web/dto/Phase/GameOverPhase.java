@@ -23,6 +23,7 @@ public class GameOverPhase extends Phase {
     protected final SimpMessageSendingOperations messagingTemplate;
 
     public void run(GameStatus gameStatus) {
+        log.info(gameStatus.getRoomId() + "번 방 - GameOverPhase 시작");
         awaitSecond(1L);
 
         ScheduledExecutorService turnTimer = Executors.newSingleThreadScheduledExecutor();

@@ -96,7 +96,8 @@ public class DisconnectHandler implements ApplicationListener<AbstractSubProtoco
             } else { // 방에 잔여 인원이 있는 경우 -> 그 사람 중 하나를 방장으로
                 Player newLeader = personList.get((int) (Math.random() * personList.size()));
                 room.setUserId(newLeader.getUserId());
-                messagingTemplate.convertAndSend("/sub/" + roomId, GameData.builder()
+                messagingTemplate.convertAndSend("/sub/" + roomId,
+                        GameData.builder()
                         .type(TypeEnum.ROOM_LEADER.name())
                         .player(newLeader.getUserId())
                         .build());

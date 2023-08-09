@@ -1,5 +1,6 @@
 package com.ssafish.domain;
 
+import com.ssafish.web.dto.RoomRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -50,5 +51,12 @@ public class Room {
         this.timeLimit = timeLimit;
         this.capacity = capacity;
         this.gameType = gameType;
+    }
+
+    public void update(RoomRequestDto requestDto) {
+        this.roomName = requestDto.getRoomName();
+        this.capacity = requestDto.getCapacity();
+        this.timeLimit = requestDto.getTimeLimit();
+        this.deckId = requestDto.getDeckId();
     }
 }

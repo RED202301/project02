@@ -25,6 +25,7 @@ public class ReplyChoosePhase extends Phase implements ChoosePhase {
     @Override
     public void startTurnTimer(GameStatus gameStatus, ScheduledExecutorService turnTimer) {
         awaitSecond(1L);
+        log.info(gameStatus.getRoomId() + "번 방 - ReplyChoosePhase 시작");
 
         latch = new CountDownLatch(1);
 
