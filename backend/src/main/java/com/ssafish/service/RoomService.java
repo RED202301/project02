@@ -57,6 +57,16 @@ public class RoomService {
     }
 
     @Transactional
+    public RoomResponseDto update(RoomRequestDto requestDto, long roomId) {
+        Room changeRoom = roomRepository.findById(roomId)
+                .orElseThrow(() -> new IllegalArgumentException("Room not found"));
+
+        changeRoom.update(requestDto);
+
+        return RoomResponseDto.from(changeRoom);
+    }
+
+    @Transactional
     public void deleteById(long roomId) {
         roomRepository.deleteById(roomId);
     }
