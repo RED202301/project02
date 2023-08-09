@@ -8,6 +8,7 @@ pipeline {
 
     tools {
         nodejs "front"
+        gradle "back"
 
     }
 
@@ -85,13 +86,13 @@ pipeline {
 
                     sh """
                      ssh -o StrictHostKeyChecking=no ubuntu@i9e202.p.ssafy.io \
-                     'docker rm -f ${dockerImageNameFront} &&
+                     '
                       docker run -d -t -p 5173:5173 --rm --name ${dockerImageNameFront} ${dockerRepository}/${dockerImageNameFront}:latest;'
 
                     """
 
                 }
-            }
+            }//docker rm -f ${dockerImageNameFront} &&
         }
     }
 

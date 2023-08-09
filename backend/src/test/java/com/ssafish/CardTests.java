@@ -188,27 +188,27 @@ class CardTests {
 //
 //    }
 
-//    @Test
-//    @Order(3)
-//    void setDefaultDeckToDB() {
-//        DeckDto deckDto = DeckDto.builder()
-//                .deckId(1)
-//                .cardId(0)
-//                .userId(1)
-//                .deckName("위인 모음집")
-//                .deckDescription("세계적인 위인들로 게임을 플레이하고, 익혀봅시다. ")
-//                .deckUsageCount(1)
-//                .ispublic(true).build();
-//
-//        Deck deck = deckDto.toEntity();
-//        deckRepository.save(deck);
-//
-////        DeckDetailDto deckDetailDto = DeckDetailDto.builder()
-////                .deck(deckDto)
-////                .cardList(cardList)
-////                .build();
-//
-////    }
+    @Test
+    @Order(3)
+    void setDefaultDeckToDB() {
+        DeckDto deckDto = DeckDto.builder()
+                .deckId(1)
+                .cardId(0)
+                .userId(1)
+                .deckName("위인 모음집")
+                .deckDescription("세계적인 위인들로 게임을 플레이하고, 익혀봅시다. ")
+                .deckUsageCount(1)
+                .ispublic(true).build();
+
+        Deck deck = deckDto.toEntity();
+        deckRepository.save(deck);
+
+//        DeckDetailDto deckDetailDto = DeckDetailDto.builder()
+//                .deck(deckDto)
+//                .cardList(cardList)
+//                .build();
+
+    }
 
 
 

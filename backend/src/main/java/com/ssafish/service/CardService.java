@@ -89,14 +89,16 @@ public class CardService {
             //하지만 다시내려 줄때는 nginx에 설정된 형태로 내려 줘야한다.
 
             log.info("store image" );
-            destFile = new File(uploadPath + File.separator + saveFileName);
 
+            destFile2 = new File("/home/ssafish/cardMainImage"+ saveFileName);
+            imagefile.transferTo(destFile2); //이미지 저장
+            log.info("store image 2: " + destFile2.getPath());
+
+            destFile = new File(uploadPath + File.separator + saveFileName);
             log.info("store image 1:" + destFile.getPath());
             imagefile.transferTo(destFile); //이미지 저장
 
-            destFile2 = new File("/home/ssafish/cardMainImage");
-            imagefile.transferTo(destFile2); //이미지 저장
-            log.info("store image 2: " + destFile2.getPath());
+
 
             //내려줄 주소 형식
             //https://i9e202.p.ssafy.io/card_images/people_imgs/1_%EB%8B%A8%EA%B5%B0%EC%99%95%EA%B2%80.png
