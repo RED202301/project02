@@ -90,7 +90,7 @@ public class RoomController {
     public ResponseEntity<Object> processClientEntrance(@DestinationVariable long roomId, @Payload SocketData data,
                                              @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
 
-        Long userId = data.getUserId();
+        long userId = data.getUserId();
         String nickname = data.getNickname();
         boolean isBot = data.isBot();
         String sessionId = headerAccessor.getSessionId();
@@ -98,7 +98,15 @@ public class RoomController {
         try {
             roomService.processClientEntrance(roomId, userId, sessionId);
             gameService.addPlayer(roomId, userId, nickname, isBot);
-            return ResponseEntity.status(HttpStatus.OK).body(gameService.getPlayerList(roomId));
+            List<Player> playerList = gameService.getPlayerList(roomId);
+            return ResponseEntity.status(HttpStatus.OK).body(SocketData.builder()
+                    .type(TypeEnum.ENTER.name())
+                    .userId(userId)
+                    .nickname(nickname)
+                    .isBot(isBot)
+                    .numPlayer(playerList.size())
+                    .playerList(playerList)
+                    .build());
         } catch (IllegalStateException e) {
             log.error("Failed to add player to the room: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

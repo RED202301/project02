@@ -99,8 +99,10 @@ public class GameService {
     }
 
     public void startGame(long roomId, GameData gameData) {
-        boards.keySet().forEach(System.out::println);
-        boards.get(roomId).play(gameData);
+        Board board = boards.get(roomId);
+        log.info("play 메서드 호출 이전인 방 번호: " + roomId);
+        board.play(gameData);
+        log.info("play 메서드 호출 완료한 방 번호: " + roomId);
     }
 
     public void selectPlayer(long roomId, GameData gameData) {

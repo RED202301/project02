@@ -103,6 +103,7 @@ public class ReplyChoosePhase extends Phase implements ChoosePhase {
 
                     turnTimer2.schedule(() -> sendEnroll(gameStatus, gameStatus.getCurrentPlayer().getUserId(), cardDraw), 2 * ++delaySecond, TimeUnit.SECONDS);
 
+                    log.info(gameStatus.getRoomId() + "번 방 - 한 유저의 손패 수: " + handCurrent.size());
                     if (handCurrent.isEmpty()) {
                         gameStatus.setGameOver(true);
                     }
@@ -128,6 +129,7 @@ public class ReplyChoosePhase extends Phase implements ChoosePhase {
 
             turnTimer2.schedule(() -> sendEnroll(gameStatus, gameStatus.getCurrentPlayer().getUserId(), cardOpen), 2 * ++delaySecond, TimeUnit.SECONDS);
 
+            log.info(gameStatus.getRoomId() + "번 방 - 한 유저의 손패 수: " + handCurrent.size() + " - 다른 유저의 손패 수: " + handOpponent.size());
             if (handCurrent.isEmpty() || handOpponent.isEmpty()) {
                 gameStatus.setGameOver(true);
             }
