@@ -4,20 +4,18 @@ import com.ssafish.web.dto.Phase.ChoosePhase;
 import com.ssafish.web.dto.Phase.GameOverPhase;
 import com.ssafish.web.dto.Phase.GameStartPhase;
 import com.ssafish.web.dto.Phase.Phase;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
-@ToString
-@Getter
-@Setter
-@RequiredArgsConstructor
+@Slf4j
+@Data
 @Component
 @Scope("prototype")
 public class Board {
@@ -32,8 +30,9 @@ public class Board {
     private ChoosePhase currentPhase;
     private ScheduledExecutorService turnTimer;
 
-
+    @Async("gameTaskExecutor")
     public void play(GameData gameData) {
+        gameStatus.init();
         isStarted = true;
         gameStartPhase.run(gameData, gameStatus);
 
@@ -41,6 +40,7 @@ public class Board {
             currentPhase = gameStatus.getCurrentPhase();
 
             turnTimer = Executors.newSingleThreadScheduledExecutor();
+            log.info("Board hashCode: " + this.hashCode());
             currentPhase.startTurnTimer(gameStatus, turnTimer);
         }
 
