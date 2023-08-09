@@ -35,17 +35,24 @@ public class RoomController {
 
     @Transactional
     @PostMapping("/api/v1/room")
-    public RoomResponseDto create(@RequestBody RoomRequestDto requestDto) {
+    public ResponseEntity<Object> create(@RequestBody RoomRequestDto requestDto) {
 
         String uuid = UUID.randomUUID().toString();
         requestDto.setPinNumber(uuid);
 
         log.info(requestDto.toString());
-        RoomResponseDto responseDto = roomService.create(requestDto);
 
-        gameService.createGameRoom(responseDto);
-        log.info(responseDto.toString());
-        return responseDto;
+        if (requestDto.getRoomName() != null && requestDto.getCapacity() > 1 && requestDto.getTimeLimit() > 0) {
+            RoomResponseDto responseDto = roomService.create(requestDto);
+
+            gameService.createGameRoom(responseDto);
+            log.info(responseDto.toString());
+            return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Wrong room condition.");
+        }
+
+
     }
 
     @GetMapping("/api/v1/room/{roomId}")
