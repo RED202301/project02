@@ -1,15 +1,21 @@
 package com.ssafish.domain.card;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface UserCardRepository extends JpaRepository<UserCard, Long> {
+    @Transactional
+    @Modifying
+    @Query(value = " delete from user_cards where user_id = ?2 and card_id = ?1 " ,
+            nativeQuery = true)
+    void deleteByIds(long cardId, long userId);
 
-//    @Query(value = " select c.card_id ,c.user_id,c.main_title , c.sub_title , c.main_img_url, c.sub_img_url , " +
-//            "  c.card_description, c.point, c.created_date , c.modified_date" +
-//            " from cards c right join (select card_id from card_decks where deck_id = ?) a" +
-//            " on c.card_id = a.card_id " ,
-//            nativeQuery = true)
-//    List<Card> findCardDeckList(long deckId);
+    @Query(value = " select count(*) from user_cards where user_id = ?2 and card_id = ?1 ",
+            nativeQuery = true)
+    int isRelation(@Param("cardId")long cardId,@Param("userId") long userId);
 //    Card findByCardId(long cardId);
 
 

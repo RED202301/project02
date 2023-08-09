@@ -147,6 +147,16 @@ public class CardService {
 
     }
 
+    public int deleteCard(long cardId, long userId){
+        try {
+            userCardRepository.deleteByIds(cardId, userId);
+            return SUCCESS;
+        }catch(Exception e){
+            e.printStackTrace();
+            return FAIL;
+        }
+    }
+}
 
 //    public DeckDetailDto deckDetail(long deckId){
 //
@@ -160,4 +170,4 @@ public class CardService {
 //
 //        return deckDetailDto;
 //    }
-}
+
