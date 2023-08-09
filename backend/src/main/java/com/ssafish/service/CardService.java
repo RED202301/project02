@@ -156,6 +156,16 @@ public class CardService {
             return FAIL;
         }
     }
+
+    public List<CardDto> userCardList(long userId){
+    //사용자의 모든 카드정보를 받아온다.
+        List<Card> userCardList = cardsRepository.UserCardList(userId);
+        List<CardDto> userCardDtoList = new ArrayList<>();
+        userCardList.forEach((card) -> userCardDtoList.add(card.toDto()));
+        return userCardDtoList;
+
+
+    }
 }
 
 //    public DeckDetailDto deckDetail(long deckId){

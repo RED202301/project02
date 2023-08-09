@@ -2,6 +2,8 @@ package com.ssafish;
 
 import com.ssafish.domain.card.Card;
 import com.ssafish.domain.card.CardsRepository;
+import com.ssafish.domain.card.UserCard;
+import com.ssafish.domain.card.UserCardRepository;
 import com.ssafish.domain.deck.CardDeck;
 import com.ssafish.domain.deck.CardDeckRepository;
 import com.ssafish.domain.deck.Deck;
@@ -38,6 +40,10 @@ class CardInsertTest {
     CardService cardService;
     @Autowired
     CardDeckRepository cardDeckRepository;
+    @Autowired
+    UserCardRepository userCardRepository;
+
+
 
 
 
@@ -152,5 +158,28 @@ class CardInsertTest {
 //
 //
 //    }
+
+    //유저 카드 테이블 더미 데이터 삽입
+    @Test
+    @Order(4)
+    void setDefaultUserCardsToDB(){
+
+        userCardRepository.deleteAllInBatch();
+
+        long cardIdnum =1;
+        for(int i=0;i<25;i++){
+
+            UserCard userCard = UserCard.builder()
+                    .userId(0)
+                    .cardId(cardIdnum)
+                    .build();
+
+            userCardRepository.save(userCard);
+            cardIdnum++;
+
+        }
+
+    }
+
 
 }

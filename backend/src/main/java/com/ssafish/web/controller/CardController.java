@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api")
 @CrossOrigin("*")
@@ -60,10 +62,7 @@ public class CardController {
         // 유저_카드 간의 관계가 있을때 관계만을 삭제한다.
 
         if(userCardRepository.isRelation(cardId,userId) >= 1){
-
-
             int result = cardService.deleteCard(cardId,userId);
-
 
             if(result == 1){
                 log.info("card delete success");
@@ -78,6 +77,13 @@ public class CardController {
         return ResponseEntity.badRequest().body(errorMessage.toString());
 
 
+    }
+    @GetMapping("/card/{userId}")
+    public ResponseEntity<List<CardDto>> userCardList(@PathVariable long userId){
+
+        List<CardDto> userCardList = cardService.userCardList(userId);
+
+        return ResponseEntity.ok().body(userCardList);
     }
 
 
