@@ -51,13 +51,9 @@ pipeline {
                            -Pdocker.image.name=${dockerImageName} \
                            -Pdocker.image.tag="latest"
 
-                  //      cd ../frontend
-                 //           docker image rm ${dockerRepository}/${dockerImageNameFront}
-                //            docker build -t ${dockerRepository}/${dockerImageNameFront}
-                 //           docker login
-                 //           docker push ${dockerRepository}/${dockerRepository}/${dockerImageNameFront}
 
-              //          """
+
+                        """
                     }
                 }
             }
@@ -73,8 +69,7 @@ pipeline {
                     'docker rm -f ${dockerImageName} &&
                     docker run -d -t -p 5001:5001 -v ssafish-cards:/home/ssafish/cardMainImage -v /home/ubuntu/ssafish/cardMainImage:/home/ssafish/cardMainImage  --rm --name ${dockerImageName} ${dockerRepository}/${dockerImageName}:latest;'
 
-                   // 'docker rm -f ${dockerImageNameFront} &&
-                   //  docker run -d -t -p 5173:5173 --rm --name ${dockerImageNameFront} ${dockerRepository}/${dockerImageNameFront};'
+
                     """
 
                 }
