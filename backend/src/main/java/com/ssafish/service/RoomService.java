@@ -53,7 +53,7 @@ public class RoomService {
         changeRoom.setDeckId(requestDto.getDeckId());
 
         // 변경된 엔티티를 RoomResponseDto로 변환하여 반환 // 두번인지 확인
-        return RoomResponseDto.from(changeRoom);
+        return RoomResponseDto.from(roomRepository.save(changeRoom));
     }
 
     @Transactional

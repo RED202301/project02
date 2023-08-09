@@ -32,8 +32,6 @@ public class RoomController {
     private final GameService gameService;
     private final UserService userService;
 
-    static Map<String, Long> rooms = new HashMap<>();
-
 
     @Transactional
     @PostMapping("/api/v1/room")
@@ -45,7 +43,6 @@ public class RoomController {
         log.info(requestDto.toString());
         RoomResponseDto responseDto = roomService.create(requestDto);
 
-        rooms.put(uuid, responseDto.getRoomId());
         gameService.createGameRoom(responseDto);
         log.info(responseDto.toString());
         return responseDto;
