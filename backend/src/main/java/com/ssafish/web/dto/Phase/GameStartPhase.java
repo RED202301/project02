@@ -49,7 +49,7 @@ public class GameStartPhase extends Phase {
                 List<Long> handCurrent = player.getCardsOnHand();
                 List<Long> enrollCurrent = player.getCardsEnrolled();
 
-                turnTimer.schedule(() -> sendAutoDraw(gameStatus, player.getUserId(), cardDraw), 2L * ++delaySec, TimeUnit.SECONDS);
+                turnTimer.schedule(() -> sendAutoDraw(gameStatus, player.getUserId(), cardDraw), 500L * ++delaySec, TimeUnit.MILLISECONDS);
                 // 카드가 requester 손패로 이동
                 if (!handCurrent.contains(cardDraw)) {
                     handCurrent.add(cardDraw);
@@ -60,7 +60,7 @@ public class GameStartPhase extends Phase {
                     gameStatus.getCheatSheet().remove(cardDraw);
                     player.addScore(gameStatus.getPointMap().get(cardDraw));
 
-                    turnTimer.schedule(() -> sendEnroll(gameStatus, player.getUserId(), cardDraw), 2L * delaySec + 1L, TimeUnit.SECONDS);
+                    turnTimer.schedule(() -> sendEnroll(gameStatus, player.getUserId(), cardDraw), 500L * delaySec + 250L, TimeUnit.MILLISECONDS);
                 }
             }
         }
@@ -68,7 +68,7 @@ public class GameStartPhase extends Phase {
         gameStatus.setCurrentPlayer(gameStatus.getPlayerList().get(gameStatus.getCurrentPlayerIdx()));
         gameStatus.setCurrentPhase(gameStatus.getPersonChoosePhase());
 
-        awaitSecond(2L * ++delaySec);
+        awaitSecond((500L * ++delaySec / 1000) + 1L);
     }
 
     public void sendAutoDraw(GameStatus gameStatus, long userId, long cardDraw) {
