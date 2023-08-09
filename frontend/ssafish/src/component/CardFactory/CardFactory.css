@@ -1,0 +1,120 @@
+.bold {
+    margin: 5%;
+    font-weight: bold;
+    font-size: 20px;
+  }
+  
+#factory {
+    border: 2px solid whitesmoke;
+    background-color: beige;
+    margin: 5%;
+    width: 500px;
+    height: 450px;
+    border-radius: 4px;
+  }
+  
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5%;
+  }
+  
+  #silverborder {
+    border: 2px solid whitesmoke;
+    background-color: beige;
+    padding: 2%;
+    margin-left: 5%;
+    font-weight: bold;
+  }
+  
+
+  #silverborders {
+    border: 2px solid whitesmoke;
+    background-color: beige;
+    padding: 2%;
+    margin-left: 3%;
+    font-weight: bold;
+  
+  }
+
+  /* 카드 모달 */
+  .makebox {
+    margin-left: 15px;
+    border: 2px ;
+    width: 200px;
+    height: 350px;
+    
+
+  }
+  .modalbox {
+    display: flex;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 2px solid whitesmoke;
+    background-color: whitesmoke;
+    width: 220px;
+    height: 420px;
+    padding-right: 2%;
+    border-radius: 6px;
+  }
+  
+  .showingbox {
+    border: 2px solid black;
+    border-radius: 6px;
+    width: 200px;
+    height: 50px;
+    /* margin-top: 1%; */
+
+    
+  }
+  
+  .imagebox {
+    border: 2px solid black;
+    width: 200px;
+    height: 150px;
+    text-align: center;
+  }
+  .button {
+    
+    border-radius: 6px;
+    width: 120px;
+    height: 30px;
+    text-align: center;
+    padding: 2%;
+
+  
+  }
+  .buttoncontain {
+    margin-top: 5px;
+    display: flex;
+    width: 200px;
+    margin-left: 20px;
+    justify-content: center; /* 가로 중앙 정렬 */
+  }
+  
+  .introducebox {
+    border: 2px solid black;
+    width: 200px;
+    height: 200px;
+    border-radius: 6px;
+    margin-top: 3%;
+
+  }
+  
+  .align {
+    text-align: center;
+  }
+
+  .buttonX {
+    float: right;
+    margin-right: -5%;
+    margin-top: 5%;
+    width: 20px;
+    height: 20px;
+    font-size: 5px;
+    font-weight: bold;
+    /* text-align: center; */
+    font-display: center;
+  }
