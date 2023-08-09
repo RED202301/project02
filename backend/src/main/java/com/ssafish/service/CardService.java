@@ -75,7 +75,10 @@ public class CardService {
 
             //이미지 전체가 저장될 경로
             File uploadDir = new File(uploadPath); // 수정
-            if (!uploadDir.exists()) uploadDir.mkdir();
+            if (!uploadDir.exists()) {
+                uploadDir.mkdir();
+                log.info("make file !") ;
+            }
 
             String filename = imagefile.getOriginalFilename();
             System.out.println(filename);
@@ -88,7 +91,7 @@ public class CardService {
 
             destFile = new File(uploadPath + File.separator + saveFileName);
             //System.out.println("here error! :" + destFile);
-            log.info("here error! :" + destFile.getPath());
+            log.info("1 locate:" + destFile.getPath());
             imagefile.transferTo(destFile); //이미지 저장
 
 
