@@ -4,17 +4,18 @@ import com.ssafish.web.dto.Phase.ChoosePhase;
 import com.ssafish.web.dto.Phase.GameOverPhase;
 import com.ssafish.web.dto.Phase.GameStartPhase;
 import com.ssafish.web.dto.Phase.Phase;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
-@ToString
-@Getter
-@Setter
-@RequiredArgsConstructor
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+
+@Slf4j
+@Data
 @Component
 @Scope("prototype")
 public class Board {
@@ -27,16 +28,20 @@ public class Board {
     private boolean isStarted = false;
     private GameStatus gameStatus;
     private ChoosePhase currentPhase;
+    private ScheduledExecutorService turnTimer;
 
-
+    @Async("gameTaskExecutor")
     public void play(GameData gameData) {
+        gameStatus.init();
         isStarted = true;
         gameStartPhase.run(gameData, gameStatus);
 
         while (!gameStatus.isGameOver()) {
             currentPhase = gameStatus.getCurrentPhase();
 
-            currentPhase.startTurnTimer(gameStatus);
+            turnTimer = Executors.newSingleThreadScheduledExecutor();
+            log.info("Board hashCode: " + this.hashCode());
+            currentPhase.startTurnTimer(gameStatus, turnTimer);
         }
 
         gameOverPhase.run(gameStatus);
@@ -45,7 +50,7 @@ public class Board {
 
     public void handlePub(GameData gameData) {
         // pub 처리
-        currentPhase.handlePub(gameData, gameStatus);
+        currentPhase.handlePub(gameData, gameStatus, turnTimer);
     }
 
     public void addPlayer(long userId, String nickname, boolean isBot) {

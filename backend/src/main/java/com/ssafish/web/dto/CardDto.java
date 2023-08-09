@@ -22,10 +22,12 @@ public class CardDto {
     private int point;
     private LocalDateTime createdDate;
 
+    private int result;
+
 
     @Builder
     public CardDto
-            (long cardId, long userId, String mainTitle, String subTitle, String mainImgUrl, String subImgUrl, String cardDescription, int point ){
+            (long cardId, long userId, String mainTitle, String subTitle, String mainImgUrl, String subImgUrl, String cardDescription, int point , int result){
         this.cardId = cardId;
         this.userId = userId;
         this.mainTitle = mainTitle;
@@ -34,6 +36,7 @@ public class CardDto {
         this.subImgUrl = subImgUrl;
         this.cardDescription = cardDescription;
         this.point = point;
+        this.result = result;
 
     }
 

@@ -1,14 +1,14 @@
 package com.ssafish.service;
 
-import com.ssafish.domain.MemberRoomRepository;
+import com.ssafish.domain.UserRoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class MemberRoomService {
+public class UserRoomService {
 
-    private final MemberRoomRepository memberRoomRepository;
+    private final UserRoomRepository userRoomRepository;
 
 
 }

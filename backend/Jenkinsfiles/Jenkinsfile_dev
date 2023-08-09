@@ -1,26 +1,43 @@
 def dockerRepository = "qortn365"
 def dockerImageName = "ssafish_dev"
+def dockerImageNameFront = "ssafish-fe"
 def deployHost = "i9e202.p.ssafy.io"
 
 pipeline {
     agent any
 
+    tools {
+        nodejs "front"
+
+    }
+
     stages {
         stage('Checkout'){
             steps {
+
                 checkout scm
             }
         }
+
+
+
         stage('Build') { //war 파일로 빌드된다.
             steps {
+
+
 
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-key',
                                  usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     script {
                         sh """
-                        cd backend
+                        cd /var/jenkins_home/workspace/ssafish_dev/backend
                             chmod u+x ./gradlew
                             ./gradlew clean bootJar
+                            """
+                         sh """
+                         cd /var/jenkins_home/workspace/ssafish_dev/frontend
+                            npm install
+                            npm run build
                         """
                     }
                 }
@@ -32,25 +49,28 @@ pipeline {
                                  usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     script {
                         sh """
-                        cd backend
+                        cd /var/jenkins_home/workspace/ssafish_dev/backend
                            ./gradlew jib -Pdocker.repository=${dockerRepository} \
                            -Pdocker.repository.username=${USERNAME} \
                            -Pdocker.repository.password=${PASSWORD} \
                            -Pdocker.image.name=${dockerImageName} \
-                            -Pdocker.image.tag="latest"
+                           -Pdocker.image.tag="latest"
+
+                        """
+
+                        sh """
+                        cd /var/jenkins_home/workspace/ssafish_dev/frontend
+
+                        docker build -t ${dockerRepository}/${dockerImageNameFront} .
+                        docker login
+                        docker push ${dockerRepository}/${dockerImageNameFront}:latest
 
                         """
                     }
                 }
             }
-        }
-        // jenkins 캐시제거
-        stage('Cleanup') {
-                    steps {
-                        // Clean up workspace before deployment
-                        cleanWs(deleteDirs: true)
-                    }
-        }
+        } //docker image rm ${dockerRepository}/${dockerImageNameFront}
+
 
 
         stage('Deploy'){// ec2에 배포된다. 즉 이미지를 받아서 실행한다x.
@@ -59,26 +79,22 @@ pipeline {
                     sh """
                     ssh -o StrictHostKeyChecking=no ubuntu@i9e202.p.ssafy.io \
                     'docker rm -f ${dockerImageName} &&
-                    docker run -d -t -p 5001:5001 --rm --name ${dockerImageName} ${dockerRepository}/${dockerImageName}:latest;'
+                    docker run -d -t -p 5001:5001 -v ssafish-cards:/home/ssafish/cardMainImage  --rm --name ${dockerImageName} ${dockerRepository}/${dockerImageName}:latest;'
                     """
+
+
+                    sh """
+                     ssh -o StrictHostKeyChecking=no ubuntu@i9e202.p.ssafy.io \
+                     'docker rm -f ${dockerImageNameFront} &&
+                      docker run -d -t -p 5173:5173 --rm --name ${dockerImageNameFront} ${dockerRepository}/${dockerImageNameFront}:latest;'
+
+                    """
+
                 }
             }
         }
     }
 
-    post {
-        always {
-            cleanWs(deleteDirs: true, cleanWhenFailure : true)
-           // patterns: [
-           //                     // Set patterns to exclude specific files or directories from cleanup
-           //                     [pattern: '.gradle', type: 'EXCLUDE'],
-           //                     [pattern: 'build/**', type: 'INCLUDE']
-            //                ]
-
-        }
-
-
-    }
 }
 
 

@@ -3,10 +3,9 @@ package com.ssafish.web.dto.Phase;
 import com.ssafish.web.dto.GameData;
 import com.ssafish.web.dto.GameStatus;
 import com.ssafish.web.dto.TypeEnum;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Scope;
-import org.springframework.messaging.handler.annotation.Payload;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Component;
 
@@ -16,23 +15,24 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class CardChoosePhase extends Phase implements ChoosePhase {
     protected final SimpMessageSendingOperations messagingTemplate;
 
-    public GameStatus startTurnTimer(GameStatus gameStatus) {
+    public void startTurnTimer(GameStatus gameStatus, ScheduledExecutorService turnTimer) {
         awaitSecond(1L);
+        log.info(gameStatus.getRoomId() + "번 방 - CardChoosePhase 시작");
 
-        turnTimer = Executors.newSingleThreadScheduledExecutor();
         latch = new CountDownLatch(1);
 
         // 턴 시작을 알림
         messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(),
-                GameData.builder()
-                        .type(TypeEnum.SELECT_CARD_TURN.name())
-                        .player(gameStatus.getCurrentPlayer().getUserId())
-                        .build()
+                ResponseEntity.ok(GameData.builder()
+                              .type(TypeEnum.SELECT_CARD_TURN.name())
+                              .player(gameStatus.getCurrentPlayer().getUserId())
+                              .build())
         );
 
 
@@ -45,9 +45,9 @@ public class CardChoosePhase extends Phase implements ChoosePhase {
 
 
         if (gameStatus.getCurrentPlayer().isBot()) { // 현재 플레이어가 봇일 경우
-            turnTimer.schedule(() -> endTurn(gameData, gameStatus), randomResponseTime(gameStatus.getTurnTimeLimit()), TimeUnit.SECONDS);
+            turnTimer.schedule(() -> endTurn(gameData, gameStatus, turnTimer), randomResponseTime(gameStatus.getTurnTimeLimit()), TimeUnit.SECONDS);
         } else {                                     // 현재 플레이어가 봇이 아닐 경우
-            turnTimer.schedule(() -> endTurn(gameData, gameStatus), gameStatus.getTurnTimeLimit(), TimeUnit.SECONDS);
+            turnTimer.schedule(() -> endTurn(gameData, gameStatus, turnTimer), gameStatus.getTurnTimeLimit(), TimeUnit.SECONDS);
         }
 
         try {
@@ -55,34 +55,33 @@ public class CardChoosePhase extends Phase implements ChoosePhase {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        return gameStatus;
     }
 
-    public void cancelTurnTimer() {
+    public void cancelTurnTimer(ScheduledExecutorService turnTimer) {
         if (turnTimer != null && !turnTimer.isShutdown()) {
             turnTimer.shutdownNow();
         }
     }
 
-    public void endTurn(GameData gameData, GameStatus gameStatus) {
-        cancelTurnTimer();
+    public void endTurn(GameData gameData, GameStatus gameStatus, ScheduledExecutorService turnTimer) {
+        cancelTurnTimer(turnTimer);
 
         // 게임 내부 로직
         gameStatus.setCardOpen(gameData.getCardId()); // 공개 카드 반영
+        gameStatus.getCheatSheet().put(gameData.getCardId(), gameData.getPlayer()); // 공개 카드 Map 에 추가
         gameStatus.changeCurrentPhase();
 
         // subscriber 들에게 메시지 전달
-        messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(), gameData);
+        messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(), ResponseEntity.ok(gameData));
 
 
         latch.countDown();
     }
 
-    public void handlePub(GameData gameData, GameStatus gameStatus) {
+    public void handlePub(GameData gameData, GameStatus gameStatus, ScheduledExecutorService turnTimer) {
         // pub 처리
 
-        this.endTurn(gameData, gameStatus);
+        this.endTurn(gameData, gameStatus, turnTimer);
     }
 
     public long randomCardId(GameStatus gameStatus) {

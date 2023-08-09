@@ -1,12 +1,15 @@
 package com.ssafish.domain;
 
+import com.ssafish.web.dto.RoomRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "room")
@@ -23,7 +26,7 @@ public class Room {
     @Column(name = "room_name", unique = true, nullable = false)
     private String roomName;
 
-    @Column(name = "user_id", unique = true, nullable = true)
+    @Column(name = "user_id", unique = false, nullable = true)
     private Long userId;
 
     @Column(name = "deck_id", nullable = true)
@@ -48,5 +51,12 @@ public class Room {
         this.timeLimit = timeLimit;
         this.capacity = capacity;
         this.gameType = gameType;
+    }
+
+    public void update(RoomRequestDto requestDto) {
+        this.roomName = requestDto.getRoomName();
+        this.capacity = requestDto.getCapacity();
+        this.timeLimit = requestDto.getTimeLimit();
+        this.deckId = requestDto.getDeckId();
     }
 }
