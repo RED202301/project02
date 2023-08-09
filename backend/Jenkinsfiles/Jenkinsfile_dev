@@ -60,7 +60,7 @@ pipeline {
 
                         sh """
                         cd /var/jenkins_home/workspace/ssafish_dev/frontend
-                        docker image rm ${dockerRepository}/${dockerImageNameFront}
+
                         docker build -t ${dockerRepository}/${dockerImageNameFront} .
                         docker login
                         docker push ${dockerRepository}/${dockerImageNameFront}:latest
@@ -69,7 +69,7 @@ pipeline {
                     }
                 }
             }
-        }
+        } //docker image rm ${dockerRepository}/${dockerImageNameFront}
 
 
 
