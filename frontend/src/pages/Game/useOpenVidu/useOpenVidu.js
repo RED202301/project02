@@ -12,10 +12,13 @@ export default function useOpenVidu({ sessionId, myUserName }) {
   const publisherProperties = {
     publishAudio: true,
     publishVideo: true,
-    resolution: '1280x720',
+    resolution: '100x100',
     insertMode: 'APPEND',
-    mirror: false,
+    mirror: true,
+    frameRate: 30,
   };
+
+ 
 
   async function openViduInitializer() {
     const OV = new OpenVidu();
