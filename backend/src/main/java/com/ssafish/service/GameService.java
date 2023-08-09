@@ -41,8 +41,8 @@ public class GameService {
     }
 
     public void changeGameRoom(RoomResponseDto responseDto) {
-        log.info("changeGameRoom invoke");
         Board board = boards.get(responseDto.getRoomId());
+        log.info("변경 이전 방 정보: " + board);
 
         if (board != null) {
             GameStatus gameStatus = board.getGameStatus();
@@ -52,7 +52,7 @@ public class GameService {
             board.setCapacity(responseDto.getCapacity());
             board.setTimeLimit(responseDto.getTimeLimit());
 
-            log.info("변경된 방 정보: " + board);
+            log.info("변경 이후 방 정보: " + board);
         } else {
             log.warn("변경할 방이 없습니다. roomId: " + responseDto.getRoomId());
             throw new IllegalArgumentException("room not found.");
@@ -61,7 +61,7 @@ public class GameService {
 
     public void deleteGameRoom(long roomId) {
         boards.remove(roomId);
-        log.info("삭제된 방 정보: " + roomId);
+        log.info("삭제된 방 번호: " + roomId);
     }
 
     public Board getGameRoomByRoomId(long roomId) {

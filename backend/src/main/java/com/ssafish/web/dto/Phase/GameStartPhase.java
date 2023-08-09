@@ -21,6 +21,7 @@ public class GameStartPhase extends Phase {
     protected final SimpMessageSendingOperations messagingTemplate;
 
     public void run(GameData gameData, GameStatus gameStatus) {
+        log.info(gameStatus.getRoomId() + "번 방 - GameStartPhase 시작");
         ScheduledExecutorService turnTimer = Executors.newSingleThreadScheduledExecutor();
 
         // 게임이 시작되었음을 알리며 카드 데이터를 클라이언트들에게 보낸다

@@ -54,7 +54,7 @@ public class RoomController {
             RoomResponseDto responseDto = roomService.findByRoomId(roomId);
             return ResponseEntity.ok(responseDto);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -64,7 +64,7 @@ public class RoomController {
             roomService.deleteById(roomId);
             return ResponseEntity.ok(null);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
 
     }
@@ -101,7 +101,7 @@ public class RoomController {
             return ResponseEntity.status(HttpStatus.OK).body(gameService.getPlayerList(roomId));
         } catch (IllegalStateException e) {
             log.error("Failed to add player to the room: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -117,7 +117,23 @@ public class RoomController {
             log.info(responseDto.toString());
             return ResponseEntity.status(HttpStatus.OK).body(responseDto);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @MessageMapping("/update/{roomId}")
+    @SendTo("/sub/{roomId}")
+    public ResponseEntity<Object> update(@DestinationVariable long roomId, @Payload RoomRequestDto requestDto,
+                                             @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
+        try {
+            log.info(requestDto.toString());
+            RoomResponseDto responseDto = roomService.update(requestDto, roomId);
+
+            gameService.changeGameRoom(responseDto);
+            log.info(responseDto.toString());
+            return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 }
