@@ -2,7 +2,6 @@ package com.ssafish.web.controller;
 
 import com.ssafish.service.CardService;
 import com.ssafish.web.dto.CardDto;
-import com.ssafish.web.dto.UserDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +28,13 @@ public class CardController {
         //카드_유저 연결
         System.out.println(request);
         log.info("input card info" + cardDto);
+
+        long maxFileSize = 10 * 1024 * 1024; // 10MB
+
+        if (request.getSize() > maxFileSize) {
+            //return ResponseEntity.badRequest().body("File size exceeds the limit");
+            return ResponseEntity.badRequest().build();
+        }
 
 
 
