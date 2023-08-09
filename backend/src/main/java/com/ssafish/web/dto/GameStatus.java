@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ScheduledExecutorService;
 
 
 @Getter
@@ -27,6 +28,7 @@ public class GameStatus {
     private List<Player> playerList = new ArrayList<>(); // userId의 리스트: 플레이어들의 순서를 나타낸다
     private List<Long> middleDeck = new ArrayList<>(); // 중앙 덱에 있는 cardId 리스트
     private Map<Long, Integer> pointMap;
+    private Map<Long, Long> cheatSheet; // 현재 공개된 유저 손패 (key: cardId, value: userId)
 
     private ChoosePhase currentPhase;
     private Player currentPlayer;
@@ -35,6 +37,14 @@ public class GameStatus {
     private boolean isGameOver;
     private int currentPlayerIdx;
     private long cardOpen;
+
+    public void init() {
+        middleDeck = new ArrayList<>();
+        pointMap = new ConcurrentHashMap<>();
+        cheatSheet = new ConcurrentHashMap<>();
+        isGameOver = false;
+        currentPlayerIdx = 0;
+    }
 
     public void addPlayer(long userId, String nickname, boolean isBot) {
         playerList.add(Player.builder()

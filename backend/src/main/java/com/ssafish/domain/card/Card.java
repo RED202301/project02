@@ -5,10 +5,11 @@ import com.ssafish.web.dto.CardDto;
 import lombok.*;
 
 import javax.persistence.*;
+
+//@AllArgsConstructor
 @ToString
 @Getter
 @Builder
-//@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "Cards")
 @Entity

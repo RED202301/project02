@@ -7,6 +7,7 @@ import com.ssafish.domain.deck.CardDeckRepository;
 import com.ssafish.domain.deck.Deck;
 import com.ssafish.domain.deck.DeckRepository;
 import com.ssafish.service.CardDeckService;
+import com.ssafish.service.CardService;
 import com.ssafish.web.dto.CardDto;
 import com.ssafish.web.dto.DeckDto;
 import lombok.RequiredArgsConstructor;
@@ -34,10 +35,31 @@ class CardTests {
 
     @Autowired
     CardDeckService cardDeckService;
+
+    @Autowired
+    CardService cardService;
     @Autowired
     CardDeckRepository cardDeckRepository;
 
-    
+
+    // 카드 서비스 확인
+    @Test
+    @Order(2)
+    void testCardInsertService(){
+
+
+        CardDto cardDto = CardDto.builder()
+                .cardDescription("testcard")
+                .cardId(1)
+                .mainImgUrl("https://i9e202.p.ssafy.io/card_images/people_imgs/1_%EB%8B%A8%EA%B5%B0%EC%99%95%EA%B2%80.png")
+                .mainTitle("testTitle")
+                .build();
+
+        //cardService.cardInsert(cardDto,);
+
+
+
+    }
     //더미 데이터 저장
     @Test
     @Order(2)
@@ -108,9 +130,9 @@ class CardTests {
 
         //프로퍼티에 추가해야할 내용, 구분자 리눅스에 맞게 확인하기
         //app.fileupload.uploadPath=C:\\SSAFY\\springboot\\springboot\\BoardWebFileUploadSpringBootMybatisVueVuex\\src\\main\\resources\\static
-// http://i9e202.p.ssafy.io/home/ubuntu/ssafish/cardMainImage/people_imgs/1_%EB%8B%A8%EA%B5%B0%EC%99%95%EA%B2%80.png
+// https://i9e202.p.ssafy.io/card_images/people_imgs/1_%EB%8B%A8%EA%B5%B0%EC%99%95%EA%B2%80.png
         //String uploadPath = "http://i9e202.p.ssafy.io/home/ubuntu/ssafish/cardMainImage";
-        String uploadPath = "D:/E202/cardMainImage";
+        String uploadPath = "https://i9e202.p.ssafy.io/card_images";
 
         String [] mainImgUrl = {"/people_imgs/1_단군왕검.png","/people_imgs/2_공자.png","/people_imgs/3_광개토대왕.png", "/people_imgs/4_나폴레옹.png",
                 "/people_imgs/5_뉴턴.png", "/people_imgs/6_데카르트.png","/people_imgs/7_레오나르도다빈치.png","/people_imgs/8_세종대왕.png",
@@ -123,12 +145,12 @@ class CardTests {
                 "/people_imgs/23_아인슈타인.png","/people_imgs/24_아이젠하워.png","/people_imgs/25_이재용.png"};
 
         for(int i=0;i<25;i++){
-            CardDto cardResponseDto = new CardDto();
-            cardResponseDto.setCardId(i);
-            cardResponseDto.setMainTitle(titles[i]);
-            cardResponseDto.setSubTitle(subtitle[i]);
-            cardResponseDto.setMainImgUrl(uploadPath + mainImgUrl[i]);
-            Card cards = cardResponseDto.toEntity();
+            CardDto cardDto = new CardDto();
+            cardDto.setCardId(i);
+            cardDto.setMainTitle(titles[i]);
+            cardDto.setSubTitle(subtitle[i]);
+            cardDto.setMainImgUrl(uploadPath + mainImgUrl[i]);
+            Card cards = cardDto.toEntity();
             cardsRepository.save(cards);
         }
 

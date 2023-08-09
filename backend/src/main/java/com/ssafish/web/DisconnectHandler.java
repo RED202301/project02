@@ -4,10 +4,13 @@ import com.ssafish.common.util.WebSocketSubscriberManager;
 import com.ssafish.service.GameService;
 import com.ssafish.service.RoomService;
 import com.ssafish.web.dto.Board;
+import com.ssafish.web.dto.GameData;
 import com.ssafish.web.dto.Player;
+import com.ssafish.web.dto.TypeEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
@@ -22,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -31,6 +35,8 @@ public class DisconnectHandler implements ApplicationListener<AbstractSubProtoco
     private final WebSocketSubscriberManager subscriberManager;
     private final RoomService roomService;
     private final GameService gameService;
+
+    private final SimpMessageSendingOperations messagingTemplate;
     private final long DISCONNECT_DELAY = 5_000;
     private TaskScheduler taskScheduler = new ConcurrentTaskScheduler();
     private Map<String, ScheduledFuture<?>> disconnectTasks = new ConcurrentHashMap<>();
@@ -41,17 +47,18 @@ public class DisconnectHandler implements ApplicationListener<AbstractSubProtoco
         String sessionId = headerAccessor.getSessionId();
 
         if (event instanceof SessionDisconnectEvent) {
-            log.info("DISCONNECT");
+            log.info("DISCONNECT 된 session ID: " + sessionId);
             if (subscriberManager.isExist(sessionId)) {
-                System.out.println("EXIST");
-                ScheduledFuture<?> disconnectTask = taskScheduler.schedule(() -> {
-                    handleDisconnect(sessionId);
-                }, new Date(System.currentTimeMillis() + DISCONNECT_DELAY));
+                log.info("subscriberManager 에 의해 관리되고 있는 session ID: " + sessionId);
+                ScheduledFuture<?> disconnectTask = taskScheduler.schedule(
+                        () -> handleDisconnect(sessionId),
+                        new Date(System.currentTimeMillis() + DISCONNECT_DELAY)
+                );
 
                 disconnectTasks.put(sessionId, disconnectTask);
             }
         } else if (event instanceof SessionConnectEvent) {
-            log.info("CONNECT");
+            log.info("CONNECT 된 session ID: " + sessionId);
             if (subscriberManager.isExist(sessionId) && disconnectTasks.get(sessionId) != null) {
                 cancelDisconnectTask(sessionId);
             }
@@ -78,7 +85,25 @@ public class DisconnectHandler implements ApplicationListener<AbstractSubProtoco
             log.info("대기실에서 퇴장 처리된 플레이어 userId: " + player.getUserId());
             roomService.sendMessageToRoom(roomId, player.getNickname() + "님이 방을 나갔습니다!");
         }
-        log.info("현재 대기실(게임방) 인원 수: " + playerList.size());
+        log.info(roomId + "번 방의 방장 userId: " + room.getUserId() + " " + "세션 종료된 userId: " + userId);
+        if (room.getUserId() == player.getUserId()) { // 방장이 퇴장한 경우
+            List<Player> personList = playerList.stream().filter(e -> !e.isBot()).collect(Collectors.toList());
+            log.info("현재 대기실(게임방) 인원 수: " + personList.size());
+            if (personList.size() == 0) { // 없는 경우 -> 방 폭파
+                gameService.deleteGameRoom(roomId);
+                roomService.deleteById(roomId);
+                log.info("삭제된 방 번호: " + roomId);
+            } else { // 방에 잔여 인원이 있는 경우 -> 그 사람 중 하나를 방장으로
+                Player newLeader = personList.get((int) (Math.random() * personList.size()));
+                room.setUserId(newLeader.getUserId());
+                messagingTemplate.convertAndSend("/sub/" + roomId,
+                        GameData.builder()
+                        .type(TypeEnum.ROOM_LEADER.name())
+                        .player(newLeader.getUserId())
+                        .build());
+                log.info(roomId + "번 방의 새로운 방장 userId: " + newLeader.getUserId());
+            }
+        }
 
         subscriberManager.removeSubscriber(sessionId);
     }

@@ -1,7 +1,9 @@
 package com.ssafish.web;
 
+import com.ssafish.domain.Room;
 import com.ssafish.service.GameService;
 import com.ssafish.service.RoomService;
+import com.ssafish.service.UserService;
 import com.ssafish.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +13,8 @@ import org.springframework.messaging.handler.annotation.*;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,23 +30,50 @@ public class RoomController {
 
     private final RoomService roomService;
     private final GameService gameService;
+    private final UserService userService;
 
-    static Map<String, Long> rooms = new HashMap<>();
 
-
+    @Transactional
     @PostMapping("/api/v1/room")
-    public RoomResponseDto create(@RequestBody RoomRequestDto requestDto) {
+    public ResponseEntity<Object> create(@RequestBody RoomRequestDto requestDto) {
 
         String uuid = UUID.randomUUID().toString();
         requestDto.setPinNumber(uuid);
 
         log.info(requestDto.toString());
-        RoomResponseDto responseDto = roomService.create(requestDto);
 
-        rooms.put(uuid, responseDto.getRoomId());
-        gameService.createGameRoom(responseDto);
-        log.info(responseDto.toString());
-        return responseDto;
+        if (requestDto.getRoomName() != null && requestDto.getCapacity() > 1 && requestDto.getTimeLimit() > 0) {
+            RoomResponseDto responseDto = roomService.create(requestDto);
+
+            gameService.createGameRoom(responseDto);
+            log.info(responseDto.toString());
+            return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Wrong room condition.");
+        }
+
+
+    }
+
+    @GetMapping("/api/v1/room/{roomId}")
+    public ResponseEntity<Object> findByRoomId(@PathVariable long roomId) {
+        try {
+            RoomResponseDto responseDto = roomService.findByRoomId(roomId);
+            return ResponseEntity.ok(responseDto);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/api/v1/room/{roomId}")
+    public ResponseEntity<Object> deleteById(@PathVariable long roomId) {
+        try {
+            roomService.deleteById(roomId);
+            return ResponseEntity.ok(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+
     }
 
     @GetMapping("/api/v1/room/id/{pinNumber}")
@@ -53,7 +84,7 @@ public class RoomController {
     }
 
     @PostMapping("/api/v1/room/msg")
-    public void msgToRoom(@RequestBody MsgData msgRequest) throws IOException {
+    public void msgToRoom(@RequestBody MsgData msgRequest) {
         log.info(msgRequest.toString());
 
         Long roomId = msgRequest.getRoomId();
@@ -66,7 +97,7 @@ public class RoomController {
     public ResponseEntity<Object> processClientEntrance(@DestinationVariable long roomId, @Payload SocketData data,
                                              @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
 
-        Long userId = data.getUserId();
+        long userId = data.getUserId();
         String nickname = data.getNickname();
         boolean isBot = data.isBot();
         String sessionId = headerAccessor.getSessionId();
@@ -74,10 +105,50 @@ public class RoomController {
         try {
             roomService.processClientEntrance(roomId, userId, sessionId);
             gameService.addPlayer(roomId, userId, nickname, isBot);
-            return ResponseEntity.ok(gameService.getPlayerList(roomId));
+            List<Player> playerList = gameService.getPlayerList(roomId);
+            return ResponseEntity.status(HttpStatus.OK).body(SocketData.builder()
+                    .type(TypeEnum.ENTER.name())
+                    .userId(userId)
+                    .nickname(nickname)
+                    .isBot(isBot)
+                    .numPlayer(playerList.size())
+                    .playerList(playerList)
+                    .build());
         } catch (IllegalStateException e) {
             log.error("Failed to add player to the room: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e); // 예외 상황에 대한 응답 생성 및 반환
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @MessageMapping("/change/{roomId}")
+    @SendTo("/sub/{roomId}")
+    public ResponseEntity<Object> changeRoom(@DestinationVariable long roomId, @Payload RoomRequestDto requestDto,
+                                                        @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
+        try {
+            log.info(requestDto.toString());
+            RoomResponseDto responseDto = roomService.change(requestDto, roomId);
+
+            gameService.changeGameRoom(responseDto);
+            log.info(responseDto.toString());
+            return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @MessageMapping("/update/{roomId}")
+    @SendTo("/sub/{roomId}")
+    public ResponseEntity<Object> update(@DestinationVariable long roomId, @Payload RoomRequestDto requestDto,
+                                             @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
+        try {
+            log.info(requestDto.toString());
+            RoomResponseDto responseDto = roomService.update(requestDto, roomId);
+
+            gameService.changeGameRoom(responseDto);
+            log.info(responseDto.toString());
+            return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 }
