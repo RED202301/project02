@@ -81,8 +81,8 @@ pipeline {
                     'docker rm -f ${dockerImageName} &&
                     docker run -d -t -p 5001:5001 -v ssafish-cards:/home/ssafish/cardMainImage  --rm --name ${dockerImageName} ${dockerRepository}/${dockerImageName}:latest;'
 
-                    'docker rm -f ${dockerImageNameFront} &&
-                    docker run -d -t -p 5173:5173 --rm --name ${dockerImageNameFront} ${dockerRepository}/${dockerImageNameFront};'
+
+                    'docker run -d -t -p 5173:5173 --rm --name ${dockerImageNameFront} ${dockerRepository}/${dockerImageNameFront};'
 
                     """
 
