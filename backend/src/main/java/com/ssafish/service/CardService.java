@@ -91,6 +91,10 @@ public class CardService {
             log.info("here error! :" + destFile);
             imagefile.transferTo(destFile); //이미지 저장
 
+            log.info("new test" );
+            System.out.println("new test");
+            
+
            //System.out.println("!!!123");
             log.info("here" );
             destFile2 = new File("/home/ubuntu/ssafish/cardMainImage");
