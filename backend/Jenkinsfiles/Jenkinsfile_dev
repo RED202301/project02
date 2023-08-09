@@ -39,20 +39,14 @@ pipeline {
                            -Pdocker.repository.username=${USERNAME} \
                            -Pdocker.repository.password=${PASSWORD} \
                            -Pdocker.image.name=${dockerImageName} \
-                            -Pdocker.image.tag="latest"
+                           -Pdocker.image.tag="latest"
 
                         """
                     }
                 }
             }
         }
-        // jenkins 캐시제거
- //       stage('Cleanup') {
-  //                  steps {
-   //                     // Clean up workspace before deployment
-    //                    cleanWs(deleteDirs: true)
-     //               }
-       // }
+
 
 
         stage('Deploy'){// ec2에 배포된다. 즉 이미지를 받아서 실행한다x.
@@ -61,26 +55,14 @@ pipeline {
                     sh """
                     ssh -o StrictHostKeyChecking=no ubuntu@i9e202.p.ssafy.io \
                     'docker rm -f ${dockerImageName} &&
-                    docker run -d -t -p 5001:5001 --rm --name ${dockerImageName} ${dockerRepository}/${dockerImageName}:latest;'
+                    docker run -d -t -p 5001:5001 -v ssafish-cards:/home/ssafish/cardMainImage -v /home/ubuntu/ssafish/cardMainImage:/home/ssafish/cardMainImage  --rm --name ${dockerImageName} ${dockerRepository}/${dockerImageName}:latest;'
                     """
+        
                 }
             }
         }
     }
 
-//    post {
- //       always {
-   //         cleanWs(deleteDirs: true, cleanWhenFailure : true)
-           // patterns: [
-           //                     // Set patterns to exclude specific files or directories from cleanup
-           //                     [pattern: '.gradle', type: 'EXCLUDE'],
-           //                     [pattern: 'build/**', type: 'INCLUDE']
-            //                ]
-
-     //   }
-
-
-   // }/
 }
 
 
