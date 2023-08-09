@@ -3,12 +3,14 @@ package com.ssafish.web.dto.Phase;
 import com.ssafish.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -19,10 +21,11 @@ public class GameStartPhase extends Phase {
     protected final SimpMessageSendingOperations messagingTemplate;
 
     public void run(GameData gameData, GameStatus gameStatus) {
-        turnTimer = Executors.newSingleThreadScheduledExecutor();
+        log.info(gameStatus.getRoomId() + "번 방 - GameStartPhase 시작");
+        ScheduledExecutorService turnTimer = Executors.newSingleThreadScheduledExecutor();
 
         // 게임이 시작되었음을 알리며 카드 데이터를 클라이언트들에게 보낸다
-        messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(), gameData);
+        messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(), ResponseEntity.ok(gameData));
 
         // 중앙 덱 섞어서 세팅해놓는다
         List<CardDto> cardList = gameData.getCards();
@@ -55,6 +58,8 @@ public class GameStartPhase extends Phase {
                     handCurrent.remove(cardDraw);
                     enrollCurrent.add(cardDraw);
                     gameStatus.getCheatSheet().remove(cardDraw);
+                    player.addScore(gameStatus.getPointMap().get(cardDraw));
+
                     turnTimer.schedule(() -> sendEnroll(gameStatus, player.getUserId(), cardDraw), 2L * delaySec + 1L, TimeUnit.SECONDS);
                 }
             }
@@ -68,21 +73,21 @@ public class GameStartPhase extends Phase {
 
     public void sendAutoDraw(GameStatus gameStatus, long userId, long cardDraw) {
         messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(),
-                GameData.builder()
-                        .type(TypeEnum.AUTO_DRAW.name())
-                        .player(userId)
-                        .cardId(cardDraw)
-                        .build()
+                ResponseEntity.ok(GameData.builder()
+                              .type(TypeEnum.AUTO_DRAW.name())
+                              .player(userId)
+                              .cardId(cardDraw)
+                              .build())
         );
     }
 
     public void sendEnroll(GameStatus gameStatus, long userId, long cardId) {
         messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(),
-                GameData.builder()
-                        .type(TypeEnum.ENROLL.name())
-                        .player(userId)
-                        .cardId(cardId)
-                        .build()
+                ResponseEntity.ok(GameData.builder()
+                                          .type(TypeEnum.ENROLL.name())
+                                          .player(userId)
+                                          .cardId(cardId)
+                                          .build())
         );
     }
 }

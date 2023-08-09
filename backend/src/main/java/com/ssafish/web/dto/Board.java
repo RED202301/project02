@@ -11,6 +11,9 @@ import lombok.ToString;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+
 @ToString
 @Getter
 @Setter
@@ -27,6 +30,7 @@ public class Board {
     private boolean isStarted = false;
     private GameStatus gameStatus;
     private ChoosePhase currentPhase;
+    private ScheduledExecutorService turnTimer;
 
 
     public void play(GameData gameData) {
@@ -36,7 +40,8 @@ public class Board {
         while (!gameStatus.isGameOver()) {
             currentPhase = gameStatus.getCurrentPhase();
 
-            currentPhase.startTurnTimer(gameStatus);
+            turnTimer = Executors.newSingleThreadScheduledExecutor();
+            currentPhase.startTurnTimer(gameStatus, turnTimer);
         }
 
         gameOverPhase.run(gameStatus);
@@ -45,7 +50,7 @@ public class Board {
 
     public void handlePub(GameData gameData) {
         // pub 처리
-        currentPhase.handlePub(gameData, gameStatus);
+        currentPhase.handlePub(gameData, gameStatus, turnTimer);
     }
 
     public void addPlayer(long userId, String nickname, boolean isBot) {

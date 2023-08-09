@@ -7,6 +7,7 @@ import com.ssafish.domain.deck.CardDeckRepository;
 import com.ssafish.domain.deck.Deck;
 import com.ssafish.domain.deck.DeckRepository;
 import com.ssafish.service.CardDeckService;
+import com.ssafish.service.CardService;
 import com.ssafish.web.dto.CardDto;
 import com.ssafish.web.dto.DeckDto;
 import lombok.RequiredArgsConstructor;
@@ -34,10 +35,31 @@ class CardTests {
 
     @Autowired
     CardDeckService cardDeckService;
+
+    @Autowired
+    CardService cardService;
     @Autowired
     CardDeckRepository cardDeckRepository;
 
-    
+
+    // 카드 서비스 확인
+    @Test
+    @Order(2)
+    void testCardInsertService(){
+
+
+        CardDto cardDto = CardDto.builder()
+                .cardDescription("testcard")
+                .cardId(1)
+                .mainImgUrl("https://i9e202.p.ssafy.io/card_images/people_imgs/1_%EB%8B%A8%EA%B5%B0%EC%99%95%EA%B2%80.png")
+                .mainTitle("testTitle")
+                .build();
+
+        //cardService.cardInsert(cardDto,);
+
+
+
+    }
     //더미 데이터 저장
     @Test
     @Order(2)
@@ -123,12 +145,12 @@ class CardTests {
                 "/people_imgs/23_아인슈타인.png","/people_imgs/24_아이젠하워.png","/people_imgs/25_이재용.png"};
 
         for(int i=0;i<25;i++){
-            CardDto cardResponseDto = new CardDto();
-            cardResponseDto.setCardId(i);
-            cardResponseDto.setMainTitle(titles[i]);
-            cardResponseDto.setSubTitle(subtitle[i]);
-            cardResponseDto.setMainImgUrl(uploadPath + mainImgUrl[i]);
-            Card cards = cardResponseDto.toEntity();
+            CardDto cardDto = new CardDto();
+            cardDto.setCardId(i);
+            cardDto.setMainTitle(titles[i]);
+            cardDto.setSubTitle(subtitle[i]);
+            cardDto.setMainImgUrl(uploadPath + mainImgUrl[i]);
+            Card cards = cardDto.toEntity();
             cardsRepository.save(cards);
         }
 

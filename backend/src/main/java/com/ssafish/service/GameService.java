@@ -31,17 +31,37 @@ public class GameService {
         gameStatus.setCheatSheet(new ConcurrentHashMap<>());
 
         board.setGameStatus(gameStatus);
+        board.setUserId(responseDto.getUserId());
         board.setDeckId(responseDto.getDeckId());
         board.setTimeLimit(responseDto.getTimeLimit());
         board.setCapacity(responseDto.getCapacity());
 
         boards.put(responseDto.getRoomId(), board);
-        log.info("생성된 방 정보: " + boards.get(responseDto.getRoomId()).toString());
+        log.info("생성된 방 번호: " + boards.get(responseDto.getRoomId()));
+    }
+
+    public void changeGameRoom(RoomResponseDto responseDto) {
+        Board board = boards.get(responseDto.getRoomId());
+        log.info("변경 이전 방 정보: " + board);
+
+        if (board != null) {
+            GameStatus gameStatus = board.getGameStatus();
+            gameStatus.setTurnTimeLimit(responseDto.getTimeLimit());
+
+            board.setDeckId(responseDto.getDeckId());
+            board.setCapacity(responseDto.getCapacity());
+            board.setTimeLimit(responseDto.getTimeLimit());
+
+            log.info("변경 이후 방 정보: " + board);
+        } else {
+            log.warn("변경할 방이 없습니다. roomId: " + responseDto.getRoomId());
+            throw new IllegalArgumentException("room not found.");
+        }
     }
 
     public void deleteGameRoom(long roomId) {
         boards.remove(roomId);
-        log.info("삭제된 방 정보: " + roomId);
+        log.info("삭제된 방 번호: " + roomId);
     }
 
     public Board getGameRoomByRoomId(long roomId) {

@@ -29,4 +29,8 @@ public class Player {
         this.cardsOnHand = new ArrayList<>();
         this.cardsEnrolled = new ArrayList<>();
     }
+
+    public void addScore(int scoreAdd) {
+        this.score += scoreAdd;
+    }
 }

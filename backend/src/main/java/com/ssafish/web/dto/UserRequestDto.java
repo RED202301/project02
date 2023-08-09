@@ -9,18 +9,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserRequestDto {
 
-    private Long userId;
     private String nickname;
 
     @Builder
-    public UserRequestDto(Long userId, String nickname) {
-        this.userId = userId;
+    public UserRequestDto(String nickname) {
         this.nickname = nickname;
     }
 
     public User toEntity() {
         return User.builder()
-                .userId(userId)
                 .nickname(nickname)
                 .build();
     }

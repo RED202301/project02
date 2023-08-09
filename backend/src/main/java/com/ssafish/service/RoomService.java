@@ -1,6 +1,7 @@
 package com.ssafish.service;
 
 import com.ssafish.common.util.WebSocketSubscriberManager;
+import com.ssafish.domain.Room;
 import com.ssafish.domain.RoomRepository;
 import com.ssafish.web.dto.RoomRequestDto;
 import com.ssafish.web.dto.RoomResponseDto;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.Map;
@@ -27,7 +29,7 @@ public class RoomService {
             System.out.println("TT");
             return;
         }
-        messagingTemplate.convertAndSend("/sub/" + roomId, new SocketData(77L, message, true));
+        messagingTemplate.convertAndSend("/sub/" + roomId, message);
     }
 
     public void processClientEntrance(Long roomId, Long userId, String sessionId) {
@@ -40,7 +42,32 @@ public class RoomService {
     }
 
     @Transactional
-    public void deleteById(long roomId) throws IllegalArgumentException {
+    public RoomResponseDto change(RoomRequestDto requestDto, long roomId) {
+        Room changeRoom = roomRepository.findById(roomId)
+                .orElseThrow(() -> new IllegalArgumentException("Room not found"));
+
+        // 값 업데이트
+        changeRoom.setRoomName(requestDto.getRoomName());
+        changeRoom.setCapacity(requestDto.getCapacity());
+        changeRoom.setTimeLimit(requestDto.getTimeLimit());
+        changeRoom.setDeckId(requestDto.getDeckId());
+
+        // 변경된 엔티티를 RoomResponseDto로 변환하여 반환 // 두번인지 확인
+        return RoomResponseDto.from(roomRepository.save(changeRoom));
+    }
+
+    @Transactional
+    public RoomResponseDto update(RoomRequestDto requestDto, long roomId) {
+        Room changeRoom = roomRepository.findById(roomId)
+                .orElseThrow(() -> new IllegalArgumentException("Room not found"));
+
+        changeRoom.update(requestDto);
+
+        return RoomResponseDto.from(changeRoom);
+    }
+
+    @Transactional
+    public void deleteById(long roomId) {
         roomRepository.deleteById(roomId);
     }
 
