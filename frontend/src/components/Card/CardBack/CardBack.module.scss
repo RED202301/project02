@@ -1,0 +1,23 @@
+.CardBack{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    //
+    overflow: hidden;
+
+    //flex
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    // 뒷면
+    transform: rotateY(180deg);
+    backface-visibility: hidden;
+
+
+    // text
+    font-family: Black_Han_Sans;
+    color: white;
+    font-size: var(--title-size)
+}
