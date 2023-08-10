@@ -48,7 +48,7 @@ export default function GameRoom() {
       playerList.forEach(({ userId, nickname, bot }) => {
         newPlayerMap[userId] = new Player({ userId, nickname, bot });
       });
-      console.log('-------------', newPlayerMap);
+      // console.log('-------------', newPlayerMap);
       setPlayerMap(() => newPlayerMap);
     },
     WAITING: () => {},
@@ -56,14 +56,15 @@ export default function GameRoom() {
       setCurrentPhase(phase);
       // setCardMap(cardMap);
       cardMapRef.current = cardMap;
-      console.log(cardMap);
+      // console.log(cardMap);
+      alert('제한 시간이 끝나면, 자동으로 플레이 됩니다. (현재 자동 플레이만 가능)');
     },
     AUTO_DRAW: (/** @type {phase}*/ phase, userId, cardId) => {
       setCurrentPhase(phase);
       setPlayerMap(playerMap => {
         const newPlayerMap = { ...playerMap };
         newPlayerMap[userId].draw(cardMapRef.current[cardId]);
-        console.log(cardMapRef.current, cardId, cardMapRef.current[cardId]);
+        // console.log(cardMapRef.current, cardId, cardMapRef.current[cardId]);
         return newPlayerMap;
       });
     },
@@ -142,7 +143,7 @@ export default function GameRoom() {
   }
 
   useEffect(() => {
-    console.log('userEffect 실행');
+    // console.log('userEffect 실행');
     openViduInitializer();
     connect({ stompClient, roomId, userId, nickname, callbacks });
     window.addEventListener('beforeunload', handleBeforeunload);
