@@ -23,11 +23,11 @@ public class PersonChoosePhase extends Phase implements ChoosePhase {
 
     protected final SimpMessageSendingOperations messagingTemplate;
 
-    public void startTurnTimer(GameStatus gameStatus, ScheduledExecutorService turnTimer) {
+    @Override
+    public void startTurnTimer(GameStatus gameStatus, ScheduledExecutorService turnTimer, CountDownLatch latch) {
         awaitSecond(1L);
         log.info(gameStatus.getRoomId() + "번 방 - PersonChoosePhase 시작");
-
-        latch = new CountDownLatch(1);
+        log.info("Scheduled task invoked by thread: {}", Thread.currentThread().getName());
 
         messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(),
                 ResponseEntity.ok(GameData.builder()
@@ -44,9 +44,9 @@ public class PersonChoosePhase extends Phase implements ChoosePhase {
                 .build();
 
         if (gameStatus.getCurrentPlayer().isBot()) { // 현재 플레이어가 봇일 경우
-            turnTimer.schedule(() -> endTurn(gameData, gameStatus, turnTimer), randomResponseTime(gameStatus.getTurnTimeLimit()), TimeUnit.SECONDS);
+            turnTimer.schedule(() -> endTurn(gameData, gameStatus, turnTimer, latch), randomResponseTime(gameStatus.getTurnTimeLimit()), TimeUnit.SECONDS);
         } else {                                     // 현재 플레이어가 봇이 아닐 경우
-            turnTimer.schedule(() -> endTurn(gameData, gameStatus, turnTimer), gameStatus.getTurnTimeLimit(), TimeUnit.SECONDS);
+            turnTimer.schedule(() -> endTurn(gameData, gameStatus, turnTimer, latch), gameStatus.getTurnTimeLimit(), TimeUnit.SECONDS);
         }
         try {
             latch.await();
@@ -61,7 +61,7 @@ public class PersonChoosePhase extends Phase implements ChoosePhase {
         }
     }
 
-    public void endTurn(GameData gameData, GameStatus gameStatus, ScheduledExecutorService turnTimer) {
+    public void endTurn(GameData gameData, GameStatus gameStatus, ScheduledExecutorService turnTimer, CountDownLatch latch) {
         cancelTurnTimer(turnTimer);
 
         // 게임 내부 로직
@@ -74,12 +74,12 @@ public class PersonChoosePhase extends Phase implements ChoosePhase {
         latch.countDown();
     }
 
-    public void handlePub(@Payload GameData gameData, GameStatus gameStatus, ScheduledExecutorService turnTimer) {
+    public void handlePub(@Payload GameData gameData, GameStatus gameStatus, ScheduledExecutorService turnTimer, CountDownLatch latch) {
         // pub 처리
         if (TypeEnum.TEST_PLAYER.name().equals(gameData.getType())) {           // 질문 대상 떠보기
             messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(), gameData);
         } else if (TypeEnum.SELECT_PLAYER.name().equals(gameData.getType())) {  // 질문 대상 지목하기
-            this.endTurn(gameData, gameStatus, turnTimer);
+            this.endTurn(gameData, gameStatus, turnTimer, latch);
         }
     }
 

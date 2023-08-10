@@ -81,35 +81,38 @@ public class CardService {
 
 
 
-            destFile = new File(uploadSubPath+ saveFileName);
+            log.info("card Main image ready");
+            destFile = new File(uploadMainPath+ saveFileName);
             mainImgUrl.transferTo(destFile); //이미지 저장
             log.info("card Main image is saved");
             log.info("image file path: " + destFile.getPath());
 
             //subImgUrl save
-            if(subImgUrl != null){
-                File uploadsubDir = new File(uploadSubPath); // 수정
-                if (!uploadsubDir.exists()) {
-                    uploadsubDir.mkdir();
-                    log.info("uploadDir 생성") ;
-                }
-
-                // 파일정보와 새 이름을 지정한다.
-                String subfilename = subImgUrl.getOriginalFilename();
-                System.out.println(subfilename);
-                UUID uuid2 = UUID.randomUUID();
-                String extension2 = StringUtils.getFilenameExtension(subfilename);
-                String saveFileName2 = uuid2 + "." + extension2;
-
-
-
-                destFile2 = new File(downloadSubPath+ saveFileName2);
-                mainImgUrl.transferTo(destFile2); //이미지 저장
-                log.info("card Main image is saved");
-                log.info("image file path: " + destFile2.getPath());
-
-
-            }
+//            if(subImgUrl != null){
+//                File uploadsubDir = new File(uploadSubPath); // 수정
+//                if (!uploadsubDir.exists()) {
+//                    uploadsubDir.mkdir();
+//                    log.info("uploadDir sub 생성") ;
+//                }
+//
+//                // 파일정보와 새 이름을 지정한다.
+//                String subfilename = subImgUrl.getOriginalFilename();
+//                System.out.println(subfilename);
+//                UUID uuid2 = UUID.randomUUID();
+//                String extension2 = StringUtils.getFilenameExtension(subfilename);
+//                String saveFileName2 = uuid2 + "." + extension2;
+//
+//
+//
+//                destFile2 = new File(uploadSubPath+ saveFileName2);
+//                mainImgUrl.transferTo(destFile2); //이미지 저장
+//                log.info("card Main image is saved");
+//                log.info("image file path: " + destFile2.getPath());
+//
+//                inputcardDto.setSubImgUrl(downloadSubPath + saveFileName2);
+//
+//
+//            }
 
 
 

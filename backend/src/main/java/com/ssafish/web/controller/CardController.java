@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.util.List;
 
@@ -27,14 +28,31 @@ public class CardController {
     CardsRepository cardsRepository;
 
     @PostMapping("/card")
-    public ResponseEntity<?> cardInsret( CardDto cardDto, MultipartFile mainImg , MultipartFile subImg){
-
+    public ResponseEntity<?> cardInsret( MultipartHttpServletRequest imgFile ){
+        //public ResponseEntity<?> cardInsret(@RequestBody CardDto cardDto, MultipartHttpServletRequest mainImg , @RequestParam("mainImg") MultipartFile subImg){
         //카드 파일저장
         //카드_유저 연결
         //System.out.println(mainImgUrl);
+
+        Long userId = Long.parseLong(imgFile.getParameter("userId"));
+        Long cardId = Long.parseLong(imgFile.getParameter("cardId"));
+        String mainTitle = imgFile.getParameter("mainTitle");
+        String subTitle = imgFile.getParameter("subTitle");
+        String cardDescription = imgFile.getParameter("cardDescription");
+
+        CardDto cardDto = CardDto.builder()
+                .userId(userId)
+                .cardId(cardId)
+                .mainTitle(mainTitle)
+                .subTitle(subTitle)
+                .cardDescription(cardDescription)
+                .build();
         log.info("input card info" + cardDto);
 
         long maxFileSize = 10 * 1024 * 1024; // 10MB
+
+        MultipartFile mainImg = imgFile.getFile("MainImg");
+        MultipartFile subImg = imgFile.getFile("SubImg");
 
         if (mainImg.getSize() > maxFileSize){
             StringBuilder errorMessage = new StringBuilder("최대 파일 크기 초과");
@@ -55,8 +73,9 @@ public class CardController {
         }
 
 
-        cardDto = cardService.cardInsert(cardDto, mainImg,subImg);
 
+
+        cardDto = cardService.cardInsert(cardDto,mainImg, subImg);
 
         if(cardDto.getResult() == 1){
             log.info("resopnse card info: " + cardDto);

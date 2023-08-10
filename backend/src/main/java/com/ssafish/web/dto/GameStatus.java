@@ -39,6 +39,8 @@ public class GameStatus {
     private long cardOpen;
 
     public void init() {
+        currentPhase = personChoosePhase;
+
         middleDeck = new ArrayList<>();
         pointMap = new ConcurrentHashMap<>();
         cheatSheet = new ConcurrentHashMap<>();
