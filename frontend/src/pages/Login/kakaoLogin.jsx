@@ -23,7 +23,7 @@ function Login2() {
         const res = await axios
           // 백엔드 주소 뒤에 인가코드 붙여서 GET 설정
           // 백엔드는 이 주소를 통해 뒤에 붙여져있는 인가코드를 전달 받게 된다.
-          .get(host_URL + `/oauth/login?code=${code}`)
+          .get(host_URL + `/api/v1/oauth/login?code=${code}`)
           // 백엔드 쪽에서 보내준 응답 확인
           .then(response => {
             console.log('응답 확인', response);
