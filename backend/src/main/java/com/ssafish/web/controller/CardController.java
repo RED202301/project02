@@ -27,7 +27,7 @@ public class CardController {
     CardsRepository cardsRepository;
 
     @PostMapping("/card")
-    public ResponseEntity<?> cardInsret(CardDto cardDto,MultipartFile mainImg ,MultipartFile subImg){
+    public ResponseEntity<?> cardInsret( CardDto cardDto, MultipartFile mainImg , MultipartFile subImg){
 
         //카드 파일저장
         //카드_유저 연결
@@ -36,12 +36,20 @@ public class CardController {
 
         long maxFileSize = 10 * 1024 * 1024; // 10MB
 
-//        if (mainImg.getSize() > maxFileSize || (subImg != null && subImg.getSize() > maxFileSize) ) {
-//            StringBuilder errorMessage = new StringBuilder("최대 파일 크기 초과");
-//            return ResponseEntity.badRequest().body(errorMessage.toString());
-//            //return ResponseEntity.badRequest().build("최대 파일 크기 초과");
-//        }
-        if (cardDto.getUserId() == 0){
+        if (mainImg.getSize() > maxFileSize){
+            StringBuilder errorMessage = new StringBuilder("최대 파일 크기 초과");
+            return ResponseEntity.badRequest().body(errorMessage.toString());
+            //return ResponseEntity.badRequest().build("최대 파일 크기 초과");
+        }
+        if(subImg != null) {
+            if(subImg.getSize() > maxFileSize){
+                StringBuilder errorMessage = new StringBuilder("최대 파일 크기 초과");
+                return ResponseEntity.badRequest().body(errorMessage.toString());
+
+            }
+
+        }
+        if (cardDto.getUserId() == 1){
             StringBuilder errorMessage = new StringBuilder("사용자 정보가 필요합니다.");
             return ResponseEntity.badRequest().body(errorMessage.toString());
         }
