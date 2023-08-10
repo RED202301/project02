@@ -42,7 +42,7 @@ public class CardDeckService {
     //List<Card_decks>를 반환하도록한다.// 해당덱의 카드리스트를 넘겨준다.
 
         List<Card> d = cardsRepository.findCardDeckList(deckId);
-        System.out.println(d.get(1));
+        //System.out.println(d.get(1));
         List<CardDto> cardList = new ArrayList<>();
 //        for(int i=0;i<25;i++){
 //            System.out.println(d.get(i).toDto());

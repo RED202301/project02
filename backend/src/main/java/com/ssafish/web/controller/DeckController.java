@@ -1,5 +1,7 @@
 package com.ssafish.web.controller;
 
+import com.ssafish.domain.deck.Deck;
+import com.ssafish.domain.deck.DeckRepository;
 import com.ssafish.service.CardDeckService;
 import com.ssafish.web.dto.CardDto;
 import com.ssafish.web.dto.DeckDetailDto;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -19,6 +22,33 @@ public class DeckController {
 
     @Autowired
     CardDeckService cardDeckService;
+    @Autowired
+    DeckRepository deckRepository;
+
+
+    @GetMapping()
+    public ResponseEntity<List<DeckDetailDto>> allDeckList(){
+
+        List<Deck> deckList = deckRepository.findAll();
+        System.out.println(deckList);
+        List<DeckDetailDto> alldDeckList = new ArrayList<>();
+
+        deckList.forEach((deck) -> {
+
+            List<CardDto> deckCardList = cardDeckService.deckCardList(deck.getDeckId());
+            if(deckCardList.size()==25){
+            DeckDetailDto deckDetailDto = DeckDetailDto.builder()
+                    .deck(deck.toDto())
+                    .cardList(deckCardList)
+                    .build();
+            alldDeckList.add(deckDetailDto);
+            }
+        });
+
+
+        return ResponseEntity.ok().body(alldDeckList);
+
+    }
     @GetMapping(value = "/deck/{deckId}")
     public ResponseEntity<DeckDetailDto> deckDetail(@PathVariable int deckId){
 
@@ -40,6 +70,7 @@ public class DeckController {
         return ResponseEntity.ok().body(deckDetailDto);
 
     }
+
 
 
 //    @PostMapping("/deck/{deckId}")
