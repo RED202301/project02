@@ -8,7 +8,7 @@ import Swal from "sweetalert2";
 
 
 function Login2() {
-  const host_URL = 'http://192.168.30.193:5001'
+  const host_URL = 'https://i9e202.p.ssafy.io'
   // // 인가코드 받아오기
   const code = new URL(window.location.href).searchParams.get("code");
 
@@ -23,7 +23,7 @@ function Login2() {
           // 백엔드 주소 뒤에 인가코드 붙여서 GET 설정
           // 백엔드는 이 주소를 통해 뒤에 붙여져있는 인가코드를 전달 받게 된다.
           .get(
-            host_URL + `/oauth/login?code=${code}`
+            host_URL + `/api/v1/oauth/login?code=${code}`
           )
           // 백엔드 쪽에서 보내준 응답 확인
           .then((response) => {
@@ -53,7 +53,7 @@ function Login2() {
                     /* Read more about isConfirmed, isDenied below */
                     if (res.isConfirmed) {
                       console.log(res.value)
-                      axios.put(host_URL+"/oauth/change-nickname",{
+                      axios.put(host_URL+"/api/v1/oauth/change-nickname",{
                       userId: window.localStorage.getItem('userId'),
                       nickname: res.value}
                       )//api 요청이 성공 했을 때,
@@ -70,7 +70,8 @@ function Login2() {
                       navigate('../')
                     })
               }})//닉네임이 입력 되지 않았을 때,
-              .catch(()=>{
+              .catch((e)=>{
+                console.log('닉네임 입력 x',e)
                 navigate('../')
               })
           }
@@ -86,7 +87,7 @@ function Login2() {
       //로그인 자체가 실패 했을 때,
       catch (e) {
         // 에러 발생 시, 에러 응답 출력
-        console.error(e);
+        console.error('로그인 자체 실패',e);
         navigate('../')
       }
     })();

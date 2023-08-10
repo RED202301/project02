@@ -6,7 +6,7 @@ import axios from 'axios';
 import Swal from "sweetalert2";
 
 function Landing(){
-  const host_URL = "http://192.168.30.193:5001"
+  const host_URL = "https://i9e202.p.ssafy.io"
   const navigate = useNavigate();
   const REST_API_KEY = '0c75393f80241be4aaf8ebd811934887'; // RestAPI 키
   const REDIRECT_URI = 'http://localhost:5173/login2'; // redirect 주소
