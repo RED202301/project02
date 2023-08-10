@@ -3,13 +3,40 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background-image: url(../../assets/배경.jpg);
+    /* background-image: url(../../assets/보드게임카페6.jpg); */
+    background-image: url(../../assets/보드게임카페12.svg);
     height: 100vh;
     width: 100vw;
-    background-size: cover; 
+    background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
+    /* color: rgba(255, 255, 255, 0.914); */
+    color: white
+    /* color: #57B7FF; */
 }
+
+.Landing_div{
+  background-color: #64463a7e;
+  /* background-image: url('../../assets/레고배경3.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center; */
+  /* background: linear-gradient(#492517a7,#4925177e) padding-box; */
+  border-radius: 20px;
+  padding: 50px;
+  padding-top: 20px;
+  box-shadow:20px 20px 50px rgba(0, 0, 0, 0.5);
+}
+.span1 {
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.914);
+  text-decoration: inherit;
+  margin: 10px
+}
+.span1:hover {
+  color: white;
+}
+
 
 .LOGO{
     display: flex;
@@ -17,7 +44,7 @@
     align-items: center;
     margin-left: auto;  
     margin-right: auto;
-    text-shadow: 1px 1px 2px white, 0 0 1em rgb(145, 145, 148), 0 0 0.2em blue;
+    text-shadow: 1px 1px 2px rgb(7, 7, 7), 0 0 1em rgb(145, 145, 148), 0 0 0.2em rgb(3, 3, 3);
 }
 
 .PIN{
@@ -35,8 +62,6 @@
     margin-right: auto;
 }
 
-span {
-}
 
 /* 
 .InputContainer {
@@ -88,11 +113,13 @@ input:hover {
   
   .container .label {
     font-size: 15px;
-    padding-left: 10px;
+    padding-left: 25px;
     position: absolute;
     top: 13px;
     transition: 0.3s;
     pointer-events: none;
+    color: white;
+    font-weight: 400;
   }
   
   .input {
@@ -117,7 +144,15 @@ input:hover {
     inset 3px 3px 10px rgba(0,0,0,1),
     inset -1px -1px 6px rgba(255, 255, 255, 0.4);
   }
-  
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+  transition: background-color 5000s;
+  -webkit-text-fill-color: black !important;
+  }
+
   .container .input:valid ~ .label,
   .container .input:focus ~ .label {
     transition: 0.3s;
@@ -150,7 +185,7 @@ input:hover {
   }
   
  .btn:hover {
-    box-shadow: -5px -5px 15px #444, 5px 5px 15px #222, inset 5px 5px 10px #222, inset -5px -5px 10px #444;
+    /* box-shadow: -5px -5px 15px #444, 5px 5px 15px #222, inset 5px 5px 10px #222, inset -5px -5px 10px #444; */
     color: #d6d6d6;
     transition: 500ms;
   }
