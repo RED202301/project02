@@ -4,7 +4,7 @@ import axios from 'axios';
 const APPLICATION_SERVER_URL = 'https://i9e202.p.ssafy.io';
 
 // const APPLICATION_SERVER_URL = 'http://localhost:5001';
-const APPLICATION_SERVER_URL = 'https://i9e202.p.ssafy.io';
+// const APPLICATION_SERVER_URL = 'https://i9e202.p.ssafy.io';
 async function getSession(sessionId) {
   const response = await axios.post(
     `${APPLICATION_SERVER_URL}/api/sessions/`,

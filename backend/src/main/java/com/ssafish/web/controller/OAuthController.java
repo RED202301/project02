@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 
 @RestController
-@RequestMapping("/oauth")
+@RequestMapping("/api/v1/oauth")
 @CrossOrigin("*") // zzzzzzzzzzzzㅠㅠ
 @Slf4j
 public class OAuthController {
@@ -107,6 +107,29 @@ public class OAuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token");
         }
     }
+
+    @DeleteMapping("")
+    public ResponseEntity<Object> deleteKakaoUser(HttpServletRequest request) {
+        try {
+            String authorizationHeader = request.getHeader("Authorization");
+            String accessToken = "";
+
+            if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+                accessToken = authorizationHeader.substring(7);
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid access token");
+            }
+
+            long kakaoId = JwtProvider.getUserId(accessToken, secretKey);
+            userService.deleteUser(kakaoId);
+            return ResponseEntity.status(HttpStatus.OK).body("회원탈퇴 처리된 유저 kakaoId: " + kakaoId);
+        } catch (JwtException e) {
+            // 토큰 파싱이 실패하거나 유효하지 않은 토큰일 경우, 클라이언트에게 인증 실패 응답 전달
+            log.error("access failed");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid access token");
+        }
+    }
+
 
     @ResponseBody
     @PutMapping("/change-nickname")
