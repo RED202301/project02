@@ -11,8 +11,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -25,8 +23,6 @@ public class GameOverPhase extends Phase {
     public void run(GameStatus gameStatus) {
         log.info(gameStatus.getRoomId() + "번 방 - GameOverPhase 시작");
         awaitSecond(1L);
-
-        ScheduledExecutorService turnTimer = Executors.newSingleThreadScheduledExecutor();
 
         // 점수가 적인 플레이어 리스트를 보내준다
         messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(),
