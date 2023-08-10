@@ -16,6 +16,8 @@ import RoomList from './pages/RoomList/RoomList';
 import Game from './pages/Game/Game';
 import GameUI from './pages/GameUI/App';
 import MVP from './pages/MVP/MVP';
+// import Cccc from './pages/Main/cccc'
+import ResultModal from './components/ResultModal';
 
 function App() {
   [];
@@ -39,6 +41,8 @@ function App() {
             <Route path="/main/game" element={<Game />} />
             <Route path="/MVP" element={<MVP />} />
             <Route path="/GameUI" element={<GameUI />} />
+            {/* <Route path="/cccc" element={<Cccc />} /> */}
+            <Route path="/ResultModal" element={<ResultModal />} />
           </Routes>
         </div>
       </AnimatePresence>
