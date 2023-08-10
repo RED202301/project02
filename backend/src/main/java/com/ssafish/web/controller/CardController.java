@@ -36,11 +36,11 @@ public class CardController {
 
         long maxFileSize = 10 * 1024 * 1024; // 10MB
 
-//        if (mainImg.getSize() > maxFileSize || (subImg != null && subImg.getSize() > maxFileSize) ) {
-//            StringBuilder errorMessage = new StringBuilder("최대 파일 크기 초과");
-//            return ResponseEntity.badRequest().body(errorMessage.toString());
-//            //return ResponseEntity.badRequest().build("최대 파일 크기 초과");
-//        }
+        if (mainImg.getSize() > maxFileSize || (subImg != null && subImg.getSize() > maxFileSize) ) {
+            StringBuilder errorMessage = new StringBuilder("최대 파일 크기 초과");
+            return ResponseEntity.badRequest().body(errorMessage.toString());
+            //return ResponseEntity.badRequest().build("최대 파일 크기 초과");
+        }
         if (cardDto.getUserId() == 0){
             StringBuilder errorMessage = new StringBuilder("사용자 정보가 필요합니다.");
             return ResponseEntity.badRequest().body(errorMessage.toString());
