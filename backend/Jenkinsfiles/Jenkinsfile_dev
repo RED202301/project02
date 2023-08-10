@@ -8,6 +8,7 @@ pipeline {
 
     tools {
         nodejs "front"
+        gradle "back"
 
     }
 
@@ -34,11 +35,11 @@ pipeline {
                             chmod u+x ./gradlew
                             ./gradlew clean bootJar
                             """
-                         sh """
-                         cd /var/jenkins_home/workspace/ssafish_dev/frontend
-                            npm install
-                            npm run build
-                        """
+                    //     sh """
+                    //     cd /var/jenkins_home/workspace/ssafish_dev/frontend
+                    //        npm install
+                    //        npm run build
+                    //    """
                     }
                 }
             }
@@ -58,14 +59,14 @@ pipeline {
 
                         """
 
-                        sh """
-                        cd /var/jenkins_home/workspace/ssafish_dev/frontend
+                    //    sh """
+                    //    cd /var/jenkins_home/workspace/ssafish_dev/frontend
 
-                        docker build -t ${dockerRepository}/${dockerImageNameFront} .
-                        docker login
-                        docker push ${dockerRepository}/${dockerImageNameFront}:latest
+                    //    docker build -t ${dockerRepository}/${dockerImageNameFront} .
+                    //    docker login
+                    //    docker push ${dockerRepository}/${dockerImageNameFront}:latest
 
-                        """
+                    //    """
                     }
                 }
             }
@@ -79,19 +80,19 @@ pipeline {
                     sh """
                     ssh -o StrictHostKeyChecking=no ubuntu@i9e202.p.ssafy.io \
                     'docker rm -f ${dockerImageName} &&
-                    docker run -d -t -p 5001:5001 -v ssafish-cards:/home/ssafish/cardMainImage  --rm --name ${dockerImageName} ${dockerRepository}/${dockerImageName}:latest;'
+                    docker run -d -t -p 5001:5001 -v /home/ubuntu/ssafish/cardMainImage:/home/ssafish/cardMainImage  --rm --name ${dockerImageName} ${dockerRepository}/${dockerImageName}:latest;'
                     """
 
 
-                    sh """
-                     ssh -o StrictHostKeyChecking=no ubuntu@i9e202.p.ssafy.io \
-                     'docker rm -f ${dockerImageNameFront} &&
-                      docker run -d -t -p 5173:5173 --rm --name ${dockerImageNameFront} ${dockerRepository}/${dockerImageNameFront}:latest;'
+                //    sh """
+                //     ssh -o StrictHostKeyChecking=no ubuntu@i9e202.p.ssafy.io \
+                //     '
+                //      docker run -d -t -p 5173:5173 --rm --name ${dockerImageNameFront} ${dockerRepository}/${dockerImageNameFront}:latest;'
 
-                    """
+                //    """
 
                 }
-            }
+            }//docker rm -f ${dockerImageNameFront} &&
         }
     }
 

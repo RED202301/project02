@@ -42,7 +42,7 @@ public class RoomController {
 
         log.info(requestDto.toString());
 
-        if (requestDto.getRoomName() != null && requestDto.getCapacity() > 1 && requestDto.getTimeLimit() > 0) {
+        if (requestDto.getRoomName().length() > 0 && requestDto.getCapacity() > 1 && requestDto.getTimeLimit() > 0) {
             RoomResponseDto responseDto = roomService.create(requestDto);
 
             gameService.createGameRoom(responseDto);
@@ -142,11 +142,15 @@ public class RoomController {
                                              @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
         try {
             log.info(requestDto.toString());
-            RoomResponseDto responseDto = roomService.update(requestDto, roomId);
+            if (requestDto.getRoomName().length() > 0 && requestDto.getCapacity() > 1 && requestDto.getTimeLimit() > 0) {
+                RoomResponseDto responseDto = roomService.update(requestDto, roomId);
 
-            gameService.changeGameRoom(responseDto);
-            log.info(responseDto.toString());
-            return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+                gameService.changeGameRoom(responseDto);
+                log.info(responseDto.toString());
+                return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Wrong room condition.");
+            }
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

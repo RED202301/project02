@@ -1,15 +1,25 @@
 package com.ssafish.service;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.ssafish.domain.user.User;
 import com.ssafish.domain.user.UserRepository;
 import com.ssafish.web.dto.KakaoUserInfo;
 import com.ssafish.web.dto.UserRequestDto;
 import com.ssafish.web.dto.UserResponseDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 @Service
+@Slf4j
 public class UserService {
 
     private final UserRepository userRepository;
@@ -43,6 +53,32 @@ public class UserService {
 
     public User saveUser(User user) {
         return userRepository.save(user);
+    }
+
+    @Transactional
+    public void deleteUser(long kakaoId) {
+        // kakao 연결 해제
+        String reqURL = "https://kapi.kakao.com/v1/user/unlink";
+        String kakaoAccessToken = userRepository.findByKakaoId(kakaoId).getKakaoAccessToken();
+
+        //access_token을 이용하여 사용자 정보 조회
+        try {
+            URL url = new URL(reqURL);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+            conn.setRequestProperty("Authorization", "Bearer " + kakaoAccessToken);
+
+            //결과 코드가 200이라면 성공
+            int responseCode = conn.getResponseCode();
+            log.info("deleteUser responseCode : " + responseCode);
+
+            // DB에서 삭제
+            userRepository.deleteByKakaoId(kakaoId);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void changeNickname(Long userId, String newNickname) {
