@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @ToString
 @Getter
+@Setter
 public class CardDto {
 
     private long cardId;
