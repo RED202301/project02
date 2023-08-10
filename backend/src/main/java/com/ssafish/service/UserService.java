@@ -96,7 +96,7 @@ public class UserService {
     }
 
     public boolean isAvailable(String nickname) {
-        return userRepository.findByNickname(nickname) == null;
+        return (userRepository.findByNickname(nickname) == null && nickname.length() > 0);
     }
 
     @Transactional
