@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/deck")
+@RequestMapping("/api")
 @CrossOrigin("*")
 @Slf4j
 public class DeckController {
 
     @Autowired
     CardDeckService cardDeckService;
-    @GetMapping(value = "/{deckId}")
+    @GetMapping(value = "/deck/{deckId}")
     public ResponseEntity<DeckDetailDto> deckDetail(@PathVariable int deckId){
 
         DeckDto deck = cardDeckService.deckInfo(deckId);
@@ -41,6 +41,20 @@ public class DeckController {
         return ResponseEntity.ok().body(deckDetailDto);
 
     }
+
+
+//    @PostMapping("/deck/{deckId}")
+//    public ResponseEntity<DeckDetailDto> deckCreate(@PathVariable int deckId, List<CardDto> CardList, DeckDto deck){
+//        // 덱정보를 저장한다
+//        // 카드덱 테이블에 삽입한다.
+//        // 유저덱 에 삽입한다. -> 사용자의 보관함
+//
+//
+//        return ResponseEntity.ok().body(deckDetailDto);
+//    }
+
+
+
 
 
 }
