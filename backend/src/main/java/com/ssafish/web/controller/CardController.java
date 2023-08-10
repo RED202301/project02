@@ -27,7 +27,7 @@ public class CardController {
     CardsRepository cardsRepository;
 
     @PostMapping("/card")
-    public ResponseEntity<?> cardInsret( CardDto cardDto, MultipartFile mainImg , MultipartFile subImg){
+    public ResponseEntity<?> cardInsret(@RequestBody CardDto cardDto,@RequestParam("mainImg") MultipartFile mainImg ,@RequestParam("mainImg") MultipartFile subImg){
 
         //카드 파일저장
         //카드_유저 연결
