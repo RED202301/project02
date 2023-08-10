@@ -2,12 +2,11 @@
 import { removeCookie } from "../../components/Cookie"
 import axios from "axios";
 
-function Logout(){
+function Signout(){
   const accessToken = localStorage.getItem('accessToken');
-	const logOut = () => {
-    axios.get(
-      // 'https://kauth.kakao.com/oauth/logout?logout_redirect_uri=http://localhost:5173/main&client_id=0c75393f80241be4aaf8ebd811934887',
-      `https://i9e202.p.ssafy.io/api/v1/oauth/logout`, 
+	const signOut = () => {
+    axios.delete(
+      `https://i9e202.p.ssafy.io/api/v1/oauth/`, 
       {headers: {
         Authorization: `Bearer ${accessToken}`
         }
@@ -26,9 +25,9 @@ function Logout(){
 
 	return (
         <div>
-			<p onClick={logOut} style={{'margin':'0px'}}>로그아웃</p>
+			<p onClick={signOut} style={{'margin':'0px'}}>회원탈퇴</p>
 		</div>
     )
 }
 
-export default Logout;
+export default Signout;
