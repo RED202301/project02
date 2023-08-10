@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.util.List;
 
@@ -27,36 +27,51 @@ public class CardController {
     CardsRepository cardsRepository;
 
     @PostMapping("/card")
-    public ResponseEntity<?> cardInsret(@RequestBody CardDto cardDto,@RequestParam("mainImg") MultipartFile mainImg ,@RequestParam("mainImg") MultipartFile subImg){
-
+    public ResponseEntity<?> cardInsret( MultipartHttpServletRequest imgFile ){
+        //public ResponseEntity<?> cardInsret(@RequestBody CardDto cardDto, MultipartHttpServletRequest mainImg , @RequestParam("mainImg") MultipartFile subImg){
         //카드 파일저장
         //카드_유저 연결
         //System.out.println(mainImgUrl);
+
+        Long userId = Long.parseLong(imgFile.getParameter("userId"));
+        Long cardId = Long.parseLong(imgFile.getParameter("cardId"));
+        String mainTitle = imgFile.getParameter("mainTitle");
+        String subTitle = imgFile.getParameter("subTitle");
+        String cardDescription = imgFile.getParameter("cardDescription");
+
+        CardDto cardDto = CardDto.builder()
+                .userId(userId)
+                .cardId(cardId)
+                .mainTitle(mainTitle)
+                .subTitle(subTitle)
+                .cardDescription(cardDescription)
+                .build();
         log.info("input card info" + cardDto);
 
         long maxFileSize = 10 * 1024 * 1024; // 10MB
 
-        if (mainImg.getSize() > maxFileSize){
-            StringBuilder errorMessage = new StringBuilder("최대 파일 크기 초과");
-            return ResponseEntity.badRequest().body(errorMessage.toString());
-            //return ResponseEntity.badRequest().build("최대 파일 크기 초과");
-        }
-        if(subImg != null) {
-            if(subImg.getSize() > maxFileSize){
-                StringBuilder errorMessage = new StringBuilder("최대 파일 크기 초과");
-                return ResponseEntity.badRequest().body(errorMessage.toString());
-
-            }
-
-        }
+//        if (mainImg.getSize() > maxFileSize){
+//            StringBuilder errorMessage = new StringBuilder("최대 파일 크기 초과");
+//            return ResponseEntity.badRequest().body(errorMessage.toString());
+//            //return ResponseEntity.badRequest().build("최대 파일 크기 초과");
+//        }
+//        if(subImg != null) {
+//            if(subImg.getSize() > maxFileSize){
+//                StringBuilder errorMessage = new StringBuilder("최대 파일 크기 초과");
+//                return ResponseEntity.badRequest().body(errorMessage.toString());
+//
+//            }
+//
+//        }
         if (cardDto.getUserId() == 1){
             StringBuilder errorMessage = new StringBuilder("사용자 정보가 필요합니다.");
             return ResponseEntity.badRequest().body(errorMessage.toString());
         }
 
 
-        cardDto = cardService.cardInsert(cardDto, mainImg,subImg);
+        //cardDto = cardService.cardInsert(cardDto, mainImg,subImg);
 
+        cardDto = cardService.cardInsert(cardDto, imgFile.getFile("MainImg"),imgFile.getFile("SubImg"));
 
         if(cardDto.getResult() == 1){
             log.info("resopnse card info: " + cardDto);
