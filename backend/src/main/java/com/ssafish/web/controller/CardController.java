@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.util.List;
@@ -50,28 +51,31 @@ public class CardController {
 
         long maxFileSize = 10 * 1024 * 1024; // 10MB
 
-//        if (mainImg.getSize() > maxFileSize){
-//            StringBuilder errorMessage = new StringBuilder("최대 파일 크기 초과");
-//            return ResponseEntity.badRequest().body(errorMessage.toString());
-//            //return ResponseEntity.badRequest().build("최대 파일 크기 초과");
-//        }
-//        if(subImg != null) {
-//            if(subImg.getSize() > maxFileSize){
-//                StringBuilder errorMessage = new StringBuilder("최대 파일 크기 초과");
-//                return ResponseEntity.badRequest().body(errorMessage.toString());
-//
-//            }
-//
-//        }
+        MultipartFile mainImg = imgFile.getFile("MainImg");
+        MultipartFile subImg = imgFile.getFile("SubImg");
+
+        if (mainImg.getSize() > maxFileSize){
+            StringBuilder errorMessage = new StringBuilder("최대 파일 크기 초과");
+            return ResponseEntity.badRequest().body(errorMessage.toString());
+            //return ResponseEntity.badRequest().build("최대 파일 크기 초과");
+        }
+        if(subImg != null) {
+            if(subImg.getSize() > maxFileSize){
+                StringBuilder errorMessage = new StringBuilder("최대 파일 크기 초과");
+                return ResponseEntity.badRequest().body(errorMessage.toString());
+
+            }
+
+        }
         if (cardDto.getUserId() == 1){
             StringBuilder errorMessage = new StringBuilder("사용자 정보가 필요합니다.");
             return ResponseEntity.badRequest().body(errorMessage.toString());
         }
 
 
-        //cardDto = cardService.cardInsert(cardDto, mainImg,subImg);
 
-        cardDto = cardService.cardInsert(cardDto, imgFile.getFile("MainImg"),imgFile.getFile("SubImg"));
+
+        cardDto = cardService.cardInsert(cardDto,mainImg, subImg);
 
         if(cardDto.getResult() == 1){
             log.info("resopnse card info: " + cardDto);
