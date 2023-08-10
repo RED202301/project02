@@ -1,13 +1,17 @@
 package com.ssafish.web.controller;
 
+
 import com.ssafish.domain.deck.Deck;
 import com.ssafish.domain.deck.DeckRepository;
 import com.ssafish.service.CardDeckService;
+import com.ssafish.service.DeckService;
 import com.ssafish.web.dto.CardDto;
 import com.ssafish.web.dto.DeckDetailDto;
 import com.ssafish.web.dto.DeckDto;
+import com.ssafish.web.dto.DeckRequestDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,13 +24,19 @@ import java.util.List;
 @Slf4j
 public class DeckController {
 
-    @Autowired
-    CardDeckService cardDeckService;
+    private final CardDeckService cardDeckService;
+    private final DeckService deckService;
+
     @Autowired
     DeckRepository deckRepository;
 
+    public DeckController(CardDeckService cardDeckService, DeckService deckService) {
+        this.cardDeckService = cardDeckService;
+        this.deckService = deckService;
+    }
 
-    @GetMapping()
+
+    @GetMapping("/deck")
     public ResponseEntity<List<DeckDetailDto>> allDeckList(){
 
         List<Deck> deckList = deckRepository.findAll();
@@ -49,6 +59,7 @@ public class DeckController {
         return ResponseEntity.ok().body(alldDeckList);
 
     }
+    
     @GetMapping(value = "/deck/{deckId}")
     public ResponseEntity<DeckDetailDto> deckDetail(@PathVariable int deckId){
 
@@ -71,19 +82,15 @@ public class DeckController {
 
     }
 
-
-
-//    @PostMapping("/deck/{deckId}")
-//    public ResponseEntity<DeckDetailDto> deckCreate(@PathVariable int deckId, List<CardDto> CardList, DeckDto deck){
-//        // 덱정보를 저장한다
-//        // 카드덱 테이블에 삽입한다.
-//        // 유저덱 에 삽입한다. -> 사용자의 보관함
-//
-//
-//        return ResponseEntity.ok().body(deckDetailDto);
-//    }
-
-
+    @PostMapping("/deck")
+    public ResponseEntity<Object> deckCreate(@RequestBody DeckRequestDto deckRequestDto){
+        try {
+            DeckRequestDto createdDeck = deckService.create(deckRequestDto);
+            return ResponseEntity.status(HttpStatus.OK).body(createdDeck);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
+        }
+    }
 
 
 
