@@ -27,16 +27,16 @@ public class CardController {
     CardsRepository cardsRepository;
 
     @PostMapping("/card")
-    public ResponseEntity<?> cardInsret(CardDto cardDto, MultipartFile mainImgUrl , MultipartFile subImgUrl){
+    public ResponseEntity<?> cardInsret(CardDto cardDto, MultipartFile mainImg , MultipartFile subImg){
 
         //카드 파일저장
         //카드_유저 연결
-        System.out.println(mainImgUrl);
+        //System.out.println(mainImgUrl);
         log.info("input card info" + cardDto);
 
         long maxFileSize = 10 * 1024 * 1024; // 10MB
 
-        if (mainImgUrl.getSize() > maxFileSize || subImgUrl.getSize() > maxFileSize ) {
+        if (mainImg.getSize() > maxFileSize || subImg.getSize() > maxFileSize ) {
             StringBuilder errorMessage = new StringBuilder("최대 파일 크기 초과");
             return ResponseEntity.badRequest().body(errorMessage.toString());
             //return ResponseEntity.badRequest().build("최대 파일 크기 초과");
@@ -47,7 +47,7 @@ public class CardController {
         }
 
 
-        cardDto = cardService.cardInsert(cardDto, mainImgUrl,subImgUrl);
+        cardDto = cardService.cardInsert(cardDto, mainImg,subImg);
 
 
         if(cardDto.getResult() == 1){
