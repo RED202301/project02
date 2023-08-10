@@ -18,14 +18,6 @@ function Landing(){
     // console.log(event.target.value);
   };
 
-  // function send(){
-  //   stompClient = Stomp.over(socket);
-  //   console.log('sending');
-  //   const dd 
-
-  //   stompClient.send('/pub/')
-  // }
-
   //핀번호 입력창에 핀번호 입력하고 확인 버튼(get 요청)
   const buttonClick = () => {
     console.log({ pinNumber })
@@ -61,21 +53,9 @@ function Landing(){
                   window.sessionStorage.setItem('userId', userId)
                   window.sessionStorage.setItem('nickname', nickname)
                   //userId가 저장됐다면, 방으로 입장 요청
-                  // if (userId) {
-                  //   axios.get(host_URL+`/enter/${roomId}`)
-                  //   //입장 요청 성공 -> 입장
-                  //     .then((response) => {
-                        
-                  //     })
-                  //     // 입장 요청 실패 -> 정원 초과 알림
-                  //     .catch((e)=>{console.log(e)
-                  //       Swal.fire({
-                  //         icon: "warning",
-                  //         title: "정원 초과",
-                  //         text: `다른 방을 이용해주세요`,
-                  //         confirmButtonText: "확인",})
-                  //     })
-                  // }
+                  if (userId) {
+                    navigate('/gameUI')
+                  }
               }).catch((err)=>{
                 console.log(err)
                 Swal.fire({
