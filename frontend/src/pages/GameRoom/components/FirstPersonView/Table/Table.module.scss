@@ -1,0 +1,15 @@
+.Table{
+
+    transform-style: preserve-3d;
+
+    background-image: url('./table.jpg');
+    
+    width: calc(var(--unit)*2);
+    height: calc(var(--unit)*2);
+
+    border-radius: var(--unit);
+    
+    // transform-origin: bottom;
+    transform: rotateX(90deg);
+    translate: 0 0 0;
+}

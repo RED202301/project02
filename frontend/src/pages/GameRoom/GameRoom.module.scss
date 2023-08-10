@@ -1,0 +1,14 @@
+.GameRoom {
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+
+    overflow: hidden;
+    background-image: url(./GameRoom.png);
+    background-size: cover;
+}
+
+.GameRoom * {
+    --unit: calc(25vw + 50vh);
+    // --unit: 100vh;
+}

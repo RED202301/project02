@@ -1,0 +1,12 @@
+.PinNumberDisplay{
+    position: absolute;
+    width: 100vw;
+
+    display: flex;
+    justify-content: center;
+
+    pointer-events: none;
+}
+.PinNumberDisplay div{
+    pointer-events: all;
+}
