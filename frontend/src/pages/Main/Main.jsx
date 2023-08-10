@@ -6,6 +6,7 @@ import axios from 'axios';
 // import useDidMountEffect from '../../components/useDidMountEffect';
 import { useNavigate } from 'react-router-dom';
 // import Cccc from './cccc'
+import Sidebar from '../../components/Sidebar/Sidebar';
 
 const base_URL = import.meta.env.VITE_SERVER_URL;
 function Modal({ modal, setModal }) {
@@ -229,9 +230,15 @@ function Main() {
 
   return (
     <div className="Main">
-      {/* 메인 페이지 */}
       <div className="web">
-        <Link to="/webmain">웹페이지</Link>
+        <div style={{ margin: '30px', marginBottom: '0px' }}>
+          <Link to="/webmain" style={{ borderRadius: '7px', backgroundColor: '#D4A389' }}>
+            웹페이지 GO
+          </Link>
+        </div>
+        <div>
+          <Sidebar></Sidebar>
+        </div>
       </div>
       <div className="room">
         <Modal {...{ modal, setModal }} />

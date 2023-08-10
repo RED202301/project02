@@ -10,6 +10,7 @@ import com.ssafish.web.dto.DeckRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -64,5 +65,15 @@ public class DeckService {
         }
         deckRequestDto.setDeck(createdDeck.toDto());
         return deckRequestDto;
+    }
+
+
+    @Transactional
+    public void delete(long userId) {
+        List<Deck> deckList = deckRepository.findAllByUserId(userId);
+        deckRepository.deleteAllByUserId(userId);
+        deckList.forEach(e -> {
+            cardDeckRepository.deleteAllByDeckId(e.getDeckId());
+        });
     }
 }

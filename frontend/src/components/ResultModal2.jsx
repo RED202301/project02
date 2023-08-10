@@ -2,14 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 // import useDidMountEffect from './useDidMountEffect';
 
-
-{/* <ResultModal winnerdata={[{userId: 1,
-  nickname: '고구마',
-  score: '10점'},{},{}]}></ResultModal> */}
-
-function ResultModal(props) {
+function ResultModal() {
     const [modal, setModal] = React.useState(true);
-    const winner = props.winnerdata
+    const winner = [{userId:1, nickname:'홍길동', score:'10'},{userId:1, nickname:'홍길동', score:'10'},{userId:1, nickname:'홍길동', score:'10'}]
   return (
     <AnimatePresence>
       {modal && (
@@ -34,10 +29,10 @@ function ResultModal(props) {
                  'display':'flex',
                  'justifyContent': 'center',}}
                  >Winner!</h1>
-                <p>결과창 들어갈 내용</p>
+                {/* <p>결과창 들어갈 내용</p>
                 <p>1. 등수: 1등 1명만? 여러명?</p>
                 <p>2. 기준: 몇점인지? 몇장내려놨는지?</p>
-                <p>3. 어떻게 보여줄건지?</p>
+                <p>3. 어떻게 보여줄건지?</p> */}
                 
                 <div style={{
                  'display':'flex',
@@ -89,7 +84,6 @@ function ResultModal(props) {
                     </div>)})}
                 </div>
                 <p></p>
-                zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
                 </div>
             </div>
            {/* ----------------------------------------------- */}

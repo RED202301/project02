@@ -2,7 +2,6 @@ import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import Landing from './pages/Landing/Landing';
-import Login from './pages/Login/Login';
 import Tutorial from './pages/Tutorial/Tutorial';
 import Main from './pages/Main/Main';
 import Header from './components/Header/Header';
@@ -18,7 +17,7 @@ import GameUI from './pages/GameUI/App';
 import GameRoom from './pages/GameRoom/GameRoom';
 import MVP from './pages/MVP/MVP';
 // import Cccc from './pages/Main/cccc'
-import ResultModal from './components/ResultModal';
+import ResultModal2 from './components/ResultModal2';
 
 function App() {
   [];
@@ -28,7 +27,6 @@ function App() {
         <div className="App">
           <Routes>
             <Route path="/" element={<Landing />} />
-            <Route path="/Login" element={<Login />} />
             <Route path="/Login2" element={<KakaoLogin />} />
             <Route path="/Tutorial" element={<Tutorial />} />
             <Route path="/Main" element={<Main />} />
@@ -44,7 +42,7 @@ function App() {
             <Route path="/GameUI" element={<GameUI />} />
             <Route path="/GameRoom" element={<GameRoom />} />
             {/* <Route path="/cccc" element={<Cccc />} /> */}
-            <Route path="/ResultModal" element={<ResultModal />} />
+            <Route path="/ResultModal" element={<ResultModal2 />} />
           </Routes>
         </div>
       </AnimatePresence>

@@ -5,7 +5,7 @@ import { removeCookie, getCookie, setCookie } from "./Cookie";
 const instance = axios.create({
     // 상대적인 URL을 인스턴스 메서드에 전달하려면 baseURL을 설정하는 것은 편리하다.
     // URL(서버 주소) 예시 - http://127.0.0.1:5500
-    baseURL: 'http://127.0.0.1:8080',
+    baseURL: 'https://i9e202.p.ssafy.io',
     // 요청이 timeout보다 오래 걸리면 요청이 중단된다.
     timeout: 1000,
   });

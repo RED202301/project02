@@ -88,7 +88,7 @@ function Login2() {
       } catch (e) {
         //로그인 자체가 실패 했을 때,
         // 에러 발생 시, 에러 응답 출력
-        console.error(e);
+        console.error('로그인 자체 실패', e);
         navigate('../');
       }
     })();
