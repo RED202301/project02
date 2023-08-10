@@ -60,11 +60,12 @@ class UserCardTests {
     }
 
     // 서비스단 테스트
-    @Test
-    @Order(3)
-    void deleteUserCardService(){
-        cardService.deleteCard(123123,321321);
-    }
+//    @Test
+//    @Order(3)
+//    void deleteUserCardService(){
+//        Card card;
+//        cardService.deleteCard(123123,321321,card);
+//    }
 
 
 

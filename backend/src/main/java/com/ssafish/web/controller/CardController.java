@@ -1,5 +1,7 @@
 package com.ssafish.web.controller;
 
+import com.ssafish.domain.card.Card;
+import com.ssafish.domain.card.CardsRepository;
 import com.ssafish.domain.card.UserCardRepository;
 import com.ssafish.service.CardService;
 import com.ssafish.web.dto.CardDto;
@@ -21,6 +23,8 @@ public class CardController {
     CardService cardService;
     @Autowired
     UserCardRepository userCardRepository;
+    @Autowired
+    CardsRepository cardsRepository;
 
     @PostMapping("/card")
     public ResponseEntity<?> cardInsret(CardDto cardDto, MultipartFile mainImgUrl , MultipartFile subImgUrl){
@@ -43,7 +47,7 @@ public class CardController {
         }
 
 
-        cardDto = cardService.cardImageInsert(cardDto, mainImgUrl,subImgUrl);
+        cardDto = cardService.cardInsert(cardDto, mainImgUrl,subImgUrl);
 
 
         if(cardDto.getResult() == 1){
@@ -60,9 +64,9 @@ public class CardController {
     public ResponseEntity<?> cardDelete(@PathVariable long cardId, long userId){
 
         // 유저_카드 간의 관계가 있을때 관계만을 삭제한다.
-
-        if(userCardRepository.isRelation(cardId,userId) >= 1){
-            int result = cardService.deleteCard(cardId,userId);
+        Card card = cardsRepository.findByCardId(cardId);
+        if(userCardRepository.isRelation(cardId,userId) >= 1 || card != null){
+            int result = cardService.deleteCard(cardId,userId,card);
 
             if(result == 1){
                 log.info("card delete success");
@@ -73,11 +77,13 @@ public class CardController {
             }
         }
 
-        StringBuilder errorMessage = new StringBuilder("이미 삭제된 카드 입니다.");
+        StringBuilder errorMessage = new StringBuilder("존재하지 않는 카드 입니다.");
         return ResponseEntity.badRequest().body(errorMessage.toString());
 
 
     }
+
+//    }
     @GetMapping("/card/{userId}")
     public ResponseEntity<List<CardDto>> userCardList(@PathVariable long userId){
 
@@ -85,6 +91,7 @@ public class CardController {
 
         return ResponseEntity.ok().body(userCardList);
     }
+
 
 
 

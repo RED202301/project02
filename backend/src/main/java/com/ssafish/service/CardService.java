@@ -7,11 +7,11 @@ import com.ssafish.domain.card.UserCardRepository;
 import com.ssafish.web.dto.CardDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -57,7 +57,7 @@ public class CardService {
     }
 
     @Transactional
-    public CardDto cardImageInsert(CardDto inputcardDto, MultipartFile mainImgUrl ,MultipartFile subImgUrl){
+    public CardDto cardInsert(CardDto inputcardDto, MultipartFile mainImgUrl ,MultipartFile subImgUrl){
 
         CardDto cardDto = new CardDto();
         File destFile = new File("dummy");
@@ -147,12 +147,53 @@ public class CardService {
 
     }
 
-    public int deleteCard(long cardId, long userId){
+
+    @Transactional
+    public int deleteCard(long cardId, long userId,Card card){
+
+
         try {
+            // 카드 제거
+            cardsRepository.deleteById(cardId);
+            // 유저_카드 관계제거
             userCardRepository.deleteByIds(cardId, userId);
+
+
+            //카드 이미지 제거
+            String mainImage = card.getMainImgUrl();
+            String subImage = card.getSubImgUrl();
+
+            //main 이미지 삭제
+            //StringTokenizer st = new StringTokenizer(mainImage,"/");
+            String main[] = mainImage.split("/");
+            System.out.println(main);
+
+            File destfile = new File(uploadMainPath+main[4]);
+            destfile.delete();
+
+            if(subImage != null){
+                String sub[] = mainImage.split("/");
+                System.out.println(sub);
+
+                destfile = new File(uploadMainPath+sub[4]);
+                destfile.delete();
+            }
+
+
             return SUCCESS;
         }catch(Exception e){
             e.printStackTrace();
+            if(cardsRepository.findByCardId(cardId) == null){
+                cardsRepository.save(card);
+            }
+            if(userCardRepository.isRelation(cardId,userId) == 0 ){
+                UserCard usercard = UserCard.builder()
+                        .cardId(cardId)
+                        .userId(userId)
+                        .build();
+                userCardRepository.save(usercard);
+            }
+
             return FAIL;
         }
     }
