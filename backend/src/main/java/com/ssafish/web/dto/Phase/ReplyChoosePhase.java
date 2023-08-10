@@ -23,11 +23,10 @@ public class ReplyChoosePhase extends Phase implements ChoosePhase {
     protected final SimpMessageSendingOperations messagingTemplate;
 
     @Override
-    public void startTurnTimer(GameStatus gameStatus, ScheduledExecutorService turnTimer) {
+    public void startTurnTimer(GameStatus gameStatus, ScheduledExecutorService turnTimer, CountDownLatch latch) {
         awaitSecond(1L);
         log.info(gameStatus.getRoomId() + "번 방 - ReplyChoosePhase 시작");
-
-        latch = new CountDownLatch(1);
+        log.info("Scheduled task invoked by thread: {}", Thread.currentThread().getName());
 
         // 턴 시작을 알림
         messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(),
@@ -49,9 +48,9 @@ public class ReplyChoosePhase extends Phase implements ChoosePhase {
 
 
         if (gameStatus.getCurrentPlayer().isBot()) { // 현재 플레이어가 봇일 경우
-            turnTimer.schedule(() -> endTurn(gameData, gameStatus, turnTimer), randomResponseTime(gameStatus.getTurnTimeLimit()), TimeUnit.SECONDS);
+            turnTimer.schedule(() -> endTurn(gameData, gameStatus, turnTimer, latch), randomResponseTime(gameStatus.getTurnTimeLimit()), TimeUnit.SECONDS);
         } else {                                     // 현재 플레이어가 봇이 아닐 경우
-            turnTimer.schedule(() -> endTurn(gameData, gameStatus, turnTimer), gameStatus.getTurnTimeLimit(), TimeUnit.SECONDS);
+            turnTimer.schedule(() -> endTurn(gameData, gameStatus, turnTimer, latch), gameStatus.getTurnTimeLimit(), TimeUnit.SECONDS);
         }
 
         try {
@@ -68,7 +67,7 @@ public class ReplyChoosePhase extends Phase implements ChoosePhase {
     }
 
     @Override
-    public void endTurn(GameData gameData, GameStatus gameStatus, ScheduledExecutorService turnTimer) {
+    public void endTurn(GameData gameData, GameStatus gameStatus, ScheduledExecutorService turnTimer, CountDownLatch latch) {
         int delaySecond = 0;
 
         cancelTurnTimer(turnTimer);
@@ -142,9 +141,9 @@ public class ReplyChoosePhase extends Phase implements ChoosePhase {
     }
 
     @Override
-    public void handlePub(GameData gameData, GameStatus gameStatus, ScheduledExecutorService turnTimer) {
+    public void handlePub(GameData gameData, GameStatus gameStatus, ScheduledExecutorService turnTimer, CountDownLatch latch) {
         // pub 처리
-        this.endTurn(gameData, gameStatus, turnTimer);
+        this.endTurn(gameData, gameStatus, turnTimer, latch);
     }
 
     public boolean isGoFish(GameStatus gameStatus) {

@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -29,19 +30,21 @@ public class Board {
     private GameStatus gameStatus;
     private ChoosePhase currentPhase;
     private ScheduledExecutorService turnTimer;
+    private CountDownLatch latch;
 
     @Async("gameTaskExecutor")
     public void play(GameData gameData) {
         gameStatus.init();
         isStarted = true;
         gameStartPhase.run(gameData, gameStatus);
-
+        log.info("Scheduled task invoked by thread: {}", Thread.currentThread().getName());
         while (!gameStatus.isGameOver()) {
             currentPhase = gameStatus.getCurrentPhase();
 
             turnTimer = Executors.newSingleThreadScheduledExecutor();
-            log.info("Board hashCode: " + this.hashCode());
-            currentPhase.startTurnTimer(gameStatus, turnTimer);
+            latch = new CountDownLatch(1);
+
+            currentPhase.startTurnTimer(gameStatus, turnTimer, latch);
         }
 
         gameOverPhase.run(gameStatus);
@@ -50,7 +53,7 @@ public class Board {
 
     public void handlePub(GameData gameData) {
         // pub 처리
-        currentPhase.handlePub(gameData, gameStatus, turnTimer);
+        currentPhase.handlePub(gameData, gameStatus, turnTimer, latch);
     }
 
     public void addPlayer(long userId, String nickname, boolean isBot) {
