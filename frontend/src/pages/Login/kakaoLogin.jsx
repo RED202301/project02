@@ -54,7 +54,7 @@ function Login2() {
                   if (res.isConfirmed) {
                     console.log(res.value);
                     axios
-                      .put(host_URL + '/oauth/change-nickname', {
+                      .put(host_URL + '/api/v1/oauth/change-nickname', {
                         userId: window.localStorage.getItem('userId'),
                         nickname: res.value,
                       }) //api 요청이 성공 했을 때,
