@@ -133,12 +133,12 @@ public class OAuthController {
 
     @ResponseBody
     @PutMapping("/change-nickname")
-    public ResponseEntity<String> changeUserNickname(@RequestBody ChangeNicknameDto request) {
+    public ResponseEntity<Object> changeUserNickname(@RequestBody ChangeNicknameDto request) {
         try {
             // 닉네임 중복 체크
             if (userService.isAvailable(request.getNickname())) {
                 userService.changeNickname(request.getUserId(), request.getNickname());
-                return ResponseEntity.status(HttpStatus.OK).body("Nickname changed successfully.");
+                return ResponseEntity.status(HttpStatus.OK).body(request);
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Nickname is already taken.");
             }
