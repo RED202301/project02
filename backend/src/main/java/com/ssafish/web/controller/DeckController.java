@@ -24,7 +24,6 @@ public class DeckController {
 
         DeckDto deck = cardDeckService.deckInfo(deckId);
         List<CardDto> deckCardList = cardDeckService.deckCardList(deckId);
-
         DeckDetailDto deckDetailDto = DeckDetailDto.builder()
                 .deck(deck)
                 .cardList(deckCardList)
