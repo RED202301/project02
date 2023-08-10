@@ -6,15 +6,19 @@
     /* background-color:black; */
     background-image: url(../../assets/보드게임카페6.jpg);
     filter: opacity(); 
-    color: white;
+    color: #320e53;
+    font-weight: 600;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
     font-size: 1.5vw;
+    overflow: hidden;
 }
 
 .web{
     display: flex;
+    justify-content:space-between;
+    align-items: center
 }
 
 .room{
@@ -42,7 +46,7 @@
     height: 100%;
     width: 100%;
     /* background-color: #1a1a1a; */
-    color: #4a4a4a;
+    color: #ffffff;
     font-size: 1.7vw;
     font-weight: 600;
     text-shadow: 10px 10px 10px rgba(0, 0, 0, 0.642);

@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-// import './Main.css';
-// import axios from "axios";
 // import useDidMountEffect from './useDidMountEffect';
 
-function Modal() {
+
+{/* <ResultModal winnerdata={[{userId: 1,
+  nickname: '고구마',
+  score: '10점'},{},{}]}></ResultModal> */}
+
+function ResultModal(props) {
     const [modal, setModal] = React.useState(true);
+    const winner = props.winnerdata
   return (
     <AnimatePresence>
       {modal && (
@@ -26,6 +30,10 @@ function Modal() {
                 <p onClick={() => setModal(modal => !modal)} className="form-exit">
                 &times;</p>
                 <div>
+                <h1 style={{
+                 'display':'flex',
+                 'justifyContent': 'center',}}
+                 >Winner!</h1>
                 <p>결과창 들어갈 내용</p>
                 <p>1. 등수: 1등 1명만? 여러명?</p>
                 <p>2. 기준: 몇점인지? 몇장내려놨는지?</p>
@@ -33,27 +41,53 @@ function Modal() {
                 
                 <div style={{
                  'display':'flex',
+                 'justifyContent': 'center',
                  'margin':'10px'}}>
-                <div style={{'border':'solid',
-                 'width':'15vw', 
-                 'height':'200px',
-                 'display':'flex',
-                 'margin':'10px'}}>
-                    네모
+                {winner.map(function(a, i){
+                    return(
+                    <div key={i} 
+                         className={a}
+                         style={{
+                          'border':'solid',
+                          'width':'15vw', 
+                          'height':'200px',
+                          'display':'flex',
+                          'flexDirection': 'column',
+                          'justifyContent': 'center',
+                          'alignItems': 'center',
+                          'margin':'10px'}}>
+                            <div style={{
+                              'width':'100%',
+                          'height':'100%',
+                          'display':'flex',
+                          'flexDirection': 'column',
+                          'justifyContent': 'center',
+                          'alignItems': 'center',
+                          }}>
+                              {a.userId}
+                            </div>
+                            <div style={{
+                              'width':'100%',
+                          'height':'100%',
+                          'display':'flex',
+                          'flexDirection': 'column',
+                          'justifyContent': 'center',
+                          'alignItems': 'center',
+                          }}>
+                              {a.nickname}
+                              </div>
+                            <div style={{
+                              'width':'100%',
+                              'height':'100%',
+                          'display':'flex',
+                          'flexDirection': 'column',
+                          'justifyContent': 'center',
+                          'alignItems': 'center',
+                          }}>
+                              {a.score}
+                              </div>
+                    </div>)})}
                 </div>
-                <div style={{'border':'solid', 'width':'200px', 'height':'200px', 'margin':'10px'}}>
-                    네모
-                </div>
-                <div style={{'border':'solid', 'width':'200px', 'height':'200px', 'margin':'10px'}}>
-                    네모
-                </div>
-                <div style={{'border':'solid', 'width':'200px', 'height':'200px', 'margin':'10px'}}>
-                    네모
-                </div>
-                <div style={{'border':'solid', 'width':'200px', 'height':'200px', 'margin':'10px'}}>
-                    네모
-                </div>
-                     </div>
                 <p></p>
                 zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
                 </div>
@@ -65,4 +99,4 @@ function Modal() {
   );
 }
 
-export default Modal;
+export default ResultModal;

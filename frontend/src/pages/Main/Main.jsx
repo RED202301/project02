@@ -6,9 +6,10 @@ import axios from "axios";
 // import useDidMountEffect from '../../components/useDidMountEffect';
 import {useNavigate } from 'react-router-dom';
 // import Cccc from './cccc'
+import Sidebar from '../../components/Sidebar/Sidebar';
 
 function Modal({ modal, setModal }) {
-  const host_URL= "http://192.168.30.193:5001"
+  const host_URL= "https://i9e202.p.ssafy.io"
   // const [roomId, setRoomId] = useState(null);
   // const [pinNumber, setPIN] = useState('');
 
@@ -159,9 +160,13 @@ function Main() {
 
   return (
     <div className="Main">
-      {/* 메인 페이지 */}
       <div className="web">
-        <Link to="/webmain">웹페이지</Link>
+        <div style={{'margin':'30px', 'marginBottom':'0px'}}>
+        <Link to="/webmain"style={{ 'borderRadius':'7px', 'backgroundColor':'#D4A389',}}>웹페이지 GO</Link>
+        </div>
+        <div>
+        <Sidebar></Sidebar>
+        </div>
       </div>
       <div className="room">
         <Modal {...{ modal, setModal }} />
