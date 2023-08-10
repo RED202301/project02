@@ -1,0 +1,22 @@
+.Sidebar{
+    width: auto;
+    background-color: white;
+    margin-right: 15px;
+}
+
+.show-menu{
+    width: 10%;
+    height: 500px;
+    position: absolute;
+    right: 5%;
+    transition: 1s;
+    background-color: aliceblue;
+    }
+    
+    .hide-menu{
+    width: 10%;
+    height: 500px;
+    position: absolute;
+    right: -15%;
+    transition: 1s;
+    }
