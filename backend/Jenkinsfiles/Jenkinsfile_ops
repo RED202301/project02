@@ -51,7 +51,7 @@ pipeline {
                     sh """
                     ssh -o StrictHostKeyChecking=no ubuntu@i9e202.p.ssafy.io \
                     'docker rm -f ssafish &&
-                    docker run -d -t -p 8080:5001  -v /home/ubuntu/ssafish/cardMainImage:/home/ssafish/cardMainImage --rm --name ssafish ${dockerRepository}/${dockerImageName}:latest;'
+                    docker run -d -t -p 8080:5001  -v /home/ubuntu/ssafish:/home/ssafish --rm --name ssafish ${dockerRepository}/${dockerImageName}:latest;'
                     """
                 }
             }
