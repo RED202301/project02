@@ -57,6 +57,8 @@ function Landing() {
                   const nickname = response.data.nickname;
                   window.sessionStorage.setItem('userId', userId);
                   window.sessionStorage.setItem('nickname', nickname);
+                  window.sessionStorage.setItem('pinNumber', pinNumber);
+                  window.sessionStorage.setItem('roomId', pinNumber);
                   //userId가 저장됐다면, 방으로 입장 요청
                   if (userId) {
                     navigate('/GameRoom');
