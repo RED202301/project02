@@ -1,12 +1,8 @@
 package com.ssafish.web.controller;
 
-<<<<<<< backend/src/main/java/com/ssafish/web/controller/DeckController.java
-import com.ssafish.domain.deck.CardDeck;
-import com.ssafish.domain.deck.Deck;
-=======
+
 import com.ssafish.domain.deck.Deck;
 import com.ssafish.domain.deck.DeckRepository;
->>>>>>> backend/src/main/java/com/ssafish/web/controller/DeckController.java
 import com.ssafish.service.CardDeckService;
 import com.ssafish.service.DeckService;
 import com.ssafish.web.dto.CardDto;
@@ -30,6 +26,9 @@ public class DeckController {
 
     private final CardDeckService cardDeckService;
     private final DeckService deckService;
+
+    @Autowired
+    DeckRepository deckRepository;
 
     public DeckController(CardDeckService cardDeckService, DeckService deckService) {
         this.cardDeckService = cardDeckService;
