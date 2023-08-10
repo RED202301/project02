@@ -6,4 +6,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByKakaoId(Long KakaoId);
     User findByNickname(String nickname);
+    void deleteByKakaoId(Long kakaoId);
 }
