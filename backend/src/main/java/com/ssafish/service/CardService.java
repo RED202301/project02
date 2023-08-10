@@ -81,6 +81,7 @@ public class CardService {
 
 
 
+            log.info("card Main image ready");
             destFile = new File(uploadSubPath+ saveFileName);
             mainImgUrl.transferTo(destFile); //이미지 저장
             log.info("card Main image is saved");
@@ -91,7 +92,7 @@ public class CardService {
                 File uploadsubDir = new File(uploadSubPath); // 수정
                 if (!uploadsubDir.exists()) {
                     uploadsubDir.mkdir();
-                    log.info("uploadDir 생성") ;
+                    log.info("uploadDir sub 생성") ;
                 }
 
                 // 파일정보와 새 이름을 지정한다.
