@@ -77,9 +77,9 @@ jib {
 
     to {
         //ops!
-        //image = "qortn365/ssafish"
+        image = "qortn365/ssafish"
         //dev
-        image = "qortn365/ssafish_dev"
+        //image = "qortn365/ssafish_dev"
         tags = ["latest"]
         auth{
             username = "qortn365"
