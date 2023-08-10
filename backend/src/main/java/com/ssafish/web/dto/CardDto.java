@@ -26,6 +26,7 @@ public class CardDto {
     private int result;
 
 
+
     @Builder
     public CardDto
             (long cardId, long userId, String mainTitle, String subTitle, String mainImgUrl, String subImgUrl, String cardDescription, int point , int result){

@@ -1,7 +1,7 @@
 import React from 'react';
 import './Header.css'
 import {Link} from'react-router-dom';
-// import Logout from '../../pages/Login/logout.jsx';
+import Logout from '../../pages/Login/logout';
 
 function Header(props){
     return(
@@ -16,16 +16,16 @@ function Header(props){
                 게임
             </div>
             </Link>
-            <Link to='/CardFactory'>
+            {/* <Link to='/CardFactory'>
             <div className='cardfactory'>
                 카드 공방
             </div>
-            </Link>
-            <Link to='/CardMarket'>
+            </Link> */}
+            {/* <Link to='/CardMarket'>
             <div className='cardmarket'>
                 카드 나눔터
             </div>
-            </Link>
+            </Link> */}
             <Link to='/Mypage'>
             <div className='mypage'>
                 마이페이지
@@ -33,7 +33,7 @@ function Header(props){
             </Link>
             <Link to=''>
             <div className='logout'>
-                {/* <Logout/> */}
+                <Logout/>
             </div>
             </Link>
         </div>

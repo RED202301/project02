@@ -1,0 +1,132 @@
+.Card, .Front, .Back, .Background, .Content{
+  // transform-style: preserve-3d;
+  display: flex;
+  // justify-content: center;
+  width: var(--width);
+  height: var(--height);
+
+  --border-radius: calc(var(--width) * 0.05);
+  border-radius: var(--border-radius);
+}
+.Front, .Back, .Background, .Content{
+  position: absolute;
+}
+
+.Content{
+  box-sizing: border-box;
+  border: solid var(--border-radius) rgba(0,0,0,0);
+}
+
+.Card {
+  // transition: all 1s;
+  // transform: rotateY(180deg);
+  &.flipped{
+    transform: rotateY(180deg);
+    // transform: rotateY(0);
+  }
+  box-shadow: 0 0 5px black;
+
+  $top:#635348;
+  $mid:#ADBF24;
+  $bot:#DED966;
+
+  width: var(--width);
+  height: var(--height);
+
+  .Front{
+    backface-visibility: hidden;
+    .Content{
+      --inner-width: calc(var(--width)*0.9);
+      --inner-height: calc(var(--height)*0.9);
+  
+      width: --inner-width;
+      height: --inner-height;
+
+      .title, .subtitle, .points, .img{
+        position: absolute;
+        white-space: nowrap;
+        font-size: var(--inner-width);
+        transform-origin: top left;
+
+        --subtitle-ratio: 0.1;
+        --title-ratio: 0.1;
+        --points-ratio: 0.1; 
+        
+        --subtitle-size: calc(var(--inner-width) * var(--subtitle-ratio));
+        --title-size: calc(var(--inner-width) * var(--title-ratio));
+        --points-size: calc(var(--inner-width) * var(--points-ratio));
+      }
+
+      .subtitle{
+        color:$mid;
+        transform: scale(var(--subtitle-ratio));
+      }
+      .title{
+        color: white;
+        top: var(--title-size);
+        transform: scale(var(--title-ratio));
+      }
+      .points{
+        top: calc(
+          var(--title-size) 
+          + var(--subtitle-size)
+          );
+        transform: scale(var(--points-ratio));
+      }
+      .img{
+        top: calc(
+          var(--title-size) 
+          + var(--subtitle-size) 
+          + var(--points-size)
+          + calc(var(--points-size)/2)
+          );
+        background-size: cover;
+        width: var(--inner-width);
+        height: calc(
+          var(--inner-height)
+          - var(--title-size) 
+          - var(--subtitle-size) 
+          - var(--points-size)
+        );
+      }
+
+    }
+  }
+  .Back{
+    backface-visibility: hidden;
+  }
+  .Background{
+    display: flex;
+    flex-direction: column;
+    transform: rotateY(180deg);
+    .Top{
+      flex: 3;
+      background-color: $top;
+      border-radius: var(--border-radius) var(--border-radius) 0 0 ;
+
+      color:white;
+      font-size: calc( var(--border-radius) * 3);
+      
+      display: flex;
+      justify-content: center;
+      align-items: end;
+    }
+    .Mid{
+      flex: 1;
+      background-color: $mid;
+    }
+    .Bot{
+      flex: 3;
+      background-color: $bot;
+      border-radius: 0 0 var(--border-radius) var(--border-radius);
+    }
+  }
+
+  
+  // 드래그 못하게 하기
+  -ms-user-select: none; 
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}

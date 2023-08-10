@@ -4,16 +4,26 @@
   font-size: 20px;
 }
 
-#factory {
+.factory {
   border: 2px solid whitesmoke;
   background-color: beige;
   margin: 5%;
-  width: 500px;
-  height: 450px;
+  width: 650px;
+  height: 500px;
   border-radius: 4px;
+  background-image:url('./DeckFactory.jpg');
+  background-size: cover;
 }
 
 .grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5%;
+  background-image: url('./cardFactory.jpg');
+  background-size: cover;
+}
+
+.gridbox {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 5%;
@@ -25,6 +35,7 @@
   padding: 2%;
   margin-left: 5%;
   font-weight: bold;
+  margin-bottom: 2%;
 }
 
 
@@ -73,6 +84,7 @@
   display: flex;
   justify-content: flex-end;
   /* margin-top: 10px; */
+  margin-right: 5%;
 }
 
 .star {
@@ -91,6 +103,7 @@
 }
 .yellow-star {
   color: yellow;
+  margin-left: 2%;
 
 }
 .shortdiv {
@@ -115,17 +128,17 @@
 }
 
 .cardx:before {
-  background-color: olive;
+  background-color: #635348;
   top: 0;
 }
 
 .cardx:after {
-  background-color: yellowgreen;
+  background-color: #DED966;
   bottom: 0;
 }
 
 .cardx .middle-section {
-  background-color: greenyellow;
+  background-color: #ADBF24;
   position: absolute;
   top: 40%; /* Adjust the position to place it between the top and bottom sections */
   width: 100%;
@@ -203,4 +216,8 @@
   font-weight: bold;
   /* text-align: center; */
   font-display: center;
+}
+
+.cardFactory {
+
 }

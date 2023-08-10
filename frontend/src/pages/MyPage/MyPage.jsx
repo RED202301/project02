@@ -67,10 +67,10 @@ function Profile() {
 
         <Cardimg />
         <div className='margin'>
-          경험치
-          <p className='exp'>
+          
+          {/* <p className='exp'>
             <span className='expbar' style={{width: '75%'}}></span>
-          </p>
+          </p> */}
           <p className='tran'>
             <span>플레이 횟수</span>
             <span className='trans'>{playcount}</span>
