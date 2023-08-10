@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -21,11 +20,11 @@ import java.util.concurrent.TimeUnit;
 public class CardChoosePhase extends Phase implements ChoosePhase {
     protected final SimpMessageSendingOperations messagingTemplate;
 
-    public void startTurnTimer(GameStatus gameStatus, ScheduledExecutorService turnTimer) {
+    @Override
+    public void startTurnTimer(GameStatus gameStatus, ScheduledExecutorService turnTimer, CountDownLatch latch) {
         awaitSecond(1L);
         log.info(gameStatus.getRoomId() + "번 방 - CardChoosePhase 시작");
-
-        latch = new CountDownLatch(1);
+        log.info("Scheduled task invoked by thread: {}", Thread.currentThread().getName());
 
         // 턴 시작을 알림
         messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(),
@@ -45,9 +44,9 @@ public class CardChoosePhase extends Phase implements ChoosePhase {
 
 
         if (gameStatus.getCurrentPlayer().isBot()) { // 현재 플레이어가 봇일 경우
-            turnTimer.schedule(() -> endTurn(gameData, gameStatus, turnTimer), randomResponseTime(gameStatus.getTurnTimeLimit()), TimeUnit.SECONDS);
+            turnTimer.schedule(() -> endTurn(gameData, gameStatus, turnTimer, latch), randomResponseTime(gameStatus.getTurnTimeLimit()), TimeUnit.SECONDS);
         } else {                                     // 현재 플레이어가 봇이 아닐 경우
-            turnTimer.schedule(() -> endTurn(gameData, gameStatus, turnTimer), gameStatus.getTurnTimeLimit(), TimeUnit.SECONDS);
+            turnTimer.schedule(() -> endTurn(gameData, gameStatus, turnTimer, latch), gameStatus.getTurnTimeLimit(), TimeUnit.SECONDS);
         }
 
         try {
@@ -63,7 +62,7 @@ public class CardChoosePhase extends Phase implements ChoosePhase {
         }
     }
 
-    public void endTurn(GameData gameData, GameStatus gameStatus, ScheduledExecutorService turnTimer) {
+    public void endTurn(GameData gameData, GameStatus gameStatus, ScheduledExecutorService turnTimer, CountDownLatch latch) {
         cancelTurnTimer(turnTimer);
 
         // 게임 내부 로직
@@ -78,10 +77,10 @@ public class CardChoosePhase extends Phase implements ChoosePhase {
         latch.countDown();
     }
 
-    public void handlePub(GameData gameData, GameStatus gameStatus, ScheduledExecutorService turnTimer) {
+    public void handlePub(GameData gameData, GameStatus gameStatus, ScheduledExecutorService turnTimer, CountDownLatch latch) {
         // pub 처리
 
-        this.endTurn(gameData, gameStatus, turnTimer);
+        this.endTurn(gameData, gameStatus, turnTimer, latch);
     }
 
     public long randomCardId(GameStatus gameStatus) {
