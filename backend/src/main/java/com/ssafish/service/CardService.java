@@ -67,10 +67,10 @@ public class CardService {
 
             //이미지 전체가 저장될 경로
             File uploadDir = new File(uploadMainPath); // 수정
-//            if (!uploadDir.exists()) {
-//                uploadDir.mkdir();
-//                log.info("uploadDir 생성") ;
-//            }
+            if (!uploadDir.exists()) {
+                uploadDir.mkdir();
+                log.info("uploadDir 생성") ;
+            }
 
             // 파일정보와 새 이름을 지정한다.
             String filename = mainImgUrl.getOriginalFilename();
@@ -81,8 +81,9 @@ public class CardService {
             String saveFileName = uuid + "." + extension;
 
             log.info("card Main image ready");
-            destFile = new File("/home/ssafish/cardMainImage/"+ saveFileName);
+            destFile = new File("home/ssafish/cardMainImage/"+ saveFileName);
             log.info("image file path: " + destFile.getPath());
+
             mainImgUrl.transferTo(destFile); //이미지 저장
             log.info("card Main image is saved");
             log.info("image file path: " + destFile.getPath());
