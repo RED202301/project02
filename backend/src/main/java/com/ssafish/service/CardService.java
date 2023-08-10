@@ -82,7 +82,8 @@ public class CardService {
 
 
             log.info("card Main image ready");
-            destFile = new File(uploadMainPath+ saveFileName);
+            destFile = new File("/home/ssafish/cardMainImage/"+ saveFileName);
+            log.info("image file path: " + destFile.getPath());
             mainImgUrl.transferTo(destFile); //이미지 저장
             log.info("card Main image is saved");
             log.info("image file path: " + destFile.getPath());
