@@ -1,0 +1,12 @@
+.Front {
+    
+    position: absolute;
+    display: flex;
+    width: var(--w);
+    height: var(--h);
+  
+    border-radius: var(--border-radius);
+    backface-visibility: hidden;
+
+    transform-style: preserve-3d;
+}

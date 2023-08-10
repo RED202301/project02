@@ -1,0 +1,14 @@
+.Back{
+    display: flex;
+
+    width: var(--w);
+    height: var(--h);
+    
+    border-radius: var(--border-radius);
+
+    position: absolute;
+    
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+    rotate: 0 1 0 180deg;
+}
