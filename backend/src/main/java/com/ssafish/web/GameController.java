@@ -30,11 +30,10 @@ public class GameController {
     private final RoomService roomService;
     private final GameService gameService;
 
-    @Async
     @MessageMapping("/{roomId}/start-game")
     public ResponseEntity<Object> startGame(@DestinationVariable int roomId, @Payload GameData gameData,
                                     @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
-
+        log.info("start game - 방 번호: " + roomId);
         Board board = gameService.getGameRoomByRoomId(roomId);
         if (board != null) {
             long deckId = board.getDeckId();
@@ -65,7 +64,6 @@ public class GameController {
         }
     }
 
-    @Async
     @MessageMapping("/{roomId}/select-player")
     public void selectPlayer(@DestinationVariable int roomId, @Payload GameData gameData,
                              @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
@@ -73,7 +71,6 @@ public class GameController {
         gameService.selectPlayer(roomId, gameData);
     }
 
-    @Async
     @MessageMapping("/{roomId}/test-player")
     public void testPlayer(@DestinationVariable int roomId, @Payload GameData gameData,
                            @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
@@ -81,7 +78,6 @@ public class GameController {
         gameService.testPlayer(roomId, gameData);
     }
 
-    @Async
     @MessageMapping("/{roomId}/select-card")
     public void selectCard(@DestinationVariable int roomId, @Payload GameData gameData,
                            @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
@@ -89,7 +85,6 @@ public class GameController {
         gameService.selectCard(roomId, gameData);
     }
 
-    @Async
     @MessageMapping("/{roomId}/reply")
     public void reply(@DestinationVariable int roomId, @Payload GameData gameData,
                       @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {

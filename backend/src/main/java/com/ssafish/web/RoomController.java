@@ -35,17 +35,24 @@ public class RoomController {
 
     @Transactional
     @PostMapping("/api/v1/room")
-    public RoomResponseDto create(@RequestBody RoomRequestDto requestDto) {
+    public ResponseEntity<Object> create(@RequestBody RoomRequestDto requestDto) {
 
         String uuid = UUID.randomUUID().toString();
         requestDto.setPinNumber(uuid);
 
         log.info(requestDto.toString());
-        RoomResponseDto responseDto = roomService.create(requestDto);
 
-        gameService.createGameRoom(responseDto);
-        log.info(responseDto.toString());
-        return responseDto;
+        if (requestDto.getRoomName().length() > 0 && requestDto.getCapacity() > 1 && requestDto.getTimeLimit() > 0) {
+            RoomResponseDto responseDto = roomService.create(requestDto);
+
+            gameService.createGameRoom(responseDto);
+            log.info(responseDto.toString());
+            return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Wrong room condition.");
+        }
+
+
     }
 
     @GetMapping("/api/v1/room/{roomId}")
@@ -90,7 +97,7 @@ public class RoomController {
     public ResponseEntity<Object> processClientEntrance(@DestinationVariable long roomId, @Payload SocketData data,
                                              @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
 
-        Long userId = data.getUserId();
+        long userId = data.getUserId();
         String nickname = data.getNickname();
         boolean isBot = data.isBot();
         String sessionId = headerAccessor.getSessionId();
@@ -98,7 +105,15 @@ public class RoomController {
         try {
             roomService.processClientEntrance(roomId, userId, sessionId);
             gameService.addPlayer(roomId, userId, nickname, isBot);
-            return ResponseEntity.status(HttpStatus.OK).body(gameService.getPlayerList(roomId));
+            List<Player> playerList = gameService.getPlayerList(roomId);
+            return ResponseEntity.status(HttpStatus.OK).body(SocketData.builder()
+                    .type(TypeEnum.ENTER.name())
+                    .userId(userId)
+                    .nickname(nickname)
+                    .isBot(isBot)
+                    .numPlayer(playerList.size())
+                    .playerList(playerList)
+                    .build());
         } catch (IllegalStateException e) {
             log.error("Failed to add player to the room: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -127,11 +142,15 @@ public class RoomController {
                                              @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
         try {
             log.info(requestDto.toString());
-            RoomResponseDto responseDto = roomService.update(requestDto, roomId);
+            if (requestDto.getRoomName().length() > 0 && requestDto.getCapacity() > 1 && requestDto.getTimeLimit() > 0) {
+                RoomResponseDto responseDto = roomService.update(requestDto, roomId);
 
-            gameService.changeGameRoom(responseDto);
-            log.info(responseDto.toString());
-            return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+                gameService.changeGameRoom(responseDto);
+                log.info(responseDto.toString());
+                return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Wrong room condition.");
+            }
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

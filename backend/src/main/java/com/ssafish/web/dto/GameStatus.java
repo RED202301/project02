@@ -38,6 +38,14 @@ public class GameStatus {
     private int currentPlayerIdx;
     private long cardOpen;
 
+    public void init() {
+        middleDeck = new ArrayList<>();
+        pointMap = new ConcurrentHashMap<>();
+        cheatSheet = new ConcurrentHashMap<>();
+        isGameOver = false;
+        currentPlayerIdx = 0;
+    }
+
     public void addPlayer(long userId, String nickname, boolean isBot) {
         playerList.add(Player.builder()
                 .userId(userId)
