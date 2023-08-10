@@ -15,6 +15,7 @@ import RoomList from './pages/RoomList/RoomList';
 // import Room from './pages/Room/Room';
 import Game from './pages/Game/Game';
 import GameUI from './pages/GameUI/App';
+import GameRoom from './pages/GameRoom/GameRoom';
 import MVP from './pages/MVP/MVP';
 // import Cccc from './pages/Main/cccc'
 import ResultModal from './components/ResultModal';
@@ -41,6 +42,7 @@ function App() {
             <Route path="/main/game" element={<Game />} />
             <Route path="/MVP" element={<MVP />} />
             <Route path="/GameUI" element={<GameUI />} />
+            <Route path="/GameRoom" element={<GameRoom />} />
             {/* <Route path="/cccc" element={<Cccc />} /> */}
             <Route path="/ResultModal" element={<ResultModal />} />
           </Routes>
