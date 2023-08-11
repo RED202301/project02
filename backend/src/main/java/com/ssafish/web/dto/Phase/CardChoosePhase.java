@@ -1,12 +1,12 @@
 package com.ssafish.web.dto.Phase;
 
+import com.ssafish.service.RoomService;
 import com.ssafish.web.dto.GameData;
 import com.ssafish.web.dto.GameStatus;
 import com.ssafish.web.dto.TypeEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,16 +18,15 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 @Component
 public class CardChoosePhase extends Phase implements ChoosePhase {
-    protected final SimpMessageSendingOperations messagingTemplate;
+    protected final RoomService roomService;
 
     @Override
     public void startTurnTimer(GameStatus gameStatus, ScheduledExecutorService turnTimer, CountDownLatch latch) {
         awaitSecond(1L);
         log.info(gameStatus.getRoomId() + "번 방 - CardChoosePhase 시작");
-        log.info("Scheduled task invoked by thread: {}", Thread.currentThread().getName());
 
         // 턴 시작을 알림
-        messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(),
+        roomService.sendMessageToRoom(gameStatus.getRoomId(),
                 ResponseEntity.ok(GameData.builder()
                               .type(TypeEnum.SELECT_CARD_TURN.name())
                               .player(gameStatus.getCurrentPlayer().getUserId())
@@ -71,8 +70,7 @@ public class CardChoosePhase extends Phase implements ChoosePhase {
         gameStatus.changeCurrentPhase();
 
         // subscriber 들에게 메시지 전달
-        messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(), ResponseEntity.ok(gameData));
-
+        roomService.sendMessageToRoom(gameStatus.getRoomId(), ResponseEntity.ok(gameData));
 
         latch.countDown();
     }

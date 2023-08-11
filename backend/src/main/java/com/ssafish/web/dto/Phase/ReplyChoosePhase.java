@@ -1,12 +1,12 @@
 package com.ssafish.web.dto.Phase;
 
+import com.ssafish.service.RoomService;
 import com.ssafish.web.dto.GameData;
 import com.ssafish.web.dto.GameStatus;
 import com.ssafish.web.dto.TypeEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -20,16 +20,15 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class ReplyChoosePhase extends Phase implements ChoosePhase {
 
-    protected final SimpMessageSendingOperations messagingTemplate;
+    protected final RoomService roomService;
 
     @Override
     public void startTurnTimer(GameStatus gameStatus, ScheduledExecutorService turnTimer, CountDownLatch latch) {
         awaitSecond(1L);
         log.info(gameStatus.getRoomId() + "번 방 - ReplyChoosePhase 시작");
-        log.info("Scheduled task invoked by thread: {}", Thread.currentThread().getName());
 
         // 턴 시작을 알림
-        messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(),
+        roomService.sendMessageToRoom(gameStatus.getRoomId(),
                 ResponseEntity.ok(GameData.builder()
                               .type(TypeEnum.REPLY_TURN.name())
                               .player(gameStatus.getOpponentPlayer().getUserId())
@@ -81,7 +80,7 @@ public class ReplyChoosePhase extends Phase implements ChoosePhase {
         List<Long> enrollCurrent = gameStatus.getCurrentPlayer().getCardsEnrolled();
         List<Long> middleDeck = gameStatus.getMiddleDeck();
 
-        messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(), ResponseEntity.ok(gameData));
+        roomService.sendMessageToRoom(gameStatus.getRoomId(), ResponseEntity.ok(gameData));
 
         if (gameData.isGoFish()) {
         // isGoFish = true면 짝인 카드가 없다
@@ -156,7 +155,7 @@ public class ReplyChoosePhase extends Phase implements ChoosePhase {
     }
 
     public void sendAutoDraw(GameStatus gameStatus, long cardDraw) {
-        messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(),
+        roomService.sendMessageToRoom(gameStatus.getRoomId(),
                 ResponseEntity.ok(GameData.builder()
                                           .type(TypeEnum.AUTO_DRAW.name())
                                           .player(gameStatus.getCurrentPlayer().getUserId())
@@ -166,7 +165,7 @@ public class ReplyChoosePhase extends Phase implements ChoosePhase {
     }
 
     public void sendEnroll(GameStatus gameStatus, long userId, long cardId) {
-        messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(),
+        roomService.sendMessageToRoom(gameStatus.getRoomId(),
                 ResponseEntity.ok(GameData.builder()
                                           .type(TypeEnum.ENROLL.name())
                                           .player(userId)
@@ -176,7 +175,7 @@ public class ReplyChoosePhase extends Phase implements ChoosePhase {
     }
 
     public void sendCardMove(GameStatus gameStatus) {
-        messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(),
+        roomService.sendMessageToRoom(gameStatus.getRoomId(),
                 ResponseEntity.ok(GameData.builder()
                                           .type(TypeEnum.CARD_MOVE.name())
                                           .from(gameStatus.getOpponentPlayer().getUserId())
