@@ -84,10 +84,10 @@ public class CardService {
             log.info("image file path: " + destFile.getPath());
 
             String path = "/home/ssafish/cardMainImage";
-            destFile = new File(path +File.separator+ saveFileName);
+            destFile = new File(path +File.separator+saveFileName);
             log.info("image file path: " + destFile.getPath());
 
-            mainImgUrl.transferTo(destFile); //이미지 저장
+            //mainImgUrl.transferTo(destFile); //이미지 저장
             log.info("card Main image is saved");
             log.info("image file path: " + destFile.getPath());
 
@@ -108,20 +108,20 @@ public class CardService {
 
 
 
-                destFile2 = new File(uploadSubPath+File.separator+  saveFileName2);
+                destFile2 = new File("/home/ssafish/cardSubImage"+File.separator+saveFileName2);
                 mainImgUrl.transferTo(destFile2); //이미지 저장
                 log.info("card Main image is saved");
                 log.info("image file path: " + destFile2.getPath());
 
-                inputcardDto.setSubImgUrl(downloadSubPath +File.separator+  saveFileName2);
+                inputcardDto.setSubImgUrl("https://i9e202.p.ssafy.io/sub_images/" + saveFileName2);
 
 
             }
 
             log.info(" card DB access start");
             //DB에 저장
-
-            inputcardDto.setMainImgUrl(downloadMainPath +File.separator+  saveFileName);
+//"https://i9e202.p.ssafy.io/main_images"
+            inputcardDto.setMainImgUrl("https://i9e202.p.ssafy.io/main_images/"+  saveFileName);
             Card card = inputcardDto.toEntity();
             cardsRepository.save(card);
 
