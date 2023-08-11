@@ -75,7 +75,7 @@ public class GameController {
     public void testPlayer(@DestinationVariable long roomId, @Payload GameData gameData,
                            @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
 
-        gameService.testPlayer(roomId, gameData);
+        roomService.sendMessageToRoom(roomId, ResponseEntity.ok(gameData));
     }
 
     @MessageMapping("/{roomId}/select-card")

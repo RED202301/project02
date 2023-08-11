@@ -110,10 +110,6 @@ public class GameService {
         boards.get(roomId).handlePub(gameData);
     }
 
-    public void testPlayer(long roomId, GameData gameData) {
-        boards.get(roomId).handlePub(gameData);
-    }
-
     public void selectCard(long roomId, GameData gameData) {
         boards.get(roomId).handlePub(gameData);
     }
