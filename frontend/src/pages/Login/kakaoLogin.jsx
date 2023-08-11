@@ -69,12 +69,21 @@ function Login2() {
                       })
                       .catch(err => {
                         console.log(err);
-                        navigate('../');
+                        Swal.fire({
+                          title: '닉네임 중복',
+                          text: `닉네임을 다시 입력해주세요`,
+                          confirmButtonText: '확인',
+                        })
+                        location.reload();
                       });
                   }
                 }) //닉네임이 입력 되지 않았을 때,
                 .catch(() => {
-                  navigate('../');
+                  Swal.fire({
+                    text: '닉네임을 입력 해 주세요',
+                    confirmButtonText: '확인',
+                  })
+                  location.reload();
                 });
             }
             //닉네임이 원래 등록되어 있을 때,
@@ -89,7 +98,11 @@ function Login2() {
         //로그인 자체가 실패 했을 때,
         // 에러 발생 시, 에러 응답 출력
         console.error('로그인 자체 실패', e);
-        navigate('../');
+        Swal.fire({
+          text: '로그인 실패',
+          confirmButtonText: '확인',
+        })
+        location.reload();
       }
     })();
   }, []);
