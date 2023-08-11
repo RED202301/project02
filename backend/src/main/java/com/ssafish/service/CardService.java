@@ -61,7 +61,7 @@ public class CardService {
 
         CardDto cardDto = new CardDto();
         File destFile = new File("dummy");
-        File destFile2 = new File("dummy2");
+        //File destFile2 = new File("dummy2");
 
         try {
 
@@ -80,11 +80,11 @@ public class CardService {
             String extension = StringUtils.getFilenameExtension(filename);
             String saveFileName = uuid + "." + extension;
 
-            log.info("card Main image ready");
+            log.info("card Main image ready123123");
             log.info("image file path: " + destFile.getPath());
 
             String path = "/home/ssafish/cardMainImage";
-            destFile = new File(path +File.separator+ saveFileName);
+            destFile = new File(path +File.separator+ saveFileName); //// 이부분을 고치니 해결되었다.
             log.info("image file path: " + destFile.getPath());
 
             mainImgUrl.transferTo(destFile); //이미지 저장
@@ -92,35 +92,35 @@ public class CardService {
             log.info("image file path: " + destFile.getPath());
 
             //subImgUrl save
-            if(subImgUrl != null){
-                File uploadsubDir = new File(uploadSubPath); // 수정
-                if (!uploadsubDir.exists()) {
-                    uploadsubDir.mkdir();
-                    log.info("uploadDir sub 생성") ;
-                }
+//            if(subImgUrl != null){
+//                File uploadsubDir = new File(uploadSubPath); // 수정
+//                if (!uploadsubDir.exists()) {
+//                    uploadsubDir.mkdir();
+//                    log.info("uploadDir sub 생성") ;
+//                }
+//
+//                // 파일정보와 새 이름을 지정한다.
+//                String subfilename = subImgUrl.getOriginalFilename();
+//                System.out.println(subfilename);
+//                UUID uuid2 = UUID.randomUUID();
+//                String extension2 = StringUtils.getFilenameExtension(subfilename);
+//                String saveFileName2 = uuid2 + "." + extension2;
+//
+//
+//
+//                destFile2 = new File(uploadSubPath+ saveFileName2);
+//                mainImgUrl.transferTo(destFile2); //이미지 저장
+//                log.info("card Main image is saved");
+//                log.info("image file path: " + destFile2.getPath());
+//
+//                inputcardDto.setSubImgUrl(downloadSubPath + saveFileName2);
+//
+//
+//            }
 
-                // 파일정보와 새 이름을 지정한다.
-                String subfilename = subImgUrl.getOriginalFilename();
-                System.out.println(subfilename);
-                UUID uuid2 = UUID.randomUUID();
-                String extension2 = StringUtils.getFilenameExtension(subfilename);
-                String saveFileName2 = uuid2 + "." + extension2;
 
 
-
-                destFile2 = new File(uploadSubPath+ saveFileName2);
-                mainImgUrl.transferTo(destFile2); //이미지 저장
-                log.info("card Main image is saved");
-                log.info("image file path: " + destFile2.getPath());
-
-                inputcardDto.setSubImgUrl(downloadSubPath + saveFileName2);
-
-
-            }
-
-
-
-            log.info(" card DB access start");
+            log.info(" card DB access success");
             //DB에 저장
             inputcardDto.setMainImgUrl(downloadMainPath + saveFileName);
             Card card = inputcardDto.toEntity();
@@ -132,26 +132,25 @@ public class CardService {
                     .build();
             userCardRepository.save(userCard);
 
-            inputcardDto.setResult(1);
-            log.info(" card DB access success");
+            inputcardDto.setResult(SUCCESS);
 
         }catch(Exception e){
             e.printStackTrace();
 
-            if(destFile.exists()) {
-                destFile.delete();
-            }
-            if(destFile2.exists()) {
-                destFile2.delete();
-            }
+//            if(destFile.exists()) {
+//                destFile.delete();
+//            }
+//            if(destFile2.exists()) {
+//                destFile2.delete();
+//            }
             if(cardsRepository.findByCardId(inputcardDto.getCardId()) != null){
                 cardsRepository.deleteById(inputcardDto.getCardId());
             }
 
 
-            inputcardDto.setResult(0);
+            inputcardDto.setResult(FAIL);
         }
-        return cardDto;
+        return inputcardDto;
 
     }
 
