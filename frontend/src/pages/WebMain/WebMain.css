@@ -2,6 +2,11 @@
     background-image: url('./boadgameCafe.jpg');
     background-size: cover;
     /* backdrop-filter: blur(30px); */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-size: 24px;
 }
 
 .webbox {
@@ -12,7 +17,48 @@
     margin-top: 20%;
     margin-left: 15%;
     margin-bottom: 5%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+    animation: closeDoor 2s ease-in-out;
+    transform-origin: left center;
 }
+/* .webbox:hover {
+
+  animation: openDoor 1s ease-in-out;
+  transform-origin: left center;
+} */
+
+.webbox.open {
+  animation: openDoor 1s ease-in-out;
+  transform-origin: left center;
+}
+.webbox:not(.open):hover {
+  transform: none;
+}
+/* .webbox:not(:hover) {
+
+} */
+
+@keyframes openDoor {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(-90deg);
+  }
+}
+@keyframes closeDoor {
+    0% {
+        transform: rotateY(-90deg);
+    }
+    100% {
+        transform: rotateY(0deg);
+    }
+}
+
 
 .boxlayout2 {
     margin-top: 20%;
@@ -22,15 +68,43 @@
     margin-top: 10%;
     background-image: url('./cardFactory.jpg');
     background-size: cover;
-    width: 400px;
+    width: 300px;
+    height: 500px;
     box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.2);
 
     
 }
+.boxlayout1.open {
+
+  }
+  
+  .boxlayout1.delayed {
+    transition-delay: 2s; /* 문이 열린 후에 이동될 딜레이 시간 */
+  }
+  
 
 /* WebMain.css */
-.cardfactory {
+/* .webbox:hover {
+  transform: translateY(-10px);
+} */
 
-}
 
 
+.door {
+    margin-Left: 35%;
+    margin-top: 5%;
+    width: 300px;
+    height: 400px;
+    /* background-color: brown; */
+    animation: openDoor 2s ease-in-out;
+    transform-origin: left center;
+  }
+  
+  /* @keyframes openDoor {
+    0% {
+      transform: rotateY(0deg);
+    }
+    100% {
+      transform: rotateY(-90deg);
+    }
+  } */

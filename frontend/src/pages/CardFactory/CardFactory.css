@@ -11,8 +11,9 @@
   width: 650px;
   height: 500px;
   border-radius: 4px;
-  background-image:url('./DeckFactory.jpg');
+  /* background-image:url('./DeckFactory.jpg'); */
   background-size: cover;
+  overflow-y: auto;
 }
 
 .grid {
@@ -143,9 +144,10 @@
   top: 40%; /* Adjust the position to place it between the top and bottom sections */
   width: 100%;
   height: 16%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  /* display: flex; */
+  /* justify-content: center; */
+  /* align-items: center; */
+  margin-right: 10%;
 }
 
 .cardx .content {
@@ -202,6 +204,11 @@
 
 }
 
+.imgbox {
+  width: 100px;
+  height: 100px;
+}
+
 .align {
   text-align: center;
 }
@@ -220,4 +227,64 @@
 
 .cardFactory {
 
+}
+
+.cardd {
+  border: 2px solid black;
+  border-radius: 6px;
+  width: 12vw;
+  height: 35vh;
+  background-color: khaki;
+  position: relative; /* Make sure the position is relative */
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.7);
+}
+
+.cardd:before,
+.cardd:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 44%; /* Adjust the height of the top and bottom sections */
+}
+
+.cardd:before {
+  background-color: #635348;
+  top: 0;
+}
+
+.cardd:after {
+  background-color: #DED966;
+  bottom: 0;
+}
+
+.cardd .middle-section {
+  background-color: #ADBF24;
+  position: absolute;
+  top: 40%; /* Adjust the position to place it between the top and bottom sections */
+  width: 100%;
+  height: 16%;
+  /* display: flex; */
+  /* justify-content: center; */
+  /* align-items: center; */
+  margin-right: 10%;
+}
+
+.cardd .content {
+  position: relative;
+  /* padding: 5px; */
+  z-index: 1;
+  padding-left: 1vw;
+  padding-top: 1vh;
+  font-weight: bold;
+
+}
+
+.cardtitled {
+  font-size:1.7vw;
+  text-align: center;
+}
+
+.yellow-stard {
+  font-size: 1.5vw;
+  color: yellow
 }

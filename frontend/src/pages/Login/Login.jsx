@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 
 function Login() {
   const REST_API_KEY = '0c75393f80241be4aaf8ebd811934887'; // RestAPI 키
-  const REDIRECT_URI = 'http://localhost:5173/login2'; // redirect 주소
+  const REDIRECT_URI = 'https://i9e202.p.ssafy.io/login2'; // redirect 주소
   const KAKAO_AUTH_URI = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code&prompt=login`;
 
   return (
