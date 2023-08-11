@@ -1,12 +1,15 @@
 package com.ssafish.web.controller;
 
 import com.ssafish.domain.user.User;
+import com.ssafish.service.CardDeckService;
+import com.ssafish.service.DeckService;
 import com.ssafish.service.OAuthService;
 import com.ssafish.service.UserService;
 import com.ssafish.service.provider.JwtProvider;
 import com.ssafish.web.dto.ChangeNicknameDto;
 import com.ssafish.web.dto.KakaoUserInfo;
 import com.ssafish.web.dto.TokensResponse;
+import com.ssafish.web.dto.UserDeleteDto;
 import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +25,7 @@ import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/v1/oauth")
-@CrossOrigin("*") // zzzzzzzzzzzzㅠㅠ
+@CrossOrigin("*")
 @Slf4j
 public class OAuthController {
 
@@ -31,6 +34,12 @@ public class OAuthController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private DeckService deckService;
+
+    @Autowired
+    private CardDeckService cardDeckService;
 
     private final String secretKey;
 
@@ -109,8 +118,9 @@ public class OAuthController {
         }
     }
 
+    // 탈퇴 시 true, false 값 받아서 true이면 해당 유저의 덱 다 지우도록 하기
     @DeleteMapping("")
-    public ResponseEntity<Object> deleteKakaoUser(HttpServletRequest request) {
+    public ResponseEntity<Object> deleteKakaoUser(@RequestBody UserDeleteDto userDeleteDto, HttpServletRequest request) {
         try {
             String authorizationHeader = request.getHeader("Authorization");
             String accessToken = "";
@@ -122,7 +132,14 @@ public class OAuthController {
             }
 
             long kakaoId = JwtProvider.getUserId(accessToken, secretKey);
-            userService.deleteUser(kakaoId);
+            long userId = userService.deleteUser(kakaoId);
+
+            // 덱 삭제 처리
+            if (userId != -1 && userDeleteDto.isWantToDeleteDeck()) {
+                cardDeckService.delete(userId);
+                deckService.delete(userId);
+            }
+
             return ResponseEntity.status(HttpStatus.OK).body("회원탈퇴 처리된 유저 kakaoId: " + kakaoId);
         } catch (JwtException e) {
             // 토큰 파싱이 실패하거나 유효하지 않은 토큰일 경우, 클라이언트에게 인증 실패 응답 전달

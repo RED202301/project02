@@ -11,6 +11,7 @@ import com.ssafish.web.dto.DeckDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,7 @@ public class CardDeckService {
     DeckRepository deckRepository;
 
     @Autowired
-    CardDeckRepository card_deckRepository;
+    CardDeckRepository cardDeckRepository;
 
     @Autowired
     CardsRepository cardsRepository;
@@ -64,5 +65,13 @@ public class CardDeckService {
         DeckDetailDto deckDetailDto = new DeckDetailDto(deck.toDto(),cardList);
 
         return deckDetailDto;
+    }
+
+    @Transactional
+    public void delete(long userId) {
+        List<Deck> deckList = deckRepository.findAllByUserId(userId);
+        deckList.forEach(e -> {
+            cardDeckRepository.deleteAllByDeckId(e.getDeckId());
+        });
     }
 }

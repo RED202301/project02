@@ -95,6 +95,7 @@ public class DeckController {
 
     @DeleteMapping("/deck/{userId}")
     public ResponseEntity<Object> deckDelete(@PathVariable long userId) {
+        cardDeckService.delete(userId);
         deckService.delete(userId);
         return ResponseEntity.status(HttpStatus.OK).body("Delete all decks");
     }

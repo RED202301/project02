@@ -4,7 +4,6 @@ import com.ssafish.domain.deck.CardDeck;
 import com.ssafish.domain.deck.CardDeckRepository;
 import com.ssafish.domain.deck.Deck;
 import com.ssafish.domain.deck.DeckRepository;
-import com.ssafish.web.dto.CardDto;
 import com.ssafish.web.dto.DeckDto;
 import com.ssafish.web.dto.DeckRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -70,10 +69,6 @@ public class DeckService {
 
     @Transactional
     public void delete(long userId) {
-        List<Deck> deckList = deckRepository.findAllByUserId(userId);
         deckRepository.deleteAllByUserId(userId);
-        deckList.forEach(e -> {
-            cardDeckRepository.deleteAllByDeckId(e.getDeckId());
-        });
     }
 }
