@@ -1,9 +1,16 @@
 def dockerRepository = "qortn365"
 def dockerImageName = "ssafish"
 def deployHost = "i9e202.p.ssafy.io"
+def dockerImageNameFront = "ssafish-fe"
 
 pipeline {
     agent any
+
+    tools {
+            nodejs "front"
+            gradle "back"
+
+        }
 
     stages {
         stage('Checkout'){
@@ -22,6 +29,12 @@ pipeline {
                             chmod u+x ./gradlew
                             ./gradlew clean bootJar
                         """
+
+                        sh """
+                                                 cd /var/jenkins_home/workspace/ssafish_dev/frontend
+                                                    npm install
+                                                    npm run build
+                                                """
                     }
                 }
             }
@@ -40,6 +53,15 @@ pipeline {
                             -Pdocker.image.tag="latest"
 
                         """
+
+                        sh """
+                                                cd /var/jenkins_home/workspace/ssafish_dev/frontend
+
+                                                docker build -t ${dockerRepository}/${dockerImageNameFront} .
+                                                docker login
+                                                docker push ${dockerRepository}/${dockerImageNameFront}:latest
+
+                                                """
                     }
                 }
             }
@@ -53,6 +75,14 @@ pipeline {
                     'docker rm -f ssafish &&
                     docker run -d -t -p 8080:5001  -v /home/ubuntu/ssafish:/home/ssafish --rm --name ssafish ${dockerRepository}/${dockerImageName}:latest;'
                     """
+
+                    sh """
+                                         ssh -o StrictHostKeyChecking=no ubuntu@i9e202.p.ssafy.io \
+                                         '
+                                         docker rm -f ${dockerImageNameFront} &&
+                                          docker run -d -t -p 5173:5173 --rm --name ${dockerImageNameFront} ${dockerRepository}/${dockerImageNameFront}:latest;'
+
+                                        """
                 }
             }
         }
