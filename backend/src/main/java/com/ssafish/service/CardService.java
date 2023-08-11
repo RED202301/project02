@@ -80,14 +80,14 @@ public class CardService {
             String extension = StringUtils.getFilenameExtension(filename);
             String saveFileName = uuid + "." + extension;
 
-            log.info("card Main image ready");
+            log.info("card Main image ready123123");
             log.info("image file path: " + destFile.getPath());
 
             String path = "/home/ssafish/cardMainImage";
-            destFile = new File(path +File.separator+ saveFileName);
+            destFile = new File(path +File.separator+ saveFileName); //// 이부분을 고치니 해결되었다.
             log.info("image file path: " + destFile.getPath());
 
-            mainImgUrl.transferTo(destFile); //이미지 저장
+            //mainImgUrl.transferTo(destFile); //이미지 저장
             log.info("card Main image is saved");
             log.info("image file path: " + destFile.getPath());
 
@@ -113,45 +113,48 @@ public class CardService {
                 log.info("card Main image is saved");
                 log.info("image file path: " + destFile2.getPath());
 
-                inputcardDto.setSubImgUrl(downloadSubPath + saveFileName2);
+                inputcardDto.setSubImgUrl("https://i9e202.p.ssafy.io/sub_images/" + saveFileName2);
 
 
             }
 
 
 
-            log.info(" card DB access start");
+            log.info(" card DB access success");
             //DB에 저장
-            inputcardDto.setMainImgUrl(downloadMainPath + saveFileName);
+            inputcardDto.setMainImgUrl("https://i9e202.p.ssafy.io/main_images/" + saveFileName);
+            System.out.println("inputcardDto : "+inputcardDto);
+
             Card card = inputcardDto.toEntity();
             cardsRepository.save(card);
+            System.out.println("card: "+ card);
 
             UserCard userCard = UserCard.builder()
                     .cardId(inputcardDto.getCardId())
                     .userId(inputcardDto.getUserId())
                     .build();
+
             userCardRepository.save(userCard);
 
-            inputcardDto.setResult(1);
-            log.info(" card DB access success");
+            inputcardDto.setResult(SUCCESS);
 
         }catch(Exception e){
             e.printStackTrace();
 
-            if(destFile.exists()) {
-                destFile.delete();
-            }
-            if(destFile2.exists()) {
-                destFile2.delete();
-            }
+//            if(destFile.exists()) {
+//                destFile.delete();
+//            }
+//            if(destFile2.exists()) {
+//                destFile2.delete();
+//            }
             if(cardsRepository.findByCardId(inputcardDto.getCardId()) != null){
                 cardsRepository.deleteById(inputcardDto.getCardId());
             }
 
 
-            inputcardDto.setResult(0);
+            inputcardDto.setResult(FAIL);
         }
-        return cardDto;
+        return inputcardDto;
 
     }
 
