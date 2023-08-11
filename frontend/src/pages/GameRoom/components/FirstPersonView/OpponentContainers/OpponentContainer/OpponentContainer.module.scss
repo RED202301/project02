@@ -1,0 +1,46 @@
+.OpponentContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform-style: preserve-3d;
+
+
+    position: absolute;
+    transform: 
+    rotateY(calc((90 - var(--angle))*1deg))
+    // translateX(calc(var(--cos) * var(--unit)))
+    // translateZ(calc(var(--sin) * var(--unit) * -1))
+    // translateZ(calc(var(--unit)*2))
+    ;
+    translate: 
+    calc(var(--cos) * var(--unit)) 
+    // calc(var(--unit)*3/5) 
+    calc(var(--unit)/4) 
+    calc(var(--sin) * var(--unit))
+    ;
+}
+
+.OpponentHand{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    bottom: 0;
+    transform-style: preserve-3d;
+    scale: 0.7;
+    translate: 0 -20px -100px;
+}
+
+.OpponentEnrolled{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: rotateX(90deg);
+    translate: 0 -10px -200px;
+    scale: 0.7;
+    // background-color: rgba(1, 1, 1, 1);
+    background-color: tomato;
+    width: 1000px;
+    height: 10px;
+    
+}

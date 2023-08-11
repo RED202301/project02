@@ -5,6 +5,8 @@ import 'slick-carousel/slick/slick-theme.css';
 import './Tutorial.css';
 import { Link } from 'react-router-dom';
 import card_image from './card-image.png';
+import ResultModal from '../../components/ResultModal';
+
 
 export default class Tutorial extends Component {
   render() {

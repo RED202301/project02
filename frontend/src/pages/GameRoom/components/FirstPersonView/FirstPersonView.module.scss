@@ -1,0 +1,28 @@
+.FirstPersonView{
+    overflow: hidden;
+    position: absolute;
+
+    width: 100vw;
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+
+    perspective: calc(var(--unit)*3);
+}
+
+.Perspective{
+    display: flex;
+    justify-content: center;
+    transform-style: preserve-3d;
+    perspective: calc(var(--unit)*3);
+    transform-style: preserve-3d;
+}
+
+.Rotater{
+    display: flex;
+    justify-content: center;
+    perspective: calc(var(--unit)*3);
+    transform-style: preserve-3d;
+    translate: 0 calc(var(--unit)*-0.3) 0 ;
+}
