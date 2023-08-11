@@ -32,7 +32,7 @@ public class OpenviduController {
     @GetMapping("/api/test")
     public String test() {
         System.out.println("성공!!");
-        return "hello";
+        return "sos";
     }
 
     /**
