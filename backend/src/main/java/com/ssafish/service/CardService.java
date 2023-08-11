@@ -59,7 +59,7 @@ public class CardService {
     @Transactional
     public CardDto cardInsert(CardDto inputcardDto, MultipartFile mainImgUrl ,MultipartFile subImgUrl){
 
-        CardDto cardDto = new CardDto();
+
         File destFile = new File("dummy");
         File destFile2 = new File("dummy2");
 
@@ -151,7 +151,7 @@ public class CardService {
 
             inputcardDto.setResult(0);
         }
-        return cardDto;
+        return inputcardDto;
 
     }
 
