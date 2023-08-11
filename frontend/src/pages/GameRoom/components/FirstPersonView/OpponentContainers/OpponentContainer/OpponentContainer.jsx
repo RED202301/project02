@@ -18,7 +18,11 @@ export default function OpponentContainer(
         '--sin': sin,
       }}
     >
-      <OpenViduCAM streamManager={subscriber} width={'calc(var(--unit))'} />
+      <OpenViduCAM
+        streamManager={subscriber}
+        // width={'calc(var(--unit))'}
+        height={'calc(var(--unit)/4*3)'}
+      />
       <div className={`${styles.OpponentHand}`}>
         <CardsOnHand cards={opponent.cardsOnHand} flipped="true" />
       </div>
