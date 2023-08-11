@@ -108,31 +108,32 @@ public class CardService {
 
 
 
-                destFile2 = new File(uploadSubPath+ saveFileName2);
+                destFile2 = new File(uploadSubPath+File.separator+  saveFileName2);
                 mainImgUrl.transferTo(destFile2); //이미지 저장
                 log.info("card Main image is saved");
                 log.info("image file path: " + destFile2.getPath());
 
-                inputcardDto.setSubImgUrl(downloadSubPath + saveFileName2);
+                inputcardDto.setSubImgUrl(downloadSubPath +File.separator+  saveFileName2);
 
 
             }
 
-
-
             log.info(" card DB access start");
             //DB에 저장
-            inputcardDto.setMainImgUrl(downloadMainPath + saveFileName);
+
+            inputcardDto.setMainImgUrl(downloadMainPath +File.separator+  saveFileName);
             Card card = inputcardDto.toEntity();
             cardsRepository.save(card);
 
+            inputcardDto.setCardId(card.getCardId());
+
             UserCard userCard = UserCard.builder()
                     .cardId(inputcardDto.getCardId())
-                    .userId(inputcardDto.getUserId())
+                    .userId(inputcardDto.getUserId()) //사용자에세 받은 사용자 아이디
                     .build();
             userCardRepository.save(userCard);
 
-            inputcardDto.setResult(1);
+            inputcardDto.setResult(SUCCESS);
             log.info(" card DB access success");
 
         }catch(Exception e){
@@ -149,7 +150,7 @@ public class CardService {
             }
 
 
-            inputcardDto.setResult(0);
+            inputcardDto.setResult(FAIL);
         }
         return inputcardDto;
 

@@ -53,7 +53,7 @@ class CardInsertTest {
     void setDefaultCardsToDB() {
 
         cardsRepository.deleteAllInBatch();
-        String [] titles = {"단군왕검", "공자", "광개토대왕","나폴레옹, ","뉴턴",
+        String [] titles = {"단군왕검", "공자", "광개토대왕","나폴레옹","뉴턴",
                 "데카르트", "레오나르도다빈치","세종대왕", "이순신", "마리 퀴리",
                 "마크 저커버그","선다 피차이", "일론 머스크", "제프 베이조스", "홉스",
                 "칸트",  "아리스토텔레스","소크라테스","율곡이이", "퇴계이황",
