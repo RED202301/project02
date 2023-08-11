@@ -1,15 +1,14 @@
 package com.ssafish.web;
 
+import com.ssafish.common.util.TimeManager;
 import com.ssafish.common.util.WebSocketSubscriberManager;
 import com.ssafish.service.GameService;
 import com.ssafish.service.RoomService;
-import com.ssafish.web.dto.Board;
-import com.ssafish.web.dto.GameData;
-import com.ssafish.web.dto.Player;
-import com.ssafish.web.dto.TypeEnum;
+import com.ssafish.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.scheduling.TaskScheduler;
@@ -20,6 +19,8 @@ import org.springframework.web.socket.messaging.SessionConnectEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 import java.io.IOException;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,7 @@ public class DisconnectHandler implements ApplicationListener<AbstractSubProtoco
     private final WebSocketSubscriberManager subscriberManager;
     private final RoomService roomService;
     private final GameService gameService;
+    private final TimeManager timeManager;
 
     private final SimpMessageSendingOperations messagingTemplate;
     private final long DISCONNECT_DELAY = 5_000;
@@ -79,12 +81,30 @@ public class DisconnectHandler implements ApplicationListener<AbstractSubProtoco
         if (room.isStarted()) {
             player.setBot(true);
             log.info("봇으로 전환된 플레이어 userId: " + player.getUserId());
-            roomService.sendMessageToRoom(roomId, player.getNickname() + "님이 로봇이 되었습니다!");
+
+            roomService.sendMessageToRoom(roomId,
+                    ResponseEntity.ok(MsgData.builder()
+                    .type(TypeEnum.SERVER_MESSAGE.name())
+                    .content(timeManager.getCurrentTime() + player.getNickname() + "님이 로봇이 되었습니다!")
+                    .build()));
         } else {
             playerList.remove(player);
             log.info("대기실에서 퇴장 처리된 플레이어 userId: " + player.getUserId());
-            roomService.sendMessageToRoom(roomId, player.getNickname() + "님이 방을 나갔습니다!");
+
+            roomService.sendMessageToRoom(roomId,
+                    ResponseEntity.ok(MsgData.builder()
+                    .type(TypeEnum.SERVER_MESSAGE.name())
+                    .content(timeManager.getCurrentTime() + player.getNickname() + "님이 방에서 나갔습니다!")
+                    .build()));
         }
+
+        // 플레이어의 연결됨에 따른 변화 내용을 알리는 메시지 전송
+        roomService.sendMessageToRoom(roomId,
+                ResponseEntity.ok(GameData.builder()
+                .type(TypeEnum.EXIT.name())
+                .players(playerList)
+                .build()));
+
         log.info(roomId + "번 방의 방장 userId: " + room.getUserId() + " " + "세션 종료된 userId: " + userId);
         if (room.getUserId() == player.getUserId()) { // 방장이 퇴장한 경우
             List<Player> personList = playerList.stream().filter(e -> !e.isBot()).collect(Collectors.toList());
@@ -96,11 +116,16 @@ public class DisconnectHandler implements ApplicationListener<AbstractSubProtoco
             } else { // 방에 잔여 인원이 있는 경우 -> 그 사람 중 하나를 방장으로
                 Player newLeader = personList.get((int) (Math.random() * personList.size()));
                 room.setUserId(newLeader.getUserId());
-                messagingTemplate.convertAndSend("/sub/" + roomId,
-                        GameData.builder()
+                roomService.sendMessageToRoom(roomId,
+                        ResponseEntity.ok(GameData.builder()
                         .type(TypeEnum.ROOM_LEADER.name())
                         .player(newLeader.getUserId())
-                        .build());
+                        .build()));
+
+                roomService.sendMessageToRoom(roomId,
+                        ResponseEntity.ok(MsgData.builder()
+                        .type(TypeEnum.SERVER_MESSAGE.name())
+                        .content(timeManager.getCurrentTime()) + newLeader.getNickname() + "님이 새로운 방장입니다!"));
                 log.info(roomId + "번 방의 새로운 방장 userId: " + newLeader.getUserId());
             }
         }

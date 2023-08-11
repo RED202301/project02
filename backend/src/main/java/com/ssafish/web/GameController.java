@@ -65,30 +65,46 @@ public class GameController {
     }
 
     @MessageMapping("/{roomId}/select-player")
-    public void selectPlayer(@DestinationVariable int roomId, @Payload GameData gameData,
+    public void selectPlayer(@DestinationVariable long roomId, @Payload GameData gameData,
                              @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
 
         gameService.selectPlayer(roomId, gameData);
     }
 
     @MessageMapping("/{roomId}/test-player")
-    public void testPlayer(@DestinationVariable int roomId, @Payload GameData gameData,
+    public void testPlayer(@DestinationVariable long roomId, @Payload GameData gameData,
                            @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
 
         gameService.testPlayer(roomId, gameData);
     }
 
     @MessageMapping("/{roomId}/select-card")
-    public void selectCard(@DestinationVariable int roomId, @Payload GameData gameData,
+    public void selectCard(@DestinationVariable long roomId, @Payload GameData gameData,
                            @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
 
         gameService.selectCard(roomId, gameData);
     }
 
     @MessageMapping("/{roomId}/reply")
-    public void reply(@DestinationVariable int roomId, @Payload GameData gameData,
+    public void reply(@DestinationVariable long roomId, @Payload GameData gameData,
                       @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) throws Exception {
 
         gameService.reply(roomId, gameData);
+    }
+
+    @MessageMapping("/{roomId}/hover-card")
+    public void hoverCard(@DestinationVariable long roomId, @Payload GameData gameData,
+                          @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) {
+
+        roomService.sendMessageToRoom(roomId, ResponseEntity.ok(gameData));
+    }
+
+    @MessageMapping("/{roomId}/ready")
+    public void ready(@DestinationVariable long roomId, @Payload GameData gameData,
+                      @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) {
+
+        gameData.setPlayers(gameService.ready(roomId, gameData));
+
+        roomService.sendMessageToRoom(roomId, ResponseEntity.ok(gameData));
     }
 }
