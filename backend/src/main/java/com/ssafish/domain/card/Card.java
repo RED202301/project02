@@ -72,6 +72,7 @@ public class Card extends BaseTimeEntity {
                 .mainTitle(mainTitle)
                 .mainImgUrl(mainImgUrl)
                 .subTitle(subTitle)
+                .cardDescription(cardDescription)
                 .subImgUrl(subImgUrl)
                 .point(point)
                 .build();
