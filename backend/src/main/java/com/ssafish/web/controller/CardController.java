@@ -35,7 +35,7 @@ public class CardController {
         //System.out.println(mainImgUrl);
 
         Long userId = Long.parseLong(imgFile.getParameter("userId"));
-        Long cardId = Long.parseLong(imgFile.getParameter("cardId"));
+        //Long cardId = Long.parseLong(imgFile.getParameter("cardId"));
         String mainTitle = imgFile.getParameter("mainTitle");
         String subTitle = imgFile.getParameter("subTitle");
         String cardDescription = imgFile.getParameter("cardDescription");
@@ -43,7 +43,7 @@ public class CardController {
 
         CardDto cardDto = CardDto.builder()
                 .userId(userId)
-                .cardId(cardId)
+              //  .cardId(cardId)
                 .mainTitle(mainTitle)
                 .subTitle(subTitle)
                 .point(point)
