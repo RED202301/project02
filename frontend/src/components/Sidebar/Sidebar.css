@@ -2,20 +2,23 @@
     width: auto;
     background-color: white;
     margin-right: 15px;
+    border-radius: 3px;
 }
 
 .show-menu{
-    width: 10%;
-    height: 500px;
+    width: 12%;
+    height: 50%;
     position: absolute;
     right: 5%;
     transition: 1s;
     background-color: aliceblue;
+    border: solid;
+    font-size: 1vw;
     }
     
     .hide-menu{
     width: 10%;
-    height: 500px;
+    height: 50%;
     position: absolute;
     right: -15%;
     transition: 1s;
