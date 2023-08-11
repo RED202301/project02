@@ -39,12 +39,14 @@ public class CardController {
         String mainTitle = imgFile.getParameter("mainTitle");
         String subTitle = imgFile.getParameter("subTitle");
         String cardDescription = imgFile.getParameter("cardDescription");
+        int point = Integer.parseInt(imgFile.getParameter("point"));
 
         CardDto cardDto = CardDto.builder()
                 .userId(userId)
                 .cardId(cardId)
                 .mainTitle(mainTitle)
                 .subTitle(subTitle)
+                .point(point)
                 .cardDescription(cardDescription)
                 .build();
         log.info("input card info" + cardDto);
@@ -67,13 +69,10 @@ public class CardController {
             }
 
         }
-        if (cardDto.getUserId() == 1){
+        if (cardDto.getUserId() ==0){
             StringBuilder errorMessage = new StringBuilder("사용자 정보가 필요합니다.");
             return ResponseEntity.badRequest().body(errorMessage.toString());
         }
-
-
-
 
         cardDto = cardService.cardInsert(cardDto,mainImg, subImg);
 
