@@ -61,7 +61,7 @@ public class CardService {
 
         CardDto cardDto = new CardDto();
         File destFile = new File("dummy");
-        //File destFile2 = new File("dummy2");
+        File destFile2 = new File("dummy2");
 
         try {
 
@@ -87,49 +87,53 @@ public class CardService {
             destFile = new File(path +File.separator+ saveFileName); //// 이부분을 고치니 해결되었다.
             log.info("image file path: " + destFile.getPath());
 
-            mainImgUrl.transferTo(destFile); //이미지 저장
+            //mainImgUrl.transferTo(destFile); //이미지 저장
             log.info("card Main image is saved");
             log.info("image file path: " + destFile.getPath());
 
             //subImgUrl save
-//            if(subImgUrl != null){
-//                File uploadsubDir = new File(uploadSubPath); // 수정
-//                if (!uploadsubDir.exists()) {
-//                    uploadsubDir.mkdir();
-//                    log.info("uploadDir sub 생성") ;
-//                }
-//
-//                // 파일정보와 새 이름을 지정한다.
-//                String subfilename = subImgUrl.getOriginalFilename();
-//                System.out.println(subfilename);
-//                UUID uuid2 = UUID.randomUUID();
-//                String extension2 = StringUtils.getFilenameExtension(subfilename);
-//                String saveFileName2 = uuid2 + "." + extension2;
-//
-//
-//
-//                destFile2 = new File(uploadSubPath+ saveFileName2);
-//                mainImgUrl.transferTo(destFile2); //이미지 저장
-//                log.info("card Main image is saved");
-//                log.info("image file path: " + destFile2.getPath());
-//
-//                inputcardDto.setSubImgUrl(downloadSubPath + saveFileName2);
-//
-//
-//            }
+            if(subImgUrl != null){
+                File uploadsubDir = new File(uploadSubPath); // 수정
+                if (!uploadsubDir.exists()) {
+                    uploadsubDir.mkdir();
+                    log.info("uploadDir sub 생성") ;
+                }
+
+                // 파일정보와 새 이름을 지정한다.
+                String subfilename = subImgUrl.getOriginalFilename();
+                System.out.println(subfilename);
+                UUID uuid2 = UUID.randomUUID();
+                String extension2 = StringUtils.getFilenameExtension(subfilename);
+                String saveFileName2 = uuid2 + "." + extension2;
+
+
+
+                destFile2 = new File(uploadSubPath+ saveFileName2);
+                mainImgUrl.transferTo(destFile2); //이미지 저장
+                log.info("card Main image is saved");
+                log.info("image file path: " + destFile2.getPath());
+
+                inputcardDto.setSubImgUrl("https://i9e202.p.ssafy.io/sub_images/" + saveFileName2);
+
+
+            }
 
 
 
             log.info(" card DB access success");
             //DB에 저장
-            inputcardDto.setMainImgUrl(downloadMainPath + saveFileName);
+            inputcardDto.setMainImgUrl("https://i9e202.p.ssafy.io/main_images/" + saveFileName);
+            System.out.println("inputcardDto : "+inputcardDto);
+
             Card card = inputcardDto.toEntity();
             cardsRepository.save(card);
+            System.out.println("card: "+ card);
 
             UserCard userCard = UserCard.builder()
                     .cardId(inputcardDto.getCardId())
                     .userId(inputcardDto.getUserId())
                     .build();
+
             userCardRepository.save(userCard);
 
             inputcardDto.setResult(SUCCESS);
