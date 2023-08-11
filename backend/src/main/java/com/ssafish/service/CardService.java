@@ -69,7 +69,7 @@ public class CardService {
             File uploadDir = new File(uploadMainPath); // 수정
             if (!uploadDir.exists()) {
                 uploadDir.mkdir();
-                log.info("uploadDir 생성") ;
+                log.info("uploadDir 생성했습니다.") ;
             }
 
             // 파일정보와 새 이름을 지정한다.
