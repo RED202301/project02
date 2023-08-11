@@ -87,7 +87,7 @@ public class CardService {
             destFile = new File(path +File.separator+ saveFileName); //// 이부분을 고치니 해결되었다.
             log.info("image file path: " + destFile.getPath());
 
-            //mainImgUrl.transferTo(destFile); //이미지 저장
+            mainImgUrl.transferTo(destFile); //이미지 저장
             log.info("card Main image is saved");
             log.info("image file path: " + destFile.getPath());
 
@@ -108,7 +108,7 @@ public class CardService {
 
 
 
-                destFile2 = new File(uploadSubPath+ saveFileName2);
+                destFile2 = new File("/home/ssafish/cardSubImage"+File.separator+ saveFileName2);
                 mainImgUrl.transferTo(destFile2); //이미지 저장
                 log.info("card Main image is saved");
                 log.info("image file path: " + destFile2.getPath());
@@ -123,9 +123,10 @@ public class CardService {
             log.info(" card DB access success");
             //DB에 저장
             inputcardDto.setMainImgUrl("https://i9e202.p.ssafy.io/main_images/" + saveFileName);
-            System.out.println("inputcardDto : "+inputcardDto);
 
+            System.out.println("inputcardDto : "+inputcardDto);
             Card card = inputcardDto.toEntity();
+            System.out.println("card: "+ card);
             cardsRepository.save(card);
             System.out.println("card: "+ card);
 
@@ -173,6 +174,8 @@ public class CardService {
             //카드 이미지 제거
             String mainImage = card.getMainImgUrl();
             String subImage = card.getSubImgUrl();
+
+
 
             //main 이미지 삭제
             //StringTokenizer st = new StringTokenizer(mainImage,"/");
