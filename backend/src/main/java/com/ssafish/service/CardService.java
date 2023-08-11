@@ -80,7 +80,7 @@ public class CardService {
             String extension = StringUtils.getFilenameExtension(filename);
             String saveFileName = uuid + "." + extension;
 
-            log.info("card Main image ready");
+            log.info("card Main image ready!!!");
             log.info("image file path: " + destFile.getPath());
 
             String path = "/home/ssafish/cardMainImage";
