@@ -121,7 +121,7 @@ public class ReplyChoosePhase extends Phase implements ChoosePhase {
             handOpponent.remove(cardOpen);
             handCurrent.remove(cardOpen);
 
-            turnTimer2.schedule(() -> sendCardMove(gameStatus, opponentUserId, currentUserId), 2 * ++delaySecond, TimeUnit.SECONDS);
+            turnTimer2.schedule(() -> sendCardMove(gameStatus, opponentUserId, currentUserId, cardOpen), 2 * ++delaySecond, TimeUnit.SECONDS);
 
             // 짝 맞춰 플레이어의 등록패로 이동
             enrollCurrent.add(cardOpen);
@@ -178,12 +178,13 @@ public class ReplyChoosePhase extends Phase implements ChoosePhase {
         );
     }
 
-    public void sendCardMove(GameStatus gameStatus, long opponentUserId, long currentUserId) {
+    public void sendCardMove(GameStatus gameStatus, long opponentUserId, long currentUserId, long cardOpen) {
         roomService.sendMessageToRoom(gameStatus.getRoomId(),
                 ResponseEntity.ok(GameData.builder()
                                           .type(TypeEnum.CARD_MOVE.name())
                                           .from(opponentUserId)
                                           .to(currentUserId)
+                                          .cardId(cardOpen)
                                           .build())
         );
     }
