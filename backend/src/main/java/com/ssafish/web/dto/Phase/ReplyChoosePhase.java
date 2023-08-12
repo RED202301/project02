@@ -82,13 +82,17 @@ public class ReplyChoosePhase extends Phase implements ChoosePhase {
 
         roomService.sendMessageToRoom(gameStatus.getRoomId(), ResponseEntity.ok(gameData));
 
+        int currentPlayerIdx = gameStatus.getCurrentPlayerIdx();
+        long currentUserId = gameStatus.getPlayerList().get(currentPlayerIdx).getUserId();
+        long opponentUserId = gameStatus.getOpponentPlayer().getUserId();
+
         if (gameData.isGoFish()) {
         // isGoFish = true면 짝인 카드가 없다
             if (!middleDeck.isEmpty()) {
             // 중앙 덱에 카드가 있으면 카드 드로우
                 Long cardDraw = middleDeck.remove(middleDeck.size() - 1);
 
-                turnTimer2.schedule(() -> sendAutoDraw(gameStatus, cardDraw), 2 * ++delaySecond, TimeUnit.SECONDS);
+                turnTimer2.schedule(() -> sendAutoDraw(gameStatus, currentUserId, cardDraw), 2 * ++delaySecond, TimeUnit.SECONDS);
                 // 카드가 requester 손패로 이동
                 if (!handCurrent.contains(cardDraw)) {
                     handCurrent.add(cardDraw);
@@ -99,7 +103,7 @@ public class ReplyChoosePhase extends Phase implements ChoosePhase {
                     gameStatus.getCheatSheet().remove(cardDraw);
                     gameStatus.getCurrentPlayer().addScore(gameStatus.getPointMap().get(cardDraw));
 
-                    turnTimer2.schedule(() -> sendEnroll(gameStatus, gameStatus.getCurrentPlayer().getUserId(), cardDraw), 2 * ++delaySecond, TimeUnit.SECONDS);
+                    turnTimer2.schedule(() -> sendEnroll(gameStatus, currentUserId, cardDraw), 2 * ++delaySecond, TimeUnit.SECONDS);
 
                     log.info(gameStatus.getRoomId() + "번 방 - 한 유저의 손패 수: " + handCurrent.size());
                     if (handCurrent.isEmpty()) {
@@ -117,7 +121,7 @@ public class ReplyChoosePhase extends Phase implements ChoosePhase {
             handOpponent.remove(cardOpen);
             handCurrent.remove(cardOpen);
 
-            turnTimer2.schedule(() -> sendCardMove(gameStatus), 2 * ++delaySecond, TimeUnit.SECONDS);
+            turnTimer2.schedule(() -> sendCardMove(gameStatus, opponentUserId, currentUserId, cardOpen), 2 * ++delaySecond, TimeUnit.SECONDS);
 
             // 짝 맞춰 플레이어의 등록패로 이동
             enrollCurrent.add(cardOpen);
@@ -125,7 +129,7 @@ public class ReplyChoosePhase extends Phase implements ChoosePhase {
             gameStatus.getCurrentPlayer().addScore(gameStatus.getPointMap().get(cardOpen));
 
 
-            turnTimer2.schedule(() -> sendEnroll(gameStatus, gameStatus.getCurrentPlayer().getUserId(), cardOpen), 2 * ++delaySecond, TimeUnit.SECONDS);
+            turnTimer2.schedule(() -> sendEnroll(gameStatus, currentUserId, cardOpen), 2 * ++delaySecond, TimeUnit.SECONDS);
 
             log.info(gameStatus.getRoomId() + "번 방 - 한 유저의 손패 수: " + handCurrent.size() + " - 다른 유저의 손패 수: " + handOpponent.size());
             if (handCurrent.isEmpty() || handOpponent.isEmpty()) {
@@ -154,11 +158,11 @@ public class ReplyChoosePhase extends Phase implements ChoosePhase {
         return Math.max(3, (int) (Math.random() * timeLimit / 2));
     }
 
-    public void sendAutoDraw(GameStatus gameStatus, long cardDraw) {
+    public void sendAutoDraw(GameStatus gameStatus, long currentUserId, long cardDraw) {
         roomService.sendMessageToRoom(gameStatus.getRoomId(),
                 ResponseEntity.ok(GameData.builder()
                                           .type(TypeEnum.AUTO_DRAW.name())
-                                          .player(gameStatus.getCurrentPlayer().getUserId())
+                                          .player(currentUserId)
                                           .cardId(cardDraw)
                                           .build())
         );
@@ -174,12 +178,13 @@ public class ReplyChoosePhase extends Phase implements ChoosePhase {
         );
     }
 
-    public void sendCardMove(GameStatus gameStatus) {
+    public void sendCardMove(GameStatus gameStatus, long opponentUserId, long currentUserId, long cardOpen) {
         roomService.sendMessageToRoom(gameStatus.getRoomId(),
                 ResponseEntity.ok(GameData.builder()
                                           .type(TypeEnum.CARD_MOVE.name())
-                                          .from(gameStatus.getOpponentPlayer().getUserId())
-                                          .to(gameStatus.getCurrentPlayer().getUserId())
+                                          .from(opponentUserId)
+                                          .to(currentUserId)
+                                          .cardId(cardOpen)
                                           .build())
         );
     }
