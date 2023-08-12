@@ -46,11 +46,11 @@ class CardInsertTest {
 
 
 
-
+//인물카드 입력
 // 1. 기본 덱 정보 삽입
     @Test
     @Order(1)
-    void setDefaultCardsToDB() {
+    void setPeopleCardsToDB() {
 
         cardsRepository.deleteAllInBatch();
         String [] titles = {"단군왕검", "공자", "광개토대왕","나폴레옹","뉴턴",
@@ -90,6 +90,8 @@ class CardInsertTest {
         }
 
     }
+
+
     //2. 기본 덱정보 삽입
     @Test
     @Order(2)
@@ -141,23 +143,6 @@ class CardInsertTest {
 
     }
 
-//    @Test
-//    @Order(3)
-//    void setDefaultDeckToDB() {
-//        DeckDto deckDto = DeckDto.builder()
-//                .deckId(1)
-//                .cardId(0)
-//                .userId(1)
-//                .deckName("위인 모음집")
-//                .deckDescription("세계적인 위인들로 게임을 플레이하고, 익혀봅시다. ")
-//                .deckUsageCount(1)
-//                .ispublic(true).build();
-//
-//        Deck deck = deckDto.toEntity();
-//        deckRepository.save(deck);
-//
-//
-//    }
 
     //유저 카드 테이블 더미 데이터 삽입
     @Test
@@ -180,6 +165,122 @@ class CardInsertTest {
         }
 
     }
+    //나라 카드 입력
+    @Test
+    @Order(5)
+    void setNationCardsToDB() {
 
+        cardsRepository.deleteAllInBatch();
+        String [] titles = {"가나","감비아","노르웨이","대한민국","덴마크",
+                "러시아","룩셈부르크","말레이시아" ,"멕시코", "불가리아",
+                "브라질","사우디아라비아","스페인", "싱가포르","영국",
+                "오스트레일리아","이란","조선민주주의인민공화국", "칠레","캐나다",
+                "콜롬비아","튀르키예","페루","핀란드","헝가리"};
+        String [] subtitle = {"아크라","반줄","오슬로","서울","코펜하겐",
+                "모스크바","룩셈부르크","쿠알라룸푸르","멕시코 시티","소피아",
+                "브라질리아","리야드","마드리드","싱가포르","런던",
+                "캔버라","테헤란","평양","산티아고","오타와",
+                "보고타","앙카라","리마","헬싱키","부다페스트"};
+
+
+// https://i9e202.p.ssafy.io/card_images/people_imgs/1_%EB%8B%A8%EA%B5%B0%EC%99%95%EA%B2%80.png
+        //String uploadPath = "http://i9e202.p.ssafy.io/home/ubuntu/ssafish/cardMainImage";
+        String uploadPath = "https://i9e202.p.ssafy.io/main_images";
+
+        String [] mainImgUrl = {
+                "/nation_imgs/가나_아크라.png","/nation_imgs/감비아_반줄.png","/nation_imgs/노르웨이_오슬로.png","/nation_imgs/대한민국_서울.png",
+                "/nation_imgs/덴마크_코펜하겐.png","/nation_imgs/러시아_모스크바.png","/nation_imgs/룩셈부르크_룩셈부르크.png","/nation_imgs/말레이시아_쿠알라룸푸르.png",
+                "/nation_imgs/멕시코_멕시코시티.png","/nation_imgs/불가리아_소피아.png","/nation_imgs/브라질_브라질리아.png","/nation_imgs/사우디아라비아_리야드.png",
+                "/nation_imgs/스페인_마드리드.png","/nation_imgs/싱가포르_싱가포르.png", "/nation_imgs/영국_런던.png","/nation_imgs/오스트레일리아_캔버라.png",
+                "/nation_imgs/이란_테헤란.png","/nation_imgs/조선민주주의인민공화국.png", "/nation_imgs/칠레_산티아고.png","/nation_imgs/캐나다_오타와.png",
+                "/nation_imgs/콜롬비아_보고타.png","/nation_imgs/튀르키예_앙카라.png", "/nation_imgs/페루_리마.png","/nation_imgs/핀란드_헬싱키.png",
+                "/nation_imgs/헝가리_부다페스트.png"
+        };
+
+        for(int i=0;i<25;i++){
+            CardDto cardDto = new CardDto();
+            //cardDto.setCardId(i);
+            cardDto.setMainTitle(titles[i]);
+            cardDto.setSubTitle(subtitle[i]);
+            cardDto.setMainImgUrl(uploadPath + mainImgUrl[i]);
+            Card cards = cardDto.toEntity();
+            cardsRepository.save(cards);
+        }
+
+    }
+
+    //2. 기본 덱정보 삽입
+    @Test
+    @Order(6)
+    void setNationDeck(){
+
+        //더미 데이터 저장 및 확인
+        Deck deck = Deck.builder()
+                .userId(1)
+                .deckId(2)
+                .cardId(4)
+                .deckName("국가 수도 모음집")
+                .deckDescription("국가 수도 카드로 게임을 플레이하고, 익혀봅시다")
+                .deckUsageCount(1)
+                .isPublic(true)
+                .build();
+
+        deckRepository.save(deck);
+
+        // select 확인
+        DeckDto deckDto = cardDeckService.deckInfo(2);
+
+        System.out.println(deckDto);
+        assertEquals("국가 수도 모음집", deckDto.getDeckName());
+
+
+    }
+    // 카드 덱 테이블 더미 데이터 삽입
+    @Test
+    @Order(7)
+    void setNationCardDeck(){
+
+        cardDeckRepository.deleteAllInBatch();
+
+        long decknum = 2;
+        long cardIdnum =26; // 카드 아이디 시작번호
+        for(int i=0;i<25;i++){
+
+            CardDeck card_decks = CardDeck.builder()
+                    .cardDeckId(cardIdnum)
+                    .cardId(cardIdnum)
+                    .deckId(decknum)
+                    .build();
+            cardDeckRepository.save(card_decks);
+            cardIdnum++;
+
+        }
+
+
+
+    }
+
+
+    //유저 카드 테이블 더미 데이터 삽입
+    @Test
+    @Order(8)
+    void setNationUserCard(){
+
+        userCardRepository.deleteAllInBatch();
+
+        long cardIdnum =26;
+        for(int i=0;i<25;i++){
+
+            UserCard userCard = UserCard.builder()
+                    .userId(0)
+                    .cardId(cardIdnum)
+                    .build();
+
+            userCardRepository.save(userCard);
+            cardIdnum++;
+
+        }
+
+    }
 
 }
