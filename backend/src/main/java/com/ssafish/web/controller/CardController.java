@@ -3,6 +3,7 @@ package com.ssafish.web.controller;
 import com.ssafish.domain.card.Card;
 import com.ssafish.domain.card.CardsRepository;
 import com.ssafish.domain.card.UserCardRepository;
+import com.ssafish.domain.deck.CardDeckRepository;
 import com.ssafish.service.CardService;
 import com.ssafish.web.dto.CardDto;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,9 @@ public class CardController {
     UserCardRepository userCardRepository;
     @Autowired
     CardsRepository cardsRepository;
+
+    @Autowired
+    CardDeckRepository cardDeckRepository;
 
     @PostMapping("/card")
     public ResponseEntity<?> cardInsret(MultipartHttpServletRequest imgFile) {
@@ -90,7 +94,23 @@ public class CardController {
     public ResponseEntity<?> cardDelete(@PathVariable long cardId) {
 
         // 유저_카드 간의 관계가 있을때 관계만을 삭제한다.
+        // 만약 다른 덱에 포함되어있다면 카드 삭제 불가
         try {
+            long deckId = cardDeckRepository.findCard(cardId);
+            StringBuilder errorMessage = new StringBuilder("카드 덱에서 사용중이므로 제거 할수 없는 카드입니다.");
+            return ResponseEntity.badRequest().body(errorMessage.toString());
+
+
+        }catch(Exception e){
+            log.info("덱에 포함되지 않은 카드입니다.");
+        }
+
+
+
+
+
+        try {
+
             Card card = cardsRepository.findByCardId(cardId);
             long userId = card.getUserId();
             if (userCardRepository.isRelation(cardId, userId) >= 1) {

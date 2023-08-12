@@ -180,16 +180,16 @@ public class CardService {
             //main 이미지 삭제
             //StringTokenizer st = new StringTokenizer(mainImage,"/");
             String main[] = mainImage.split("/");
-            System.out.println(main);
+            log.info("filename : " +main[4]);
 
-            File destfile = new File(uploadMainPath+main[4]);
+            File destfile = new File("/home/ssafish/cardMainImage/"+main[4]);
             destfile.delete();
 
             if(subImage != null){
                 String sub[] = mainImage.split("/");
                 System.out.println(sub);
 
-                destfile = new File(uploadMainPath+sub[4]);
+                destfile = new File("/home/ssafish/cardSubImage/"+sub[4]);
                 destfile.delete();
             }
 
