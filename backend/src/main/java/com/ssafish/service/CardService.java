@@ -59,7 +59,7 @@ public class CardService {
     @Transactional
     public CardDto cardInsert(CardDto inputcardDto, MultipartFile mainImgUrl ,MultipartFile subImgUrl){
 
-
+        CardDto cardDto = new CardDto();
         File destFile = new File("dummy");
         File destFile2 = new File("dummy2");
 
@@ -69,7 +69,7 @@ public class CardService {
             File uploadDir = new File(uploadMainPath); // 수정
             if (!uploadDir.exists()) {
                 uploadDir.mkdir();
-                log.info("uploadDir 생성했습니다.") ;
+                log.info("uploadDir 생성") ;
             }
 
             // 파일정보와 새 이름을 지정한다.
@@ -80,11 +80,11 @@ public class CardService {
             String extension = StringUtils.getFilenameExtension(filename);
             String saveFileName = uuid + "." + extension;
 
-            log.info("card Main image ready!!!");
+            log.info("card Main image ready123123");
             log.info("image file path: " + destFile.getPath());
 
             String path = "/home/ssafish/cardMainImage";
-            destFile = new File(path +File.separator+ saveFileName);
+            destFile = new File(path +File.separator+ saveFileName); //// 이부분을 고치니 해결되었다.
             log.info("image file path: " + destFile.getPath());
 
             mainImgUrl.transferTo(destFile); //이미지 저장
@@ -108,32 +108,36 @@ public class CardService {
 
 
 
-                destFile2 = new File(uploadSubPath+ saveFileName2);
+                destFile2 = new File("/home/ssafish/cardSubImage"+File.separator+ saveFileName2);
                 mainImgUrl.transferTo(destFile2); //이미지 저장
                 log.info("card Main image is saved");
                 log.info("image file path: " + destFile2.getPath());
 
-                inputcardDto.setSubImgUrl(downloadSubPath + saveFileName2);
+                inputcardDto.setSubImgUrl("https://i9e202.p.ssafy.io/sub_images/" + saveFileName2);
 
 
             }
 
 
 
-            log.info(" card DB access start");
+            log.info(" card DB access success");
             //DB에 저장
-            inputcardDto.setMainImgUrl(downloadMainPath + saveFileName);
+            inputcardDto.setMainImgUrl("https://i9e202.p.ssafy.io/main_images/" + saveFileName);
+
+            System.out.println("inputcardDto : "+inputcardDto);
             Card card = inputcardDto.toEntity();
+            System.out.println("card: "+ card);
             cardsRepository.save(card);
+            System.out.println("card: "+ card);
 
             UserCard userCard = UserCard.builder()
-                    .cardId(inputcardDto.getCardId())
+                    .cardId(card.getCardId())
                     .userId(inputcardDto.getUserId())
                     .build();
+
             userCardRepository.save(userCard);
 
-            inputcardDto.setResult(1);
-            log.info(" card DB access success");
+            inputcardDto.setResult(SUCCESS);
 
         }catch(Exception e){
             e.printStackTrace();
@@ -149,7 +153,7 @@ public class CardService {
             }
 
 
-            inputcardDto.setResult(0);
+            inputcardDto.setResult(FAIL);
         }
         return inputcardDto;
 
@@ -171,19 +175,21 @@ public class CardService {
             String mainImage = card.getMainImgUrl();
             String subImage = card.getSubImgUrl();
 
+
+
             //main 이미지 삭제
             //StringTokenizer st = new StringTokenizer(mainImage,"/");
             String main[] = mainImage.split("/");
-            System.out.println(main);
+            log.info("filename : " +main[4]);
 
-            File destfile = new File(uploadMainPath+main[4]);
+            File destfile = new File("/home/ssafish/cardMainImage/"+main[4]);
             destfile.delete();
 
             if(subImage != null){
                 String sub[] = mainImage.split("/");
                 System.out.println(sub);
 
-                destfile = new File(uploadMainPath+sub[4]);
+                destfile = new File("/home/ssafish/cardSubImage/"+sub[4]);
                 destfile.delete();
             }
 
@@ -209,6 +215,7 @@ public class CardService {
     public List<CardDto> userCardList(long userId){
     //사용자의 모든 카드정보를 받아온다.
         List<Card> userCardList = cardsRepository.UserCardList(userId);
+        log.info("drt: "+userCardList);
         List<CardDto> userCardDtoList = new ArrayList<>();
         userCardList.forEach((card) -> userCardDtoList.add(card.toDto()));
         return userCardDtoList;

@@ -1,12 +1,12 @@
 package com.ssafish.web.dto.Phase;
 
+import com.ssafish.service.RoomService;
 import com.ssafish.web.dto.GameData;
 import com.ssafish.web.dto.GameStatus;
 import com.ssafish.web.dto.TypeEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -20,16 +20,15 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class ReplyChoosePhase extends Phase implements ChoosePhase {
 
-    protected final SimpMessageSendingOperations messagingTemplate;
+    protected final RoomService roomService;
 
     @Override
     public void startTurnTimer(GameStatus gameStatus, ScheduledExecutorService turnTimer, CountDownLatch latch) {
         awaitSecond(1L);
         log.info(gameStatus.getRoomId() + "번 방 - ReplyChoosePhase 시작");
-        log.info("Scheduled task invoked by thread: {}", Thread.currentThread().getName());
 
         // 턴 시작을 알림
-        messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(),
+        roomService.sendMessageToRoom(gameStatus.getRoomId(),
                 ResponseEntity.ok(GameData.builder()
                               .type(TypeEnum.REPLY_TURN.name())
                               .player(gameStatus.getOpponentPlayer().getUserId())
@@ -81,7 +80,11 @@ public class ReplyChoosePhase extends Phase implements ChoosePhase {
         List<Long> enrollCurrent = gameStatus.getCurrentPlayer().getCardsEnrolled();
         List<Long> middleDeck = gameStatus.getMiddleDeck();
 
-        messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(), ResponseEntity.ok(gameData));
+        roomService.sendMessageToRoom(gameStatus.getRoomId(), ResponseEntity.ok(gameData));
+
+        int currentPlayerIdx = gameStatus.getCurrentPlayerIdx();
+        long currentUserId = gameStatus.getPlayerList().get(currentPlayerIdx).getUserId();
+        long opponentUserId = gameStatus.getOpponentPlayer().getUserId();
 
         if (gameData.isGoFish()) {
         // isGoFish = true면 짝인 카드가 없다
@@ -89,7 +92,7 @@ public class ReplyChoosePhase extends Phase implements ChoosePhase {
             // 중앙 덱에 카드가 있으면 카드 드로우
                 Long cardDraw = middleDeck.remove(middleDeck.size() - 1);
 
-                turnTimer2.schedule(() -> sendAutoDraw(gameStatus, cardDraw), 2 * ++delaySecond, TimeUnit.SECONDS);
+                turnTimer2.schedule(() -> sendAutoDraw(gameStatus, currentUserId, cardDraw), 2 * ++delaySecond, TimeUnit.SECONDS);
                 // 카드가 requester 손패로 이동
                 if (!handCurrent.contains(cardDraw)) {
                     handCurrent.add(cardDraw);
@@ -100,7 +103,7 @@ public class ReplyChoosePhase extends Phase implements ChoosePhase {
                     gameStatus.getCheatSheet().remove(cardDraw);
                     gameStatus.getCurrentPlayer().addScore(gameStatus.getPointMap().get(cardDraw));
 
-                    turnTimer2.schedule(() -> sendEnroll(gameStatus, gameStatus.getCurrentPlayer().getUserId(), cardDraw), 2 * ++delaySecond, TimeUnit.SECONDS);
+                    turnTimer2.schedule(() -> sendEnroll(gameStatus, currentUserId, cardDraw), 2 * ++delaySecond, TimeUnit.SECONDS);
 
                     log.info(gameStatus.getRoomId() + "번 방 - 한 유저의 손패 수: " + handCurrent.size());
                     if (handCurrent.isEmpty()) {
@@ -118,7 +121,7 @@ public class ReplyChoosePhase extends Phase implements ChoosePhase {
             handOpponent.remove(cardOpen);
             handCurrent.remove(cardOpen);
 
-            turnTimer2.schedule(() -> sendCardMove(gameStatus), 2 * ++delaySecond, TimeUnit.SECONDS);
+            turnTimer2.schedule(() -> sendCardMove(gameStatus, opponentUserId, currentUserId, cardOpen), 2 * ++delaySecond, TimeUnit.SECONDS);
 
             // 짝 맞춰 플레이어의 등록패로 이동
             enrollCurrent.add(cardOpen);
@@ -126,7 +129,7 @@ public class ReplyChoosePhase extends Phase implements ChoosePhase {
             gameStatus.getCurrentPlayer().addScore(gameStatus.getPointMap().get(cardOpen));
 
 
-            turnTimer2.schedule(() -> sendEnroll(gameStatus, gameStatus.getCurrentPlayer().getUserId(), cardOpen), 2 * ++delaySecond, TimeUnit.SECONDS);
+            turnTimer2.schedule(() -> sendEnroll(gameStatus, currentUserId, cardOpen), 2 * ++delaySecond, TimeUnit.SECONDS);
 
             log.info(gameStatus.getRoomId() + "번 방 - 한 유저의 손패 수: " + handCurrent.size() + " - 다른 유저의 손패 수: " + handOpponent.size());
             if (handCurrent.isEmpty() || handOpponent.isEmpty()) {
@@ -155,18 +158,18 @@ public class ReplyChoosePhase extends Phase implements ChoosePhase {
         return Math.max(3, (int) (Math.random() * timeLimit / 2));
     }
 
-    public void sendAutoDraw(GameStatus gameStatus, long cardDraw) {
-        messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(),
+    public void sendAutoDraw(GameStatus gameStatus, long currentUserId, long cardDraw) {
+        roomService.sendMessageToRoom(gameStatus.getRoomId(),
                 ResponseEntity.ok(GameData.builder()
                                           .type(TypeEnum.AUTO_DRAW.name())
-                                          .player(gameStatus.getCurrentPlayer().getUserId())
+                                          .player(currentUserId)
                                           .cardId(cardDraw)
                                           .build())
         );
     }
 
     public void sendEnroll(GameStatus gameStatus, long userId, long cardId) {
-        messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(),
+        roomService.sendMessageToRoom(gameStatus.getRoomId(),
                 ResponseEntity.ok(GameData.builder()
                                           .type(TypeEnum.ENROLL.name())
                                           .player(userId)
@@ -175,12 +178,13 @@ public class ReplyChoosePhase extends Phase implements ChoosePhase {
         );
     }
 
-    public void sendCardMove(GameStatus gameStatus) {
-        messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(),
+    public void sendCardMove(GameStatus gameStatus, long opponentUserId, long currentUserId, long cardOpen) {
+        roomService.sendMessageToRoom(gameStatus.getRoomId(),
                 ResponseEntity.ok(GameData.builder()
                                           .type(TypeEnum.CARD_MOVE.name())
-                                          .from(gameStatus.getOpponentPlayer().getUserId())
-                                          .to(gameStatus.getCurrentPlayer().getUserId())
+                                          .from(opponentUserId)
+                                          .to(currentUserId)
+                                          .cardId(cardOpen)
                                           .build())
         );
     }
