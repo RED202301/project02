@@ -22,7 +22,7 @@ public class DeckService {
     private final CardDeckRepository cardDeckRepository;
 
     public DeckRequestDto create(DeckRequestDto deckRequestDto) {
-        // DB에 deck 저장
+        // [1] DB에 deck 저장
         DeckDto deckDto = deckRequestDto.getDeck();
 
         // 덱 생성한 사람 id 없거나 덱 이름 및 설명이 없는 경우
@@ -52,16 +52,17 @@ public class DeckService {
 
         Deck createdDeck = deckRepository.save(deck);
 
-        // DB에 card_deck 저장
+        // [2] DB에 card_deck 저장
         long deckId = createdDeck.getDeckId();
 
-        for (int i=0;i<25;i++) {
-            CardDeck card_decks = CardDeck.builder()
-                    .cardId(cardIdList.get(i))
+        cardIdList.forEach(e -> {
+            CardDeck cardDeck = CardDeck.builder()
+                    .cardId(e)
                     .deckId(deckId)
                     .build();
-            cardDeckRepository.save(card_decks);
-        }
+            cardDeckRepository.save(cardDeck);
+        });
+
         deckRequestDto.setDeck(createdDeck.toDto());
         return deckRequestDto;
     }
