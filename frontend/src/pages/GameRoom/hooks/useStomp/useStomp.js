@@ -1,6 +1,7 @@
 const host_URL = import.meta.env.VITE_SERVER_URL;
 
 const ENTER = 'ENTER';
+const EXIT = 'EXIT';
 const START_GAME = 'START_GAME';
 const AUTO_DRAW = 'AUTO_DRAW';
 const ENROLL = 'ENROLL';
@@ -11,7 +12,7 @@ const SELECT_CARD_TURN = 'SELECT_CARD_TURN';
 const SELECT_CARD = 'SELECT_CARD';
 const REPLY_TURN = 'REPLY_TURN';
 const REPLY = 'REPLY';
-const MOVE_CARD = 'MOVE_CARD';
+const CARD_MOVE = 'CARD_MOVE';
 const END_GAME = 'END_GAME';
 const WINNER_CEREMONY = 'WINNER_CEREMONY';
 
@@ -25,7 +26,7 @@ export function sendMessage({ stompClient, roomId, message }) {
   stompClient.send(`/pub/msg/${roomId}`, {}, JSON.stringify({ content: message }));
 }
 
-/** @typedef {'WAITING'|'START_GAME'|'AUTO_DRAW'|'ENROLL'|'SELECT_PLAYER_TURN'|'SELECT_PLAYER'|'SELECT_CARD_TURN'|'SELECT_CARD'|'REPLY_TURN'|'REPLY'|'MOVE_CARD'|'END_GAME'|'WINNER_CEREMONY'} phase*/
+/** @typedef {'WAITING'|'START_GAME'|'AUTO_DRAW'|'ENROLL'|'SELECT_PLAYER_TURN'|'SELECT_PLAYER'|'SELECT_CARD_TURN'|'SELECT_CARD'|'REPLY_TURN'|'REPLY'|'CARD_MOVE'|'END_GAME'|'WINNER_CEREMONY'} phase*/
 
 export function connect(
   /** @type {{callbacks:Map<phase, Function>}} */ {
@@ -59,8 +60,14 @@ export function subscribe(
     switch (subJson.type) {
       case ENTER:
         {
-          const { type, playerList } = subJson;
-          callbacks[type](playerList);
+          const { type, playerList, userId } = subJson;
+          callbacks[type](playerList, userId);
+        }
+        break;
+      case EXIT:
+        {
+          const { type, players, userId } = subJson;
+          callbacks[type](players, userId);
         }
         break;
 
@@ -148,7 +155,7 @@ export function subscribe(
           console.log(type, requester, responser, isGoFish);
         }
         break;
-      case MOVE_CARD:
+      case CARD_MOVE:
         {
           /** @type {{type:phase, from:number, to:number}}*/
           const { type, from, to } = subJson;
@@ -184,23 +191,29 @@ export function enterRoom({ stompClient, roomId, userId, nickname }) {
 }
 
 export function startGame({ stompClient, roomId }) {
-  console.log('-------------', stompClient);
   stompClient.send(`/pub/${roomId}/start-game`, {}, JSON.stringify({ type: START_GAME }));
 }
 export function testPlayer({ stompClient, roomId, player }) {
   stompClient.send(`/pub/${roomId}/test-player`, {}, JSON.stringify({ type: TEST_PLAYER, player }));
 }
+export function selectPlayer({ stompClient, roomId, requester, responser }) {
+  stompClient.send(
+    `/pub/${roomId}/select-player`,
+    {},
+    JSON.stringify({ type: SELECT_PLAYER, requester, responser })
+  );
+}
 export function selectCard({ stompClient, roomId, player, cardId }) {
   stompClient.send(
     `/pub/${roomId}/select-card`,
     {},
-    JSON.stringify({ type: TEST_PLAYER, player, cardId })
+    JSON.stringify({ type: SELECT_CARD, player, cardId })
   );
 }
-export function reply({ stompClient, roomId, requester, responser, isGoFish }) {
+export function reply({ stompClient, roomId, requester, responser, goFish }) {
   stompClient.send(
     `/pub/${roomId}/reply`,
     {},
-    JSON.stringify({ type: REPLY, requester, responser, isGoFish })
+    JSON.stringify({ type: REPLY, requester, responser, goFish })
   );
 }

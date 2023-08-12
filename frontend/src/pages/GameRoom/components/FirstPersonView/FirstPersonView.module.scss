@@ -8,21 +8,29 @@
     display: flex;
     justify-content: center;
 
-    perspective: calc(var(--unit)*3);
+    // perspective: calc(var(--unit)*4);
+    
+    // perspective: 300vh;
+    perspective: 200vh;
+}
+.FirstPersonView * {
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
 }
 
 .Perspective{
     display: flex;
     justify-content: center;
-    transform-style: preserve-3d;
-    perspective: calc(var(--unit)*3);
-    transform-style: preserve-3d;
+    // perspective: calc(var(--unit)*1);
+    
+
+    // perspective: 2500px;
+    perspective: 200vh;
 }
 
 .Rotater{
     display: flex;
     justify-content: center;
-    perspective: calc(var(--unit)*3);
-    transform-style: preserve-3d;
-    translate: 0 calc(var(--unit)*-0.3) 0 ;
+    transition: all 1s;
+    rotate: y var(--viewAngle);    translate: 0 calc(var(--unit)*-0.3) 0;
 }

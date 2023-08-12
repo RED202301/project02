@@ -91,37 +91,37 @@ function Modal({ modal, setModal }) {
                 <div className="form-capacity">
                   <div className="form-capacity2">
                     <label className="inputlabel" htmlFor="timeLimit1">
-                      15초
+                      5초
                     </label>
                     <input
                       type="radio"
                       id="timeLimit1"
+                      name="timeLimit"
+                      value="5"
+                      onChange={e => setTimeLimit(e.target.value)}
+                    ></input>
+                  </div>
+                  <div className="form-capacity2">
+                    <label className="inputlabel" htmlFor="timeLimit2">
+                      15초
+                    </label>
+                    <input
+                      type="radio"
+                      id="timeLimit2"
                       name="timeLimit"
                       value="15"
                       onChange={e => setTimeLimit(e.target.value)}
                     ></input>
                   </div>
                   <div className="form-capacity2">
-                    <label className="inputlabel" htmlFor="timeLimit2">
-                      30초
-                    </label>
-                    <input
-                      type="radio"
-                      id="timeLimit2"
-                      name="timeLimit"
-                      value="30"
-                      onChange={e => setTimeLimit(e.target.value)}
-                    ></input>
-                  </div>
-                  <div className="form-capacity2">
                     <label className="inputlabel" htmlFor="timeLimit3">
-                      45초
+                      0초
                     </label>
                     <input
                       type="radio"
                       id="timeLimit3"
                       name="timeLimit"
-                      value="45"
+                      value="0"
                       onChange={e => setTimeLimit(e.target.value)}
                     ></input>
                   </div>
