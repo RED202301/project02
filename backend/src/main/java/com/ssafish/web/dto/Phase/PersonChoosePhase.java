@@ -1,5 +1,6 @@
 package com.ssafish.web.dto.Phase;
 
+import com.ssafish.service.RoomService;
 import com.ssafish.web.dto.GameData;
 import com.ssafish.web.dto.GameStatus;
 import com.ssafish.web.dto.Player;
@@ -8,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -21,15 +21,14 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class PersonChoosePhase extends Phase implements ChoosePhase {
 
-    protected final SimpMessageSendingOperations messagingTemplate;
+    protected final RoomService roomService;
 
     @Override
     public void startTurnTimer(GameStatus gameStatus, ScheduledExecutorService turnTimer, CountDownLatch latch) {
         awaitSecond(1L);
         log.info(gameStatus.getRoomId() + "번 방 - PersonChoosePhase 시작");
-        log.info("Scheduled task invoked by thread: {}", Thread.currentThread().getName());
 
-        messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(),
+        roomService.sendMessageToRoom(gameStatus.getRoomId(),
                 ResponseEntity.ok(GameData.builder()
                                           .type(TypeEnum.SELECT_PLAYER_TURN.name())
                                           .player(gameStatus.getCurrentPlayer().getUserId())
@@ -69,7 +68,7 @@ public class PersonChoosePhase extends Phase implements ChoosePhase {
         gameStatus.changeCurrentPhase();
 
         // subscriber 들에게 메시지 전달
-        messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(), ResponseEntity.ok(gameData));
+        roomService.sendMessageToRoom(gameStatus.getRoomId(), ResponseEntity.ok(gameData));
 
         latch.countDown();
     }
@@ -77,7 +76,7 @@ public class PersonChoosePhase extends Phase implements ChoosePhase {
     public void handlePub(@Payload GameData gameData, GameStatus gameStatus, ScheduledExecutorService turnTimer, CountDownLatch latch) {
         // pub 처리
         if (TypeEnum.TEST_PLAYER.name().equals(gameData.getType())) {           // 질문 대상 떠보기
-            messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(), gameData);
+            roomService.sendMessageToRoom(gameStatus.getRoomId(), ResponseEntity.ok(gameData));
         } else if (TypeEnum.SELECT_PLAYER.name().equals(gameData.getType())) {  // 질문 대상 지목하기
             this.endTurn(gameData, gameStatus, turnTimer, latch);
         }

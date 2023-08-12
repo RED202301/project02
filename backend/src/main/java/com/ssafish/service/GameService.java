@@ -110,15 +110,20 @@ public class GameService {
         boards.get(roomId).handlePub(gameData);
     }
 
-    public void testPlayer(long roomId, GameData gameData) {
-        boards.get(roomId).handlePub(gameData);
-    }
-
     public void selectCard(long roomId, GameData gameData) {
         boards.get(roomId).handlePub(gameData);
     }
 
     public void reply(long roomId, GameData gameData) {
         boards.get(roomId).handlePub(gameData);
+    }
+
+    public List<Player> ready(long roomId, GameData gameData) {
+        long userId = gameData.getPlayer();
+        List<Player> playerList = boards.get(roomId).getGameStatus().getPlayerList();
+        Player player = playerList.stream().filter(e -> e.getUserId() == userId).findAny().orElseThrow();
+        player.changeReady();
+
+        return playerList;
     }
 }
