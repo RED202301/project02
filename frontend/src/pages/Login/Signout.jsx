@@ -23,13 +23,13 @@ function Signout() {
           else {
             res.value = false
           }
-          console.log(res.value);
           axios
-              .delete(`https://i9e202.p.ssafy.io/api/v1/oauth/`, {
-                wantToDeleteDeck: res.value
-              },{
+              .delete(`https://i9e202.p.ssafy.io/api/v1/oauth/`,{
                 headers: {
                   Authorization: `Bearer ${accessToken}`,
+                },
+                data:{
+                  wantToDeleteDeck: res.value,
                 },
               })
               .then(response => {
