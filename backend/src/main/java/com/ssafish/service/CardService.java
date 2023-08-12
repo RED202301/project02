@@ -131,7 +131,7 @@ public class CardService {
             System.out.println("card: "+ card);
 
             UserCard userCard = UserCard.builder()
-                    .cardId(inputcardDto.getCardId())
+                    .cardId(card.getCardId())
                     .userId(inputcardDto.getUserId())
                     .build();
 
@@ -142,12 +142,12 @@ public class CardService {
         }catch(Exception e){
             e.printStackTrace();
 
-//            if(destFile.exists()) {
-//                destFile.delete();
-//            }
-//            if(destFile2.exists()) {
-//                destFile2.delete();
-//            }
+            if(destFile.exists()) {
+                destFile.delete();
+            }
+            if(destFile2.exists()) {
+                destFile2.delete();
+            }
             if(cardsRepository.findByCardId(inputcardDto.getCardId()) != null){
                 cardsRepository.deleteById(inputcardDto.getCardId());
             }
@@ -215,6 +215,7 @@ public class CardService {
     public List<CardDto> userCardList(long userId){
     //사용자의 모든 카드정보를 받아온다.
         List<Card> userCardList = cardsRepository.UserCardList(userId);
+        log.info("drt: "+userCardList);
         List<CardDto> userCardDtoList = new ArrayList<>();
         userCardList.forEach((card) -> userCardDtoList.add(card.toDto()));
         return userCardDtoList;
