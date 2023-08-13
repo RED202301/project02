@@ -25,25 +25,30 @@ export default function CardsEnrolled(/** @type {{cards:Card[]}} */ { cards }) {
     const centerIdx = (cards.length - 1) / 2;
     return idx - centerIdx;
   }
-
   return (
-    <div className={`${styles.CardsEnrolled}`}>
+    <div
+      className={`${styles.CardsEnrolled}`}
+      style={{
+        // rotate: userId === me ? '0 0 1 180deg' : '0 0 0 180deg',
+        rotate: '0 0 1 180deg',
+      }}
+    >
       {cards.map(({ cardId, mainTitle, subTitle, mainImgUrl, point }, idx) => (
         <Card
           {...{ cardId, mainTitle, subTitle, mainImgUrl, point }}
           key={idx}
-          width={'calc(var(--unit)*0.2)'}
-          height={'calc(var(--unit)*0.3)'}
+          width={'calc(var(--unit)*0.16)'}
+          height={'calc(var(--unit)*0.24)'}
           style={{
             position: 'absolute',
             transformOrigin: 'bottom',
-            '--translateX': `translateX(calc(${unit(idx)}*var(--unit)*0.2*${
-              cards.length <= 5 ? 1 : 5 / (cards.length + 1)
+            '--translateX': `translateX(calc(${unit(idx)}*var(--unit)*${
+              cards.length <= 5 ? 0.15 : 0.6 / (cards.length + 1)
             }))`,
-            '--rotateZ': `rotateZ(${unit(idx) * 10}deg)`,
-            '--translateY': `translateY(calc(${
-              Math.sin(((unit(idx) * 10 + 90) / 180) * Math.PI) - 1
-            }*var(--unit)))`,
+            '--rotateZ': `rotateZ(0)`,
+            // '--translateY': userId === me ? `translateY(0)` : `translateY(calc(var(--unit)*0.24))`,
+            '--translateY': `translateY(calc(var(--unit)*0.24))`,
+            // '--translateY': `translateY(0)`,
           }}
         />
       ))}

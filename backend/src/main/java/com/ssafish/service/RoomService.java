@@ -7,6 +7,8 @@ import com.ssafish.web.dto.RoomRequestDto;
 import com.ssafish.web.dto.RoomResponseDto;
 import com.ssafish.web.dto.SocketData;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,7 @@ import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.Map;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class RoomService {
@@ -23,13 +26,12 @@ public class RoomService {
     private final WebSocketSubscriberManager subscriberManager;
     private final SimpMessageSendingOperations messagingTemplate;
 
-    public void sendMessageToRoom(Long roomId, String message) {
+    public void sendMessageToRoom(long roomId, ResponseEntity<?> response) {
         Map<Long, String> sessionIds = subscriberManager.getRoomById(roomId);
         if (sessionIds == null) {
-            System.out.println("TT");
-            return;
+            throw new NullPointerException(roomId + "번 방의 소켓 세션이 없습니다.");
         }
-        messagingTemplate.convertAndSend("/sub/" + roomId, message);
+        messagingTemplate.convertAndSend("/sub/" + roomId, response);
     }
 
     public void processClientEntrance(Long roomId, Long userId, String sessionId) {

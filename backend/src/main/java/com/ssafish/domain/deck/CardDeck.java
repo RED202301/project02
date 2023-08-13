@@ -34,8 +34,4 @@ public class CardDeck {
         this.deckId = deckId;
     }
 
-
-
-
-
 }

@@ -1,7 +1,5 @@
 package com.ssafish.service;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import com.ssafish.domain.user.User;
 import com.ssafish.domain.user.UserRepository;
 import com.ssafish.web.dto.KakaoUserInfo;
@@ -12,9 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -56,12 +52,12 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteUser(long kakaoId) {
+    public long deleteUser(long kakaoId) {
         // kakao 연결 해제
         String reqURL = "https://kapi.kakao.com/v1/user/unlink";
         String kakaoAccessToken = userRepository.findByKakaoId(kakaoId).getKakaoAccessToken();
+        long userId = userRepository.findByKakaoId(kakaoId).getUserId();
 
-        //access_token을 이용하여 사용자 정보 조회
         try {
             URL url = new URL(reqURL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -76,8 +72,10 @@ public class UserService {
 
             // DB에서 삭제
             userRepository.deleteByKakaoId(kakaoId);
+            return userId;
         } catch (IOException e) {
             e.printStackTrace();
+            return -1;
         }
     }
 

@@ -7,9 +7,9 @@ import lombok.*;
 import javax.persistence.*;
 
 //@AllArgsConstructor
+
 @ToString
 @Getter
-@Builder
 @NoArgsConstructor
 @Table(name = "Cards")
 @Entity
@@ -53,7 +53,7 @@ public class Card extends BaseTimeEntity {
 
     @Builder
     public Card
-             (long cardId, long userId, String mainTitle, String subTitle,String mainImgUrl, String cardDescription,String subImgUrl, int point){
+             (long cardId, long userId, String mainTitle, String subTitle,String mainImgUrl, String subImgUrl,String cardDescription, int point){
         this.cardId = cardId;
         this.userId = userId;
         this.mainTitle = mainTitle;
@@ -72,6 +72,7 @@ public class Card extends BaseTimeEntity {
                 .mainTitle(mainTitle)
                 .mainImgUrl(mainImgUrl)
                 .subTitle(subTitle)
+                .cardDescription(cardDescription)
                 .subImgUrl(subImgUrl)
                 .point(point)
                 .build();
