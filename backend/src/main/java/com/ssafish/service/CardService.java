@@ -61,7 +61,7 @@ public class CardService {
 
         CardDto cardDto = new CardDto();
         File destFile = new File("dummy");
-        //File destFile2 = new File("dummy2");
+        File destFile2 = new File("dummy2");
 
         try {
 
@@ -82,9 +82,9 @@ public class CardService {
 
             log.info("card Main image ready123123");
             log.info("image file path: " + destFile.getPath());
-            
+
             String path = "/home/ssafish/cardMainImage";
-            destFile = new File(path +File.separator+ saveFileName);
+            destFile = new File(path +File.separator+ saveFileName); //// 이부분을 고치니 해결되었다.
             log.info("image file path: " + destFile.getPath());
 
             mainImgUrl.transferTo(destFile); //이미지 저장
@@ -92,44 +92,49 @@ public class CardService {
             log.info("image file path: " + destFile.getPath());
 
             //subImgUrl save
-//            if(subImgUrl != null){
-//                File uploadsubDir = new File(uploadSubPath); // 수정
-//                if (!uploadsubDir.exists()) {
-//                    uploadsubDir.mkdir();
-//                    log.info("uploadDir sub 생성") ;
-//                }
-//
-//                // 파일정보와 새 이름을 지정한다.
-//                String subfilename = subImgUrl.getOriginalFilename();
-//                System.out.println(subfilename);
-//                UUID uuid2 = UUID.randomUUID();
-//                String extension2 = StringUtils.getFilenameExtension(subfilename);
-//                String saveFileName2 = uuid2 + "." + extension2;
-//
-//
-//
-//                destFile2 = new File(uploadSubPath+ saveFileName2);
-//                mainImgUrl.transferTo(destFile2); //이미지 저장
-//                log.info("card Main image is saved");
-//                log.info("image file path: " + destFile2.getPath());
-//
-//                inputcardDto.setSubImgUrl(downloadSubPath + saveFileName2);
-//
-//
-//            }
+            if(subImgUrl != null){
+                File uploadsubDir = new File(uploadSubPath); // 수정
+                if (!uploadsubDir.exists()) {
+                    uploadsubDir.mkdir();
+                    log.info("uploadDir sub 생성") ;
+                }
+
+                // 파일정보와 새 이름을 지정한다.
+                String subfilename = subImgUrl.getOriginalFilename();
+                System.out.println(subfilename);
+                UUID uuid2 = UUID.randomUUID();
+                String extension2 = StringUtils.getFilenameExtension(subfilename);
+                String saveFileName2 = uuid2 + "." + extension2;
+
+
+
+                destFile2 = new File("/home/ssafish/cardSubImage"+File.separator+ saveFileName2);
+                mainImgUrl.transferTo(destFile2); //이미지 저장
+                log.info("card Main image is saved");
+                log.info("image file path: " + destFile2.getPath());
+
+                inputcardDto.setSubImgUrl("https://i9e202.p.ssafy.io/sub_images/" + saveFileName2);
+
+
+            }
 
 
 
             log.info(" card DB access success");
             //DB에 저장
-            inputcardDto.setMainImgUrl(downloadMainPath + saveFileName);
+            inputcardDto.setMainImgUrl("https://i9e202.p.ssafy.io/main_images/" + saveFileName);
+
+            System.out.println("inputcardDto : "+inputcardDto);
             Card card = inputcardDto.toEntity();
+            System.out.println("card: "+ card);
             cardsRepository.save(card);
+            System.out.println("card: "+ card);
 
             UserCard userCard = UserCard.builder()
-                    .cardId(inputcardDto.getCardId())
+                    .cardId(card.getCardId())
                     .userId(inputcardDto.getUserId())
                     .build();
+
             userCardRepository.save(userCard);
 
             inputcardDto.setResult(SUCCESS);
@@ -137,12 +142,12 @@ public class CardService {
         }catch(Exception e){
             e.printStackTrace();
 
-//            if(destFile.exists()) {
-//                destFile.delete();
-//            }
-//            if(destFile2.exists()) {
-//                destFile2.delete();
-//            }
+            if(destFile.exists()) {
+                destFile.delete();
+            }
+            if(destFile2.exists()) {
+                destFile2.delete();
+            }
             if(cardsRepository.findByCardId(inputcardDto.getCardId()) != null){
                 cardsRepository.deleteById(inputcardDto.getCardId());
             }
@@ -150,7 +155,7 @@ public class CardService {
 
             inputcardDto.setResult(FAIL);
         }
-        return cardDto;
+        return inputcardDto;
 
     }
 
@@ -170,19 +175,21 @@ public class CardService {
             String mainImage = card.getMainImgUrl();
             String subImage = card.getSubImgUrl();
 
+
+
             //main 이미지 삭제
             //StringTokenizer st = new StringTokenizer(mainImage,"/");
             String main[] = mainImage.split("/");
-            System.out.println(main);
+            log.info("filename : " +main[4]);
 
-            File destfile = new File(uploadMainPath+main[4]);
+            File destfile = new File("/home/ssafish/cardMainImage/"+main[4]);
             destfile.delete();
 
             if(subImage != null){
                 String sub[] = mainImage.split("/");
                 System.out.println(sub);
 
-                destfile = new File(uploadMainPath+sub[4]);
+                destfile = new File("/home/ssafish/cardSubImage/"+sub[4]);
                 destfile.delete();
             }
 
@@ -208,6 +215,7 @@ public class CardService {
     public List<CardDto> userCardList(long userId){
     //사용자의 모든 카드정보를 받아온다.
         List<Card> userCardList = cardsRepository.UserCardList(userId);
+        log.info("drt: "+userCardList);
         List<CardDto> userCardDtoList = new ArrayList<>();
         userCardList.forEach((card) -> userCardDtoList.add(card.toDto()));
         return userCardDtoList;

@@ -1,9 +1,8 @@
 package com.ssafish.web;
 
-import com.ssafish.domain.Room;
+import com.ssafish.common.util.TimeManager;
 import com.ssafish.service.GameService;
 import com.ssafish.service.RoomService;
-import com.ssafish.service.UserService;
 import com.ssafish.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,10 +12,7 @@ import org.springframework.messaging.handler.annotation.*;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.List;
@@ -30,8 +26,7 @@ public class RoomController {
 
     private final RoomService roomService;
     private final GameService gameService;
-    private final UserService userService;
-
+    private final TimeManager timeManager;
 
     @Transactional
     @PostMapping("/api/v1/room")
@@ -81,15 +76,6 @@ public class RoomController {
         log.info(pinNumber);
 
         return roomService.findByPinNumber(pinNumber);
-    }
-
-    @PostMapping("/api/v1/room/msg")
-    public void msgToRoom(@RequestBody MsgData msgRequest) {
-        log.info(msgRequest.toString());
-
-        Long roomId = msgRequest.getRoomId();
-        String content = msgRequest.getContent();
-        roomService.sendMessageToRoom(roomId, content);
     }
 
     @MessageMapping("/enter/{roomId}")
@@ -154,5 +140,25 @@ public class RoomController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
+    }
+
+    @MessageMapping("/chat/{roomId}")
+    public void chat(@DestinationVariable long roomId, @Payload MsgData data,
+                                       @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) {
+        try {
+            MsgData response = MsgData.builder()
+                    .type(data.getType())
+                    .content(timeManager.getCurrentTime() + data.getSender() + ": " + data.getContent())
+                    .build();
+            roomService.sendMessageToRoom(roomId, ResponseEntity.status(HttpStatus.OK).body(response));
+        } catch (NullPointerException e) {
+            roomService.sendMessageToRoom(roomId, ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()));
+        }
+    }
+
+    @MessageMapping("/speech/{roomId}")
+    public void speech(@DestinationVariable long roomId, @Payload MsgData data,
+                       @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) {
+        
     }
 }

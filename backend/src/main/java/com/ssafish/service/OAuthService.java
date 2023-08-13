@@ -125,7 +125,9 @@ public class OAuthService {
             kakaoUserInfo.setNickname(profile.getAsJsonObject().get("nickname").getAsString());
             kakaoUserInfo.setProfileImgUrl(profile.getAsJsonObject().get("profile_image_url").getAsString());
             kakaoUserInfo.setThumnailImgUrl(profile.getAsJsonObject().get("thumbnail_image_url").getAsString());
-            kakaoUserInfo.setEmail(kakaoAccount.getAsJsonObject().get("email").getAsString());
+            if (kakaoAccount.getAsJsonObject().has("email")) {
+                kakaoUserInfo.setEmail(kakaoAccount.getAsJsonObject().get("email").getAsString());
+            }
 
             br.close();
 

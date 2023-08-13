@@ -5,8 +5,11 @@
     height: 100vh;
 
     display: flex;
-    justify-content: space-between;
     align-items: center;
 
     pointer-events: none;
+    button {
+        position: absolute;
+        pointer-events:auto;
+    }
 }

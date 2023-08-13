@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { setCookie } from '../../components/Cookie';
 import './kakaoLogin.css';
 import Swal from 'sweetalert2';
+import Cubeloader from '../../components/cubeloader';
 
 const base_url = import.meta.env.VITE_SERVER_URL;
 function Login2() {
@@ -69,12 +70,21 @@ function Login2() {
                       })
                       .catch(err => {
                         console.log(err);
-                        navigate('../');
+                        Swal.fire({
+                          title: '닉네임 중복',
+                          text: `닉네임을 다시 입력해주세요`,
+                          confirmButtonText: '확인',
+                        })
+                        location.reload();
                       });
                   }
                 }) //닉네임이 입력 되지 않았을 때,
                 .catch(() => {
-                  navigate('../');
+                  Swal.fire({
+                    text: '닉네임을 입력 해 주세요',
+                    confirmButtonText: '확인',
+                  })
+                  location.reload();
                 });
             }
             //닉네임이 원래 등록되어 있을 때,
@@ -89,7 +99,11 @@ function Login2() {
         //로그인 자체가 실패 했을 때,
         // 에러 발생 시, 에러 응답 출력
         console.error('로그인 자체 실패', e);
-        navigate('../');
+        Swal.fire({
+          text: '로그인 실패',
+          confirmButtonText: '확인',
+        })
+        location.reload();
       }
     })();
   }, []);
@@ -105,28 +119,8 @@ function Login2() {
       // }}
       className="kakaoLogin"
     >
-      <div
-        aria-label="Orange and tan hamster running in a metal wheel"
-        role="img"
-        className="wheel-and-hamster"
-      >
-        <div className="wheel"></div>
-        <div className="hamster">
-          <div className="hamster__body">
-            <div className="hamster__head">
-              <div className="hamster__ear"></div>
-              <div className="hamster__eye"></div>
-              <div className="hamster__nose"></div>
-            </div>
-            <div className="hamster__limb hamster__limb--fr"></div>
-            <div className="hamster__limb hamster__limb--fl"></div>
-            <div className="hamster__limb hamster__limb--br"></div>
-            <div className="hamster__limb hamster__limb--bl"></div>
-            <div className="hamster__tail"></div>
-          </div>
-        </div>
-        <div className="spoke"></div>
-      </div>
+      <Cubeloader/>
+
 
       <div className="go2home">
         <Link to="/">Home</Link>

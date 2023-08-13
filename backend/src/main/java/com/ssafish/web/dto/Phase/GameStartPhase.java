@@ -1,10 +1,10 @@
 package com.ssafish.web.dto.Phase;
 
+import com.ssafish.service.RoomService;
 import com.ssafish.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
@@ -18,14 +18,14 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class GameStartPhase extends Phase {
 
-    protected final SimpMessageSendingOperations messagingTemplate;
+    protected final RoomService roomService;
 
     public void run(GameData gameData, GameStatus gameStatus) {
         log.info(gameStatus.getRoomId() + "번 방 - GameStartPhase 시작");
         ScheduledExecutorService turnTimer = Executors.newSingleThreadScheduledExecutor();
 
         // 게임이 시작되었음을 알리며 카드 데이터를 클라이언트들에게 보낸다
-        messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(), ResponseEntity.ok(gameData));
+        roomService.sendMessageToRoom(gameStatus.getRoomId(), ResponseEntity.ok(gameData));
 
         // 중앙 덱 섞어서 세팅해놓는다
         List<CardDto> cardList = gameData.getCards();
@@ -72,7 +72,7 @@ public class GameStartPhase extends Phase {
     }
 
     public void sendAutoDraw(GameStatus gameStatus, long userId, long cardDraw) {
-        messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(),
+        roomService.sendMessageToRoom(gameStatus.getRoomId(),
                 ResponseEntity.ok(GameData.builder()
                               .type(TypeEnum.AUTO_DRAW.name())
                               .player(userId)
@@ -82,7 +82,7 @@ public class GameStartPhase extends Phase {
     }
 
     public void sendEnroll(GameStatus gameStatus, long userId, long cardId) {
-        messagingTemplate.convertAndSend("/sub/" + gameStatus.getRoomId(),
+        roomService.sendMessageToRoom(gameStatus.getRoomId(),
                 ResponseEntity.ok(GameData.builder()
                                           .type(TypeEnum.ENROLL.name())
                                           .player(userId)

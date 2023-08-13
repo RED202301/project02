@@ -26,7 +26,7 @@ public class Deck extends BaseTimeEntity {
     private long userId;
 
     //@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "card_id", unique = true, nullable = false)
+    @JoinColumn(name = "card_id", nullable = false)
     private long cardId;
 
     @Column(name = "deck_name", length = 10)

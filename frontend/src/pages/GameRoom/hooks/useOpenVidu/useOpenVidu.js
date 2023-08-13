@@ -11,13 +11,16 @@ import { handleStreamCreated, handleStreamDestroyed } from './functions/streamHa
 /** @typedef {import('react').React} React */
 /** @typedef {React.Dispatch<React.SetStateAction<T>>} setState<T> @template T */
 
-export default function useOpenVidu({ sessionId, userId }) {
+export default function useOpenVidu({ sessionId, userId, nickname }) {
   /** @type {[subscriberMap, setState<subscriberMap>]} */
   const [subscriberMap, setSubscriberMap] = useState({});
   /** @type {[Publisher, setState<Publisher>]} */
   const [publisher, setPublisher] = useState(null);
 
   const OV = new OpenVidu();
+  // 콘솔로그 없애기
+  OV.enableProdMode();
+
   const session = OV.initSession();
 
   const publisherProperties = {
@@ -34,13 +37,14 @@ export default function useOpenVidu({ sessionId, userId }) {
     session.on('exception', console.warn);
 
     const token = await getToken(sessionId);
-    await session.connect(token, { userId }).catch(error => {
+    await session.connect(token, { userId, nickname }).catch(error => {
       console.log('There was an error connecting to the session:', error.code, error.message);
     });
 
     const publisher = await OV.initPublisherAsync(undefined, publisherProperties);
     session.publish(publisher);
     setPublisher(publisher);
+    setSubscriberMap(subs => ({ ...subs, [userId]: publisher }));
   }
 
   return {

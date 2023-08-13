@@ -17,18 +17,25 @@ export default function Card({
   height,
   style,
   flipped,
+  isOnHand,
+  onClick,
 }) {
   /** @type {React.MutableRefObject<HTMLDivElement>} */
   cardId;
   const CardRef = useRef();
   return (
     <div
+      onClick={onClick}
       ref={CardRef}
       className={`${styles.Card} ${flipped && styles.flipped}`}
       style={{ ...style, '--width': width || '200px', '--height': height || '300px' }}
     >
       <Back />
-      <Front {...{ mainTitle, subTitle, point, mainImgUrl }}></Front>
+      {isOnHand && flipped ? (
+        <></>
+      ) : (
+        <Front {...{ mainTitle, subTitle, point, mainImgUrl }}></Front>
+      )}
     </div>
   );
 }

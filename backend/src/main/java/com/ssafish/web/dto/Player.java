@@ -16,6 +16,7 @@ public class Player {
     private long userId;
     private String nickname;
     private boolean isBot;
+    private boolean isReady;
     private int score;
     private List<Long> cardsOnHand;
     private List<Long> cardsEnrolled;
@@ -25,6 +26,7 @@ public class Player {
         this.userId = userId;
         this.nickname = nickname;
         this.isBot = isBot;
+        this.isReady = isBot;
         this.score = 0;
         this.cardsOnHand = new ArrayList<>();
         this.cardsEnrolled = new ArrayList<>();
@@ -32,5 +34,9 @@ public class Player {
 
     public void addScore(int scoreAdd) {
         this.score += scoreAdd;
+    }
+
+    public void changeReady() {
+        this.isReady = !this.isReady;
     }
 }
