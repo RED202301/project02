@@ -115,13 +115,13 @@ function Modal({ modal, setModal }) {
                   </div>
                   <div className="form-capacity2">
                     <label className="inputlabel" htmlFor="timeLimit3">
-                      0초
+                      30초
                     </label>
                     <input
                       type="radio"
                       id="timeLimit3"
                       name="timeLimit"
-                      value="0"
+                      value="30"
                       onChange={e => setTimeLimit(e.target.value)}
                     ></input>
                   </div>
