@@ -76,9 +76,11 @@ public class RoomController {
         log.info(pinNumber);
         RoomResponseDto responseDto = roomService.findByPinNumber(pinNumber);
         Board board = gameService.getGameRoomByRoomId(responseDto.getRoomId());
+        log.info("현재 방의 인원 수 : " + board.getGameStatus().getPlayerList().size());
+        log.info("시작 여부 : " + board.isStarted());
 
         if (board.getGameStatus().getPlayerList().size() >= responseDto.getCapacity() || board.isStarted()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cannot add player.");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Cannot add player.");
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
