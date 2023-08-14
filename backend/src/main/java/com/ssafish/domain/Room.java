@@ -23,7 +23,7 @@ public class Room {
     @Column(name = "pin_number", unique = true, nullable = false)
     private String pinNumber;
 
-    @Column(name = "room_name", unique = true, nullable = false)
+    @Column(name = "room_name", unique = false, nullable = false)
     private String roomName;
 
     @Column(name = "user_id", unique = false, nullable = true)
