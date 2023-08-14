@@ -31,7 +31,13 @@ export default function UI(
       <PinNumberDisplay {...{ pinNumber, currentPhase }} />
 
       <RotationController {...{ viewAngles, setView, view }} />
-      {selectedCard ? <Card {...{ ...selectedCard, width: '200px', height: '300px' }} /> : <></>}
+      {selectedCard ? (
+        <Card
+          {...{ ...selectedCard, width: '200px', height: '300px', style: { position: 'absolute' } }}
+        />
+      ) : (
+        <></>
+      )}
       <div className={`${styles.myHand}`}>
         {player ? (
           <CardsOnHand

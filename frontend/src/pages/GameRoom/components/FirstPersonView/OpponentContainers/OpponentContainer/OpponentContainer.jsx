@@ -1,4 +1,5 @@
-import OpenViduCAM from '../../../OpenViduCAM/OpenViduCAM';
+// import OpenViduCAM from '../../../OpenViduCAM/OpenViduCAM_bg_removed';
+import OpenViduCAM2 from '../../../OpenViduCAM/OpenViduCAM_origin';
 import CardsEnrolled from '../../../Cards/CardsEnrolled';
 import CardsOnHand from '../../../Cards/CardsOnHand';
 import styles from './OpponentContainer.module.scss';
@@ -60,8 +61,9 @@ export default function OpponentContainer(
     >
       <div className={`${styles.nickname}`}>{nickname}</div>
       <div onClick={handleClick}>
-        <OpenViduCAM
+        <OpenViduCAM2
           streamManager={subscriber}
+          width={`calc(var(--unit))`}
           height={`calc(var(--unit)*3/4)`}
           style={{ ...style }}
         />

@@ -368,6 +368,21 @@ export default function GameRoom() {
           <></>
         )}
       </div>
+
+      <div
+        style={{
+          position: 'absolute',
+          width: '100vw',
+          height: '100vh',
+          pointerEvents: 'none',
+          boxShadow:
+            currentPlayer === userId
+              ? `inset 0 0 10vw yellowgreen`
+              : selectedPlayer === userId
+              ? `inset 0 0 10vw skyblue`
+              : ``,
+        }}
+      />
     </div>
   );
 }
