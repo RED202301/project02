@@ -54,6 +54,11 @@ public class RoomController {
     public ResponseEntity<Object> findByRoomId(@PathVariable long roomId) {
         try {
             RoomResponseDto responseDto = roomService.findByRoomId(roomId);
+            Board board = gameService.getGameRoomByRoomId(roomId);
+
+            if (board.getGameStatus().getPlayerList().size() >= responseDto.getCapacity() || board.isStarted()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cannot add player.");
+            }
             return ResponseEntity.ok(responseDto);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
