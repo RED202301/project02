@@ -29,14 +29,7 @@ export default function OpponentContainers(
     const range = 360;
     const unitAngle = range / N;
     const startAngle = -90;
-    return startAngle + idx * unitAngle;
-    // const N = opponents.length;
-    // const centerIdx = N - 1;
-    // const offset = idx - centerIdx;
-    // const range = 180;
-    // const unitAngle = range / N;
-    // const startAngle = 180 - unitAngle / 2;
-    // return startAngle + offset * unitAngle;
+    return startAngle - idx * unitAngle;
   }
 
   return (
@@ -44,6 +37,7 @@ export default function OpponentContainers(
       {opponents.map(({ opponent, subscriber }, idx) =>
         subscriber ? (
           <OpponentContainer
+            key={idx}
             {...{
               opponent,
               subscriber,
@@ -54,10 +48,9 @@ export default function OpponentContainers(
               currentPhase,
               testPlayerWapper,
             }}
-            key={idx}
           />
         ) : (
-          <></>
+          <div key={idx}></div>
         )
       )}
     </div>
