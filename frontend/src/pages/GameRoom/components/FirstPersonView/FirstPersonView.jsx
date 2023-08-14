@@ -38,13 +38,6 @@ export default function FirstPersonView(
             }}
           />
           <Table />
-          {/* {playerMap[userId] ? (
-            <div className={`${styles.enrolledCards}`}>
-              <CardsEnrolled cards={playerMap[userId].cardsEnrolled} />
-            </div>
-          ) : (
-            <></>
-          )} */}
         </div>
       </div>
     </div>
