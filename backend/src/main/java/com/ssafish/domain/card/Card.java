@@ -26,7 +26,7 @@ public class Card extends BaseTimeEntity {
     private long userId;
 
 
-    @Column(name = "main_title" ,length = 10)
+    @Column(name = "main_title" ,length = 15)
     private String mainTitle;
 
     @Column(name = "sub_title",length = 200)
