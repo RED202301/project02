@@ -6,9 +6,14 @@
     overflow: hidden;
     background-image: url(./GameRoom.png);
     background-size: cover;
-}
 
-.GameRoom * {
-    --unit: calc(25vw + 50vh);
-    // --unit: 100vh;
+    * {
+        --unit: calc(25vw + 50vh);
+        --viewAngle: var(--view-angle);
+        // --unit: 100vh;
+    }
+
+    button {
+        background-color: white;
+    }
 }
