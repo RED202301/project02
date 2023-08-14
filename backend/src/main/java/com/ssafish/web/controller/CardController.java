@@ -142,5 +142,15 @@ public class CardController {
         return ResponseEntity.ok().body(userCardList);
     }
 
+    //하나의 카드만을 반환
+    @GetMapping("/card/cardId/{cardId}")
+    public ResponseEntity<CardDto> cardData(@PathVariable long cardId) {
+
+        CardDto cardDto = cardsRepository.findByCardId(cardId).toDto();
+
+
+        return ResponseEntity.ok().body(cardDto);
+    }
+
 
 }
