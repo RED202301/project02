@@ -1,6 +1,7 @@
 //logout
 import { removeCookie } from "../../components/Cookie"
 import axios from "axios";
+import Swal from "sweetalert2";
 
 function Logout(){
   const accessToken = localStorage.getItem('accessToken');
@@ -19,8 +20,15 @@ function Logout(){
         localStorage.removeItem("userId");
         localStorage.removeItem("nickname");
         removeCookie('refreshToken'); // 쿠키를 삭제
-        location.reload();
-        window.location.replace('/')
+        Swal.fire({
+          title: '로그아웃 완료',
+          confirmButtonText: '확인',
+          confirmButtonColor: 'black',
+          width: 'auto',
+        }).then(()=>{                  
+          location.reload();
+          window.location.replace('/');
+        })
           })
 	};
 

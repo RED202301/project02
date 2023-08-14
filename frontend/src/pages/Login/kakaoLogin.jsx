@@ -103,7 +103,7 @@ function Login2() {
           text: '로그인 실패',
           confirmButtonText: '확인',
         })
-        location.reload();
+        navigate('../');
       }
     })();
   }, []);

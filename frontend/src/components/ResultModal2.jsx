@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import './ResultModal2.css';
 // import useDidMountEffect from './useDidMountEffect';
 
 function ResultModal() {
@@ -24,6 +25,27 @@ function ResultModal() {
             <div className="form-container">
                 <p onClick={() => setModal(modal => !modal)} className="form-exit">
                 &times;</p>
+                <div className="confetti">
+                  <div className="confetti-piece"></div>
+                  <div className="confetti-piece"></div>
+                  <div className="confetti-piece"></div>
+                  <div className="confetti-piece"></div>
+                  <div className="confetti-piece"></div>
+                  <div className="confetti-piece"></div>
+                  <div className="confetti-piece"></div>
+                  <div className="confetti-piece"></div>
+                  <div className="confetti-piece"></div>
+                  <div className="confetti-piece"></div>
+                  <div className="confetti-piece"></div>
+                  <div className="confetti-piece"></div>
+                  <div className="confetti-piece"></div>
+                  <div className="confetti-piece"></div>
+                  <div className="confetti-piece"></div>
+                  <div className="confetti-piece"></div>
+                  <div className="confetti-piece"></div>
+                  <div className="confetti-piece"></div>
+                  <div className="confetti-piece"></div>
+                </div>
                 <div>
                 <h1 style={{
                  'display':'flex',

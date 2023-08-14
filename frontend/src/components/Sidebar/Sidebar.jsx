@@ -17,7 +17,7 @@ const toggleMenu = () => {
 
   return(
       <div className="Sidebar">
-              <ul className="header-wrapper" style={{'display':'flex','padding':'0px', 'border':'solid', 'borderRadius':'3px',}}>
+              <ul className="Sidebar-header-wrapper" style={{'display':'flex','padding':'0px', 'border':'solid', 'borderRadius':'3px', }}>
                   {/* // 클릭되었을 때 준비한 함수 호출! on off 개념                      */}
                   <p onClick={()=>toggleMenu()} style={{'margin':'0px', 'display':'flex', 'width':'auto',}}>
                     {/* 三 */}
@@ -29,11 +29,17 @@ const toggleMenu = () => {
 
               <ul className={isOpen ? "show-menu" : "hide-menu"} style={{'margin':'0px', 'paddingLeft':'2.2vw',}}> 
               {/* // 삼항연산자 true 일 때 클래스명 show-menu, false일때 hide-menu */}
+                      <br/>
                       <li ><ChangeNickname style={{'border':'solid',}}/></li>
+                      <hr/>
                       <li ><Logout style={{'border':'solid',}}/></li>
-                      <li ><Signout style={{'border':'solid',}}/></li>
+                      <hr/>
                       <li ><Link to="../cardfactory">카드 공방</Link></li>
+                      <hr/>
                       <li ><Link to="../resultmodal">게임 결과 모달 테스트</Link></li>
+                      <hr/>
+                      <li ><Signout style={{'border':'solid',}}/></li>
+                      <hr/>
               </ul>
       </div>
   )

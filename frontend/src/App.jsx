@@ -16,7 +16,7 @@ import Game from './pages/Game/Game';
 import GameUI from './pages/GameUI/App';
 import GameRoom from './pages/GameRoom/GameRoom';
 import MVP from './pages/MVP/MVP';
-// import Cccc from './pages/Main/cccc'
+// import Cccc from './pages/Main/cccc' 
 import ResultModal2 from './components/ResultModal2';
 
 function App() {

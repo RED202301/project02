@@ -23,3 +23,12 @@
     right: -15%;
     transition: 1s;
     }
+
+.Sidebar a {
+    color: #320e53;
+    font-weight: 600;
+}
+
+.Sidebar a:hover {
+    color: #320e53;
+}
