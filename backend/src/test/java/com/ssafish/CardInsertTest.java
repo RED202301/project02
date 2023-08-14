@@ -52,7 +52,7 @@ class CardInsertTest {
     @Order(1)
     void setPeopleCardsToDB() {
 
-        cardsRepository.deleteAllInBatch();
+//        cardsRepository.deleteAllInBatch();
         String [] titles = {"단군왕검", "공자", "광개토대왕","나폴레옹","뉴턴",
                 "데카르트", "레오나르도다빈치","세종대왕", "이순신", "마리 퀴리",
                 "마크 저커버그","선다 피차이", "일론 머스크", "제프 베이조스", "홉스",
@@ -123,7 +123,7 @@ class CardInsertTest {
     @Order(3)
     void setDefaultDeckCardsToDB(){
 
-            cardDeckRepository.deleteAllInBatch();
+//            cardDeckRepository.deleteAllInBatch();
 
         long decknum = 1;
         long cardIdnum =1;
@@ -149,7 +149,7 @@ class CardInsertTest {
     @Order(4)
     void setDefaultUserCardsToDB(){
 
-        userCardRepository.deleteAllInBatch();
+//        userCardRepository.deleteAllInBatch();
 
         long cardIdnum =1;
         for(int i=0;i<25;i++){
@@ -170,7 +170,7 @@ class CardInsertTest {
     @Order(5)
     void setNationCardsToDB() {
 
-        cardsRepository.deleteAllInBatch();
+//        cardsRepository.deleteAllInBatch();
         String [] titles = {"아크라","반줄","오슬로","서울","코펜하겐",
                 "모스크바","룩셈부르크","쿠알라룸푸르","멕시코 시티","소피아",
                 "브라질리아","리야드","마드리드","싱가포르","런던",
@@ -240,7 +240,7 @@ class CardInsertTest {
     @Order(7)
     void setNationCardDeck(){
 
-        cardDeckRepository.deleteAllInBatch();
+//        cardDeckRepository.deleteAllInBatch();
 
         long decknum = 2;
         long cardIdnum =26; // 카드 아이디 시작번호
@@ -266,7 +266,7 @@ class CardInsertTest {
     @Order(8)
     void setNationUserCard(){
 
-        userCardRepository.deleteAllInBatch();
+//        userCardRepository.deleteAllInBatch();
 
         long cardIdnum =26;
         for(int i=0;i<25;i++){

@@ -54,11 +54,6 @@ public class RoomController {
     public ResponseEntity<Object> findByRoomId(@PathVariable long roomId) {
         try {
             RoomResponseDto responseDto = roomService.findByRoomId(roomId);
-            Board board = gameService.getGameRoomByRoomId(roomId);
-
-            if (board.getGameStatus().getPlayerList().size() >= responseDto.getCapacity() || board.isStarted()) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cannot add player.");
-            }
             return ResponseEntity.ok(responseDto);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -77,10 +72,16 @@ public class RoomController {
     }
 
     @GetMapping("/api/v1/room/id/{pinNumber}")
-    public RoomResponseDto findByPinNumber(@PathVariable String pinNumber) {
+    public ResponseEntity<Object> findByPinNumber(@PathVariable String pinNumber) {
         log.info(pinNumber);
+        RoomResponseDto responseDto = roomService.findByPinNumber(pinNumber);
+        Board board = gameService.getGameRoomByRoomId(responseDto.getRoomId());
 
-        return roomService.findByPinNumber(pinNumber);
+        if (board.getGameStatus().getPlayerList().size() >= responseDto.getCapacity() || board.isStarted()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cannot add player.");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 
     @MessageMapping("/enter/{roomId}")
