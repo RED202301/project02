@@ -2,8 +2,6 @@ package com.ssafish;
 
 import com.ssafish.domain.card.Card;
 import com.ssafish.domain.card.CardsRepository;
-import com.ssafish.domain.card.UserCard;
-import com.ssafish.domain.card.UserCardRepository;
 import com.ssafish.domain.deck.CardDeck;
 import com.ssafish.domain.deck.CardDeckRepository;
 import com.ssafish.domain.deck.Deck;
@@ -40,8 +38,7 @@ class CardInsertTest {
     CardService cardService;
     @Autowired
     CardDeckRepository cardDeckRepository;
-    @Autowired
-    UserCardRepository userCardRepository;
+
 
 
 
@@ -81,10 +78,10 @@ class CardInsertTest {
 
         for(int i=0;i<25;i++){
             CardDto cardDto = new CardDto();
-            cardDto.setCardId(i);
             cardDto.setMainTitle(titles[i]);
             cardDto.setSubTitle(subtitle[i]);
             cardDto.setMainImgUrl(uploadPath + mainImgUrl[i]);
+            cardDto.setUserId(1);
             Card cards = cardDto.toEntity();
             cardsRepository.save(cards);
         }
@@ -145,26 +142,7 @@ class CardInsertTest {
 
 
     //유저 카드 테이블 더미 데이터 삽입
-    @Test
-    @Order(4)
-    void setDefaultUserCardsToDB(){
 
-//        userCardRepository.deleteAllInBatch();
-
-        long cardIdnum =1;
-        for(int i=0;i<25;i++){
-
-            UserCard userCard = UserCard.builder()
-                    .userId(0)
-                    .cardId(cardIdnum)
-                    .build();
-
-            userCardRepository.save(userCard);
-            cardIdnum++;
-
-        }
-
-    }
     //나라 카드 입력
     @Test
     @Order(5)
@@ -203,6 +181,7 @@ class CardInsertTest {
             cardDto.setMainTitle(titles[i]);
             cardDto.setSubTitle(subtitle[i]);
             cardDto.setMainImgUrl(uploadPath + mainImgUrl[i]);
+            cardDto.setUserId(1);
             Card cards = cardDto.toEntity();
             cardsRepository.save(cards);
         }
@@ -261,27 +240,6 @@ class CardInsertTest {
     }
 
 
-    //유저 카드 테이블 더미 데이터 삽입
-    @Test
-    @Order(8)
-    void setNationUserCard(){
-
-//        userCardRepository.deleteAllInBatch();
-
-        long cardIdnum =26;
-        for(int i=0;i<25;i++){
-
-            UserCard userCard = UserCard.builder()
-                    .userId(0)
-                    .cardId(cardIdnum)
-                    .build();
-
-            userCardRepository.save(userCard);
-            cardIdnum++;
-
-        }
-
-    }
 
     //나라 카드 입력2
     @Test
@@ -321,6 +279,7 @@ class CardInsertTest {
             cardDto.setMainTitle(titles[i]);
             cardDto.setSubTitle(subtitle[i]);
             cardDto.setMainImgUrl(uploadPath + mainImgUrl[i]);
+            cardDto.setUserId(1);
             Card cards = cardDto.toEntity();
             cardsRepository.save(cards);
         }
@@ -379,26 +338,104 @@ class CardInsertTest {
     }
 
 
-    //유저 카드 테이블 더미 데이터 삽입
+
+
+    //명화 카드 입력
     @Test
-    @Order(12)
-    void setNation2UserCard(){
+    @Order(13)
+    void setPaintingCardsToDB() {
 
-//        userCardRepository.deleteAllInBatch();
+//        cardsRepository.deleteAllInBatch();
+        //수도명
+        String [] titles = {"그랑드자트섬의 일요일 오후","기억의 지속","기타 치는 노인","나와 마을","대사들",
+                "두 자매","마라의 죽음","밤샘하는 사람들","뱃놀이 일행의 오찬","별이 빛나는 밤",
+                "비너스의 탄생","상처 입은 천사","수련 연못","스타","시녀들",
+                "아르놀피니 부부의 초상","아메리칸 고딕","아테네 학당"," 안개바다 위의 방랑자","야간 순찰대",
+                "이반뇌제와 그의 아들 이반","잠자는 집시","진주 귀걸이를 한 소녀","큰 모자를 쓴 잔 에뷔테른","해돋이"
+        };
+        // 국가명
+        String [] subtitle = {"조르주 쇠라","살바도르 달리","파블로 피카소","마르크 샤갈","한스 홀바인",
+                "오귀스트 르누아르","자크루이 다비드","에드워드 호퍼","오귀스트 르누아르","빈센트 반 고흐",
+                "산드로 보티첼리","휴고 심베리","클로드 모네","에드가 드가","디에고 벨라스케스",
+                "얀 판 에이크","그랜트 우드","라파엘로 산치오","다비드 프리드리히","렘브란트 반 레인",
+                "일리야 레핀","앙리 루소","요하네스 페르메이르","아메데오 모딜리아니","클로드 모네"
+        };
 
-        long cardIdnum =51;
+
+// https://i9e202.p.ssafy.io/card_images/people_imgs/1_%EB%8B%A8%EA%B5%B0%EC%99%95%EA%B2%80.png
+        //String uploadPath = "http://i9e202.p.ssafy.io/home/ubuntu/ssafish/cardMainImage";
+        String uploadPath = "https://i9e202.p.ssafy.io/main_images";
+
+        String [] mainImgUrl = {
+                "/painting_imgs/그랑드자트섬의 일요일 오후.jpg","/painting_imgs/기억의 지속.png","/painting_imgs/기타 치는 노인.jpg","/painting_imgs/나와 마을.jpg","/painting_imgs/대사들.jpg",
+                "/painting_imgs/두 자매.jpg","/painting_imgs/마라의 죽음.jpg","/painting_imgs/밤샘하는 사람들.jpg","/painting_imgs/뱃놀이 일행의 오찬.jpg","/painting_imgs/별이 빛나는 밤.jpg",
+                "/painting_imgs/비너스의 탄생.jpg","/painting_imgs/상처 입은 천사.jpg","/painting_imgs/수련 연못.jpg","/painting_imgs/스타.jpg","/painting_imgs/시녀들.jpg",
+                "/painting_imgs/아르놀피니 부부의 초상.jpg","/painting_imgs/아메리칸 고딕.jpg","/painting_imgs/아테네 학당.jpg","/painting_imgs/안개바다 위의 방랑자.jpg","/painting_imgs/야간 순찰대.jpg",
+                "/painting_imgs/이반뇌제와 그의 아들 이반.jpg","/painting_imgs/잠자는 집시.jpg","/painting_imgs/진주 귀걸이를 한 소녀.jpg","/painting_imgs/큰 모자를 쓴 잔 에뷔테른.jpg","/painting_imgs/해돋이.jpg"
+        };
+
+        for(int i=0;i<25;i++){
+            CardDto cardDto = new CardDto();
+            //cardDto.setCardId(i);
+            cardDto.setMainTitle(titles[i]);
+            cardDto.setSubTitle(subtitle[i]);
+            cardDto.setMainImgUrl(uploadPath + mainImgUrl[i]);
+            cardDto.setUserId(1);
+            Card cards = cardDto.toEntity();
+            cardsRepository.save(cards);
+        }
+
+    }
+
+    //2. 기본 덱정보 삽입
+    @Test
+    @Order(14)
+    void setPaintingDeck(){
+
+        //더미 데이터 저장 및 확인
+        Deck deck = Deck.builder()
+                .userId(1)
+                .deckId(4)
+                .cardId(80)
+                .deckName("명화 모음집")
+                .deckDescription("명화 카드로 게임을 플레이하고, 익혀봅시다")
+                .deckUsageCount(1)
+                .isPublic(true)
+                .build();
+
+        deckRepository.save(deck);
+
+        // select 확인
+        DeckDto deckDto = cardDeckService.deckInfo(4);
+
+        System.out.println(deckDto);
+        assertEquals("명화 모음집", deckDto.getDeckName());
+
+
+    }
+    // 카드 덱 테이블 더미 데이터 삽입
+    @Test
+    @Order(15)
+    void setPaintingCardDeck(){
+
+//        cardDeckRepository.deleteAllInBatch();
+
+        long decknum = 4;
+        long cardIdnum =76; // 카드 아이디 시작번호
         for(int i=0;i<25;i++){
 
-            UserCard userCard = UserCard.builder()
-                    .userId(0)
+            CardDeck card_decks = CardDeck.builder()
+                    .cardDeckId(cardIdnum)
                     .cardId(cardIdnum)
+                    .deckId(decknum)
                     .build();
-
-            userCardRepository.save(userCard);
+            cardDeckRepository.save(card_decks);
             cardIdnum++;
 
         }
 
     }
+
+
 
 }
