@@ -1,5 +1,5 @@
 FROM openjdk:11-jre
-EXPOSE 8080
 EXPOSE 5001
-ADD *.jar ssafish.jar
-ENTRYPOINT ["java", "-jar", "ssafish.jar"]
+COPY build/libs/ssafish-0.0.1-SNAPSHOT.jar /ssafish.jar
+WORKDIR /
+ENTRYPOINT ["java", "-jar", "/ssafish.jar"]
