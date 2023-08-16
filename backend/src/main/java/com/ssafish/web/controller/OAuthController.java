@@ -132,13 +132,16 @@ public class OAuthController {
             }
 
             long kakaoId = JwtProvider.getUserId(accessToken, secretKey);
-            long userId = userService.deleteUser(kakaoId);
 
             // 덱 삭제 처리
-            if (userId != -1 && userDeleteDto.isWantToDeleteDeck()) {
+            if (userDeleteDto.isWantToDeleteDeck()) {
+                User user = userService.findUserByKakaoId(kakaoId);
+                long userId = user.getUserId();
                 cardDeckService.delete(userId);
                 deckService.delete(userId);
             }
+
+            userService.deleteUser(kakaoId);
 
             return ResponseEntity.status(HttpStatus.OK).body("회원탈퇴 처리된 유저 kakaoId: " + kakaoId);
         } catch (JwtException e) {

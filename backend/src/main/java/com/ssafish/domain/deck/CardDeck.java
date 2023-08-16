@@ -1,13 +1,12 @@
 package com.ssafish.domain.deck;
 
+import com.ssafish.domain.card.Card;
 import lombok.*;
 
 import javax.persistence.*;
 
 @ToString
 @Getter
-@Builder
-//@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "Card_decks")
 @Entity
@@ -19,19 +18,19 @@ public class CardDeck {
     @Column(name = "card_deck_id", unique = true, nullable = false)
     private Long cardDeckId;
 
-    //@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "card_id", unique = true, nullable = false)
-    private Long cardId;
+    @ManyToOne
+    @JoinColumn(name = "card_id")
+    private Card card;
 
-    //@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "deck_id", unique = true, nullable = false)
-    private Long deckId;
+    @ManyToOne
+    @JoinColumn(name = "deck_id")
+    private Deck deck;
 
     @Builder
-    public CardDeck(Long cardDeckId, Long cardId,Long deckId ){
+    public CardDeck(Long cardDeckId, Card card, Deck deck) {
         this.cardDeckId = cardDeckId;
-        this.cardId = cardId;
-        this.deckId = deckId;
+        this.card = card;
+        this.deck = deck;
     }
 
 }

@@ -1,9 +1,12 @@
 package com.ssafish.service;
 
+import com.ssafish.domain.card.CardsRepository;
 import com.ssafish.domain.deck.CardDeck;
 import com.ssafish.domain.deck.CardDeckRepository;
 import com.ssafish.domain.deck.Deck;
 import com.ssafish.domain.deck.DeckRepository;
+import com.ssafish.domain.user.User;
+import com.ssafish.domain.user.UserRepository;
 import com.ssafish.web.dto.DeckDto;
 import com.ssafish.web.dto.DeckRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +23,8 @@ public class DeckService {
 
     private final DeckRepository deckRepository;
     private final CardDeckRepository cardDeckRepository;
+    private final CardsRepository cardsRepository;
+    private final UserRepository userRepository;
 
     public DeckRequestDto create(DeckRequestDto deckRequestDto) {
         // [1] DB에 deck 저장
@@ -42,8 +47,8 @@ public class DeckService {
         }
 
         Deck deck = Deck.builder()
-                .userId(deckDto.getUserId())
-                .cardId(deckDto.getCardId())
+                .user(userRepository.findById(deckDto.getUserId()).orElseThrow(() -> new IllegalArgumentException("해당하는 유저가 없습니다.")))
+                .card(cardsRepository.findByCardId(deckDto.getCardId()))
                 .deckName(deckDto.getDeckName())
                 .deckDescription(deckDto.getDeckDescription())
                 .deckUsageCount(0)
@@ -57,8 +62,8 @@ public class DeckService {
 
         cardIdList.forEach(e -> {
             CardDeck cardDeck = CardDeck.builder()
-                    .cardId(e)
-                    .deckId(deckId)
+                    .card(cardsRepository.findByCardId(e))
+                    .deck(createdDeck)
                     .build();
             cardDeckRepository.save(cardDeck);
         });
@@ -70,7 +75,8 @@ public class DeckService {
 
     @Transactional
     public void delete(long userId) {
-        deckRepository.deleteAllByUserId(userId);
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당하는 유저가 없습니다."));
+        deckRepository.deleteAllByUser(user);
     }
 
     // 덱 이름으로 덱을 찾는다.
