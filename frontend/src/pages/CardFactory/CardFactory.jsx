@@ -17,9 +17,22 @@ function CardFactory( ){
     const closeModals = () => setIsModalOpens(false)
     const [res, setRes] = useState([''])
     const [rescard, setRescard] = useState('');
+    // const [userId, setUserId] = useState('');
 
     const [selectedCardId, setSelectedCardId] = useState(null); // 선택한 카드의 ID 상태
     const [responseData, setResponseData] = useState([]); // GET 요청으로 받아온 데이터를 저장하는 배열
+    const [userId, setUserId] = useState('');
+
+    function getUserIdFromLocalStorage() {
+      return localStorage.getItem('userId');
+    }
+    
+    useEffect(() => {
+      const storedUserId = getUserIdFromLocalStorage();
+      if (storedUserId) {
+        setUserId(storedUserId);
+      }
+    }, []);
     // const handleAddToDeck = () => {
     //   if (selectedCardIndex !== null) {
     //     if (selectedCardIds.length < 25) {
@@ -48,7 +61,6 @@ function CardFactory( ){
     //   }
     // };
     // const [selectedCardId, setSelectedCardId] = useState(null); // 선택한 카드의 ID 상태
- const userId = {userId}
 
     const handleDeckCard = (cardId) => {
       setSelectedCardId(cardId);
