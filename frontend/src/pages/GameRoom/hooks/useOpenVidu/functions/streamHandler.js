@@ -1,6 +1,6 @@
 /** @typedef {import("openvidu-browser").Session} Session */
 /** @typedef {import("openvidu-browser").StreamEvent} StreamEvent */
-/** @typedef {import("../useOpenVidu").subscriberMap} subscriberMap */
+/** @typedef {import("../initOpenVidu").subscriberMap} subscriberMap */
 
 /** @typedef {import('react').React} React */
 /** @typedef {React.Dispatch<React.SetStateAction<T>>} setState<T> @template T */
@@ -12,7 +12,11 @@ export function handleStreamCreated(
   return function (/** @type {StreamEvent}*/ { stream }) {
     const sub = session.subscribe(stream, undefined);
     const { userId } = JSON.parse(sub.stream.connection.data);
-    setSubscriberMap(subs => ({ ...subs, [userId]: sub }));
+    setSubscriberMap(subs => {
+      const newSubs = { ...subs, [userId]: sub };
+      console.log(newSubs);
+      return newSubs;
+    });
   };
 }
 

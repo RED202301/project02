@@ -17,7 +17,6 @@ export default function Card({
   height,
   style,
   flipped,
-  isOnHand,
   onClick,
 }) {
   /** @type {React.MutableRefObject<HTMLDivElement>} */
@@ -31,11 +30,7 @@ export default function Card({
       style={{ ...style, '--width': width || '200px', '--height': height || '300px' }}
     >
       <Back />
-      {isOnHand && flipped ? (
-        <></>
-      ) : (
-        <Front {...{ mainTitle, subTitle, point, mainImgUrl }}></Front>
-      )}
+      <Front {...{ mainTitle, subTitle, point, mainImgUrl }}></Front>
     </div>
   );
 }
