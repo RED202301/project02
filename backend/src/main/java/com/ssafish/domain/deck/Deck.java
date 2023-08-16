@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @Table(name = "Decks")
 @Entity
@@ -19,7 +20,7 @@ public class Deck extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "deck_id", unique = true, nullable = false)
+    @Column(name = "deck_id")
     private long deckId;
 
     @ManyToOne

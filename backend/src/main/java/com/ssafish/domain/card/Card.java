@@ -13,6 +13,7 @@ import java.util.List;
 
 
 @Getter
+@Setter
 @NoArgsConstructor
 @Table(name = "Cards")
 @Entity
@@ -21,7 +22,7 @@ public class Card extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "card_id", unique = true, nullable = false)
+    @Column(name = "card_id")
     private long cardId;
 
     @ManyToOne
