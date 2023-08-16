@@ -52,11 +52,9 @@ pipeline {
                         sh """
 
                         cd /var/jenkins_home/workspace/ssafish_dev/backend
-                           ./gradlew jib -Pdocker.repository=${dockerRepository} \
-                           -Pdocker.repository.username=${USERNAME} \
-                           -Pdocker.repository.password=${PASSWORD} \
-                           -Pdocker.image.name=${dockerImageName} \
-                           -Pdocker.image.tag="latest"
+                        docker build -t ${dockerRepository}/${dockerImageName} .
+                        docker login
+                        docker push ${dockerRepository}/${dockerImageName}:latest
 
                         """
 
