@@ -26,7 +26,7 @@ public class Board {
     private long deckId;
     private long timeLimit;
     private long capacity;
-    private boolean isStarted = false;
+    private boolean isStarted;
     private GameStatus gameStatus;
     private ChoosePhase currentPhase;
     private ScheduledExecutorService turnTimer;
