@@ -72,4 +72,12 @@ public class DeckService {
     public void delete(long userId) {
         deckRepository.deleteAllByUserId(userId);
     }
+
+    // 덱 이름으로 덱을 찾는다.
+    public Deck findDeckName(String deckName){
+
+        Deck deck = deckRepository.findDeckName(deckName);
+        return deck;
+
+    }
 }

@@ -1,0 +1,82 @@
+// @import url('https://fonts.googleapis.com/css?family=Montserrat:100,400&display=swap');
+
+@font-face {
+  font-family: 'Yeongdeok-Snow-Crab';
+  src: url('./src/assets/Yeongdeok-Snow-Crab.ttf') format('truetype');
+}
+
+.NoticeContainer{
+  position: absolute;
+
+  width: 100vw;
+
+  display: flex;
+  justify-content: center;
+  
+  pointer-events: none;
+
+   // 드래그 못하게 하기
+   -ms-user-select: none; 
+   -moz-user-select: -moz-none;
+   -khtml-user-select: none;
+   -webkit-user-select: none;
+   user-select: none;
+}
+
+.Notice{
+  background-color: #fff;
+  width:500px;
+  height:38px;
+  border:2px #CCD4D0 solid;
+  display:block;
+  transition:0.3s;
+  padding-top:4px;
+  padding-right:6px;
+  padding-bottom:4px;
+  padding-left:6px;
+}
+.Notice:focus{
+  border:2px black solid;
+}
+.Notice[type="text"]
+{
+    font-size:1.25rem;
+  text-align:center;
+  font-family: 'Montserrat', sans-serif;
+  font-weight:700;
+  color:black;
+}
+.Notice::-webkit-input-placeholder {
+  font-family: 'Montserrat', sans-serif;
+  color:#B5B5B5;
+}
+
+.Notice:-ms-input-placeholder {
+  font-family: 'Montserrat', sans-serif;
+  color:#B5B5B5;
+}
+
+.Notice:-moz-placeholder {
+  font-family: 'Montserrat', sans-serif;
+  color:#B5B5B5;
+}
+
+.Notice::-moz-placeholder {
+  font-family: 'Montserrat', sans-serif;
+  color:#B5B5B5;
+}
+
+.Clip{
+  border: 0px;
+  background-color: #333333;
+  color:white;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  border-radius: 3px;
+  cursor: pointer;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: all;
+}
