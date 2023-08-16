@@ -1,19 +1,156 @@
-.GameRoom {
-    overflow: hidden;
-    width: 100vw;
-    height: 100vh;
+.Container {
+  width: 100vw; height: 100vh;
+  background-image: url(./GameRoom.png); background-size: cover;
 
-    overflow: hidden;
-    background-image: url(./GameRoom.png);
-    background-size: cover;
+  --table-diameter: 3000px;
+  --table-radius: calc(var(--table-diameter)/2);
 
-    * {
-        --unit: calc(25vw + 50vh);
-        --viewAngle: var(--view-angle);
-        // --unit: 100vh;
-    }
+  display: flex; justify-content: center;
+  pointer-events: none;
 
-    button {
-        background-color: white;
-    }
+  // overflow: hidden;
+}
+
+.ReplyButtonHolder{
+  position: absolute;
+  bottom: 1200px;
+}
+
+.filter{
+  position: absolute;
+  width: 100vw; height: 100vh;
+  backdrop-filter: blur(5px);
+  pointer-events: none;
+}
+
+.Perspective1{
+  display: flex; justify-content: center;
+  // perspective: 5000px;
+}
+.Perspective2{
+  transform-style: preserve-3d;
+  display: flex; justify-content: center;
+  align-items: end;
+  perspective: 1000px;
+}
+
+.Rotater{
+  position: absolute;
+  transform-style: preserve-3d;;
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transition: rotate 1s;
+  perspective: 6000px;
+}
+.RotateButtonContainer{
+  position: absolute;
+  width: 100vw;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 200px;
+}
+
+.SelectedCardContainer{
+  position: absolute;
+
+  top:100px;
+  left: 100px;
+}
+
+.SelectedCard{
+  position: absolute;
+}
+
+.Table{
+  position: absolute;
+  transform-style: preserve-3d;
+  width: var(--table-diameter);
+  height: var(--table-diameter);
+  border-radius: var(--table-radius);
+  
+  background-image: url('./table.jpg');
+  rotate: 1 0 0 90deg;
+
+}
+
+.PubUI{
+  position: absolute;
+  left: 0;
+  bottom: 0;
+
+  z-index: 10;
+}
+
+.PubTogglersContainer{
+  position: absolute;
+  z-index: 10;
+  bottom: 250px;
+
+}
+
+.SubUI{
+  transform-style: preserve-3d;
+  position: absolute; bottom: 0;
+
+  --rotate-y: 0deg;
+  --translate-x: 0;
+  --translate-z: 0;
+
+  rotate: y var(--rotate-y);
+  translate: calc(var(--table-radius) * var(--translate-x)) 0 calc(var(--table-radius) * var(--translate-z));
+  display: flex; justify-content: center;
+}
+
+
+.SubHands{
+  position: absolute;
+  bottom: 0;
+  translate: 0 -20px 30px;
+
+  display: flex; justify-content: center;
+}
+
+.SubPoints{
+  position: absolute;
+  bottom: 0;
+  width: 1440px;
+  height: 720px;
+  
+  transform-origin: bottom;
+  transform: rotateX(-90deg);
+
+  display: flex; justify-content: center;
+}
+
+.StartButtonHolder{
+  position: absolute;
+  width: 100vw;
+  margin-bottom: 60px;
+  bottom: 0;
+}
+.SelectPlayerButtonHolder{
+  position: absolute;
+  margin-bottom: 60px;
+  bottom: 0;
+  translate: 0 -20px 60px;
+}
+
+.PubHandsContainer{
+  position: absolute;
+  width: 100vw;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.PubHands{
+  position: absolute;
+}
+
+.SelectCardButtonHolder{
+  position: absolute;
+  bottom: 60px;
 }

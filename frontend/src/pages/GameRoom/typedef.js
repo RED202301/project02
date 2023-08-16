@@ -1,7 +1,7 @@
 /** @typedef {import('openvidu-browser').Stream} Stream */
 /** @typedef {import('openvidu-browser').Publisher} Publisher */
 /** @typedef {import('openvidu-browser').Subscriber} Subscriber */
-/** @typedef {import('./hooks/useOpenVidu/useOpenVidu').subscriberMap} subscriberMap */
+/** @typedef {import('./hooks/useOpenVidu/initOpenVidu').subscriberMap} subscriberMap */
 
 /** @typedef {import('./Class/Player.js').Player} Player */
 /** @typedef {import('./Class/Player.js').playerMap} playerMap */
