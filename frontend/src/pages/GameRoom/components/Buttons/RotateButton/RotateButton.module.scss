@@ -1,0 +1,25 @@
+.rotaterInner, .rotaterOuter{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rotaterOuter {
+  pointer-events: all;
+
+  position: relative;
+
+  width: var(--size);
+  height: var(--size);
+  border-radius: calc(var(--size)/2);
+}
+
+.rotaterInner {
+  width: calc(var(--size)*3/4);
+  height: calc(var(--size)*3/4);
+  border-radius: calc(var(--size)*3/8);
+  
+  font-size: 2rem;
+
+  box-shadow: 0 0 1rem rgba(0,0,0,0.3);
+}

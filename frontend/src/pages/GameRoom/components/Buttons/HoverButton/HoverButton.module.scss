@@ -1,0 +1,51 @@
+@font-face {
+  font-family: 'Yeongdeok-Snow-Crab';
+  src: url('./src/assets/Yeongdeok-Snow-Crab.ttf') format('truetype');
+}
+
+
+.button {
+  background: #3D4C53;
+  margin : auto;
+  width : 200px;
+  height : 50px;
+  overflow: hidden;
+  text-align : center;
+  transition : .2s;
+  cursor : pointer;
+  border-radius: 3px;
+  box-shadow: 0px 1px 10px rgba(0,0,0,1);
+  
+  pointer-events: all;
+  
+  font-family: 'Yeongdeok-Snow-Crab';
+}
+.btnTwo {
+  position : relative;
+  width : 200px;
+  height : 100px;
+  margin-top: -100px;
+  padding-top: 2px;
+  background : #FEB309;
+  left : -250px;
+  transition : .3s;
+}
+.btnText {
+  color : white;
+  transition : .3s;
+}
+.btnText2 {
+  margin-top : 63px;
+  margin-right : -130px;
+  color : #FFF;
+}
+.button:hover .btnTwo{ /*When hovering over .button change .btnTwo*/
+  left: -130px;
+}
+.button:hover .btnText{ /*When hovering over .button change .btnText*/
+  margin-left : 65px;
+}
+.button:active { /*Clicked and held*/
+  box-shadow: 0px 5px 6px rgba(0,0,0,0.3);
+}
+
