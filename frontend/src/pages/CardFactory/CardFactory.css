@@ -7,7 +7,9 @@
 .factory {
   border: 2px solid whitesmoke;
   background-color: beige;
-  margin: 5%;
+  
+  margin-left: 5%;
+  margin-bottom: 5%;
   width: 650px;
   height: 500px;
   border-radius: 4px;
@@ -225,7 +227,7 @@ background-image: linear-gradient(315deg, #f0ecfc 0%, #c797eb 74%);
   
 }
 .added-to-deck {
-  display:; /* Change the background color to gray or any other style you want */
+  display: none; /* Change the background color to gray or any other style you want */
   /* Add other styling properties as needed */
 }
 
@@ -238,8 +240,8 @@ background-image: linear-gradient(315deg, #f0ecfc 0%, #c797eb 74%);
 .star-containers {
   display: flex;
   justify-content: flex-end;
-  /* margin-top: 10px; */
-  margin-right: 70%;
+  margin-top: -20%;
+  margin-right: 150%;
 }
 
 .star {
@@ -410,6 +412,17 @@ background-image: linear-gradient(315deg, #f0ecfc 0%, #c797eb 74%);
   background-color: #DED966;
   bottom: 0;
 }
+.deckbutton {
+  margin-top: 1%;
+  width: 50px;
+  height: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* transform: scale(0.7); */
+  /* transform: scale(0.7); */
+  /* margin-rig */
+}
 
 .cardd .middle-section {
   background-color: #ADBF24;
@@ -422,6 +435,7 @@ background-image: linear-gradient(315deg, #f0ecfc 0%, #c797eb 74%);
   /* align-items: center; */
   margin-right: 10%;
 }
+
 .add-to-deck-button {
   width: 50px;
   height: 30px;
@@ -431,8 +445,8 @@ background-image: linear-gradient(315deg, #f0ecfc 0%, #c797eb 74%);
   font-weight: bold;
   background-color: ivory;
   color: #fff;
-  border-radius: 5px;
-  padding: 10px 25px;
+  /* border-radius: 5px; */
+
   font-family: 'Lato', sans-serif;
   /* font-weight: 500; */
   background: transparent;
@@ -446,21 +460,17 @@ background-image: linear-gradient(315deg, #f0ecfc 0%, #c797eb 74%);
   outline: none;
 
 }
+.btn-12:not(:hover) {
+  display: none;
+}
+.btn-12:hover{
+  position: absolute;
+  background-color: black;
 
-.btn-12{
-  position: relative;
-  right: 20px;
-  bottom: 20px;
-  border:none;
-  box-shadow: none;
-  width: 130px;
-  height: 40px;
-  line-height: 42px;
-  -webkit-perspective: 230px;
-  perspective: 230px;
+  opacity: 70%;
 }
 .btn-12 span {
-  background: #f0ecfc;
+  /* background: #f0ecfc;
 background: linear-gradient(0deg,  #f0ecfc 0%, #c797eb 74%);
   display: block;
   position: absolute;
@@ -476,9 +486,10 @@ background: linear-gradient(0deg,  #f0ecfc 0%, #c797eb 74%);
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   -webkit-transition: all .3s;
-  transition: all .3s;
+  transition: all .3s; */
+  /* background: black */
 }
-.btn-12 span:nth-child(1) {
+/* .btn-12 span:nth-child(1) {
   box-shadow:
    -7px -7px 20px 0px #fff9,
    -4px -4px 5px 0px #fff9,
@@ -515,7 +526,7 @@ background: linear-gradient(0deg,  #f0ecfc 0%, #c797eb 74%);
   -webkit-transform: rotateX(-90deg);
   -moz-transform: rotateX(-90deg);
   transform: rotateX(-90deg);
-}
+} */
 .cardd .content {
   position: relative;
   /* padding: 5px; */
@@ -529,6 +540,9 @@ background: linear-gradient(0deg,  #f0ecfc 0%, #c797eb 74%);
 .cardtitled {
   font-size:1vw;
   text-align: center;
+  width: 130px;
+  height: 25px;
+  margin-left: 1%;
 }
 .contents {
 
@@ -551,6 +565,39 @@ background: linear-gradient(0deg,  #f0ecfc 0%, #c797eb 74%);
   transform: scale(0.6);
   margin-top:-5px;
   margin-left: -3.5px;
+}
+.gridXX {
+  width: 120px;
+  height: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  
+  margin-left: 25%;
+  /* gap: 50%; */
+}
+.gridXXX {
+  width: 140px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-left: -12%;
+}
+
+.Xbox {
+  /* justify-content: center; */
+  /* margin-right: 5px; */
+  /* padding-left: 2px; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 200%;
+
+}
+.xbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10%;
+  transform: scale(0.6);
 }
 .repcardbox {
   background-color: beige;
@@ -625,7 +672,7 @@ background: linear-gradient(0deg,  #f0ecfc 0%, #c797eb 74%);
 .gridcard {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 5%;
+  /* gap: 5%; */
 }
 .subtitle {
   font-size: 1.3vw;
@@ -643,15 +690,17 @@ background: linear-gradient(0deg,  #f0ecfc 0%, #c797eb 74%);
 }
 
 .subfont {
+  display: flex;
   font-size: 0.1vw;
   transform: scale(0.7);
   width: 70px;
   color: white;
-  margin-top:-2px;
+  margin-top:-10%;
+  margin-left:-4px;
 }
 
 .board {
-  background-image: url('./ssafishm.png');
+  /* background-image: url('./ssafishm.png'); */
   background-size: contain; /* 이미지를 내부에 맞게 조절 */
   background-repeat: no-repeat;
   background-position: center center; /* 이미지를 가운데 정렬 */
@@ -660,4 +709,61 @@ background: linear-gradient(0deg,  #f0ecfc 0%, #c797eb 74%);
   /* width: 50%; 원하는 크기로 조절 */
   /* height: 50vh; 원하는 크기로 조절 */
   margin: auto; /* 가운데 정렬 */
+}
+
+.gridTitle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 5%;
+}
+
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.buttons {
+  margin: 10%;
+  text-align: center;
+
+}
+
+.btn-hover {
+  width: 80px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  margin: 20px;
+  height: 60px;
+  text-align:center;
+  border: none;
+  background-size: 300% 100%;
+  margin-top:-60%;
+  border-radius: 20px;
+  -moz-transition: all .4s ease-in-out;
+  -o-transition: all .4s ease-in-out;
+  -webkit-transition: all .4s ease-in-out;
+  transition: all .4s ease-in-out;
+  opacity: 80%;
+}
+
+.btn-hover:hover {
+  background-position: 100% 0;
+  -moz-transition: all .4s ease-in-out;
+  -o-transition: all .4s ease-in-out;
+  -webkit-transition: all .4s ease-in-out;
+  transition: all .4s ease-in-out;
+  display: flex;
+}
+
+
+.btn-hover:focus {
+  outline: none;
+  display: flex;
+}
+.btn-hover.color-6 {
+  background-image: linear-gradient(to right, #009245, #FCEE21, #00A8C5, #D9E021);
+  box-shadow: 0 4px 15px 0 rgba(83, 176, 57, 0.75);
 }
