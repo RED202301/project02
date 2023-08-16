@@ -5,6 +5,8 @@ import com.ssafish.domain.card.CardsRepository;
 import com.ssafish.domain.deck.CardDeckRepository;
 import com.ssafish.domain.deck.Deck;
 import com.ssafish.domain.deck.DeckRepository;
+import com.ssafish.domain.user.User;
+import com.ssafish.domain.user.UserRepository;
 import com.ssafish.web.dto.CardDto;
 import com.ssafish.web.dto.DeckDetailDto;
 import com.ssafish.web.dto.DeckDto;
@@ -30,6 +32,9 @@ public class CardDeckService {
 
     @Autowired
     CardsRepository cardsRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     //해당 덱의 정보 읽어오기
     public DeckDto deckInfo(long deckId){
@@ -69,7 +74,8 @@ public class CardDeckService {
 
     @Transactional
     public void delete(long userId) {
-        List<Deck> deckList = deckRepository.findAllByUserId(userId);
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당하는 유저가 없습니다."));
+        List<Deck> deckList = deckRepository.findAllByUser(user);
         deckList.forEach(e -> {
             cardDeckRepository.deleteAllByDeckId(e.getDeckId());
         });

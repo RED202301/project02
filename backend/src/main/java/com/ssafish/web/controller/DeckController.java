@@ -101,7 +101,7 @@ public class DeckController {
     }
 
     // 추가 부분1. : 모든 덱의 간략 정보만 반환한다.
-    @GetMapping("deck/deckTitle")
+    @GetMapping("/deck/deckTitle")
     public ResponseEntity<List<String>> deckTitle(){
         //
 //        List<Deck> deckList = deckRepository.findAll();
@@ -119,7 +119,7 @@ public class DeckController {
     }
 
     // 추가 부분2.: 덱의 String으로만 제공한다.
-    @GetMapping("deck/deckCards")
+    @GetMapping("/deck/deckCards")
     public ResponseEntity<DeckDetailDto> deckCards(@RequestParam(value="deckName", required = false, defaultValue = "위인 모음집") String deckName){
         //해당 덱 아이디를 찾는다.
 //        Deck inputdeck = Deck.builder()
