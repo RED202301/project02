@@ -14,10 +14,12 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.socket.config.WebSocketMessageBrokerStats;
 import org.springframework.web.socket.messaging.AbstractSubProtocolEvent;
 import org.springframework.web.socket.messaging.SessionConnectEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -33,15 +35,20 @@ import java.util.stream.Collectors;
 @Component
 public class DisconnectHandler implements ApplicationListener<AbstractSubProtocolEvent> {
 
+    private final WebSocketMessageBrokerStats brokerStats;
     private final WebSocketSubscriberManager subscriberManager;
     private final RoomService roomService;
     private final GameService gameService;
     private final TimeManager timeManager;
 
-    private final SimpMessageSendingOperations messagingTemplate;
     private final long DISCONNECT_DELAY = 5_000;
     private TaskScheduler taskScheduler = new ConcurrentTaskScheduler();
     private Map<String, ScheduledFuture<?>> disconnectTasks = new ConcurrentHashMap<>();
+
+    @PostConstruct
+    public void init() {
+        brokerStats.setLoggingPeriod(10_000L);
+    }
 
     @Override
     public void onApplicationEvent(AbstractSubProtocolEvent event) {
@@ -61,6 +68,7 @@ public class DisconnectHandler implements ApplicationListener<AbstractSubProtoco
             }
         } else if (event instanceof SessionConnectEvent) {
             log.info("CONNECT 된 session ID: " + sessionId);
+            log.info(brokerStats.getWebSocketSessionStatsInfo());
             if (subscriberManager.isExist(sessionId) && disconnectTasks.get(sessionId) != null) {
                 cancelDisconnectTask(sessionId);
             }
@@ -110,6 +118,7 @@ public class DisconnectHandler implements ApplicationListener<AbstractSubProtoco
             List<Player> personList = playerList.stream().filter(e -> !e.isBot()).collect(Collectors.toList());
             log.info("현재 대기실(게임방) 인원 수: " + personList.size());
             if (personList.size() == 0) { // 없는 경우 -> 방 폭파
+                gameService.stopGame(roomId);
                 gameService.deleteGameRoom(roomId);
                 roomService.deleteById(roomId);
                 log.info("삭제된 방 번호: " + roomId);
