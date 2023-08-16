@@ -4,16 +4,39 @@
   font-size: 20px;
 }
 
-#factory {
+.factory {
   border: 2px solid whitesmoke;
   background-color: beige;
-  margin: 5%;
-  width: 500px;
-  height: 450px;
+  
+  margin-left: 5%;
+  margin-bottom: 5%;
+  width: 650px;
+  height: 500px;
   border-radius: 4px;
+  /* background-image:url('./deckre1.jpg'); */
+  background-size: cover;
+  overflow-y: scroll;
+  
+}
+#selected-card {
+  border: 2px solid yellow; /* 노란 테두리 추가 */
+}
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5%;
+  background-image: url('./cardFactory.jpg');
+  background-size: cover;
+  /* opacity: 90%; */
+  background: linear-gradient(0deg, black 0%, black(251,75,2,1) 100%);
+}
+.selected-cardx {
+  border: 2px solid yellow;
+  /* padding: 5px; 테두리와 카드 간의 간격을 조절 */
 }
 
-.grid {
+
+.gridbox {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 5%;
@@ -25,6 +48,7 @@
   padding: 2%;
   margin-left: 5%;
   font-weight: bold;
+  margin-bottom: 2%;
 }
 
 
@@ -46,6 +70,139 @@
   
 
 }
+
+.btn {
+  width: 130px;
+  height: 40px;
+  color: #fff;
+  border-radius: 5px;
+  padding: 10px 25px;
+  font-family: 'Lato', sans-serif;
+  font-weight: 500;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+   box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+   7px 7px 20px 0px rgba(0,0,0,.1),
+   4px 4px 5px 0px rgba(0,0,0,.1);
+  outline: none;
+}
+.btn-5 {
+  width: 130px;
+  height: 40px;
+  line-height: 42px;
+  padding: 0;
+  border: none;
+  background: rgb(255,27,0);
+background: linear-gradient(0deg, rgba(255,27,0,1) 0%, rgba(251,75,2,1) 100%);
+}
+.btn-5:hover {
+  color: #f0094a;
+  background: transparent;
+   box-shadow:none;
+}
+.btn-5:before,
+.btn-5:after{
+  content:'';
+  position:absolute;
+  top:0;
+  right:0;
+  height:2px;
+  width:0;
+  background: #f0094a;
+  box-shadow:
+   -1px -1px 5px 0px #fff,
+   7px 7px 20px 0px #0003,
+   4px 4px 5px 0px #0002;
+  transition:400ms ease all;
+}
+.btn-5:after{
+  right:inherit;
+  top:inherit;
+  left:0;
+  bottom:0;
+}
+.btn-5:hover:before,
+.btn-5:hover:after{
+  width:100%;
+  transition:800ms ease all;
+}
+.btn-8 {
+  background-color: #f0ecfc;
+background-image: linear-gradient(315deg, #f0ecfc 0%, #c797eb 74%);
+  line-height: 42px;
+  padding: 0;
+  border: none;
+}
+.btn-8 span {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.btn-8:before,
+.btn-8:after {
+  position: absolute;
+  content: "";
+  right: 0;
+  bottom: 0;
+  background: #c797eb;
+  /*box-shadow:  4px 4px 6px 0 rgba(255,255,255,.5),
+              -4px -4px 6px 0 rgba(116, 125, 136, .2), 
+    inset -4px -4px 6px 0 rgba(255,255,255,.5),
+    inset 4px 4px 6px 0 rgba(116, 125, 136, .3);*/
+  transition: all 0.3s ease;
+}
+.btn-8:before{
+   height: 0%;
+   width: 2px;
+}
+.btn-8:after {
+  width: 0%;
+  height: 2px;
+}
+.btn-8:hover:before {
+  height: 100%;
+}
+.btn-8:hover:after {
+  width: 100%;
+}
+.btn-8:hover{
+  background: transparent;
+}
+.btn-8 span:hover{
+  color: #c797eb;
+}
+.btn-8 span:before,
+.btn-8 span:after {
+  position: absolute;
+  content: "";
+  left: 0;
+  top: 0;
+  background: #c797eb;
+  /*box-shadow:  4px 4px 6px 0 rgba(255,255,255,.5),
+              -4px -4px 6px 0 rgba(116, 125, 136, .2), 
+    inset -4px -4px 6px 0 rgba(255,255,255,.5),
+    inset 4px 4px 6px 0 rgba(116, 125, 136, .3);*/
+  transition: all 0.3s ease;
+}
+.btn-8 span:before {
+  width: 2px;
+  height: 0%;
+}
+.btn-8 span:after {
+  height: 2px;
+  width: 0%;
+}
+.btn-8 span:hover:before {
+  height: 100%;
+}
+.btn-8 span:hover:after {
+  width: 100%;
+}
+
 .modalbox {
   display: flex;
   position: fixed;
@@ -69,10 +226,22 @@
 
   
 }
+.added-to-deck {
+  display: none; /* Change the background color to gray or any other style you want */
+  /* Add other styling properties as needed */
+}
+
 .star-container {
   display: flex;
   justify-content: flex-end;
   /* margin-top: 10px; */
+  /* margin-right: -20%; */
+}
+.star-containers {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -20%;
+  margin-right: 150%;
 }
 
 .star {
@@ -91,6 +260,7 @@
 }
 .yellow-star {
   color: yellow;
+  margin-left: 2%;
 
 }
 .shortdiv {
@@ -115,24 +285,25 @@
 }
 
 .cardx:before {
-  background-color: olive;
+  background-color: #635348;
   top: 0;
 }
 
 .cardx:after {
-  background-color: yellowgreen;
+  background-color: #DED966;
   bottom: 0;
 }
 
 .cardx .middle-section {
-  background-color: greenyellow;
+  background-color: #ADBF24;
   position: absolute;
   top: 40%; /* Adjust the position to place it between the top and bottom sections */
   width: 100%;
   height: 16%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  /* display: flex; */
+  /* justify-content: center; */
+  /* align-items: center; */
+  margin-right: 10%;
 }
 
 .cardx .content {
@@ -189,6 +360,11 @@
 
 }
 
+.imgbox {
+  width: 100px;
+  height: 100px;
+}
+
 .align {
   text-align: center;
 }
@@ -203,4 +379,391 @@
   font-weight: bold;
   /* text-align: center; */
   font-display: center;
+}
+
+.cardFactory {
+
+}
+
+.cardd {
+  border: 2px solid black;
+  border-radius: 6px;
+  width: 12vw;
+  height: 35vh;
+  background-color: khaki;
+  position: relative; /* Make sure the position is relative */
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.7);
+}
+
+.cardd:before,
+.cardd:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 44%; /* Adjust the height of the top and bottom sections */
+}
+
+.cardd:before {
+  background-color: #635348;
+  top: 0;
+}
+
+.cardd:after {
+  background-color: #DED966;
+  bottom: 0;
+}
+.deckbutton {
+  margin-top: 1%;
+  width: 50px;
+  height: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* transform: scale(0.7); */
+  /* transform: scale(0.7); */
+  /* margin-rig */
+}
+
+.cardd .middle-section {
+  background-color: #ADBF24;
+  position: absolute;
+  top: 40%; /* Adjust the position to place it between the top and bottom sections */
+  width: 100%;
+  height: 16%;
+  /* display: flex; */
+  /* justify-content: center; */
+  /* align-items: center; */
+  margin-right: 10%;
+}
+
+.add-to-deck-button {
+  width: 50px;
+  height: 30px;
+  /* margin-left:5%; */
+  margin-top: 5%;
+  font-size: 10px;
+  font-weight: bold;
+  background-color: ivory;
+  color: #fff;
+  /* border-radius: 5px; */
+
+  font-family: 'Lato', sans-serif;
+  /* font-weight: 500; */
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+   box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+   7px 7px 20px 0px rgba(0,0,0,.1),
+   4px 4px 5px 0px rgba(0,0,0,.1);
+  outline: none;
+
+}
+.btn-12:not(:hover) {
+  display: none;
+}
+.btn-12:hover{
+  position: absolute;
+  background-color: black;
+
+  opacity: 70%;
+}
+.btn-12 span {
+  /* background: #f0ecfc;
+background: linear-gradient(0deg,  #f0ecfc 0%, #c797eb 74%);
+  display: block;
+  position: absolute;
+  width: 50px;
+  height: 30px;
+  box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+   7px 7px 20px 0px rgba(0,0,0,.1),
+   4px 4px 5px 0px rgba(0,0,0,.1);
+  border-radius: 5px;
+  margin:0;
+  text-align: center;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-transition: all .3s;
+  transition: all .3s; */
+  /* background: black */
+}
+/* .btn-12 span:nth-child(1) {
+  box-shadow:
+   -7px -7px 20px 0px #fff9,
+   -4px -4px 5px 0px #fff9,
+   7px 7px 20px 0px #0002,
+   4px 4px 5px 0px #0001;
+  -webkit-transform: rotateX(90deg);
+  -moz-transform: rotateX(90deg);
+  transform: rotateX(90deg);
+  -webkit-transform-origin: 50% 50% -20px;
+  -moz-transform-origin: 50% 50% -20px;
+  transform-origin: 50% 50% -20px;
+}
+.btn-12 span:nth-child(2) {
+  -webkit-transform: rotateX(0deg);
+  -moz-transform: rotateX(0deg);
+  transform: rotateX(0deg);
+  -webkit-transform-origin: 50% 50% -20px;
+  -moz-transform-origin: 50% 50% -20px;
+  transform-origin: 50% 50% -20px;
+}
+.btn-12:hover span:nth-child(1) {
+  box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+   7px 7px 20px 0px rgba(0,0,0,.1),
+   4px 4px 5px 0px rgba(0,0,0,.1);
+  -webkit-transform: rotateX(0deg);
+  -moz-transform: rotateX(0deg);
+  transform: rotateX(0deg);
+}
+.btn-12:hover span:nth-child(2) {
+  box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+   7px 7px 20px 0px rgba(0,0,0,.1),
+   4px 4px 5px 0px rgba(0,0,0,.1);
+ color: transparent;
+  -webkit-transform: rotateX(-90deg);
+  -moz-transform: rotateX(-90deg);
+  transform: rotateX(-90deg);
+} */
+.cardd .content {
+  position: relative;
+  /* padding: 5px; */
+  z-index: 1;
+  /* padding-left: 1vw; */
+  padding-top: 1vh;
+  font-weight: bold;
+
+}
+
+.cardtitled {
+  font-size:1vw;
+  text-align: center;
+  width: 130px;
+  height: 25px;
+  margin-left: 1%;
+}
+.contents {
+
+    position: relative;
+    /* padding: 5px; */
+    z-index: 1;
+    /* padding-left: 10px; */
+    /* padding-top: 10px; */
+    font-weight: bold;
+  
+}
+
+.yellow-stard {
+  font-size: 1.3vw;
+  color: yellow
+}
+.yellow-stardd {
+  font-size:0.1vw;
+  color: yellow;
+  transform: scale(0.6);
+  margin-top:-5px;
+  margin-left: -3.5px;
+}
+.gridXX {
+  width: 120px;
+  height: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  
+  margin-left: 25%;
+  /* gap: 50%; */
+}
+.gridXXX {
+  width: 140px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-left: -12%;
+}
+
+.Xbox {
+  /* justify-content: center; */
+  /* margin-right: 5px; */
+  /* padding-left: 2px; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 200%;
+
+}
+.xbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10%;
+  transform: scale(0.6);
+}
+.repcardbox {
+  background-color: beige;
+  margin-top: 5%;
+  margin-left:-30%;
+  font-weight: bold;
+  /* display: flex; */
+  align-items: center;
+  /* justify-content: center; 가로 중앙 정렬 */
+  /* height: 200px; 박스 높이 */
+  /* border: 1px solid #ccc; / */
+}
+.carddeck {
+  border: 2px solid black;
+  border-radius: 6px;
+  width: 5vw;
+  height: 12vh;
+  background-color: khaki;
+  position: relative; /* Make sure the position is relative */
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.7);
+}
+
+.carddeck:before,
+.carddeck:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 44%; /* Adjust the height of the top and bottom sections */
+}
+
+.carddeck:before {
+  background-color: #635348;
+  top: 0;
+}
+
+.carddeck:after {
+  background-color: #DED966;
+  bottom: 0;
+}
+
+.carddeck .middle-section {
+  background-color: #ADBF24;
+  position: absolute;
+  top: 40%; /* Adjust the position to place it between the top and bottom sections */
+  width: 100%;
+  height: 16%;
+  /* display: flex; */
+  /* justify-content: center; */
+  /* align-items: center; */
+  margin-right: 10%;
+}
+
+.carddeck .content {
+  position: relative;
+  /* padding: 5px; */
+  z-index: 1;
+  padding-left: 1vw;
+  padding-top: 1vh;
+  font-weight: bold;
+
+}
+
+.carddecktitled {
+  font-size:10px;
+  text-align: center;
+  transform: scale(0.5);
+  margin-right: 10px;
+  width: 100px;
+  margin-left:-30px;
+}
+
+.gridcard {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  /* gap: 5%; */
+}
+.subtitle {
+  font-size: 1.3vw;
+  margin-right: 50%;
+  width: 120px;
+  /* transform: scale(0.7); */
+  color: white;
+}
+.gridbutton {
+  display: flex;
+  
+  width: 100px;
+  margin-left: 18%;
+  gap:5px;
+}
+
+.subfont {
+  display: flex;
+  font-size: 0.1vw;
+  transform: scale(0.7);
+  width: 70px;
+  color: white;
+  margin-top:-10%;
+  margin-left:-4px;
+}
+
+.board {
+  /* background-image: url('./ssafishm.png'); */
+  background-size: contain; /* 이미지를 내부에 맞게 조절 */
+  background-repeat: no-repeat;
+  background-position: center center; /* 이미지를 가운데 정렬 */
+  /* filter: blur(5px); 이미지에 흐릿한 효과 */
+  /* opacity: 0.7; 이미지의 투명도 설정 */
+  /* width: 50%; 원하는 크기로 조절 */
+  /* height: 50vh; 원하는 크기로 조절 */
+  margin: auto; /* 가운데 정렬 */
+}
+
+.gridTitle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 5%;
+}
+
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.buttons {
+  margin: 10%;
+  text-align: center;
+
+}
+
+.btn-hover {
+  width: 80px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  margin: 20px;
+  height: 60px;
+  text-align:center;
+  border: none;
+  background-size: 300% 100%;
+  margin-top:-60%;
+  border-radius: 20px;
+  -moz-transition: all .4s ease-in-out;
+  -o-transition: all .4s ease-in-out;
+  -webkit-transition: all .4s ease-in-out;
+  transition: all .4s ease-in-out;
+  opacity: 80%;
+}
+
+.btn-hover:hover {
+  background-position: 100% 0;
+  -moz-transition: all .4s ease-in-out;
+  -o-transition: all .4s ease-in-out;
+  -webkit-transition: all .4s ease-in-out;
+  transition: all .4s ease-in-out;
+  display: flex;
+}
+
+
+.btn-hover:focus {
+  outline: none;
+  display: flex;
+}
+.btn-hover.color-6 {
+  background-image: linear-gradient(to right, #009245, #FCEE21, #00A8C5, #D9E021);
+  box-shadow: 0 4px 15px 0 rgba(83, 176, 57, 0.75);
 }

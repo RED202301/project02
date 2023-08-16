@@ -31,10 +31,10 @@ pipeline {
                         """
 
                         sh """
-                                                 cd /var/jenkins_home/workspace/ssafish_dev/frontend
-                                                    npm install
-                                                    npm run build
-                                                """
+                        cd /var/jenkins_home/workspace/ssafish_dev/frontend
+                        npm install
+                        npm run build
+                        """
                     }
                 }
             }
@@ -55,13 +55,11 @@ pipeline {
                         """
 
                         sh """
-                                                cd /var/jenkins_home/workspace/ssafish_dev/frontend
-
-                                                docker build -t ${dockerRepository}/${dockerImageNameFront} .
-                                                docker login
-                                                docker push ${dockerRepository}/${dockerImageNameFront}:latest
-
-                                                """
+                        cd /var/jenkins_home/workspace/ssafish_dev/frontend
+                        docker build -t ${dockerRepository}/${dockerImageNameFront} .
+                        docker login
+                        docker push ${dockerRepository}/${dockerImageNameFront}:latest
+                        """
                     }
                 }
             }
@@ -77,12 +75,10 @@ pipeline {
                     """
 
                     sh """
-                                         ssh -o StrictHostKeyChecking=no ubuntu@i9e202.p.ssafy.io \
-                                         '
-                                         docker rm -f ${dockerImageNameFront} &&
-                                          docker run -d -t -p 5173:5173 --rm --name ${dockerImageNameFront} ${dockerRepository}/${dockerImageNameFront}:latest;'
-
-                                        """
+                    ssh -o StrictHostKeyChecking=no ubuntu@i9e202.p.ssafy.io \
+                    'docker rm -f ${dockerImageNameFront} &&
+                    docker run -d -t -p 5173:5173 --rm --name ${dockerImageNameFront} ${dockerRepository}/${dockerImageNameFront}:latest;'
+                    """
                 }
             }
         }

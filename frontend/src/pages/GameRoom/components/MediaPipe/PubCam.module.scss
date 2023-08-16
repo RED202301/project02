@@ -1,0 +1,20 @@
+.container{
+  position: absolute;
+  bottom: 0;
+  pointer-events: none;
+  box-sizing: border-box; 
+
+  transform-origin: bottom left;
+  transform: scale(0.5);
+}
+
+.video, .canvas, .border{ position: absolute; bottom: 0; }
+
+.video{ display: none; }
+.border{ box-sizing: border-box; }
+.canvas{
+  z-index: 10;
+}
+
+.current{ border: solid 10px yellowgreen; }
+.selected{ border: solid 10px white; }
