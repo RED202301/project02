@@ -1,7 +1,10 @@
 package com.ssafish.web.dto;
 
 import com.ssafish.domain.card.Card;
+import com.ssafish.domain.user.User;
+import com.ssafish.domain.user.UserRepository;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 
@@ -38,12 +41,13 @@ public class CardDto {
         this.cardDescription = cardDescription;
         this.point = point;
         this.result = result;
-
     }
 
-    public Card toEntity() {
+    public Card toEntity(UserRepository userRepository) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당하는 유저가 없습니다."));
+
         return Card.builder()
-                .userId(userId)
+                .user(user)
                 .mainTitle(mainTitle)
                 .subTitle(subTitle)
                 .mainImgUrl(mainImgUrl)
