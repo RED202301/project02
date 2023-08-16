@@ -74,7 +74,7 @@ public class GameStartPhase extends Phase {
     public void sendAutoDraw(GameStatus gameStatus, long userId, long cardDraw) {
         roomService.sendMessageToRoom(gameStatus.getRoomId(),
                 ResponseEntity.ok(GameData.builder()
-                              .type(TypeEnum.AUTO_DRAW.name())
+                              .type(MessageType.AUTO_DRAW.name())
                               .player(userId)
                               .cardId(cardDraw)
                               .build())
@@ -84,7 +84,7 @@ public class GameStartPhase extends Phase {
     public void sendEnroll(GameStatus gameStatus, long userId, long cardId) {
         roomService.sendMessageToRoom(gameStatus.getRoomId(),
                 ResponseEntity.ok(GameData.builder()
-                                          .type(TypeEnum.ENROLL.name())
+                                          .type(MessageType.ENROLL.name())
                                           .player(userId)
                                           .cardId(cardId)
                                           .build())
