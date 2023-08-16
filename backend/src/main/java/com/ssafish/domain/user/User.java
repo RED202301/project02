@@ -59,6 +59,9 @@ public class User extends BaseTimeEntity {
     @Column(name = "play_count")
     private int playCount;
 
+    @Column(name = "role")
+    private String role;
+
 //    @Column(name = "create_date")
 //    @Temporal(TemporalType.DATE)
 //    private LocalDateTime createdDate; //Date -> LocalDateTime
@@ -72,7 +75,7 @@ public class User extends BaseTimeEntity {
     @Builder
     public User(long userId, long kakaoId, String nickname, String profileImgUrl,
          String thumbnailImgUrl, String email, String refreshToken, String kakaoAccessToken,
-         boolean isDefaultImage, boolean isLogin, int totalPoint , int playCount) {
+         boolean isDefaultImage, boolean isLogin, int totalPoint , int playCount, String role) {
 
         this.userId = userId;
         this.kakaoId = kakaoId;
@@ -86,6 +89,7 @@ public class User extends BaseTimeEntity {
         this.isLogin = isLogin;
         this.totalPoint = totalPoint;
         this.playCount = playCount;
+        this.role = role;
     }
 
 }

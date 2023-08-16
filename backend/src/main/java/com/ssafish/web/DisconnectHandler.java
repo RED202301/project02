@@ -140,7 +140,11 @@ public class DisconnectHandler implements ApplicationListener<AbstractSubProtoco
         // 플레이어가 손님일 경우 DB 에서 삭제
         UserResponseDto userDto = userService.findUserById(userId);
         if (Role.GUEST.name().equals(userDto.getRole())) {
-            userService.deleteGuest(userId);
+            if (userService.deleteGuest(userId) != -1) {
+                log.info("삭제된 게스트 userId: " + userId);
+            } else {
+                log.info("DB에 등록되지 않은 userId: " + userId);
+            }
         }
 
         subscriberManager.removeSubscriber(sessionId);
