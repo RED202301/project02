@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 // import CardD from './CardD';
 // import cardE from '../../Card/Card'
 function CardFactory( ){
+  const [recard, setRecard] = useState('');
   const [dataFetched, setDataFetched] = useState(false);
   const [selectedCardIndex, setSelectedCardIndex] = useState(null);
   const [selectedCardIds, setSelectedCardIds] = useState([]); // 선택한 카드들의 ID를 보관하는 배열
@@ -16,7 +17,7 @@ function CardFactory( ){
     const closeModals = () => setIsModalOpens(false)
     const [res, setRes] = useState([''])
     const [rescard, setRescard] = useState('');
-    const userId= 349
+
     const [selectedCardId, setSelectedCardId] = useState(null); // 선택한 카드의 ID 상태
     const [responseData, setResponseData] = useState([]); // GET 요청으로 받아온 데이터를 저장하는 배열
     // const handleAddToDeck = () => {
@@ -46,16 +47,31 @@ function CardFactory( ){
     //     console.log('카드를 선택해주세요.');
     //   }
     // };
+    // const [selectedCardId, setSelectedCardId] = useState(null); // 선택한 카드의 ID 상태
+ const userId = {userId}
+
+    const handleDeckCard = (cardId) => {
+      setSelectedCardId(cardId);
+      console.log('선택한 카드의 아이디:', cardId);
+      setRecard(cardId);
+    };
   console.log(rescard)
 
-
+  const handlerescard = () => {
+    if (recard) {
+      setRescard(recard);
+      console.log('대표카드가 선택되었습니다.', recard);
+    } else {
+      console.log('대표 카드를 선택해주세요.');
+    }
+  };
   function sendRequestForSelectedCardIds() {
-  const userId = 349; // 사용자 ID
-  const selectedCardIdPromises = selectedCardIds.map(cardId => {
-    return axios.get(`https://i9e202.p.ssafy.io/api/card/cardId/${cardId}`);
-  });
-
-  Promise.all(selectedCardIdPromises)
+    // 사용자 ID
+    const selectedCardIdPromises = selectedCardIds.map(cardId => {
+      return axios.get(`https://i9e202.p.ssafy.io/api/card/cardId/${cardId}`);
+    });
+    
+    Promise.all(selectedCardIdPromises)
     .then(responses => {
       const extractedData = responses.map(response => response.data);
       console.log('데이터 내용입니다', extractedData);
@@ -66,13 +82,16 @@ function CardFactory( ){
       console.error('Multiple GET 요청 실패:', error);
     });
   }
-
+  
   console.log(responseData)
+
+
+
     
   async function fetchSomeData() {
     try {
       const response = await axios.get(`https://i9e202.p.ssafy.io/api/card/${userId}`);
-
+      
       console.log('GET 요청 성공:', response.data);
       setRes(response.data);
       console.log(res);
@@ -92,13 +111,15 @@ function CardFactory( ){
       <div className="grid">
       {/* <cardE></cardE> */}
       <div>
-      <Deckin selectedCardIds={selectedCardIds} responseData={responseData} rescard={rescard} setRescard={setRescard} setSelectedCardIds={setSelectedCardIds} sendRequestForSelectedCardIds={sendRequestForSelectedCardIds}></Deckin>
+      
+      <Deckin userId={userId} handlerescard={handlerescard} handleDeckCard={handleDeckCard} recard={recard} setRecard={setRecard} selectedCardIds={selectedCardIds} responseData={responseData} rescard={rescard} setRescard={setRescard} setSelectedCardIds={setSelectedCardIds} selectedCardId={selectedCardId} setSelectedCardId={setSelectedCardId} sendRequestForSelectedCardIds={sendRequestForSelectedCardIds}></Deckin>
       <button id="silverborder" onClick={openModals}  >덱 등록하기</button>
-      <ModalX sendRequestForSelectedCardIds={sendRequestForSelectedCardIds} setSelectedCardIds={setSelectedCardIds} isOpens={isModalOpens} closeModals={closeModals} className='modalbox' selectedCardIds={selectedCardIds} rescard={rescard}>
-      <Deckintroduce selectedCardIds={selectedCardIds} setSelectedCardIds={setSelectedCardIds} responseData={responseData} sendRequestForSelectedCardIds={sendRequestForSelectedCardIds} />
+      <ModalX userId={userId} selectedCardId={selectedCardId} setSelectedCardId={setSelectedCardId} handleDeckCard={handleDeckCard} sendRequestForSelectedCardIds={sendRequestForSelectedCardIds}  setSelectedCardIds={setSelectedCardIds} isOpens={isModalOpens} closeModals={closeModals} className='modalbox' selectedCardIds={selectedCardIds} rescard={rescard}>
+      <Deckintroduce userId={userId} selectedCardId={selectedCardId} setSelectedCardId={setSelectedCardId} handleDeckCard={handleDeckCard} selectedCardIds={selectedCardIds} setSelectedCardIds={setSelectedCardIds} responseData={responseData} sendRequestForSelectedCardIds={sendRequestForSelectedCardIds} />
       </ModalX>
       {/* <button id="silverborders">대표 카드지정</button> */}
       <button onClick={sendRequestForSelectedCardIds}>덱 불러오기</button>
+
       </div>
       {/* <div><CardL
       maTitle={maTitle}
@@ -109,6 +130,7 @@ function CardFactory( ){
       <div >
         {dataFetched ? (
       <Selectin
+            userId={userId}
             res={res}
             fetchSomeData={fetchSomeData}
             selectedCardIds={selectedCardIds}
@@ -124,8 +146,8 @@ function CardFactory( ){
       {/* <button onClick={handleAddToDeck}>덱에 담기</button> */}
       <button onClick={fetchSomeData}>카드 불러오기</button>
       {/* <button onClick={handleDeckInClick}>덱에담기</button> */}
-      <Modal isOpen={isModalOpen} closeModal={closeModal} fetchSomeData={fetchSomeData} className='modalbox'>
-        <Deckmake fetchSomeData={fetchSomeData} closeModal={closeModal}></Deckmake>
+      <Modal userId={userId} isOpen={isModalOpen} closeModal={closeModal} fetchSomeData={fetchSomeData} className='modalbox'>
+        <Deckmake userId={userId} fetchSomeData={fetchSomeData} closeModal={closeModal}></Deckmake>
       </Modal>
       </div>
       </div>
@@ -133,40 +155,35 @@ function CardFactory( ){
     )
 }
 
-function Carddeck({ responseData, selectedCardIds,fetchSomeData, rescard, setRescard, setSelectedCardIds, sendRequestForSelectedCardIds}) {
-  const [selectedCardId, setSelectedCardId] = useState(null); // 선택한 카드의 ID 상태
-  const [recard, setRecard] = useState('');
+function Carddeck({ userId, responseData, handleDeckCard, selectedCardIds, selectedCardId, setSelectedCardId, recard, setRecard, fetchSomeData, rescard, setRescard, setSelectedCardIds, sendRequestForSelectedCardIds}) {
 
-  const handleDeckCard = (cardId) => {
-    setSelectedCardId(cardId);
-    console.log('선택한 카드의 아이디:', cardId);
-    setRecard(cardId);
-  };
   const handleMinusCard = async (cardId) => {
     try {
       // 선택한 카드 ID를 selectedCardIds 배열에서 제거
       setSelectedCardIds(prevSelectedCardIds =>
         prevSelectedCardIds.filter(id => id !== cardId)
       );
-  
+      setSelectedCardId(cardId);
       // 데이터 요청 실행 (선택한 카드 제거 후)
       await sendRequestForSelectedCardIds();
 
   
       console.log(`카드 ${cardId}를 덱에서 제거했습니다.`);
-
+      
     } catch (error) {
       console.error('오류 발생:', error);
     }
   };
-  const handlerescard = () => {
-    if (recard) {
-      setRescard(recard);
-      console.log(recard);
-    } else {
-      console.log('대표 카드를 선택해주세요.');
-    }
-  };
+  console.log(selectedCardId)
+  console.log(recard)
+  // const handlerescard = () => {
+  //   if (recard) {
+  //     setRescard(recard);
+  //     console.log(recard);
+  //   } else {
+  //     console.log('대표 카드를 선택해주세요.');
+  //   }
+  // };
   useEffect(() => {
     // selectedCardIds가 변경되면 데이터 요청 실행
     sendRequestForSelectedCardIds();
@@ -176,30 +193,43 @@ function Carddeck({ responseData, selectedCardIds,fetchSomeData, rescard, setRes
     const row = responseData.slice(i, i + 7);
     rows.push(row);
   }
-
   return (
     <div>
       {rows.map((row, rowIndex) => (
         <ul
-          key={rowIndex}
-          style={{
-            display: 'flex',
-            marginLeft: '-7%',
-            marginTop: rowIndex > 0 ? '20px' : '0',
-            
-          }}
+        key={rowIndex}
+        style={{
+          display: 'flex',
+          marginLeft: '-7%',
+          marginTop: rowIndex > 0 ? '20px' : '0',
+          
+        }}
         >
           {row.map((data, cardIndex) => (
+            
             <div
-              className={`carddeck`}
-              id={`${selectedCardId === data.cardId ? 'selected-card' : ''}`}
-              onClick={() => handleDeckCard(data.cardId)}
-              key={cardIndex}
-              style={{ marginTop: '2%', marginLeft: '2%' }}
+            className={`carddeck`}
+            id={`${selectedCardId === data.cardId ? 'selected-card' : ''}`}
+            onClick={() => handleDeckCard(data.cardId)}
+            key={cardIndex}
+            style={{ marginTop: '2%', marginLeft: '2%' }}
             >
               <div className='contents'>
                 <div className={`carddecktitled`}>
+                <div className='gridXX'>
                   {data.mainTitle}
+ 
+                  {selectedCardId === data.cardId && (
+                <button
+                  style={{  width: '20px', fontSize: '10px'}}
+                  className='xbox'
+                  onClick={() => handleMinusCard(data.cardId)}
+                  value={'❌'}
+                  >
+                  ❌ 
+                  </button>
+                  )}
+                    </div>
                 </div>
                 <div className='gridcard' style={{zIndex:'1', marginLeft:'-5%'}}>
                 <div className='subfont'>{data.subTitle}</div>
@@ -224,8 +254,8 @@ function Carddeck({ responseData, selectedCardIds,fetchSomeData, rescard, setRes
                   }}
                 />
          
-         {selectedCardId === data.cardId && (
-    <div className='gridbutton'>
+         {/* {selectedCardId === data.cardId && (
+   
       <button
         style={{ width: '70px', fontSize: '10px', transform: 'scale(0.5)' }}
         className='repcardbox'
@@ -233,19 +263,13 @@ function Carddeck({ responseData, selectedCardIds,fetchSomeData, rescard, setRes
       >
         대표 카드
       </button>
-      <button
-        style={{ width: '48px', fontSize: '10px', transform: 'scale(0.5)' }}
-        className='repcardbox'
-        onClick={() => handleMinusCard(data.cardId)}
-      >
-        빼기
-      </button>
-    </div>
-  )}
+
+  )} */}
               </div>
             </div>
           ))}
         </ul>
+
       ))}
     </div>
   );
@@ -255,13 +279,16 @@ function Carddeck({ responseData, selectedCardIds,fetchSomeData, rescard, setRes
 
 
 
-function Deckin({ selectedCardIds, responseData, rescard, setRescard, sendRequestForSelectedCardIds, setSelectedCardIds }) {
+function Deckin({ userId, selectedCardId, setSelectedCardId, handleDeckCard, handlerescard, selectedCardIds, responseData, rescard, setRescard, sendRequestForSelectedCardIds, setSelectedCardIds }) {
   return (
     <div>
+      <div className='gridTitle'>
       <h4 className='bold'>덱에 포함시킬 카드</h4>
+      <button onClick={handlerescard} style={{width:'130px', height:'40px', marginTop: '3%', marginLeft: '50%', color:'white', fontWeight:'bold'}}>대표 카드</button>
+      </div>
       {selectedCardIds !== null && selectedCardIds.length > 0 ? (
         <div className="factory board">
-          <Carddeck setSelectedCardIds={setSelectedCardIds} sendRequestForSelectedCardIds={sendRequestForSelectedCardIds} rescard={rescard} setRescard={setRescard} key={responseData.cardId} cardId={responseData.cardId} responseData={responseData} selectedCardIds={selectedCardIds}/>
+          <Carddeck userId={userId} selectedCardId={selectedCardId} setSelectedCardId={setSelectedCardId} handleDeckCard={handleDeckCard} setSelectedCardIds={setSelectedCardIds} sendRequestForSelectedCardIds={sendRequestForSelectedCardIds} rescard={rescard} setRescard={setRescard} key={responseData.cardId} cardId={responseData.cardId} responseData={responseData} selectedCardIds={selectedCardIds}/>
         </div>
       ) : (
         <div className="factory"><p className='board'></p></div>
@@ -274,12 +301,13 @@ function Deckin({ selectedCardIds, responseData, rescard, setRescard, sendReques
 
 
 
-function Selectin({res, sendRequestForSelectedCardIds, onAddToDeck, fetchSomeData, selectedCardIds, setSelectedCardIds}) {
+function Selectin({userId, res, sendRequestForSelectedCardIds, onAddToDeck, fetchSomeData, selectedCardIds, setSelectedCardIds}) {
     return (
       <div>
         <h4 className="bold">선택 가능한 카드</h4>
         <div className="factory board">
         <CardD
+        userId={userId}
   fetchSomeData={fetchSomeData}
   res={res}
   selectedCardIds={selectedCardIds}
@@ -292,12 +320,12 @@ function Selectin({res, sendRequestForSelectedCardIds, onAddToDeck, fetchSomeDat
     )
   }
 
-  function Modal({isOpen, closeModal, fetchSomeData}) {
+  function Modal({userId, isOpen, closeModal, fetchSomeData}) {
 
     return (
       <div style={{display:isOpen ? "block": "none", zIndex:1}} className='modalbox'>
         <button onClick={closeModal} className='buttonX'>X</button>
-        <Deckmake closeModal={closeModal} fetchSomeData={fetchSomeData}/>
+        <Deckmake userId={userId} closeModal={closeModal} fetchSomeData={fetchSomeData}/>
         <div className='buttoncontain'>
         
 
@@ -306,11 +334,11 @@ function Selectin({res, sendRequestForSelectedCardIds, onAddToDeck, fetchSomeDat
     )
   }
 
-  function ModalX({isOpens, closeModals, selectedCardIds, responseData, recard, rescard}) {
+  function ModalX({userId, isOpens, closeModals, selectedCardIds, responseData, recard, rescard}) {
     return (
       <div style={{display:isOpens ? "block": "none", zIndex:1}} className='modalbox'>
         <button onClick={closeModals} className='buttonX'>X</button>
-        <Deckintroduce selectedCardIds={selectedCardIds} responseData={responseData} recard={recard} rescard={rescard} closeModals={closeModals} />
+        <Deckintroduce userId={userId} selectedCardIds={selectedCardIds} responseData={responseData} recard={recard} rescard={rescard} closeModals={closeModals} />
         <div className='buttoncontain'>
         
         {/* <button onClick={closeModals} className='button'>등록하기</button> */}
@@ -321,7 +349,7 @@ function Selectin({res, sendRequestForSelectedCardIds, onAddToDeck, fetchSomeDat
 
 // 카드 만들기, 상세 모달
 
-function CardX({ name, point, imageUrl, subTitle }) {
+function CardX({userId, name, point, imageUrl, subTitle }) {
   const truncateText = (text, maxLength) => {
     if (text.length > maxLength) {
       return text.substring(0, maxLength) + '...';
@@ -352,13 +380,14 @@ function CardX({ name, point, imageUrl, subTitle }) {
 
 
 
-function CardD({ fetchSomeData, onAddToDeck, res, selectedCardIds, setSelectedCardIds }) {
+function CardD({userId, fetchSomeData, onAddToDeck, res, selectedCardIds, setSelectedCardIds }) {
   const [selectedCardId, setSelectedCardId] = useState(null);
+  const [isAddToDeckButtonVisible, setIsAddToDeckButtonVisible] = useState(true);
 
   const handleCardClick = (cardId) => {
     setSelectedCardId(cardId);
   };
-
+  console.log(selectedCardId)
   const handleDeleteCard = async () => {
     try {
       if (selectedCardId) {
@@ -402,12 +431,20 @@ function CardD({ fetchSomeData, onAddToDeck, res, selectedCardIds, setSelectedCa
         }
       } else {
         console.log('덱에는 최대 25개까지만 추가할 수 있습니다.');
+        Swal.fire({
+          icon: 'warning',
+          title: '덱 카드 부족',
+          text: '덱에는 최대 25개까지만 추가할 수 있습니다.'
+
+      })
+
       }
     } else {
       console.log('카드를 선택해주세요.');
     }
+    
   };
-
+  const [dis, setDis] = useState(false);
   const truncateText = (text, maxLength) => {
     if (text.length > maxLength) {
       return text.substring(0, maxLength) + '...';
@@ -429,7 +466,21 @@ function CardD({ fetchSomeData, onAddToDeck, res, selectedCardIds, setSelectedCa
             onClick={() => handleCardClick(data.cardId)}
           >
             <div className='content'>
+              <div className='gridXXX'>
               <div className='cardtitled'>{truncateText(data.mainTitle, 5)}</div>
+
+              {selectedCardId === data.cardId && (
+              <button
+                  style={{width:'25px',height:'25px', fontSize: '10px'}}
+                  className='Xbox'
+                  onClick={() => handleDeleteCard(data.cardId)}
+                  value={'❌'}
+                  >
+                  ❌ 
+                  </button>
+                   )}
+      
+                  </div>
               <div className='gridcard'>
                 <div className='subtitle'>{truncateText(data.subTitle, 5)}</div>
                 <div className='star-container'>
@@ -451,19 +502,17 @@ function CardD({ fetchSomeData, onAddToDeck, res, selectedCardIds, setSelectedCa
                   borderRadius: '10px',
                   marginLeft: '13%'
                 }}
-              />
-              <div style={{ display: 'flex', marginLeft: '15%' }}>
-                {selectedCardId === data.cardId && (
-                  <button onClick={handleAddToDeck} className='add-to-deck-button btn-12' >
-                    <span>진짜?</span><span>담기</span>
-                  </button>
-                )}
-                {selectedCardId === data.cardId && (
-                  <button onClick={handleDeleteCard} className='add-to-deck-button btn-12'>
-                    <span>정말로?</span><span>삭제</span>
-                  </button>
-                )}
-              </div>
+              ></img>
+                  <div style={{ display: 'flex',fontSize:'10px', justifyContent:'center', alignItems:'center' }}>
+                    {selectedCardId === data.cardId && (
+                      <button onClick={handleAddToDeck} className='btn-hover color-6 deckbutton added-to-deck' >
+    
+                        담기
+                      </button>
+                    )}
+    
+                  </div>
+
             </div>
           </div>
         ))}
@@ -474,7 +523,7 @@ function CardD({ fetchSomeData, onAddToDeck, res, selectedCardIds, setSelectedCa
 
 
 
-function Deckmake({closeModal, fetchSomeData}) {
+function Deckmake({userId, closeModal, fetchSomeData}) {
   const fileInputRef = useRef(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
@@ -485,7 +534,7 @@ function Deckmake({closeModal, fetchSomeData}) {
   const [showCard, setShowCard] = useState(false);
   const [enroll, setEnroll] = useState(false);
 
-  const userId = 349;
+
   
   const handleImageClick = () => {
     fileInputRef.current.click();
@@ -686,7 +735,7 @@ const showTrue = () => {
       <div className='margincard'>
         {showCard && name && imageUrl && subTitle && (
           <div>
-            <CardX name={name} fetchSomeData={fetchSomeData} imageUrl={imageUrl} subTitle={subTitle} point={point} />
+            <CardX userId={userId} name={name} fetchSomeData={fetchSomeData} imageUrl={imageUrl} subTitle={subTitle} point={point} />
           </div>
         )}
 
@@ -697,12 +746,12 @@ const showTrue = () => {
 }
 
 
-  function Deckintroduce({ selectedCardIds, responseData, rescard, closeModals }) {
+  function Deckintroduce({ userId, selectedCardIds, responseData, rescard, closeModals }) {
     const [deckTitle, setDeckTitle] = useState('');
     const [deckDescription, setDeckDescription] = useState('');
     // const [repCard, setRepCard] = useState(null); // 대표 카드 정보 상태
     const [repCardIdToSend, setRepCardIdToSend] = useState(''); // 대표 카드 ID 상태
-    const userId = 349;
+
     console.log(rescard)
     console.log(selectedCardIds)
 
