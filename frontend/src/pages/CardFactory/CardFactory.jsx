@@ -31,8 +31,10 @@ function CardFactory( ){
       const storedUserId = getUserIdFromLocalStorage();
       if (storedUserId) {
         setUserId(storedUserId);
+        console.log(setUserId)
       }
     }, []);
+    console.log(userId)
     // const handleAddToDeck = () => {
     //   if (selectedCardIndex !== null) {
     //     if (selectedCardIds.length < 25) {
