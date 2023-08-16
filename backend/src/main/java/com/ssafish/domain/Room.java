@@ -17,7 +17,7 @@ public class Room {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "room_id", unique = true, nullable = false)
+    @Column(name = "room_id")
     private Long roomId;
 
     @Column(name = "pin_number", unique = true, nullable = false)
