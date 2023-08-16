@@ -78,4 +78,12 @@ public class DeckService {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당하는 유저가 없습니다."));
         deckRepository.deleteAllByUser(user);
     }
+
+    // 덱 이름으로 덱을 찾는다.
+    public Deck findDeckName(String deckName){
+
+        Deck deck = deckRepository.findDeckName(deckName);
+        return deck;
+
+    }
 }
