@@ -255,7 +255,7 @@ class CardInsertTest {
 
     //나라 카드 입력2
     @Test
-    @Order(9)
+    @Order(8)
     void setNation2CardsToDB() {
 
 //        cardsRepository.deleteAllInBatch();
@@ -287,12 +287,11 @@ class CardInsertTest {
 
         for(int i=0;i<25;i++){
             CardDto cardDto = new CardDto();
-            //cardDto.setCardId(i);
+            cardDto.setUserId(1L);
             cardDto.setMainTitle(titles[i]);
             cardDto.setSubTitle(subtitle[i]);
             cardDto.setMainImgUrl(uploadPath + mainImgUrl[i]);
-            cardDto.setUserId(1);
-            Card cards = cardDto.toEntity();
+            Card cards = cardDto.toEntity(userRepository);
             cardsRepository.save(cards);
         }
 
@@ -300,17 +299,17 @@ class CardInsertTest {
 
     //2. 기본 덱정보 삽입
     @Test
-    @Order(10)
+    @Order(9)
     void setNation2Deck(){
 
         //더미 데이터 저장 및 확인
         Deck deck = Deck.builder()
-                .userId(1)
+                .user(userRepository.findById(1L).orElseThrow(() -> new IllegalArgumentException("해당하는 유저가 없습니다.")))
                 .deckId(3)
-                .cardId(51)
-                .deckName("국가 수도 모음집")
+                .card(cardsRepository.findByCardId(51L))
+                .deckName("국가 수도 모음집2")
                 .deckDescription("국가 수도 카드로 게임을 플레이하고, 익혀봅시다")
-                .deckUsageCount(1)
+                .deckUsageCount(0)
                 .isPublic(true)
                 .build();
 
@@ -320,13 +319,13 @@ class CardInsertTest {
         DeckDto deckDto = cardDeckService.deckInfo(3);
 
         System.out.println(deckDto);
-        assertEquals("국가 수도 모음집", deckDto.getDeckName());
+        assertEquals("국가 수도 모음집2", deckDto.getDeckName());
 
 
     }
     // 카드 덱 테이블 더미 데이터 삽입
     @Test
-    @Order(11)
+    @Order(10)
     void setNation2CardDeck(){
 
 //        cardDeckRepository.deleteAllInBatch();
@@ -337,8 +336,8 @@ class CardInsertTest {
 
             CardDeck card_decks = CardDeck.builder()
                     .cardDeckId(cardIdnum)
-                    .cardId(cardIdnum)
-                    .deckId(decknum)
+                    .card(cardsRepository.findByCardId(cardIdnum))
+                    .deck(deckRepository.findByDeckId(decknum))
                     .build();
             cardDeckRepository.save(card_decks);
             cardIdnum++;
@@ -354,7 +353,7 @@ class CardInsertTest {
 
     //명화 카드 입력
     @Test
-    @Order(13)
+    @Order(11)
     void setPaintingCardsToDB() {
 
 //        cardsRepository.deleteAllInBatch();
@@ -388,12 +387,11 @@ class CardInsertTest {
 
         for(int i=0;i<25;i++){
             CardDto cardDto = new CardDto();
-            //cardDto.setCardId(i);
+            cardDto.setUserId(1L);
             cardDto.setMainTitle(titles[i]);
             cardDto.setSubTitle(subtitle[i]);
             cardDto.setMainImgUrl(uploadPath + mainImgUrl[i]);
-            cardDto.setUserId(1);
-            Card cards = cardDto.toEntity();
+            Card cards = cardDto.toEntity(userRepository);
             cardsRepository.save(cards);
         }
 
@@ -401,17 +399,17 @@ class CardInsertTest {
 
     //2. 기본 덱정보 삽입
     @Test
-    @Order(14)
+    @Order(12)
     void setPaintingDeck(){
 
         //더미 데이터 저장 및 확인
         Deck deck = Deck.builder()
-                .userId(1)
+                .user(userRepository.findById(1L).orElseThrow(() -> new IllegalArgumentException("해당하는 유저가 없습니다.")))
                 .deckId(4)
-                .cardId(80)
+                .card(cardsRepository.findByCardId(76L))
                 .deckName("명화 모음집")
                 .deckDescription("명화 카드로 게임을 플레이하고, 익혀봅시다")
-                .deckUsageCount(1)
+                .deckUsageCount(0)
                 .isPublic(true)
                 .build();
 
@@ -427,7 +425,7 @@ class CardInsertTest {
     }
     // 카드 덱 테이블 더미 데이터 삽입
     @Test
-    @Order(15)
+    @Order(13)
     void setPaintingCardDeck(){
 
 //        cardDeckRepository.deleteAllInBatch();
@@ -438,8 +436,8 @@ class CardInsertTest {
 
             CardDeck card_decks = CardDeck.builder()
                     .cardDeckId(cardIdnum)
-                    .cardId(cardIdnum)
-                    .deckId(decknum)
+                    .card(cardsRepository.findByCardId(cardIdnum))
+                    .deck(deckRepository.findByDeckId(decknum))
                     .build();
             cardDeckRepository.save(card_decks);
             cardIdnum++;
