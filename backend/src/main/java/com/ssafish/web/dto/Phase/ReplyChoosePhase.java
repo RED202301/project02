@@ -3,7 +3,7 @@ package com.ssafish.web.dto.Phase;
 import com.ssafish.service.RoomService;
 import com.ssafish.web.dto.GameData;
 import com.ssafish.web.dto.GameStatus;
-import com.ssafish.web.dto.TypeEnum;
+import com.ssafish.web.dto.MessageType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +30,7 @@ public class ReplyChoosePhase extends Phase implements ChoosePhase {
         // 턴 시작을 알림
         roomService.sendMessageToRoom(gameStatus.getRoomId(),
                 ResponseEntity.ok(GameData.builder()
-                              .type(TypeEnum.REPLY_TURN.name())
+                              .type(MessageType.REPLY_TURN.name())
                               .player(gameStatus.getOpponentPlayer().getUserId())
                               .cardId(gameStatus.getCardOpen())
                               .build())
@@ -38,7 +38,7 @@ public class ReplyChoosePhase extends Phase implements ChoosePhase {
 
         // 자동 처리 로직
         GameData gameData = GameData.builder()
-                .type(TypeEnum.REPLY.name())
+                .type(MessageType.REPLY.name())
                 .requester(gameStatus.getCurrentPlayer().getUserId())
                 .responser(gameStatus.getOpponentPlayer().getUserId())
                 .cardId(gameStatus.getCardOpen())
@@ -161,7 +161,7 @@ public class ReplyChoosePhase extends Phase implements ChoosePhase {
     public void sendAutoDraw(GameStatus gameStatus, long currentUserId, long cardDraw) {
         roomService.sendMessageToRoom(gameStatus.getRoomId(),
                 ResponseEntity.ok(GameData.builder()
-                                          .type(TypeEnum.AUTO_DRAW.name())
+                                          .type(MessageType.AUTO_DRAW.name())
                                           .player(currentUserId)
                                           .cardId(cardDraw)
                                           .build())
@@ -171,7 +171,7 @@ public class ReplyChoosePhase extends Phase implements ChoosePhase {
     public void sendEnroll(GameStatus gameStatus, long userId, long cardId) {
         roomService.sendMessageToRoom(gameStatus.getRoomId(),
                 ResponseEntity.ok(GameData.builder()
-                                          .type(TypeEnum.ENROLL.name())
+                                          .type(MessageType.ENROLL.name())
                                           .player(userId)
                                           .cardId(cardId)
                                           .build())
@@ -181,7 +181,7 @@ public class ReplyChoosePhase extends Phase implements ChoosePhase {
     public void sendCardMove(GameStatus gameStatus, long opponentUserId, long currentUserId, long cardOpen) {
         roomService.sendMessageToRoom(gameStatus.getRoomId(),
                 ResponseEntity.ok(GameData.builder()
-                                          .type(TypeEnum.CARD_MOVE.name())
+                                          .type(MessageType.CARD_MOVE.name())
                                           .from(opponentUserId)
                                           .to(currentUserId)
                                           .cardId(cardOpen)
