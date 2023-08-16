@@ -2,16 +2,17 @@ package com.ssafish;
 
 import com.ssafish.domain.card.Card;
 import com.ssafish.domain.card.CardsRepository;
-import com.ssafish.domain.card.UserCard;
-import com.ssafish.domain.card.UserCardRepository;
 import com.ssafish.domain.deck.CardDeck;
 import com.ssafish.domain.deck.CardDeckRepository;
 import com.ssafish.domain.deck.Deck;
 import com.ssafish.domain.deck.DeckRepository;
+import com.ssafish.domain.user.User;
+import com.ssafish.domain.user.UserRepository;
 import com.ssafish.service.CardDeckService;
 import com.ssafish.service.CardService;
 import com.ssafish.web.dto.CardDto;
 import com.ssafish.web.dto.DeckDto;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -41,15 +42,23 @@ class CardInsertTest {
     @Autowired
     CardDeckRepository cardDeckRepository;
     @Autowired
-    UserCardRepository userCardRepository;
-
-
+    UserRepository userRepository;
 
 
 //인물카드 입력
-// 1. 기본 덱 정보 삽입
+// 1. 테스트 1번 유저 저장
     @Test
     @Order(1)
+    void setTestUser() {
+        User user = User.builder()
+                .nickname("test")
+                .build();
+        userRepository.save(user);
+    }
+
+// 2. 기본 덱 정보 삽입
+    @Test
+    @Order(2)
     void setPeopleCardsToDB() {
 
 //        cardsRepository.deleteAllInBatch();
@@ -82,29 +91,29 @@ class CardInsertTest {
         for(int i=0;i<25;i++){
             CardDto cardDto = new CardDto();
             cardDto.setCardId(i);
+            cardDto.setUserId(1L);
             cardDto.setMainTitle(titles[i]);
             cardDto.setSubTitle(subtitle[i]);
             cardDto.setMainImgUrl(uploadPath + mainImgUrl[i]);
-            Card cards = cardDto.toEntity();
+            Card cards = cardDto.toEntity(userRepository);
             cardsRepository.save(cards);
         }
 
     }
 
 
-    //2. 기본 덱정보 삽입
+    //3. 기본 덱정보 삽입
     @Test
-    @Order(2)
+    @Order(3)
     void testdeckInfoService(){
 
         //더미 데이터 저장 및 확인
         Deck deck = Deck.builder()
-                .userId(1)
-                .deckId(1)
-                .cardId(2)
+                .user(userRepository.findById(1L).orElseThrow(() -> new IllegalArgumentException("해당하는 유저가 없습니다.")))
+                .card(cardsRepository.findByCardId(1L))
                 .deckName("위인 모음집")
                 .deckDescription("위인 카드로 게임을 플레이하고, 익혀봅시다")
-                .deckUsageCount(1)
+                .deckUsageCount(0)
                 .isPublic(true)
                 .build();
 
@@ -120,7 +129,7 @@ class CardInsertTest {
     }
     // 카드 덱 테이블 더미 데이터 삽입
     @Test
-    @Order(3)
+    @Order(4)
     void setDefaultDeckCardsToDB(){
 
 //            cardDeckRepository.deleteAllInBatch();
@@ -131,8 +140,8 @@ class CardInsertTest {
 
             CardDeck card_decks = CardDeck.builder()
                     .cardDeckId(cardIdnum)
-                    .cardId(cardIdnum)
-                    .deckId(decknum)
+                    .card(cardsRepository.findByCardId(cardIdnum))
+                    .deck(deckRepository.findByDeckId(decknum))
                     .build();
             cardDeckRepository.save(card_decks);
             cardIdnum++;
@@ -144,27 +153,6 @@ class CardInsertTest {
     }
 
 
-    //유저 카드 테이블 더미 데이터 삽입
-    @Test
-    @Order(4)
-    void setDefaultUserCardsToDB(){
-
-//        userCardRepository.deleteAllInBatch();
-
-        long cardIdnum =1;
-        for(int i=0;i<25;i++){
-
-            UserCard userCard = UserCard.builder()
-                    .userId(0)
-                    .cardId(cardIdnum)
-                    .build();
-
-            userCardRepository.save(userCard);
-            cardIdnum++;
-
-        }
-
-    }
     //나라 카드 입력
     @Test
     @Order(5)
@@ -200,10 +188,11 @@ class CardInsertTest {
         for(int i=0;i<25;i++){
             CardDto cardDto = new CardDto();
             //cardDto.setCardId(i);
+            cardDto.setUserId(1L);
             cardDto.setMainTitle(titles[i]);
             cardDto.setSubTitle(subtitle[i]);
             cardDto.setMainImgUrl(uploadPath + mainImgUrl[i]);
-            Card cards = cardDto.toEntity();
+            Card cards = cardDto.toEntity(userRepository);
             cardsRepository.save(cards);
         }
 
@@ -216,12 +205,12 @@ class CardInsertTest {
 
         //더미 데이터 저장 및 확인
         Deck deck = Deck.builder()
-                .userId(1)
+                .user(userRepository.findById(1L).orElseThrow(() -> new IllegalArgumentException("해당하는 유저가 없습니다.")))
                 .deckId(2)
-                .cardId(4)
+                .card(cardsRepository.findByCardId(26L))
                 .deckName("국가 수도 모음집")
                 .deckDescription("국가 수도 카드로 게임을 플레이하고, 익혀봅시다")
-                .deckUsageCount(1)
+                .deckUsageCount(0)
                 .isPublic(true)
                 .build();
 
@@ -248,8 +237,8 @@ class CardInsertTest {
 
             CardDeck card_decks = CardDeck.builder()
                     .cardDeckId(cardIdnum)
-                    .cardId(cardIdnum)
-                    .deckId(decknum)
+                    .card(cardsRepository.findByCardId(cardIdnum))
+                    .deck(deckRepository.findByDeckId(decknum))
                     .build();
             cardDeckRepository.save(card_decks);
             cardIdnum++;
@@ -257,29 +246,6 @@ class CardInsertTest {
         }
 
 
-
-    }
-
-
-    //유저 카드 테이블 더미 데이터 삽입
-    @Test
-    @Order(8)
-    void setNationUserCard(){
-
-//        userCardRepository.deleteAllInBatch();
-
-        long cardIdnum =26;
-        for(int i=0;i<25;i++){
-
-            UserCard userCard = UserCard.builder()
-                    .userId(0)
-                    .cardId(cardIdnum)
-                    .build();
-
-            userCardRepository.save(userCard);
-            cardIdnum++;
-
-        }
 
     }
 
