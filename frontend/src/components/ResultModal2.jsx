@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import './ResultModal2.css';
 // import useDidMountEffect from './useDidMountEffect';
 
+
 function ResultModal() {
     const [modal, setModal] = React.useState(true);
     const winner = [{userId:1, nickname:'홍길동', score:'10'},{userId:1, nickname:'홍길동', score:'10'},{userId:1, nickname:'홍길동', score:'10'}]

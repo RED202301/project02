@@ -2,7 +2,7 @@ import './cubeloader.scss'
 
 function cubeloader(){
     return (
-        <div className="container">
+        <div className="cube_container">
             <div className="cube">
                 <div className="sides">
                 <div className="top"></div>
@@ -13,7 +13,7 @@ function cubeloader(){
                 <div className="back"></div>
             </div>
         </div>
-  <div className="text">BUNDLING DEPENDENCIES</div>
+  <div className="text">Loading. . .</div>
 </div>
             )}
             

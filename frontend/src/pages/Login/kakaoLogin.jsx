@@ -48,6 +48,9 @@ function Login2() {
                 text: '닉네임을 입력 해 주세요',
                 input: 'text',
                 confirmButtonText: '등록',
+                width: 'auto', 
+                color: 'black',
+                confirmButtonColor: 'black',
               })
                 //닉네임이 입력 됐을 때,
                 .then(res => {

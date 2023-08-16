@@ -1,12 +1,11 @@
 import axios from "axios";
-import { warning } from "framer-motion";
 import Swal from "sweetalert2";
 
 const base_url = import.meta.env.VITE_SERVER_URL;
 
 function ChangeNickname(){
     const host_URL = base_url;
-        const changeNickname  = () => {
+        // const changeNickname  = () => {
             Swal.fire({
               title: '닉네임을 입력 해 주세요',
               input: 'text',
@@ -55,11 +54,11 @@ function ChangeNickname(){
               .catch(() => {
                 
               });
-            }
+            // }
 
 	return (
         <div>
-			<p onClick={changeNickname} style={{'margin':'0px'}}>닉네임 변경</p>
+			{/* <p onClick={changeNickname} style={{'margin':'0px'}}>닉네임 변경</p> */}
 		</div>
 )}
 

@@ -16,11 +16,15 @@ import Game from './pages/Game/Game';
 import GameUI from './pages/GameUI/App';
 import GameRoom from './pages/GameRoom/GameRoom';
 import MVP from './pages/MVP/MVP';
-// import Cccc from './pages/Main/cccc' 
+import Cccc from './pages/Main/cccc' 
 import ResultModal2 from './components/ResultModal2';
+import CreateRoomModal from './components/CreateRoomModal';
+import PrivateRoute from './components/PrivateRoute';
 
 function App() {
   [];
+  const access = localStorage.getItem('accessToken');
+  const access2 = sessionStorage.getItem('roomId');
   return (
     <Router>
       <AnimatePresence>
@@ -29,20 +33,31 @@ function App() {
             <Route path="/" element={<Landing />} />
             <Route path="/Login2" element={<KakaoLogin />} />
             <Route path="/Tutorial" element={<Tutorial />} />
-            <Route path="/Main" element={<Main />} />
-            <Route path="/RoomList" element={<RoomList />} />
-            <Route path="/WebMain" element={[<Header />, <WebMain />]} />
+            <Route path="/Main" element={<Main/>}/>
+            {/* <Route path="/RoomList" element={<RoomList />} /> */}
+            {/* <Route path="/WebMain" element={[<Header />, <WebMain />]} />
             <Route path="/CardFactory" element={[<Header />, <CardFactory />]} />
             <Route path="/CardMarket" element={[<Header />, <CardMarket />]} />
             <Route path="/Mypage" element={[<Header />, <Mypage />]} />
-            <Route path="/WebMain" element={[<Header />, <WebMain />]} />
+            <Route path="/WebMain" element={[<Header />, <WebMain />]} /> */}
             {/* <Route path="/Room" element={<Room />} /> */}
             <Route path="/main/game" element={<Game />} />
             <Route path="/MVP" element={<MVP />} />
             <Route path="/GameUI" element={<GameUI />} />
             <Route path="/GameRoom" element={<GameRoom />} />
-            {/* <Route path="/cccc" element={<Cccc />} /> */}
+            <Route path="/cccc" element={<Cccc />} />
             <Route path="/ResultModal" element={<ResultModal2 />} />
+            <Route path="/CreateRoomModal" element={<CreateRoomModal/>} />
+
+
+
+            {/* <Route path="/Main" element={<PrivateRoute authenticated={access} component={<Main/>}/>} /> */}
+            <Route path="/WebMain" element={<PrivateRoute authenticated={access} component={[<Header />, <WebMain />]}/>}/>
+            <Route path="/CardFactory" element={<PrivateRoute authenticated={access} component={[<Header />, <CardFactory />]} />}/>
+            <Route path="/CardMarket" element={<PrivateRoute authenticated={access} component={[<Header />, <CardMarket />]} />}/>
+            <Route path="/Mypage" element={<PrivateRoute authenticated={access} component={[<Header />, <Mypage />]} />}/>
+            <Route path="/CreateRoomModal" element={<PrivateRoute authenticated={access} component={<CreateRoomModal/>} />}/>
+            {/* <Route path="/GameRoom" element={<PrivateRoute authenticated={access2} component={<GameRoom />} />}/> */}
           </Routes>
         </div>
       </AnimatePresence>
