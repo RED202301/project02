@@ -99,4 +99,45 @@ public class DeckController {
         deckService.delete(userId);
         return ResponseEntity.status(HttpStatus.OK).body("Delete all decks");
     }
+
+    // 추가 부분1. : 모든 덱의 간략 정보만 반환한다.
+    @GetMapping("deck/deckTitle")
+    public ResponseEntity<List<String>> deckTitle(){
+        //
+//        List<Deck> deckList = deckRepository.findAll();
+//        List<DeckDto> deckDtoList = new ArrayList<>();
+//        deckList.forEach((deck) -> deckDtoList.add(deck.toDto()));
+
+
+        List<Deck> deckList = deckRepository.findAll();
+        List<String> deckNameList = new ArrayList<>();
+        deckList.forEach((deck) -> deckNameList.add(deck.getDeckName()));
+
+
+        return ResponseEntity.ok().body(deckNameList);
+
+    }
+
+    // 추가 부분2.: 덱의 String으로만 제공한다.
+    @GetMapping("deck/deckCards")
+    public ResponseEntity<DeckDetailDto> deckCards(@RequestParam(value="deckName", required = false, defaultValue = "위인 모음집") String deckName){
+        //해당 덱 아이디를 찾는다.
+//        Deck inputdeck = Deck.builder()
+//                .deckName(deckName)
+//                .build();
+
+        Deck inputdeck = deckService.findDeckName(deckName);
+        // 해당 카드 리스트를 읽어온다.
+
+
+        List<CardDto> deckCardList = cardDeckService.deckCardList(inputdeck.getDeckId());
+        DeckDetailDto deckDetailDto = DeckDetailDto.builder()
+                .deck(inputdeck.toDto())
+                .cardList(deckCardList)
+                .build();
+
+
+        return ResponseEntity.ok().body(deckDetailDto);
+
+    }
 }

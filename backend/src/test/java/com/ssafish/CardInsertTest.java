@@ -351,7 +351,7 @@ class CardInsertTest {
                 "두 자매","마라의 죽음","밤샘하는 사람들","뱃놀이 일행의 오찬","별이 빛나는 밤",
                 "비너스의 탄생","상처 입은 천사","수련 연못","스타","시녀들",
                 "아르놀피니 부부의 초상","아메리칸 고딕","아테네 학당"," 안개바다 위의 방랑자","야간 순찰대",
-                "이반뇌제와 그의 아들 이반","잠자는 집시","진주 귀걸이를 한 소녀","큰 모자를 쓴 잔 에뷔테른","해돋이"
+                "이반뇌제와 그의 아들 이반","잠자는 집시","진주 귀걸이를 한 소녀","큰 모자를 쓴 잔 에뷔테른","인상,해돋이"
         };
         // 국가명
         String [] subtitle = {"조르주 쇠라","살바도르 달리","파블로 피카소","마르크 샤갈","한스 홀바인",
@@ -370,8 +370,8 @@ class CardInsertTest {
                 "/painting_imgs/그랑드자트섬의 일요일 오후.jpg","/painting_imgs/기억의 지속.png","/painting_imgs/기타 치는 노인.jpg","/painting_imgs/나와 마을.jpg","/painting_imgs/대사들.jpg",
                 "/painting_imgs/두 자매.jpg","/painting_imgs/마라의 죽음.jpg","/painting_imgs/밤샘하는 사람들.jpg","/painting_imgs/뱃놀이 일행의 오찬.jpg","/painting_imgs/별이 빛나는 밤.jpg",
                 "/painting_imgs/비너스의 탄생.jpg","/painting_imgs/상처 입은 천사.jpg","/painting_imgs/수련 연못.jpg","/painting_imgs/스타.jpg","/painting_imgs/시녀들.jpg",
-                "/painting_imgs/아르놀피니 부부의 초상.jpg","/painting_imgs/아메리칸 고딕.jpg","/painting_imgs/아테네 학당.jpg","/painting_imgs/안개바다 위의 방랑자.jpg","/painting_imgs/야간 순찰대.jpg",
-                "/painting_imgs/이반뇌제와 그의 아들 이반.jpg","/painting_imgs/잠자는 집시.jpg","/painting_imgs/진주 귀걸이를 한 소녀.jpg","/painting_imgs/큰 모자를 쓴 잔 에뷔테른.jpg","/painting_imgs/해돋이.jpg"
+                "/painting_imgs/아르놀피니 부부의 초상.jpg","/painting_imgs/아메리칸 고딕.jpg","/painting_imgs/아테네 학당.jpg","/painting_imgs/안개 바다 위의 방랑자.jpg","/painting_imgs/야간 순찰대.jpg",
+                "/painting_imgs/이반뇌제와 그의 아들 이반.jpg","/painting_imgs/잠자는 집시.jpg","/painting_imgs/진주 귀걸이를 한 소녀.jpg","/painting_imgs/큰 모자를 쓴 잔 에뷔테른.jpg","/painting_imgs/인상,해돋이.jpg"
         };
 
         for(int i=0;i<25;i++){
