@@ -101,7 +101,7 @@ public class RoomController {
             gameService.addPlayer(roomId, userId, nickname, isBot);
             List<Player> playerList = gameService.getPlayerList(roomId);
             return ResponseEntity.status(HttpStatus.OK).body(SocketData.builder()
-                    .type(TypeEnum.ENTER.name())
+                    .type(MessageType.ENTER.name())
                     .userId(userId)
                     .nickname(nickname)
                     .isBot(isBot)
@@ -113,6 +113,16 @@ public class RoomController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
+//    @MessageMapping("/add-bot/{roomId}")
+//    @SendTo("/sub/{roomId}")
+//    public void addBot(@DestinationVariable long roomId, @Payload GameData gameData,
+//                       @Headers Map<String, Object> attributes, SimpMessageHeaderAccessor headerAccessor) {
+//
+//        gameData.setPlayers(gameService.add(roomId, gameData));
+//
+//        roomService.sendMessageToRoom(roomId, ResponseEntity.ok(gameData));
+//    }
 
     @MessageMapping("/change/{roomId}")
     @SendTo("/sub/{roomId}")

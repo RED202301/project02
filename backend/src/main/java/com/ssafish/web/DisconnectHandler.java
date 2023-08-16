@@ -4,12 +4,12 @@ import com.ssafish.common.util.TimeManager;
 import com.ssafish.common.util.WebSocketSubscriberManager;
 import com.ssafish.service.GameService;
 import com.ssafish.service.RoomService;
+import com.ssafish.service.UserService;
 import com.ssafish.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
@@ -20,9 +20,6 @@ import org.springframework.web.socket.messaging.SessionConnectEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 import javax.annotation.PostConstruct;
-import java.io.IOException;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +36,7 @@ public class DisconnectHandler implements ApplicationListener<AbstractSubProtoco
     private final WebSocketSubscriberManager subscriberManager;
     private final RoomService roomService;
     private final GameService gameService;
+    private final UserService userService;
     private final TimeManager timeManager;
 
     private final long DISCONNECT_DELAY = 5_000;
@@ -92,7 +90,7 @@ public class DisconnectHandler implements ApplicationListener<AbstractSubProtoco
 
             roomService.sendMessageToRoom(roomId,
                     ResponseEntity.ok(MsgData.builder()
-                    .type(TypeEnum.SERVER_MESSAGE.name())
+                    .type(MessageType.SERVER_MESSAGE.name())
                     .content(timeManager.getCurrentTime() + player.getNickname() + "님이 로봇이 되었습니다!")
                     .build()));
         } else {
@@ -101,7 +99,7 @@ public class DisconnectHandler implements ApplicationListener<AbstractSubProtoco
 
             roomService.sendMessageToRoom(roomId,
                     ResponseEntity.ok(MsgData.builder()
-                    .type(TypeEnum.SERVER_MESSAGE.name())
+                    .type(MessageType.SERVER_MESSAGE.name())
                     .content(timeManager.getCurrentTime() + player.getNickname() + "님이 방에서 나갔습니다!")
                     .build()));
         }
@@ -109,7 +107,7 @@ public class DisconnectHandler implements ApplicationListener<AbstractSubProtoco
         // 플레이어의 연결됨에 따른 변화 내용을 알리는 메시지 전송
         roomService.sendMessageToRoom(roomId,
                 ResponseEntity.ok(GameData.builder()
-                .type(TypeEnum.EXIT.name())
+                .type(MessageType.EXIT.name())
                 .players(playerList)
                 .build()));
 
@@ -127,16 +125,22 @@ public class DisconnectHandler implements ApplicationListener<AbstractSubProtoco
                 room.setUserId(newLeader.getUserId());
                 roomService.sendMessageToRoom(roomId,
                         ResponseEntity.ok(GameData.builder()
-                        .type(TypeEnum.ROOM_LEADER.name())
+                        .type(MessageType.ROOM_LEADER.name())
                         .player(newLeader.getUserId())
                         .build()));
 
                 roomService.sendMessageToRoom(roomId,
                         ResponseEntity.ok(MsgData.builder()
-                        .type(TypeEnum.SERVER_MESSAGE.name())
+                        .type(MessageType.SERVER_MESSAGE.name())
                         .content(timeManager.getCurrentTime()) + newLeader.getNickname() + "님이 새로운 방장입니다!"));
                 log.info(roomId + "번 방의 새로운 방장 userId: " + newLeader.getUserId());
             }
+        }
+
+        // 플레이어가 손님일 경우 DB 에서 삭제
+        UserResponseDto userDto = userService.findUserById(userId);
+        if (Role.GUEST.name().equals(userDto.getRole())) {
+            userService.deleteGuest(userId);
         }
 
         subscriberManager.removeSubscriber(sessionId);
