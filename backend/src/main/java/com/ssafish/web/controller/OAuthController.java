@@ -132,17 +132,17 @@ public class OAuthController {
             }
 
             long kakaoId = JwtProvider.getUserId(accessToken, secretKey);
+            User user = userService.findUserByKakaoId(kakaoId);
+            long userId = user.getUserId();
 
-            // 덱 삭제 처리
-            if (userDeleteDto.isWantToDeleteDeck()) {
-                User user = userService.findUserByKakaoId(kakaoId);
-                long userId = user.getUserId();
+            if (userDeleteDto.isWantToDeleteDeck()) { // 덱 삭제 처리
                 cardDeckService.delete(userId);
                 deckService.delete(userId);
+            } else { // 덱 연관관계 매핑 제거
+                user.getDecks().forEach(deck -> deck.setUser(null));
             }
 
             userService.deleteUser(kakaoId);
-
             return ResponseEntity.status(HttpStatus.OK).body("회원탈퇴 처리된 유저 kakaoId: " + kakaoId);
         } catch (JwtException e) {
             // 토큰 파싱이 실패하거나 유효하지 않은 토큰일 경우, 클라이언트에게 인증 실패 응답 전달

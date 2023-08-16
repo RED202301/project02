@@ -15,7 +15,7 @@ public class CardDeck {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "card_deck_id", unique = true, nullable = false)
+    @Column(name = "card_deck_id")
     private Long cardDeckId;
 
     @ManyToOne

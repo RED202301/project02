@@ -1,5 +1,6 @@
 package com.ssafish.service;
 
+import com.ssafish.domain.card.CardsRepository;
 import com.ssafish.domain.user.User;
 import com.ssafish.domain.user.UserRepository;
 import com.ssafish.web.dto.KakaoUserInfo;
@@ -19,10 +20,12 @@ import java.net.URL;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final CardsRepository cardsRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, CardsRepository cardsRepository) {
         this.userRepository = userRepository;
+        this.cardsRepository = cardsRepository;
     }
 
     public static User mapToEntity(KakaoUserInfo kakaoUserInfo, String refreshToken, String kakaoAccessToken) {
@@ -56,7 +59,7 @@ public class UserService {
         // kakao 연결 해제
         String reqURL = "https://kapi.kakao.com/v1/user/unlink";
         String kakaoAccessToken = userRepository.findByKakaoId(kakaoId).getKakaoAccessToken();
-        long userId = userRepository.findByKakaoId(kakaoId).getUserId();
+        User user = userRepository.findByKakaoId(kakaoId);
 
         try {
             URL url = new URL(reqURL);
@@ -71,8 +74,15 @@ public class UserService {
             log.info("deleteUser responseCode : " + responseCode);
 
             // DB에서 삭제
+            user.getCards().forEach(card -> {
+                        if (card.getCardDecks().isEmpty()) {
+                            cardsRepository.delete(card);
+                        } else {
+                            card.setUser(null);
+                        }
+                    });
             userRepository.deleteByKakaoId(kakaoId);
-            return userId;
+            return user.getUserId();
         } catch (IOException e) {
             e.printStackTrace();
             return -1;
