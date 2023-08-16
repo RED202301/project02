@@ -16,7 +16,7 @@ const CARD_MOVE = 'CARD_MOVE';
 const END_GAME = 'END_GAME';
 const WINNER_CEREMONY = 'WINNER_CEREMONY';
 
-export function useStomp() {
+export function getStomp() {
   const socket = new SockJS(host_URL + '/ssafish');
   const stompClient = Stomp.over(socket);
   return stompClient;
