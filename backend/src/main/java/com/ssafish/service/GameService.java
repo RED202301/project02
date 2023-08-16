@@ -106,6 +106,11 @@ public class GameService {
         log.info("play 메서드 호출 완료한 방 번호: " + roomId);
     }
 
+    public void stopGame(long roomId) {
+        Board board = boards.get(roomId);
+        board.getGameStatus().setGameOver(true);
+    }
+
     public void selectPlayer(long roomId, GameData gameData) {
         boards.get(roomId).handlePub(gameData);
     }
