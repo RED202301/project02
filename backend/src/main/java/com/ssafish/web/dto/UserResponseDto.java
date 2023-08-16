@@ -11,12 +11,14 @@ import lombok.Getter;
 @Builder(access = AccessLevel.PRIVATE)
 public class UserResponseDto {
 
-    private Long userId;
+    private long userId;
     private String nickname;
+    private String role;
     public static UserResponseDto from(User user) {
         return UserResponseDto.builder()
                 .userId(user.getUserId())
                 .nickname(user.getNickname())
+                .role(user.getRole())
                 .build();
     }
 }

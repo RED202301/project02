@@ -4,6 +4,7 @@ import com.ssafish.domain.card.CardsRepository;
 import com.ssafish.domain.user.User;
 import com.ssafish.domain.user.UserRepository;
 import com.ssafish.web.dto.KakaoUserInfo;
+import com.ssafish.web.dto.Role;
 import com.ssafish.web.dto.UserRequestDto;
 import com.ssafish.web.dto.UserResponseDto;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +38,7 @@ public class UserService {
         user.setProfileImgUrl(kakaoUserInfo.getProfileImgUrl());
         user.setThumbnailImgUrl(kakaoUserInfo.getThumnailImgUrl());
         user.setEmail(kakaoUserInfo.getEmail());
+        user.setRole(Role.MEMBER.name());
         return user;
     }
 
@@ -109,6 +111,21 @@ public class UserService {
 
     @Transactional
     public UserResponseDto create(UserRequestDto requestDto) {
+        requestDto.setRole(Role.GUEST.name());
         return UserResponseDto.from(userRepository.save(requestDto.toEntity()));
+    }
+
+    public UserResponseDto findUserById(long userId) {
+        return UserResponseDto.from(userRepository.findById(userId).orElseThrow());
+    }
+
+    public long deleteGuest(long userId) {
+        try {
+            userRepository.deleteById(userId);
+            return userId;
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            return -1L;
+        }
     }
 }
