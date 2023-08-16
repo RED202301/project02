@@ -11,9 +11,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-//@AllArgsConstructor
 
-@ToString
 @Getter
 @NoArgsConstructor
 @Table(name = "Cards")
@@ -26,9 +24,6 @@ public class Card extends BaseTimeEntity {
     @Column(name = "card_id", unique = true, nullable = false)
     private long cardId;
 
-//    //@ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id", unique = true, nullable = false)
-//    private long userId;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

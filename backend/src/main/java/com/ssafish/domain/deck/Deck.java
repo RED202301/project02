@@ -10,9 +10,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@ToString
 @Getter
-//@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "Decks")
 @Entity
@@ -24,17 +22,9 @@ public class Deck extends BaseTimeEntity {
     @Column(name = "deck_id", unique = true, nullable = false)
     private long deckId;
 
-//    //@ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id", unique = true, nullable = false)
-//    private long userId;
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-//    //@ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "card_id", nullable = false)
-//    private long cardId;
 
     @ManyToOne
     @JoinColumn(name = "card_id")
@@ -79,6 +69,4 @@ public class Deck extends BaseTimeEntity {
                 .ispublic(isPublic)
                 .build();
     }
-
-
 }

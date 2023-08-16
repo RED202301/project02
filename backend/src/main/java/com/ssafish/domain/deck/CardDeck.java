@@ -26,7 +26,6 @@ public class CardDeck {
     @JoinColumn(name = "deck_id")
     private Deck deck;
 
-
     @Builder
     public CardDeck(Long cardDeckId, Card card, Deck deck) {
         this.cardDeckId = cardDeckId;

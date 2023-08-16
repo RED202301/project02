@@ -11,6 +11,5 @@ public interface DeckRepository extends JpaRepository<Deck,Long> {
 
     void deleteAllByUser(User user);
     Deck findByDeckId(long deckId);
-
     List<Deck> findAllByUser(User user);
 }

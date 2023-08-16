@@ -194,8 +194,8 @@ public class CardService {
 
     public List<CardDto> userCardList(long userId){
     //사용자의 모든 카드정보를 받아온다.
-        List<Card> userCardList = cardsRepository.UserCardList(userId);
-        log.info("drt: "+userCardList);
+        List<Card> userCardList = userRepository.findById(userId).orElseThrow().getCards();
+        //log.info("drt: "+userCardList);
         List<CardDto> userCardDtoList = new ArrayList<>();
         userCardList.forEach((card) -> userCardDtoList.add(card.toDto()));
         return userCardDtoList;
