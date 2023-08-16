@@ -84,7 +84,7 @@ public class UserService {
             throw new IllegalArgumentException("User ID cannot be null.");
         }
 
-        User user = userRepository.findById(userId).orElse(null);
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당하는 유저가 없습니다."));
         if (user == null) {
             throw new IllegalArgumentException("User not found with ID: " + userId);
         }

@@ -1,6 +1,10 @@
 package com.ssafish.web.dto;
 
+import com.ssafish.domain.card.Card;
+import com.ssafish.domain.card.CardsRepository;
 import com.ssafish.domain.deck.Deck;
+import com.ssafish.domain.user.User;
+import com.ssafish.domain.user.UserRepository;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -25,11 +29,14 @@ public class DeckDto {
     private LocalDateTime createdDate;
     private boolean isPublic;
 
+    private UserRepository userRepository;
+    private CardsRepository cardsRepository;
+
 
 
     @Builder
     public DeckDto
-            (long deckId, long cardId, long userId, String deckName, String deckDescription,int deckUsageCount ,boolean ispublic){
+            (long deckId, long cardId, long userId, String deckName, String deckDescription,int deckUsageCount ,boolean ispublic, UserRepository userRepository, CardsRepository cardsRepository){
         this.deckId = deckId;
         this.cardId = cardId;
         this.userId = userId;
@@ -37,14 +44,18 @@ public class DeckDto {
         this.deckDescription = deckDescription;
         this.deckUsageCount = deckUsageCount;
         this.isPublic = ispublic;
-
+        this.userRepository = userRepository;
+        this.cardsRepository = cardsRepository;
     }
 
     public Deck toEntity() {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당하는 유저가 없습니다."));
+        Card card = cardsRepository.findByCardId(cardId);
+
         return Deck.builder()
                 .deckId(deckId)
-                .userId(userId)
-                .cardId(cardId)
+                .user(user)
+                .card(card)
                 .deckName(deckName)
                 .deckDescription(deckDescription)
                 .deckUsageCount(deckUsageCount)

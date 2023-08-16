@@ -1,0 +1,21 @@
+.video{ display: none; }
+
+.SubCam{
+    position: absolute;
+    bottom: 0;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    transform-origin: bottom;
+    transform: scale(2);
+    
+    pointer-events: all;
+
+  }
+  
+.video, .canvas, .border{ position: absolute; bottom:0 }
+.border{ box-sizing: border-box; pointer-events: none;}
+.current{ border: solid 10px yellowgreen; }
+.selected{ border: solid 10px white; }
