@@ -1,11 +1,15 @@
 package com.ssafish.domain.user;
 
 import com.ssafish.domain.BaseTimeEntity;
+import com.ssafish.domain.card.Card;
+import com.ssafish.domain.deck.CardDeck;
+import com.ssafish.domain.deck.Deck;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
-@ToString
 @Getter
 @Data
 @Table(name = "User")
@@ -58,6 +62,12 @@ public class User extends BaseTimeEntity {
 //    @Column(name = "create_date")
 //    @Temporal(TemporalType.DATE)
 //    private LocalDateTime createdDate; //Date -> LocalDateTime
+
+    @OneToMany(mappedBy = "user")
+    private List<Card> cards = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Deck> decks = new ArrayList<>();
 
     @Builder
     public User(long userId, long kakaoId, String nickname, String profileImgUrl,

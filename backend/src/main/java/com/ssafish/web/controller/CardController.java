@@ -2,7 +2,6 @@ package com.ssafish.web.controller;
 
 import com.ssafish.domain.card.Card;
 import com.ssafish.domain.card.CardsRepository;
-import com.ssafish.domain.card.UserCardRepository;
 import com.ssafish.domain.deck.CardDeckRepository;
 import com.ssafish.service.CardService;
 import com.ssafish.web.dto.CardDto;
@@ -23,8 +22,7 @@ public class CardController {
 
     @Autowired
     CardService cardService;
-    @Autowired
-    UserCardRepository userCardRepository;
+
     @Autowired
     CardsRepository cardsRepository;
 
@@ -32,7 +30,7 @@ public class CardController {
     CardDeckRepository cardDeckRepository;
 
     @PostMapping("/card")
-    public ResponseEntity<?> cardInsret(MultipartHttpServletRequest imgFile) {
+    public ResponseEntity<?> cardInsert(MultipartHttpServletRequest imgFile) {
         //public ResponseEntity<?> cardInsret(@RequestBody CardDto cardDto, MultipartHttpServletRequest mainImg , @RequestParam("mainImg") MultipartFile subImg){
         //카드 파일저장
         //카드_유저 연결
@@ -47,7 +45,6 @@ public class CardController {
 
         CardDto cardDto = CardDto.builder()
                 .userId(userId)
-              //  .cardId(cardId)
                 .mainTitle(mainTitle)
                 .subTitle(subTitle)
                 .point(point)
@@ -105,25 +102,19 @@ public class CardController {
             log.info("덱에 포함되지 않은 카드입니다.");
         }
 
-
-
-
-
         try {
 
             Card card = cardsRepository.findByCardId(cardId);
-            long userId = card.getUserId();
-            if (userCardRepository.isRelation(cardId, userId) >= 1) {
-                int result = cardService.deleteCard(cardId, userId, card);
+            long userId = card.getUser().getUserId();
+            int result = cardService.deleteCard(cardId, userId, card);
 
-                if (result == 1) {
-                    log.info("card delete success");
-                    return ResponseEntity.ok().build(); //정상결과 출력
-                } else {
-                    log.info("card delete fail!!");
-                    return ResponseEntity.notFound().build();
-                }
-            }else{ throw new Exception();}
+            if (result == 1) {
+                log.info("card delete success");
+                return ResponseEntity.ok().build(); //정상결과 출력
+            } else {
+                log.info("card delete fail!!");
+                return ResponseEntity.notFound().build();
+            }
 
         } catch (Exception e) {
 

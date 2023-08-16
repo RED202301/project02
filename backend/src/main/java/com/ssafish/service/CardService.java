@@ -2,8 +2,7 @@ package com.ssafish.service;
 
 import com.ssafish.domain.card.Card;
 import com.ssafish.domain.card.CardsRepository;
-import com.ssafish.domain.card.UserCard;
-import com.ssafish.domain.card.UserCardRepository;
+import com.ssafish.domain.user.UserRepository;
 import com.ssafish.web.dto.CardDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +37,8 @@ public class CardService {
     CardsRepository cardsRepository;
 
     @Autowired
-    UserCardRepository userCardRepository;
+    UserRepository userRepository;
+
 
 
     private static final int SUCCESS = 1;
@@ -125,17 +125,10 @@ public class CardService {
             inputcardDto.setMainImgUrl("https://i9e202.p.ssafy.io/main_images/" + saveFileName);
 
             System.out.println("inputcardDto : "+inputcardDto);
-            Card card = inputcardDto.toEntity();
+            Card card = inputcardDto.toEntity(userRepository);
             System.out.println("card: "+ card);
             cardsRepository.save(card);
             System.out.println("card: "+ card);
-
-            UserCard userCard = UserCard.builder()
-                    .cardId(card.getCardId())
-                    .userId(inputcardDto.getUserId())
-                    .build();
-
-            userCardRepository.save(userCard);
 
             inputcardDto.setResult(SUCCESS);
 
@@ -161,14 +154,12 @@ public class CardService {
 
 
     @Transactional
-    public int deleteCard(long cardId, long userId,Card card){
+    public int deleteCard(long cardId, long userId, Card card){
 
 
         try {
             // 카드 제거
             cardsRepository.deleteById(cardId);
-            // 유저_카드 관계제거
-            userCardRepository.deleteByIds(cardId, userId);
 
 
             //카드 이미지 제거
@@ -197,25 +188,14 @@ public class CardService {
             return SUCCESS;
         }catch(Exception e){
             e.printStackTrace();
-            if(cardsRepository.findByCardId(cardId) == null){
-                cardsRepository.save(card);
-            }
-            if(userCardRepository.isRelation(cardId,userId) == 0 ){
-                UserCard usercard = UserCard.builder()
-                        .cardId(cardId)
-                        .userId(userId)
-                        .build();
-                userCardRepository.save(usercard);
-            }
-
             return FAIL;
         }
     }
 
     public List<CardDto> userCardList(long userId){
     //사용자의 모든 카드정보를 받아온다.
-        List<Card> userCardList = cardsRepository.UserCardList(userId);
-        log.info("drt: "+userCardList);
+        List<Card> userCardList = userRepository.findById(userId).orElseThrow().getCards();
+        //log.info("drt: "+userCardList);
         List<CardDto> userCardDtoList = new ArrayList<>();
         userCardList.forEach((card) -> userCardDtoList.add(card.toDto()));
         return userCardDtoList;
