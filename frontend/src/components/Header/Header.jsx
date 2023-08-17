@@ -21,16 +21,11 @@ function Header(props){
                 카드 공방
             </div>
             </Link>
-            <Link to='/CardMarket'>
-            <div className='cardmarket'>
-                카드 나눔터
-            </div>
-            </Link>
-            <Link to='/Mypage'>
+            {/* <Link to='/Mypage'>
             <div className='mypage'>
                 마이페이지
             </div>
-            </Link>
+            </Link> */}
             <Link to=''>
             <div className='logout'>
                 {/* <Logout/> */}

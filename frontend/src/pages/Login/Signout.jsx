@@ -7,12 +7,15 @@ function Signout() {
   const accessToken = localStorage.getItem('accessToken');
   const signOut = () => {
     Swal.fire({
+      icon: 'warning',
+      iconColor: 'red',
       title: '회원탈퇴',
       // text: '탈퇴 시 본인이 직접 제작한 덱도 지우시겠습니까?',
       input: 'checkbox',
       inputValue: true,
       inputPlaceholder: '탈퇴 시 본인이 직접 제작한 덱도 지우시겠습니까?',
       confirmButtonText: '탈퇴',
+      confirmButtonColor: 'black',
     })
       //인풋이 입력됐을 때,
       .then(res => {
@@ -38,8 +41,15 @@ function Signout() {
                 localStorage.removeItem('userId');
                 localStorage.removeItem('nickname');
                 removeCookie('refreshToken'); // 쿠키를 삭제
-                location.reload();
-                window.location.replace('/');
+                Swal.fire({
+                  title: '탈퇴 완료',
+                  confirmButtonText: '확인',
+                  confirmButtonColor: 'black',
+                }).then(()=>{                  
+                  location.reload();
+                  window.location.replace('/');
+                })
+
               }).catch(e=>{
                 console.log('카드 삭제 요청 실패', e)
               });
