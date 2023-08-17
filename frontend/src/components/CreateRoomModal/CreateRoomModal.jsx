@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
 // import useDidMountEffect from './useDidMountEffect';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
@@ -7,19 +6,33 @@ import './CreateRoomModal.scss';
 
 const base_URL = import.meta.env.VITE_SERVER_URL;
 function CreateRoomModal() {
-  const [modal, setModal] = React.useState(true);
-  // const host_URL= "http://192.168.30.193:5001"
   const host_URL = base_URL;
-  // const [roomId, setRoomId] = useState(null);
-  // const [pinNumber, setPIN] = useState('');
-
   const [roomName, setName] = useState('');
   const [timeLimit, setTimeLimit] = useState(0);
-  const [capacity, setCapacity] = useState(0);
+  const [capacity, setCapacity] = useState(0)
   const [gameType, setGameType] = useState('');
   const [deckId, setDeckId] = useState(1);
+  // const [deck_list, setDecklist] = useState([]);
   const navigate = useNavigate();
 
+
+  let deck_list = []
+  for (let i = 0; i <= 1000; i++) {
+    if (window.sessionStorage.getItem(`deck_${i}`)){
+      deck_list.push(window.sessionStorage.getItem(`deck_${i}`))}
+    }
+
+  useEffect(()=>{
+    axios.get(host_URL+`/api/deck/deckTitle`,)
+    .then(response=> {
+      console.log(response.data);
+      for (let i = 0; i < response.data.length; i++) {
+        window.sessionStorage.setItem(`deck_${i}`,response.data[i])
+      }
+      console.log(deck_list)
+    }
+    )
+  },[])
 
   const Roomdata = () => {
     axios
@@ -51,12 +64,9 @@ function CreateRoomModal() {
   };
 
   return (
-    <AnimatePresence>
-      {modal && (
-        <motion.div
-          className="modal"
+    <div
+          className="create_modal"
         >
-          {/* ---모달 안------------------------------------- */}
           <div className="form-container">
             <form className="form">
               <div className="form-group">
@@ -113,13 +123,13 @@ function CreateRoomModal() {
                   </div>
                   <div className="form-capacity2">
                     <label className="inputlabel" htmlFor="timeLimit4">
-                      1초
+                      60초
                     </label>
                     <input
                       type="radio"
                       id="timeLimit4"
                       name="timeLimit"
-                      value="1"
+                      value="60"
                       onChange={e => setTimeLimit(e.target.value)}
                     ></input>
                   </div>
@@ -177,7 +187,7 @@ function CreateRoomModal() {
                   </div>
                 </div>
 
-                <label htmlFor="gameType">게임 유형</label>
+                {/* <label htmlFor="gameType">게임 유형</label>
                 <input
                   type="text"
                   id="gameType"
@@ -185,14 +195,14 @@ function CreateRoomModal() {
                   value={gameType}
                   onChange={e => setGameType(e.target.value)}
                   required
-                />
+                /> */}
 
                 <div className="form-deckId">
-                  <label htmlFor="deckId">덱 선택</label>
+                  <label htmlFor="deckId" style={{'marginRight':'10px'}}>덱 선택</label>
                   <select onChange={e => setDeckId(e.target.value)}>
-                    <option value={1}>1</option>
-                    <option value={2}>2</option>
-                    <option value={3}>3</option>
+                  {deck_list.map((a, i) => (
+                  <option value={i+1} key={i+1}>{a}</option>
+                    ))}
                   </select>
                 </div>
 
@@ -204,11 +214,7 @@ function CreateRoomModal() {
               </div>
             </form>
           </div>
-          {/* ----------------------------------------------- */}
-        </motion.div>
+        </div>
       )}
-    </AnimatePresence>
-  );
-}
 
 export default CreateRoomModal;
