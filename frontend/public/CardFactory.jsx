@@ -6,10 +6,8 @@ import {Link} from'react-router-dom';
 // import CardD from './CardD';
 // import cardE from '../../Card/Card'
 import Card from './Card/Card'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronUp, faChevronDown} from "@fortawesome/free-solid-svg-icons";
 function CardFactory( ){
-  const [deckkk, setDeckkk] = useState('덱 목록');
+  const [deckkk, setDeckkk] = useState('덱목록');
   const [recard, setRecard] = useState('');
   const [dataFetched, setDataFetched] = useState(false);
   const [selectedCardIndex, setSelectedCardIndex] = useState(null);
@@ -27,27 +25,27 @@ function CardFactory( ){
     const [cardinfo, setCardInfo] = useState([]);
     const [selectedCardId, setSelectedCardId] = useState(null); // 선택한 카드의 ID 상태
     const [responseData, setResponseData] = useState([]); // GET 요청으로 받아온 데이터를 저장하는 배열
-    const [userId, setUserId] = useState('');
+    // const [userId, setUserId] = useState('');
 
     const [info, setInfo] = useState('');
 
     const [showCard, setShowCard] = useState(false);
-    function getUserIdFromLocalStorage() {
-      return localStorage.getItem('userId');
-    }
-    function getUserIdFromLocalStorage() {
-      return localStorage.getItem('userId');
-    }
+    // function getUserIdFromLocalStorage() {
+    //   return localStorage.getItem('userId');
+    // }
+    // function getUserIdFromLocalStorage() {
+    //   return localStorage.getItem('userId');
+    // }
     
-    useEffect(() => {
-      const storedUserId = getUserIdFromLocalStorage();
-      if (storedUserId) {
-        setUserId(storedUserId);
-        console.log(setUserId)
-      }
-    }, []);
+    // useEffect(() => {
+    //   const storedUserId = getUserIdFromLocalStorage();
+    //   if (storedUserId) {
+    //     setUserId(storedUserId);
+    //     console.log(setUserId)
+    //   }
+    // }, []);
     // console.log(userId)
-    // const userId = 6;
+    const userId = 6;
     const handleDeckCard = (cardId) => {
       setSelectedCardId(cardId);
       // console.log('선택한 카드의 아이디:', cardId);
@@ -256,34 +254,24 @@ function DropdownMenu({showCard, setShowCard, deckkk, setDeckkk,fetchSomeData, d
 
   return (
     <div className="dropdown-container" style={{ zIndex: '2' }} ref={dropdownRef}>
-    <div style={{ borderRadius: '6px', color:'#515F65', fontWeight:'bold', display:'flex', justifyContent:'space-between'}} className="dropdown-button " onClick={toggleDropdown}>
-    {deckkk}
-      <div style={{marginLeft:'10px', marginTop:'2px'}}>
-      <FontAwesomeIcon
-        icon={isOpen ?  faChevronUp: faChevronDown}
-        style={{ marginRight: '5px', transition: 'transform 0.2s ease-in-out'}}
-      />
+      <div style={{ borderRadius: '6px', color:'#515F65', fontWeight:'bold' }} className="dropdown-button" onClick={toggleDropdown}>
+         {deckkk}
       </div>
-    </div>
-    {isOpen && (
-      <ul className="dropdown-list" style={{marginLeft:'5px', color:'#515F65', fontWeight:'bold' }}>
-        <div className='dropx'>
+      {isOpen && (
+        <ul className="dropdown-list" style={{marginLeft:'5px', color:'#515F65', fontWeight:'bold' }} >
           {deckinfo.map((data) => (
             <li key={data}>
-              
-              <p onClick={() => handleclick(data)} className="dropdown-item" >
-                <span style={{color:'#515F65'}}>🃢</span> <span style={{marginLeft:'5px', color:'#515F65'}}>{data}</span>
+              <p onClick={() => handleclick(data)} className="dropdown-item">
+              🃢 {data}
               </p>
-        
             </li>
           ))}
-          <li>
-            <p onClick={handlefetch} className='dropdown-item'>내 카드</p>
-          </li>
-        </div>
-      </ul>
-    )}
-  </div>
+            <li>
+              <p onClick={handlefetch} className='dropdown-item'>내 카드</p>
+            </li>
+        </ul>
+      )}
+    </div>
   );
 }
 
@@ -385,7 +373,7 @@ function Selectin({ showCard, setShowCard, deckkk, setDeckkk, setCardInfo, decki
 
     return (
       <div style={{display:isOpen ? "block": "none", zIndex:'1'}} className='modalbox'>
-        <button onClick={closeModal} className='buttonY'>X</button>
+        <button onClick={closeModal} className='buttonX'>X</button>
         <Deckmake userId={userId} closeModal={closeModal} fetchSomeData={fetchSomeData}/>
         <div className='buttoncontain'>
         
@@ -546,7 +534,6 @@ const showTrue = () => {
 }
 
   return (
-    
     <div className='makebox' style={{marginLeft:'9px'}}>
       <h3>카드 만들기</h3>
       <input 
@@ -1035,7 +1022,6 @@ function Carddeck({ userId, responseData, handleDeckCard, selectedCardIds, selec
     
  
     return (
-    <div>
       <div className='makebox' style={{zIndex:'3'}} >
         <h3>덱 등록하기</h3>
         <p style={{    display: 'flex',
@@ -1062,10 +1048,8 @@ function Carddeck({ userId, responseData, handleDeckCard, selectedCardIds, selec
           value={deckDescription}
           onChange={event => setDeckDescription(event.target.value)}
         />
-  
-     
-      </div>
-        <button className='butt' onClick={handleDeckUpload} >등록하기</button>
+        <button onClick={handleDeckUpload} style={{display:'flex', border:'none', color:'white',marginTop:'2%', marginLeft:'40%', backgroundColor:'#515F65'}}>등록하기</button>
+
       </div>
     );
   }
