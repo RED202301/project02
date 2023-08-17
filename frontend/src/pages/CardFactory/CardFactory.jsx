@@ -25,27 +25,27 @@ function CardFactory( ){
     const [cardinfo, setCardInfo] = useState([]);
     const [selectedCardId, setSelectedCardId] = useState(null); // 선택한 카드의 ID 상태
     const [responseData, setResponseData] = useState([]); // GET 요청으로 받아온 데이터를 저장하는 배열
-    const [userId, setUserId] = useState('');
-    const [userId, setUserId] = useState('');
+    // const [userId, setUserId] = useState('');
+
     const [info, setInfo] = useState('');
 
     const [showCard, setShowCard] = useState(false);
-    function getUserIdFromLocalStorage() {
-      return localStorage.getItem('userId');
-    }
-    function getUserIdFromLocalStorage() {
-      return localStorage.getItem('userId');
-    }
+    // function getUserIdFromLocalStorage() {
+    //   return localStorage.getItem('userId');
+    // }
+    // function getUserIdFromLocalStorage() {
+    //   return localStorage.getItem('userId');
+    // }
     
-    useEffect(() => {
-      const storedUserId = getUserIdFromLocalStorage();
-      if (storedUserId) {
-        setUserId(storedUserId);
-        console.log(setUserId)
-      }
-    }, []);
+    // useEffect(() => {
+    //   const storedUserId = getUserIdFromLocalStorage();
+    //   if (storedUserId) {
+    //     setUserId(storedUserId);
+    //     console.log(setUserId)
+    //   }
+    // }, []);
     // console.log(userId)
-    // const userId = 6;
+    const userId = 6;
     const handleDeckCard = (cardId) => {
       setSelectedCardId(cardId);
       // console.log('선택한 카드의 아이디:', cardId);
@@ -800,19 +800,6 @@ function CardD({ userId, fetchSomeData, onAddToDeck, res, selectedCardIds, setSe
           onClick={() => handleCardClick(data.cardId)}
           >
           <div className='content'>
-          <div className='gridXXX'>
-          <div className='cardtitled'>{truncateText(data.mainTitle, 5)}</div>
-          {selectedCardId === data.cardId && (
-              <button
-              style={{ display: 'flex', marginLeft:'25.5%', marginTop:'0%', position:'absolute',  fontSize:'10px', justifyContent:'center', alignItems:'center' }}
-            className='deckbuttossn added-to-deck'
-            onClick={() => handleDeleteCard(data.cardId)}
-            >
-            ❌
-            </button>
-            )}
-            </div>
-              <div className='subtitle'>{truncateText(data.subTitle, 5)}</div>
           <div className='gridXXX'>
           <div className='cardtitled'>{truncateText(data.mainTitle, 5)}</div>
           {selectedCardId === data.cardId && (
