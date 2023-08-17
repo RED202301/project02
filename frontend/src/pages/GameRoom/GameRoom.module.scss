@@ -115,7 +115,6 @@
   position: absolute;
   bottom: 0;
   translate: 0 -20px 30px;
-
   display: flex; justify-content: center;
 }
 
@@ -124,7 +123,10 @@
   bottom: 0;
   
   transform-origin: bottom;
-  transform: rotateX(-90deg);
+  transform: 
+  rotateX(-90deg)
+  translateZ(-10px)
+  ;
 
   display: flex; justify-content: center;
 }
@@ -132,11 +134,11 @@
 .PubPoints{
   position: absolute;
   bottom: 0;
-  width: 1440px;
-  height: 720px;
-  
   transform-origin: bottom;
-  transform: rotateX(90deg);
+  transform: 
+  rotateX(90deg)
+  translateZ(1px)
+  ;
 
   display: flex; justify-content: center;
 }
@@ -167,6 +169,7 @@
 .PubHandsContainer{
   position: absolute;
   width: 100vw;
+  height: 230px;
   bottom: 0;
   display: flex;
   justify-content: center;
@@ -178,12 +181,18 @@
   // drop-shadow(0 0 10px yellowgreen)
   // drop-shadow(0 10px 3px #000);
 }
+.HandTogglerHolder{
+  position: absolute;
+  bottom: 20px;
+}
 
 .PubHands{
   position: absolute;
+  display: flex;
 }
 
 .SelectCardButtonHolder{
   position: absolute;
   bottom: 60px;
+  z-index: 10;
 }
