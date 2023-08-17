@@ -36,7 +36,7 @@ function App() {
             <Route path="/Main" element={<Main/>}/>
             {/* <Route path="/RoomList" element={<RoomList />} /> */}
             {/* <Route path="/WebMain" element={[<Header />, <WebMain />]} /> */}
-            <Route path="/CardFactory" element={[<Header />, <CardFactory />]} />
+            <Route path="/CardFactory" element={[ <CardFactory />]} />
             {/* <Route path="/CardMarket" element={[<Header />, <CardMarket />]} /> */}
             {/* <Route path="/Mypage" element={[<Header />, <Mypage />]} /> */}
             {/* <Route path="/WebMain" element={[<Header />, <WebMain />]} /> */}
