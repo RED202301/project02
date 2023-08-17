@@ -1,0 +1,52 @@
+.Card, .Card *{
+    --border-radius: calc(var(--w) * 0.05);
+    --w: var(--width);
+    --h: var(--height);
+    
+    --top-background-color:#635348;
+    --mid-background-color:#ADBF24;
+    --bot-background-color:#DED966;
+}
+
+
+.Card{
+    transition: rotate 1s translate 1s;
+    display: flex;
+    width: var(--w);
+    height: var(--h);
+  
+    border-radius: var(--border-radius);
+    transform-origin: center;
+
+    transform-style: preserve-3d;
+    &.flipped{
+        transform: rotateY(180deg);
+    }
+    width: var(--w);
+    height: var(--h);
+    // filter: 
+    // drop-shadow(-0.8px -0.8px 2px #fff) 
+    // drop-shadow(0 0 0.4px #fff) 
+    // drop-shadow(0 0 2px yellowgreen) 
+    // drop-shadow(0 0 3px yellowgreen)
+    // drop-shadow(0 0 2px yellowgreen)
+    // drop-shadow(0 2px 0.6px #000);
+    // filter: 
+    // drop-shadow(-1.6px -1.6px 4px #fff) 
+    // drop-shadow(0 0 0.8px #fff) 
+    // drop-shadow(0 0 4px yellowgreen) 
+    // drop-shadow(0 0 6px yellowgreen)
+    // drop-shadow(0 0 4px yellowgreen)
+    // drop-shadow(0 4px 1.2px #000);
+    
+    
+    
+    // 드래그 못하게 하기
+    -ms-user-select: none; 
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+
+    perspective: 300vh;
+}

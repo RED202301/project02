@@ -5,16 +5,44 @@
   box-sizing: border-box; 
 
   transform-origin: bottom left;
-  transform: scale(0.5);
+  transform: scale(0.6);
 }
 
 .video, .canvas, .border{ position: absolute; bottom: 0; }
 
 .video{ display: none; }
-.border{ box-sizing: border-box; }
-.canvas{
-  z-index: 10;
+.border{ 
+  width: 100%;
+  box-sizing: border-box; 
+  display: flex; 
+  justify-content: center;
+  align-items: center;
+  button {
+    pointer-events: all;
+  }
 }
-
-.current{ border: solid 10px yellowgreen; }
-.selected{ border: solid 10px white; }
+// .current{ 
+//   filter: 
+//     drop-shadow(-1.6px -1.6px 4px #fff) 
+//     drop-shadow(0 0 0.8px #fff) 
+//     drop-shadow(0 0 4px yellowgreen) 
+//     drop-shadow(0 0 6px yellowgreen)
+//     drop-shadow(0 0 4px yellowgreen)
+//     drop-shadow(0 4px 1.2px #000);
+//  }
+.selected{
+  // filter: 
+  //   drop-shadow(-1.6px -1.6px 4px #fff) 
+  //   drop-shadow(0 0 0.8px #fff) 
+  //   drop-shadow(0 0 4px #8BADD5) 
+  //   drop-shadow(0 0 6px #8BADD5)
+  //   drop-shadow(0 0 4px #8BADD5)
+  //   drop-shadow(0 4px 1.2px #000);
+  filter: 
+    drop-shadow(-4px -4px 10px #fff) 
+    drop-shadow(0 0 2px #fff) 
+    drop-shadow(0 0 10px #8BADD5) 
+    drop-shadow(0 0 15px #8BADD5)
+    drop-shadow(0 0 10px #8BADD5)
+    drop-shadow(0 10px 3px #000);
+}

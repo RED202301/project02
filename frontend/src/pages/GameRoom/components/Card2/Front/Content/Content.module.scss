@@ -1,0 +1,67 @@
+.Content{
+    position: absolute;
+
+    width: var(--w);
+    height: var(--h);
+    
+    box-sizing: border-box;
+    
+    border: solid var(--border-radius) rgba(0,0,0,0);
+    border-radius: var(--border-radius);
+    
+    display: flex;
+
+    --inner-width: calc(var(--w)*0.9);
+    --inner-height: calc(var(--h)*0.9);
+
+    width: --inner-width;
+    height: --inner-height;
+
+    .mainTitle, .subTitle, .point, .img{
+      position: absolute;
+      white-space: nowrap;
+      font-size: var(--inner-width);
+      transform-origin: top left;
+
+      --subtitle-ratio: 0.1;
+      --title-ratio: 0.1;
+      --points-ratio: 0.1; 
+      
+      --subtitle-size: calc(var(--inner-width) * var(--subtitle-ratio));
+      --title-size: calc(var(--inner-width) * var(--title-ratio));
+      --points-size: calc(var(--inner-width) * var(--points-ratio));
+    }
+
+    .subTitle{
+      color: var(--mid-background-color);
+      transform: scale(var(--subtitle-ratio));
+    }
+    .mainTitle{
+      color: white;
+      top: var(--title-size);
+      transform: scale(var(--title-ratio));
+    }
+    .point{
+      top: calc(
+        var(--title-size) 
+        + var(--subtitle-size)
+        );
+      transform: scale(var(--points-ratio));
+    }
+    .img{
+      top: calc(
+        var(--title-size) 
+        + var(--subtitle-size) 
+        + var(--points-size)
+        + calc(var(--points-size)/2)
+        );
+      background-size: cover;
+      width: var(--inner-width);
+      height: calc(
+        var(--inner-height)
+        - var(--title-size) 
+        - var(--subtitle-size) 
+        - var(--points-size)
+      );
+    }
+}
