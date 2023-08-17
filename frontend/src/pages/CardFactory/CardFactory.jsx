@@ -24,23 +24,23 @@ function CardFactory( ){
     const [cardinfo, setCardInfo] = useState([]);
     const [selectedCardId, setSelectedCardId] = useState(null); // 선택한 카드의 ID 상태
     const [responseData, setResponseData] = useState([]); // GET 요청으로 받아온 데이터를 저장하는 배열
-    // const [userId, setUserId] = useState('');
+    const [userId, setUserId] = useState('');
     const [info, setInfo] = useState('');
 
     const [showCard, setShowCard] = useState(false);
-    // function getUserIdFromLocalStorage() {
-    //   return localStorage.getItem('userId');
-    // }
+    function getUserIdFromLocalStorage() {
+      return localStorage.getItem('userId');
+    }
     
-    // useEffect(() => {
-    //   const storedUserId = getUserIdFromLocalStorage();
-    //   if (storedUserId) {
-    //     setUserId(storedUserId);
-    //     console.log(setUserId)
-    //   }
-    // }, []);
+    useEffect(() => {
+      const storedUserId = getUserIdFromLocalStorage();
+      if (storedUserId) {
+        setUserId(storedUserId);
+        console.log(setUserId)
+      }
+    }, []);
     // console.log(userId)
-    const userId = 5;
+    // const userId = 5;
     const handleDeckCard = (cardId) => {
       setSelectedCardId(cardId);
       console.log('선택한 카드의 아이디:', cardId);
