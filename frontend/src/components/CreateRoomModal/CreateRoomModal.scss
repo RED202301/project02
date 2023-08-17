@@ -1,12 +1,16 @@
 /* ----------------모달 css------------------------------------- */
-.modal{
+.create_modal{
     display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
     flex-direction: column;
     /* border:solid; */
     /* border-radius: 10px; */
     position: absolute;
     background-color: white;
-    background-image: url(../assets/보드게임카페6.jpg);
+    background-image: url(../../assets/보드게임카페6.jpg);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -15,9 +19,11 @@
 }
 
 .form-container {
+
     height: auto;
-    width: 200px;
-    background-color:rgb(252, 238, 238);
+    width: 270px;
+    // background-color:rgb(252, 238, 238);
+    background-color:#f0f0f0;
     box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
     padding: 0px 24px;
 
@@ -111,7 +117,7 @@
     color: white;
     font-weight: 600;
     width: 40%;
-    background: #313131;
+    background: #515F65;
     border: 1px solid #414141;
     padding: 12px 12px;
     font-size: inherit;
