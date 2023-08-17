@@ -99,67 +99,53 @@
   font-weight: bold;
 
 }
+
 .scrollable-container {
   width: 650px;
   height: 550px;
+  /* overflow-x: hidden; */
+  /* border: 1px solid #ccc; */
   position: relative;
   border-radius: 16px;
-  overflow: hidden; /* 숨겨진 부분의 스크롤은 숨김 */
 }
 
 .contents {
   width: 100%;
-  height: calc(100% + 20px); /* 위 아래에 추가 공간 확보 */
-  margin-top: -10px; /* 위쪽 공간 보정 */
-  margin-bottom: -10px; /* 아래쪽 공간 보정 */
+  height: 100%;
   overflow-y: scroll;
-  padding-right: 0px;
-  box-sizing: content-box;
+  padding-right: 0px; /* 오른쪽에 스크롤 공간 확보 */
+  box-sizing: content-box; /* padding 포함된 크기로 계산 */
 }
 
+/* 스크롤바 스타일 */
 .contents::-webkit-scrollbar {
   width: 7px;
+  /* height: 6px; 스크롤바 너비 */
+  /* display: none; */
 }
 
 .contents::-webkit-scrollbar-thumb {
-  background-color: #888;
-  border-radius: 4px;
+  background-color: #888; /* 스크롤바 색상 */
+  border-radius: 4px; /* 스크롤바 모서리 둥글게 */
 }
 
 .contents::-webkit-scrollbar-thumb:hover {
-  background-color: #555;
+  background-color: #555; /* 스크롤바 호버시 색상 변경 */
 }
 
 .contents::-webkit-scrollbar-track {
-  /* background-color: #f1f1f1; */
-  border-radius: 4px;
-  display: none;
+  background-color: #f1f1f1; /* 스크롤바 트랙 색상 */
+  border-radius: 4px; /* 스크롤바 트랙 모서리 둥글게 */
+  display:none;
 }
 
-.scrollable-container:hover .contents::-webkit-scrollbar {
-  width: 7px;
-}
-
-.scrollable-container:hover .contents::-webkit-scrollbar-thumb {
-  background-color: #888;
-}
-
-.scrollable-container:hover .contents::-webkit-scrollbar-thumb:hover {
-  background-color: #555;
-}
-
-.scrollable-container:hover .contents::-webkit-scrollbar-track {
-  display: block;
-}
 /* 카드 모달 */
 .makebox {
-  margin-left:10px;
+  margin-left:4%;
   border: 2px ;
-  width: 300px;
+  width: 200px;
   height: 300px;
   z-index: 2;
-  
-
   /* border-radius: 30px; */
 
 }
@@ -309,7 +295,6 @@ background-image: linear-gradient(315deg, #f0ecfc 0%, #c797eb 74%);
   height: 40px;
   /* margin-top: 1%; */
 
-
   
 }
 .added-to-deck {
@@ -323,8 +308,7 @@ background-image: linear-gradient(315deg, #f0ecfc 0%, #c797eb 74%);
   justify-content: flex-start;
   /* margin-top: 10px; */
   /* margin-right: -20%; */
-  margin-left: 5%;
-  /* margin-top: 5% */
+  margin-left: 5%
 }
 .star-containers {
   display: flex;
@@ -434,23 +418,6 @@ background-image: linear-gradient(315deg, #f0ecfc 0%, #c797eb 74%);
 
 
 }
-.butt {
-  display: flex;
-  background-color: #515F65;
-  border: none;
-  border-radius: 6px;
-  width: 80px;
-  height: 30px;
-  text-align: center;
-  justify-content: center;
-  align-items: center;
-  margin-top: 4%;
-  padding: 2%;
-  margin-left: 110px;
-  margin-top: 30%
-  /* margin-left:-12px;
-   */
-}
 .buttoncontain {
   margin-top: 5px;
   display: flex;
@@ -479,26 +446,12 @@ background-image: linear-gradient(315deg, #f0ecfc 0%, #c797eb 74%);
 
 .buttonX {
   float: right;
-  margin-right: 3%;
-  margin-top: 2%;
-  width: 20px;
-  height: 20px;
-  font-size: 20px;
-  font-weight: bold;
-  border:none;
-  /* text-align: center; */
-  font-display: center;
-}
-
-.buttonY {
-  float: right;
   margin-right: -5%;
-  margin-top: 2%;
+  margin-top: 5%;
   width: 20px;
   height: 20px;
-  font-size: 20px;
+  font-size: 5px;
   font-weight: bold;
-  border:none;
   /* text-align: center; */
   font-display: center;
 }
@@ -530,7 +483,6 @@ background-image: linear-gradient(315deg, #f0ecfc 0%, #c797eb 74%);
 .modalboxs {
   display: flex;
   position: fixed;
-  justify-content: flex-start;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -538,10 +490,8 @@ background-image: linear-gradient(315deg, #f0ecfc 0%, #c797eb 74%);
   background-color: #D0D0D0;
   width: 300px;
   height: 450px;
-  /* margin-right: 20px */
+  padding-right: 3%;
   border-radius: 10px;
-  /* margin-left: 12px; */
-
   box-shadow: 0px 4px 8px rgba(0,0,0,0.7);
 }
 
@@ -842,30 +792,18 @@ background: linear-gradient(0deg,  #f0ecfc 0%, #c797eb 74%);
 /* DropdownMenu.css */
 .dropdown-container {
   position: relative;
-  width: 180px;
+  width: 200px;
   margin-left: 30%;
   
   
 }
-.dropdown-button i.fa-chevron-up,
-.dropdown-button i.fa-chevron-down {
-  font-size: 0.75em;
-  transition: transform 0.2s ease-in-out; 
-}
 
-/* 클릭 시 화살표 회전 애니메이션 */
-.dropdown-button.open i.fa-chevron-down {
-  transform: rotate(180deg);
-}
 .dropdown-button {
   cursor: pointer;
   padding: 10px 20px;
   background-color: whitesmoke;
+  /* border: 1px solid whitesmoke; */
   margin-right: -5%;
-
-  /* 아래에 추가된 스타일 */
-  display: flex;
-  align-items: center;
 }
 
 .dropdown-list {
@@ -881,56 +819,8 @@ background: linear-gradient(0deg,  #f0ecfc 0%, #c797eb 74%);
   padding: 0;
   margin: 0;
   height: 200px;
-  border-radius: 8px;
-  overflow: hidden;
-  /* overflow-y: scroll; */
-  
-}
-
-.dropx {
-  width: 100%;
-  height: calc(100% + 20px); /* 위 아래에 추가 공간 확보 */
-  margin-top: -10px; /* 위쪽 공간 보정 */
-  margin-bottom: -10px; /* 아래쪽 공간 보정 */
   overflow-y: scroll;
-  padding-right: 0px;
-  box-sizing: content-box;
-  color:#515F65;
-}
-
-.dropx::-webkit-scrollbar {
-  width: 7px;
-}
-
-.dropx::-webkit-scrollbar-thumb {
-  background-color: #888;
-  border-radius: 4px;
-}
-
-.dropx::-webkit-scrollbar-thumb:hover {
-  background-color: #555;
-}
-
-.dropx::-webkit-scrollbar-track {
-  background-color: #f1f1f1;
-  border-radius: 4px;
-  display: none;
-}
-
-.dropdown-list:hover .contents::-webkit-scrollbar {
-  width: 7px;
-}
-
-.dropdown-list:hover .contents::-webkit-scrollbar-thumb {
-  background-color: #888;
-}
-
-.dropdown-list:hover .contents::-webkit-scrollbar-thumb:hover {
-  background-color: #555;
-}
-
-.dropdown-list:hover .contents::-webkit-scrollbar-track {
-  display: block;
+  
 }
 
 .dropdown-item {
@@ -938,7 +828,7 @@ background: linear-gradient(0deg,  #f0ecfc 0%, #c797eb 74%);
   padding: 10px 20px;
   transition: background-color 0.3s;
   height: 40px;
-  color:#515F65;
+ 
   
   
 }
