@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import Card from './components/Cards/Card/Card';
+import Card from './components/Card/Card';
 import initOpenVidu from './hooks/useOpenVidu/initOpenVidu';
 import {
   getStomp,
@@ -26,6 +26,31 @@ import PubTogglers from './components/PubTogglers/PubTogglers';
 import { FiChevronsLeft, FiChevronsRight } from 'react-icons/fi';
 
 import SubCam from './components/MediaPipe/SubCam';
+
+import { confetti } from 'https://cdn.jsdelivr.net/npm/tsparticles-confetti/+esm';
+import Neon from './components/Neon/Neon';
+
+function run() {
+  (function frame() {
+    confetti({
+      particleCount: 2,
+      angle: 60,
+      spread: 55,
+      origin: { x: 0 },
+    });
+
+    confetti({
+      particleCount: 2,
+      angle: 120,
+      spread: 55,
+      origin: { x: 1 },
+    });
+
+    if (Date.now() < Date.now() + 15 * 1000) {
+      requestAnimationFrame(frame);
+    }
+  })();
+}
 
 /** @typedef {import('./typedef')} */
 
@@ -55,6 +80,9 @@ export default function GameRoom() {
   const viewAngles = [-30, 0, 30];
 
   const [goFish, setGoFish] = useState(true);
+  const [winners, setWinners] = useState(null);
+
+  const cardAudio = useRef();
 
   /** @type {Map<phase, Function>} */
   const callbacks = {
@@ -108,6 +136,7 @@ export default function GameRoom() {
         // console.log(cardMapRef.current, cardId, cardMapRef.current[cardId]);
         return newPlayerMap;
       });
+      cardAudio.current.play();
     },
     ENROLL: (/** @type {phase}*/ phase, userId, cardId) => {
       setCurrentPhase(prev => {
@@ -119,6 +148,7 @@ export default function GameRoom() {
         newPlayerMap[userId].enroll(cardId);
         return newPlayerMap;
       });
+      cardAudio.current.play();
     },
     SELECT_PLAYER_TURN: (/** @type {phase}*/ phase, player) => {
       setCurrentPhase(prev => {
@@ -193,6 +223,7 @@ export default function GameRoom() {
         });
         return newPlayerMap;
       });
+      cardAudio.current.play();
     },
     END_GAME: (/** @type {phase}*/ phase) => {
       setCurrentPhase(prev => {
@@ -200,12 +231,13 @@ export default function GameRoom() {
         return phase;
       });
     },
-    WINNER_CEREMONY: (/** @type {phase}*/ phase, winner) => {
+    WINNER_CEREMONY: (/** @type {phase}*/ phase, players) => {
       setCurrentPhase(prev => {
         console.log(prev, '=>', phase);
         return phase;
       });
-      winner;
+      setWinners(players);
+      run();
     },
   };
 
@@ -228,6 +260,7 @@ export default function GameRoom() {
   }
 
   useEffect(() => {
+    cardAudio.current = new Audio('./src/assets/cardAudio.mp3');
     setStompClient(() => {
       const stompClient = getStomp();
       connect({ stompClient, roomId, userId, nickname, callbacks });
@@ -252,7 +285,21 @@ export default function GameRoom() {
   return (
     <Container>
       <div className={styles.filter}></div>
-      <Notice {...{ pinNumber, currentPhase }} />
+      <Notice
+        {...{
+          pinNumber,
+          currentPhase,
+          current: currentPlayer === me,
+          selected: selectedPlayer === me,
+          playerMap,
+          currentPlayer,
+          selectedPlayer,
+          cardMap: cardMapRef.current,
+          selectedCard,
+          goFish,
+          winners,
+        }}
+      />
 
       <Perspective1>
         <Perspective2>
@@ -261,7 +308,19 @@ export default function GameRoom() {
             {Object.keys(subscriberMap)
               .filter(userId => userId != me)
               .map((key, idx, arr) => (
-                <SubUI deg={(180 / (arr.length * 2)) * (idx * 2 + 1)} key={idx}>
+                <SubUI deg={(180 / (arr.length + 1)) * (idx + 1)} key={idx}>
+                  <div
+                    style={{
+                      position: 'absolute',
+                      bottom: '700px',
+                      whiteSpace: 'nowrap',
+                      zIndex: 10,
+                    }}
+                  >
+                    <Neon fontSize={'100px'}>
+                      {JSON.parse(subscriberMap[key].stream.connection.data)['nickname']}
+                    </Neon>
+                  </div>
                   <ReplyButtonHolder
                     condition={
                       currentPlayer === Number(key) &&
@@ -277,16 +336,17 @@ export default function GameRoom() {
                         playerMap[me].cardsOnHand.findIndex(
                           card => card.cardId === selectedCard
                         ) === -1
-                          ? 'FISH'
+                          ? 'FISH!'
                           : '주기'
                       }
                       text2={
                         playerMap[me].cardsOnHand.findIndex(
                           card => card.cardId === selectedCard
                         ) === -1
-                          ? 'SSA'
+                          ? 'GO'
                           : 'ㅠㅠ'
                       }
+                      width="400px"
                       onClick={() =>
                         reply({
                           stompClient,
@@ -296,12 +356,18 @@ export default function GameRoom() {
                           goFish,
                         })
                       }
+                      color="#F9BB3B"
                     />
                   </ReplyButtonHolder>
                   <SubCam
                     subscriber={subscriberMap[key]}
                     current={currentPlayer === Number(key)}
                     selected={selectedPlayer === Number(key)}
+                    able={
+                      currentPlayer === me &&
+                      currentPhase === 'SELECT_PLAYER_TURN' &&
+                      !selectedPlayer
+                    }
                     onClick={() => {
                       setSelectedPlayer(selectedPlayer => {
                         if (currentPlayer === me && currentPhase === 'SELECT_PLAYER_TURN') {
@@ -334,11 +400,15 @@ export default function GameRoom() {
                             requester: currentPlayer,
                             responser: selectedPlayer,
                           }),
+                        width: '400px',
+                        color: '#8BADD5',
                       }}
                     />
                   </SelectPlayerButtonHolder>
                 </SubUI>
               ))}
+
+            <PubPoints cards={playerMap[me]?.cardsEnrolled} />
           </Rotater>
         </Perspective2>
       </Perspective1>
@@ -378,20 +448,23 @@ export default function GameRoom() {
               onClick={() =>
                 selectCard({ stompClient, roomId, player: currentPlayer, cardId: selectedCard })
               }
+              color="yellowgreen"
             />
           </SelectCardButtonHolder>
           <HandToggler onClick={() => setHand(hand => !hand)} />
         </PubHandsContainer>
-        <StartButtonHolder condition={currentPhase === 'WAITING'}>
-          <HoverButton
-            {...{
-              text1: '준비?',
-              text2: '시작!',
-              onClick: () => startGame({ stompClient, roomId }),
-            }}
-          />
-        </StartButtonHolder>
       </PubUI>
+      <StartButtonHolder condition={currentPhase === 'WAITING'}>
+        <HoverButton
+          {...{
+            text1: '준비?',
+            text2: '시작!',
+            onClick: () => startGame({ stompClient, roomId }),
+            width: '400px',
+            color: 'yellowgreen',
+          }}
+        />
+      </StartButtonHolder>
 
       <RotateButtonContainer>
         <RotateButton
@@ -418,11 +491,59 @@ export default function GameRoom() {
         <SelectedCard
           {...{ card, selectedCard: selectedCard ? cardMapRef.current[selectedCard] : null }}
         />
-        <CardToggler onClick={() => setCard(card => !card)} />
+        <CardTogglerHolder>
+          <CardToggler onClick={() => setCard(card => !card)} />
+        </CardTogglerHolder>
       </SelectedCardContainer>
     </Container>
   );
 }
+
+function PubPoints({ cards }) {
+  function unit(idx) {
+    const centerIdx = (cards.length - 1) / 2;
+    return idx - centerIdx;
+  }
+  function translateX(idx) {
+    return `calc(${unit(idx)}*var(--table-radius)*0.2*${
+      cards.length <= 4 ? 0.6 : 4 / (cards.length + 1)
+    })`;
+  }
+  function translateY(idx) {
+    return `calc(
+      ${1 - Math.sin(((unit(idx) * 10 + 90) / 180) * Math.PI)}
+      *var(--table-radius)
+      *${cards.length <= 4 ? 1 : 4 / (cards.length + 1)}
+      -
+      ${1 - Math.sin(((unit((cards.length - 1) / 2) * 10 + 90) / 180) * Math.PI)}
+      *var(--table-radius)
+      *${cards.length <= 4 ? 1 : 4 / (cards.length + 1)}
+      + 100px
+    )`;
+  }
+  function rotateZ(idx) {
+    return `${unit(idx) * 10 * (cards.length <= 4 ? 1 : 4 / (cards.length + 1))}deg`;
+  }
+
+  if (cards)
+    return (
+      <div className={`${styles.PubPoints}`}>
+        {cards.map((card, idx) => (
+          <Card
+            {...card}
+            key={idx}
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              translate: `${translateX(idx)} ${translateY(idx)} -100px`,
+              rotate: `z ${rotateZ(idx)}`,
+            }}
+          />
+        ))}
+      </div>
+    );
+}
+
 function ReplyButtonHolder({ condition, children }) {
   if (condition) return <div className={`${styles.ReplyButtonHolder}`}>{children}</div>;
 }
@@ -459,7 +580,8 @@ function PubHands({
   }
 
   function translateX(idx) {
-    return `calc(${unit(idx)}*var(--table-radius)*0.2*${
+    // return `calc(${unit(idx)}*var(--table-radius)*0.2*${
+    return `calc(${unit(idx)}*var(--table-radius)*0.1*${
       cards.length <= 4 ? 0.6 : 4 / (cards.length + 1)
     })`;
   }
@@ -467,11 +589,11 @@ function PubHands({
   function translateY(idx) {
     return `calc(
       ${1 - Math.sin(((unit(idx) * 10 + 90) / 180) * Math.PI)}
-      *var(--table-radius)
+      *var(--table-radius) * 0.5
       *${cards.length <= 4 ? 1 : 4 / (cards.length + 1)}
       -
       ${1 - Math.sin(((unit((cards.length - 1) / 2) * 10 + 90) / 180) * Math.PI)}
-      *var(--table-radius)
+      *var(--table-radius) * 0.5
       *${cards.length <= 4 ? 1 : 4 / (cards.length + 1)}
     )`;
   }
@@ -499,15 +621,34 @@ function PubHands({
             >
               <Card
                 {...card}
+                width="100px"
+                height="150px"
                 style={{
                   position: 'absolute',
                   transformOrigin: 'bottom center',
                   bottom: 0,
-                  border:
-                    (current && selectedCard === card.cardId) ||
-                    (selected && currentPhase === 'REPLY_TURN' && selectedCard === card.cardId)
-                      ? 'solid 5px white'
-                      : '',
+                  filter:
+                    (current &&
+                      currentPhase === 'SELECT_CARD_TURN' &&
+                      `
+                      drop-shadow(-1.6px -1.6px 4px #fff) 
+                      drop-shadow(0 0 0.8px #fff) 
+                      drop-shadow(0 0 4px yellowgreen) 
+                      drop-shadow(0 0 6px yellowgreen)
+                      drop-shadow(0 0 4px yellowgreen)
+                      drop-shadow(0 4px 1.2px #000)
+                      `) ||
+                    (selected &&
+                      currentPhase === 'REPLY_TURN' &&
+                      selectedCard === card.cardId &&
+                      `
+                      drop-shadow(-1.6px -1.6px 4px #fff) 
+                      drop-shadow(0 0 0.8px #fff) 
+                      drop-shadow(0 0 4px yellowgreen) 
+                      drop-shadow(0 0 6px yellowgreen)
+                      drop-shadow(0 0 4px yellowgreen)
+                      drop-shadow(0 4px 1.2px #000)
+                      `),
                   transform: `
                   ${`translateX(calc(${translateX(idx)} - 100px))`}
                   ${`translateY(${translateY(idx)})`}
@@ -531,6 +672,9 @@ function SelectPlayerButtonHolder({ condition, children }) {
 
 function SelectedCardContainer({ selectedCard, children }) {
   if (selectedCard) return <div className={`${styles.SelectedCardContainer}`}>{children}</div>;
+}
+function CardTogglerHolder({ children }) {
+  return <div className={styles.CardTogglerHolder}>{children}</div>;
 }
 
 function SelectedCard({ card, selectedCard }) {
@@ -566,30 +710,37 @@ function SubHands({ cards }) {
     const centerIdx = (cards.length - 1) / 2;
     return idx - centerIdx;
   }
+
   function translateX(idx) {
-    return `calc(${unit(idx)}*var(--table-radius)*0.2*${
+    // return `calc(${unit(idx)}*var(--table-radius)*0.2*${
+    return `calc(${unit(idx)}*var(--table-radius)*0.1*${
       cards.length <= 4 ? 0.6 : 4 / (cards.length + 1)
     })`;
   }
+
   function translateY(idx) {
     return `calc(
       ${1 - Math.sin(((unit(idx) * 10 + 90) / 180) * Math.PI)}
-      *var(--table-radius)
+      *var(--table-radius) * 0.5
       *${cards.length <= 4 ? 1 : 4 / (cards.length + 1)}
       -
       ${1 - Math.sin(((unit((cards.length - 1) / 2) * 10 + 90) / 180) * Math.PI)}
-      *var(--table-radius)
+      *var(--table-radius) * 0.5
       *${cards.length <= 4 ? 1 : 4 / (cards.length + 1)}
     )`;
   }
+
   function rotateZ(idx) {
     return `${unit(idx) * 10 * (cards.length <= 4 ? 1 : 4 / (cards.length + 1))}deg`;
   }
+
   return (
     <div className={`${styles.SubHands}`}>
       {cards.map((card, idx) => (
         <Card
           {...card}
+          width={'150px'}
+          height={'225px'}
           key={idx}
           flipped={true}
           style={{
@@ -622,6 +773,7 @@ function SubPoints({ cards }) {
       ${1 - Math.sin(((unit((cards.length - 1) / 2) * 10 + 90) / 180) * Math.PI)}
       *var(--table-radius)
       *${cards.length <= 4 ? 1 : 4 / (cards.length + 1)}
+      - 300px
     )`;
   }
   function rotateZ(idx) {
@@ -636,8 +788,11 @@ function SubPoints({ cards }) {
           style={{
             position: 'absolute',
             bottom: 0,
-            translate: `${translateX(idx)} ${translateY(idx)} 0`,
             rotate: `z ${rotateZ(idx)}`,
+            transform: `
+              translateX(${translateX(idx)})
+              translateY(${translateY(idx)})
+            `,
           }}
         />
       ))}
