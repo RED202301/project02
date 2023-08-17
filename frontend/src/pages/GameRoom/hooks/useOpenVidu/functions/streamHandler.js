@@ -14,7 +14,7 @@ export function handleStreamCreated(
     const { userId } = JSON.parse(sub.stream.connection.data);
     setSubscriberMap(subs => {
       const newSubs = { ...subs, [userId]: sub };
-      console.log(newSubs);
+      // console.log(newSubs);
       return newSubs;
     });
   };

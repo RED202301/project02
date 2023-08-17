@@ -19,8 +19,8 @@ export class Player {
 
   draw(/** @type {Card} */ card) {
     this.cardsOnHand.push(card);
-    console.log(this.userId, 'draw', card);
-    console.log(this.userId, this.cardsOnHand);
+    // console.log(this.userId, 'draw', card);
+    // console.log(this.userId, this.cardsOnHand);
   }
 
   enroll(/** @type {number} */ cardId) {
@@ -28,14 +28,14 @@ export class Player {
     const enrolledCard = cardsOnHand.filter(Card => Card.cardId === cardId)[0];
     this.cardsOnHand = cardsOnHand.filter(Card => Card.cardId !== cardId);
     this.cardsEnrolled = [...cardsEnrolled, enrolledCard];
-    console.log(this.userId, 'enroll', cardId);
-    console.log(this.userId, this.cardsOnHand);
+    // console.log(this.userId, 'enroll', cardId);
+    // console.log(this.userId, this.cardsOnHand);
   }
 
   lost(/** @type {number} */ cardId) {
     const { cardsOnHand } = this;
     this.cardsOnHand = cardsOnHand.filter(card => card.cardId !== cardId);
-    console.log(this.userId, 'lost', cardId);
-    console.log(this.userId, this.cardsOnHand);
+    // console.log(this.userId, 'lost', cardId);
+    // console.log(this.userId, this.cardsOnHand);
   }
 }

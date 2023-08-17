@@ -19,6 +19,7 @@ const WINNER_CEREMONY = 'WINNER_CEREMONY';
 export function getStomp() {
   const socket = new SockJS(host_URL + '/ssafish');
   const stompClient = Stomp.over(socket);
+  stompClient.debug = null;
   return stompClient;
 }
 
@@ -79,7 +80,7 @@ export function subscribe(
             cardMap[card.cardId] = card;
           });
           callbacks[type](type, cardMap);
-          console.log(type, cards, cardMap);
+          // console.log(type, cards, cardMap);
         }
         break;
       case AUTO_DRAW:
@@ -87,7 +88,7 @@ export function subscribe(
           /** @type {{type:phase, player:number, cardId:number}}*/
           const { type, player, cardId } = subJson;
           callbacks[type](type, player, cardId);
-          console.log(type, player, cardId);
+          // console.log(type, player, cardId);
         }
         break;
       case ENROLL:
@@ -95,7 +96,7 @@ export function subscribe(
           /** @type {{type:phase, player:number, cardId:number}}*/
           const { type, player, cardId } = subJson;
           callbacks[type](type, player, cardId);
-          console.log(type, player, cardId);
+          // console.log(type, player, cardId);
         }
         break;
       case SELECT_PLAYER_TURN:
@@ -103,7 +104,7 @@ export function subscribe(
           /** @type {{type:phase, player:number}}*/
           const { type, player } = subJson;
           callbacks[type](type, player);
-          console.log(type, player);
+          // console.log(type, player);
         }
         break;
       case TEST_PLAYER:
@@ -111,7 +112,7 @@ export function subscribe(
           /** @type {{type:phase, player:number}}*/
           const { type, player } = subJson;
           callbacks[type](player);
-          console.log(type, player);
+          // console.log(type, player);
         }
         break;
       case SELECT_PLAYER:
@@ -119,7 +120,7 @@ export function subscribe(
           /** @type {{type:phase, requester:number, responser:number}}*/
           const { type, requester, responser } = subJson;
           callbacks[type](type, requester, responser);
-          console.log(type, requester, responser);
+          // console.log(type, requester, responser);
         }
         break;
       case SELECT_CARD_TURN:
@@ -127,7 +128,7 @@ export function subscribe(
           /** @type {{type:phase, player:number}}*/
           const { type, player } = subJson;
           callbacks[type](type, player);
-          console.log(type, player);
+          // console.log(type, player);
         }
         break;
 
@@ -136,7 +137,7 @@ export function subscribe(
           /** @type {{type:phase, player:number, cardId:number}}*/
           const { type, player, cardId } = subJson;
           callbacks[type](type, player, cardId);
-          console.log(type, player, cardId);
+          // console.log(type, player, cardId);
         }
         break;
       case REPLY_TURN:
@@ -144,7 +145,7 @@ export function subscribe(
           /** @type {{type:phase, player:number, cardId:number}}*/
           const { type, player, cardId } = subJson;
           callbacks[type](type, player, cardId);
-          console.log(type, player, cardId);
+          // console.log(type, player, cardId);
         }
         break;
       case REPLY:
@@ -152,7 +153,7 @@ export function subscribe(
           /** @type {{type:phase, requester:number, responser:number, isGoFish:boolean}}*/
           const { type, requester, responser, isGoFish } = subJson;
           callbacks[type](type, requester, responser, isGoFish);
-          console.log(type, requester, responser, isGoFish);
+          // console.log(type, requester, responser, isGoFish);
         }
         break;
       case CARD_MOVE:
@@ -160,7 +161,7 @@ export function subscribe(
           /** @type {{type:phase, from:number, to:number}}*/
           const { type, from, to } = subJson;
           callbacks[type](type, from, to);
-          console.log(type, from, to);
+          // console.log(type, from, to);
         }
         break;
       case END_GAME:
@@ -168,7 +169,7 @@ export function subscribe(
           /** @type {{type:phase}}*/
           const { type } = subJson;
           callbacks[type](type);
-          console.log(type);
+          // console.log(type);
         }
         break;
       case WINNER_CEREMONY:
@@ -176,7 +177,7 @@ export function subscribe(
           /** @type {{type:phase, players}}*/
           const { type, players } = subJson;
           callbacks[type](type, players);
-          console.log(type, players);
+          // console.log(type, players);
         }
         break;
 
