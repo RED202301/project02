@@ -3,9 +3,9 @@
     place-items: center;
   }
   
-  .card {
-    width: 15%;
-    height: 40%;
+  .main_card {
+    width: 16%;
+    height: 48%;
     // background: linear-gradient(-45deg, #FFC796 0%, #ff9cb8 100%);
     // background-image: url('/table.jpg');
     // background: rgb(255, 211, 181);
@@ -72,8 +72,6 @@
     color: #1b1b1b;
     font-size: 1.5em;
     font-weight: 600;
-    line-height: 2rem;
-    margin-top: 5px;
   }
   
   .card-subtitle {
