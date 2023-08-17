@@ -119,9 +119,9 @@ function CardFactory( ){
         <div className="CardFactory">
               <div className="game">
             <Link to='/Webmain'>
-            <div id='r3' className="card-social-icon" style={{display:'flex', justifyContent:'flex-start', width:'50px'}}>
+            <div id='r3' className="cards-social-icon" style={{display:'flex', justifyContent:'flex-start', width:'50px'}}>
                     <img src="src/assets/로그아웃.svg"style={{'width':'3em', marginTop:'30px', marginLeft:'30px'}} alt="z" />
-                    <p style={{marginLeft:'35px', marginTop:'-2px' }}>GO BACK!!</p>
+                    <p style={{marginTop:'55%'}}>GO BACK!!</p>
             </div>
             </Link>
             </div>
@@ -130,10 +130,10 @@ function CardFactory( ){
       {/* <cardE></cardE> */}
       <div>
       
-      <Deckin userId={userId} handlerescard={handlerescard} handleDeckCard={handleDeckCard} recard={recard} setRecard={setRecard} selectedCardIds={selectedCardIds} responseData={responseData} rescard={rescard} setRescard={setRescard} setSelectedCardIds={setSelectedCardIds} selectedCardId={selectedCardId} setSelectedCardId={setSelectedCardId} sendRequestForSelectedCardIds={sendRequestForSelectedCardIds}></Deckin>
-      <button className="btn btn-5" onClick={openModals} style={{marginLeft:'5%'}} >덱 등록하기</button>
-      <ModalX userId={userId} selectedCardId={selectedCardId} setSelectedCardId={setSelectedCardId} handleDeckCard={handleDeckCard} sendRequestForSelectedCardIds={sendRequestForSelectedCardIds}  setSelectedCardIds={setSelectedCardIds} isOpens={isModalOpens} closeModals={closeModals} className='modalbox' selectedCardIds={selectedCardIds} rescard={rescard}>
-      <Deckintroduce userId={userId} selectedCardId={selectedCardId} setSelectedCardId={setSelectedCardId} handleDeckCard={handleDeckCard} selectedCardIds={selectedCardIds} setSelectedCardIds={setSelectedCardIds} responseData={responseData} sendRequestForSelectedCardIds={sendRequestForSelectedCardIds} />
+      <Deckin setShowCard={setShowCard} userId={userId} handlerescard={handlerescard} handleDeckCard={handleDeckCard} recard={recard} setRecard={setRecard} selectedCardIds={selectedCardIds} responseData={responseData} rescard={rescard} setRescard={setRescard} setSelectedCardIds={setSelectedCardIds} selectedCardId={selectedCardId} setSelectedCardId={setSelectedCardId} sendRequestForSelectedCardIds={sendRequestForSelectedCardIds}></Deckin>
+      <button className="btnd btnd-5" onClick={openModals} style={{marginLeft:'5%'}} >덱 등록하기</button>
+      <ModalX setShowCard={setShowCard}  userId={userId} selectedCardId={selectedCardId} setSelectedCardId={setSelectedCardId} handleDeckCard={handleDeckCard} sendRequestForSelectedCardIds={sendRequestForSelectedCardIds}  setSelectedCardIds={setSelectedCardIds} isOpens={isModalOpens} closeModals={closeModals} className='modalbox' selectedCardIds={selectedCardIds} rescard={rescard}>
+      <Deckintroduce setShowCard={setShowCard}  userId={userId} selectedCardId={selectedCardId} setSelectedCardId={setSelectedCardId} handleDeckCard={handleDeckCard} selectedCardIds={selectedCardIds} setSelectedCardIds={setSelectedCardIds} responseData={responseData} sendRequestForSelectedCardIds={sendRequestForSelectedCardIds} />
       </ModalX>
       {/* <button id="silverborders">대표 카드지정</button> */}
       {/* <button onClick={sendRequestForSelectedCardIds}>덱 불러오기</button> */}
@@ -148,7 +148,7 @@ function CardFactory( ){
           <div className='magin'>
             <div className='gridTitle'>
           <Selectin
-            // showCard={showCard}
+            setShowCard={setShowCard}
             DropdownMenu={DropdownMenu}
             setCardInfo={setCardInfo}
             showCard={showCard}
@@ -173,7 +173,7 @@ function CardFactory( ){
       {/* </div> */}
       </div>      
      <div>
-     <button onClick={openModal} className='btn btn-5' style={{position:'relative', marginTop:'84%'}}>카드 만들기</button>
+     <button onClick={openModal} className='btnd btnd-5' style={{position:'relative', marginTop:'84%'}}>카드 만들기</button>
      </div>
       
       {/* <button onClick={handleAddToDeck}>덱에 담기</button> */}
@@ -218,7 +218,7 @@ function DropdownMenu({showCard, setShowCard, deckkk, setDeckkk,fetchSomeData, d
     setIsOpen(!isOpen);
   };
   const handlefetch = () => {
-    setShowCard(true);
+    setShowCard(true)
     fetchSomeData();
     setDeckkk('내 카드')
   }
@@ -285,7 +285,7 @@ function Deckin({ userId, selectedCardId, setSelectedCardId, handleDeckCard, han
         <div className="factory board">
           <div className='grids'>
           <h4 className='bold' style={{display:'flex', justifyContent:'flex-start', marginLeft:'30%', color:'#515F65', fontSize:'30px'}}>덱에 포함시킬 카드</h4>
-          <button className='bttn' onClick={handlerescard} style={{width:'130px', height:'40px', marginTop: '15%',color:'white', fontWeight:'bold', marginLeft:'-45%', backgroundColor:'##515F65'}}>대표 카드</button>
+          <button className='bttn' onClick={handlerescard} style={{width:'130px', height:'40px', marginTop: '15%',color:'white', fontWeight:'bold', marginLeft:'-45%', backgroundColor:'#515F65'}}>대표 카드</button>
           </div>
           <Carddeck userId={userId} selectedCardId={selectedCardId} setSelectedCardId={setSelectedCardId} handleDeckCard={handleDeckCard} setSelectedCardIds={setSelectedCardIds} sendRequestForSelectedCardIds={sendRequestForSelectedCardIds} rescard={rescard} setRescard={setRescard} key={responseData.cardId} cardId={responseData.cardId} responseData={responseData} selectedCardIds={selectedCardIds}/>
         </div>
@@ -294,7 +294,7 @@ function Deckin({ userId, selectedCardId, setSelectedCardId, handleDeckCard, han
         <div className="factory">
           <div className='grids'>
           <h4 className='bold' style={{display:'flex', justifyContent:'flex-start', marginLeft:'30%', color:'#515F65', fontSize:'30px'}}>덱에 포함시킬 카드</h4>
-          <button onClick={handlerescard} style={{width:'130px', height:'40px', marginTop: '15%', marginLeft:'-45%',color:'#515F65', fontWeight:'bold', backgroundColor:'##515F65'}}>대표 카드</button>
+          <button onClick={handlerescard} style={{width:'130px', height:'40px', marginTop: '15%', marginLeft:'-45%',color:'white', fontWeight:'bold', backgroundColor:'#515F65'}}>대표 카드</button>
           </div>
         <p className='board'></p></div>
       )}
@@ -305,7 +305,7 @@ function Deckin({ userId, selectedCardId, setSelectedCardId, handleDeckCard, han
 
 
 
-function Selectin({ deckkk, setDeckkk, setCardInfo, deckinfo, showCard, cardinfo, userId, res, sendRequestForSelectedCardIds, onAddToDeck, fetchSomeData, selectedCardIds, setSelectedCardIds}) {
+function Selectin({ showCard, setShowCard, deckkk, setDeckkk, setCardInfo, deckinfo, cardinfo, userId, res, sendRequestForSelectedCardIds, onAddToDeck, fetchSomeData, selectedCardIds, setSelectedCardIds}) {
   return (
     <div>
       <div>
@@ -315,6 +315,7 @@ function Selectin({ deckkk, setDeckkk, setCardInfo, deckinfo, showCard, cardinfo
       <h4 className='bold' style={{display:'flex', justifyContent:'flex-start', marginLeft:'30%', color:'#515F65', fontSize:'30px'}}>선택할 카드</h4>
           <div style={{ marginLeft:'-150%', marginTop: '8%'}}>
           <DropdownMenu
+          setShowCard={setShowCard}
           showCard={showCard}
           deckkk={deckkk}
           setDeckkk={setDeckkk}
@@ -340,7 +341,7 @@ function Selectin({ deckkk, setDeckkk, setCardInfo, deckinfo, showCard, cardinfo
          sendRequestForSelectedCardIds={sendRequestForSelectedCardIds}
          />) : <CardD
          showCard={showCard}
-    
+         setShowCard={setShowCard}
          userId={userId}
          res={res}
          fetchSomeData={fetchSomeData}
@@ -422,7 +423,7 @@ function CardX({userId, name, point, imageUrl, subTitle }) {
 
 
 
-function Deckmake({userId, closeModal, fetchSomeData}) {
+function Deckmake({ userId, closeModal, fetchSomeData}) {
   const fileInputRef = useRef(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
@@ -706,6 +707,15 @@ function CardG({cardinfo, fetchSomeData, onAddToDeck, selectedCardIds, setSelect
           
                 </div>
               </div>
+                <div style={{ display: 'flex', marginLeft:'-6%', marginTop:'35%', position:'absolute',  fontSize:'12px', justifyContent:'center', alignItems:'center' }}>
+                  {selectedCardId === data.cardId && (
+                    <button onClick={handleAddToDeck} className='deckbuttosn added-to-deck' >
+  
+                      담기
+                    </button>
+                  )}
+  
+                </div>
               <img
                 src={data.mainImgUrl}
                 alt=''
@@ -720,15 +730,6 @@ function CardG({cardinfo, fetchSomeData, onAddToDeck, selectedCardIds, setSelect
                   
                 }}
               ></img>
-                  <div style={{ display: 'flex',marginLeft:'-6%', position:'absolute',  fontSize:'10px', justifyContent:'center', alignItems:'center' }}>
-                    {selectedCardId === data.cardId && (
-                      <button onClick={handleAddToDeck} className='btn-hover color-6 deckbutton added-to-deck' >
-    
-                        담기
-                      </button>
-                    )}
-    
-                  </div>
 
             </div>
           </div>
@@ -741,7 +742,7 @@ function CardG({cardinfo, fetchSomeData, onAddToDeck, selectedCardIds, setSelect
 
 
 
-function CardD({userId, fetchSomeData, onAddToDeck, res, selectedCardIds, setSelectedCardIds}) {
+function CardD({ userId, fetchSomeData, onAddToDeck, res, selectedCardIds, setSelectedCardIds}) {
   const [selectedCardId, setSelectedCardId] = useState(null);
   // const [isAddToDeckButtonVisible, setIsAddToDeckButtonVisible] = useState(true);
 
@@ -814,74 +815,141 @@ function CardD({userId, fetchSomeData, onAddToDeck, res, selectedCardIds, setSel
 
   return (
     <div>
-      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
-        {res.map((data) => (
-          <div
-            className={`cardd ${selectedCardId === data.cardId ? 'selected-card' : ''} ${
-              selectedCardIds.includes(data.cardId) ? 'added-to-deck' : ''
-            }`}
-            id={`${selectedCardId === data.cardId ? 'selected-card' : ''}`}
-            key={data.cardId}
-            style={{ marginTop: '2%', marginLeft: '2%', width: '30%', maxWidth: '150px' }}
-            onClick={() => handleCardClick(data.cardId)}
-          >
-            <div className='content'>
-                <div className='gridXXX'>
-                  <div className='subtitl'>{truncateText(data.subTitle, 5)}</div>
-              {selectedCardId === data.cardId && (
+    <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
+      {res.map((data) => (
+        <div
+          className={`cardd ${selectedCardId === data.cardId ? 'selected-card' : ''} ${
+            selectedCardIds.includes(data.cardId) ? 'added-to-deck' : ''
+          }`}
+          id={`${selectedCardId === data.cardId ? 'selected-card' : ''}`}
+          key={data.cardId}
+          style={{ marginTop: '2%', marginLeft: '2%', width: '30%', maxWidth: '140px' }}
+          onClick={() => handleCardClick(data.cardId)}
+        >
+          <div className='content'>
+            <div className='gridXXX'>
+              <div className='subtitle'>{truncateText(data.subTitle, 5)}</div>
+            {selectedCardId === data.cardId && (
                 <button
-                style={{width:'25px',height:'25px', fontSize: '10px'}}
-                className='Xbox'
-                onClick={() => handleDeleteCard(data.cardId)}
-                value={'❌'}
-                >
-                  ❌ 
-                  </button>
-                   )}
-      
-                  </div>
-                   <div className='cardtitl'>{truncateText(data.mainTitle, 5)}</div>
-              <div>
-                <div className='star-container'>
-                  {[...Array(data.point)].map((_, index) => (
-                    <span key={index} className='yellow-stard'>
-                      ⭐
-                    </span>
-                  ))}
-          
-                </div>
+                style={{ display: 'flex', marginLeft:'25.5%', marginTop:'0%', position:'absolute',  fontSize:'10px', justifyContent:'center', alignItems:'center' }}
+              className='deckbuttossn added-to-deck'
+              onClick={() => handleDeleteCard(data.cardId)}
+              >
+              ❌
+              </button>
+              )}
               </div>
-              <img
-                src={data.mainImgUrl}
-                alt=''
-                style={{
-                  display: 'flex',
-                  marginTop: '0.5vh',
-                  width: '4vw',
-                  height: '4vh',
-                  // borderRadius: '10px',
-                  marginLeft: '1.5%',
-                  // zIndex:'1',
-                  
-                }}
-              ></img>
-                  <div style={{ display: 'flex',position:'absolute',  fontSize:'10px', justifyContent:'center', alignItems:'center' }}>
-                    {selectedCardId === data.cardId && (
-                      <button onClick={handleAddToDeck} className='btn-hover color-6 deckbutton added-to-deck' >
-    
-                        담기
-                      </button>
-                    )}
-    
-                  </div>
-
+            <div className='cardtitled'>{truncateText(data.mainTitle, 5)}</div>
+            <div>
+              <div className='star-container'>
+                {[...Array(data.point)].map((_, index) => (
+                  <span key={index} className='yellow-stard'>
+                    ⭐
+                  </span>
+                ))}
+        
+              </div>
             </div>
+              <div style={{ display: 'flex', marginLeft:'-6%', marginTop:'35%', position:'absolute',  fontSize:'12px', justifyContent:'center', alignItems:'center' }}>
+                {selectedCardId === data.cardId && (
+                  <button onClick={handleAddToDeck} className='deckbuttosn added-to-deck' >
+
+                    담기
+                  </button>
+                )}
+
+              </div>
+            <img
+              src={data.mainImgUrl}
+              alt=''
+              style={{
+                display: 'flex',
+                marginTop: '0.5vh',
+                width: '8vw',
+                height: '14vh',
+                // borderRadius: '10px',
+                marginLeft: '2.5%',
+                // zIndex:'1',
+                
+              }}
+            ></img>
+
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
-  );
+  </div>
+);
 }
+//     <div>
+//       <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
+//         {res.map((data) => (
+//           <div
+//             className={`cardd ${selectedCardId === data.cardId ? 'selected-card' : ''} ${
+//               selectedCardIds.includes(data.cardId) ? 'added-to-deck' : ''
+//             }`}
+//             id={`${selectedCardId === data.cardId ? 'selected-card' : ''}`}
+//             key={data.cardId}
+//             style={{ marginTop: '2%', marginLeft: '2%', width: '30%', maxWidth: '150px' }}
+//             onClick={() => handleCardClick(data.cardId)}
+//           >
+//             <div className='content'>
+//                 <div className='gridXXX'>
+//                   <div className='subtitl'>{truncateText(data.subTitle, 5)}</div>
+//               {selectedCardId === data.cardId && (
+//                 <button
+//                 style={{width:'25px',height:'25px', fontSize: '10px'}}
+//                 className='Xbox'
+//                 onClick={() => handleDeleteCard(data.cardId)}
+//                 value={'❌'}
+//                 >
+//                   ❌ 
+//                   </button>
+//                    )}
+      
+//                   </div>
+//                    <div className='cardtitl'>{truncateText(data.mainTitle, 5)}</div>
+//               <div>
+//                 <div className='star-container'>
+//                   {[...Array(data.point)].map((_, index) => (
+//                     <span key={index} className='yellow-stard'>
+//                       ⭐
+//                     </span>
+//                   ))}
+          
+//                 </div>
+//               </div>
+//               <img
+//                 src={data.mainImgUrl}
+//                 alt=''
+//                 style={{
+//                   display: 'flex',
+//                   marginTop: '0.5vh',
+//                   width: '8vw',
+//                   height: '14vh',
+//                   // borderRadius: '10px',
+//                   marginLeft: '2.5%',
+//                   // zIndex:'1',
+                  
+//                 }}
+//                 ></img>
+//                 {selectedCardId === data.cardId && (
+//                   <button onClick={handleAddToDeck} className='btne-hover color-6 deckbutton added-to-deck' >
+
+//                     담기
+//                   </button>
+//                 )}
+//                   {/* <div style={{ display: 'flex',position:'absolute',  fontSize:'10px', justifyContent:'center', alignItems:'center' }}> */}
+    
+//                   {/* </div> */}
+
+//             </div>
+//           </div>
+//         ))}
+//       </div>
+//     </div>
+//   );
+// }
 
 
 
@@ -955,14 +1023,6 @@ function Carddeck({ userId, responseData, handleDeckCard, selectedCardIds, selec
 
                   <div className='titlefont gridboxx'>
                   {truncateText(data.mainTitle, 3)}
-                  {selectedCardId === data.cardId && (
-                    <button
-                  className='btn-hover color-6 deckbutton added-to-deck'
-                  onClick={() => handleMinusCard(data.cardId)}
-                  >
-                  빼기 
-                  </button>
-                  )}
                   </div>
                 <div className={`carddecktitled`}>
 
@@ -993,13 +1053,21 @@ function Carddeck({ userId, responseData, handleDeckCard, selectedCardIds, selec
                     marginLeft: '5%',
                     marginTop: '2%',
                   }}
-                />
+                  />
+                {selectedCardId === data.cardId && (
+                  <button
+                className='btns-hover color-6 deckbutton added-to-deck'
+                onClick={() => handleMinusCard(data.cardId)}
+                >
+                빼기 
+                </button>
+                )}
                 </div>
          
          {/* {selectedCardId === data.cardId && (
-   
-      <button
-        style={{ width: '70px', fontSize: '10px', transform: 'scale(0.5)' }}
+           
+           <button
+           style={{ width: '70px', fontSize: '10px', transform: 'scale(0.5)' }}
         className='repcardbox'
         onClick={handlerescard}
       >
@@ -1091,7 +1159,7 @@ function Carddeck({ userId, responseData, handleDeckCard, selectedCardIds, selec
           value={deckDescription}
           onChange={event => setDeckDescription(event.target.value)}
         />
-        <button onClick={handleDeckUpload} style={{display:'flex',marginTop:'2%', marginLeft:'40%'}}>등록하기</button>
+        <button onClick={handleDeckUpload} style={{display:'flex', border:'none', color:'white',marginTop:'2%', marginLeft:'40%', backgroundColor:'#515F65'}}>등록하기</button>
 
       </div>
     );
