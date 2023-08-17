@@ -70,7 +70,7 @@ const Card = () => {
   
   return (
     <div className="main">
-    <div id="c2" className="card">
+    <div id="c2" className="main_card">
        <div className="card-info">
        <li className="contact-icon">
             <img src="src/assets/공방.svg" style={{'width':'5.5em',}} alt="" />
@@ -92,7 +92,7 @@ const Card = () => {
            </div>
        </div>
 
-       <div id="c3" className="card">
+       <div id="c3" className="main_card">
        <div className="card-info">
            <li className="address-icon">
            <img src="src/assets/게임기.svg" style={{'width':'5.5em',}} alt="" />
@@ -128,7 +128,7 @@ const Card = () => {
    </div>
 
 
-   <div id="c1" className="card">
+   <div id="c1" className="main_card">
         <div className="card-info">
            <div className="card-avatar">
                 <svg viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
