@@ -1,6 +1,6 @@
 .Container {
   width: 100vw; height: 100vh;
-  background-image: url(./GameRoom.png); background-size: cover;
+  background-image: url(./GameRoomUp.svg); background-size: cover;
 
   --table-diameter: 3000px;
   --table-radius: calc(var(--table-diameter)/2);
@@ -39,7 +39,7 @@
   justify-content: center;
   align-items: center;
 
-  transition: rotate 1s;
+  transition: rotate 1s ease;
 }
 .RotateButtonContainer{
   position: absolute;

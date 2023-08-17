@@ -17,7 +17,7 @@
   position: relative;
   bottom: 0;
 
-  transition: all 0.5s;
+  transition: all 0.5s ease;
   display: flex;
   width: var(--w);
   height: var(--h);
