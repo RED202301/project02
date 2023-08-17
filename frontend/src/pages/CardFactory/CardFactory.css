@@ -147,7 +147,7 @@
 
 .btnd {
   margin-top: 3%;
-  margin-bottom: 8%;
+  margin-bottom: 9%;
   width: 130px;
   height: 40px;
   color: #fff;
@@ -366,7 +366,7 @@ background-image: linear-gradient(315deg, #f0ecfc 0%, #c797eb 74%);
 .cardx .middle-section {
   background-color: #ADBF24;
   position: absolute;
-  top: 40%; /* Adjust the position to place it between the top and bottom sections */
+  top: 40%;
   width: 100%;
   height: 16%;
   /* display: flex; */
@@ -469,9 +469,7 @@ background-image: linear-gradient(315deg, #f0ecfc 0%, #c797eb 74%);
   border-radius: 6px;
   box-shadow: 0px 4px 8px rgba(0,0,0,0.7);
 }
-.magin {
-  margin-top:-2%;
-}
+
 
 .margin {
   margin-top:5%;
@@ -484,7 +482,7 @@ background-image: linear-gradient(315deg, #f0ecfc 0%, #c797eb 74%);
   left: 50%;
   transform: translate(-50%, -50%);
   /* border: 2px solid whitesmoke; */
-  background-color: #748c97;
+  background-color: #D0D0D0;
   width: 300px;
   height: 450px;
   padding-right: 3%;
@@ -510,7 +508,7 @@ background-image: linear-gradient(315deg, #f0ecfc 0%, #c797eb 74%);
   display: flex;
   /* flex-direction: column; */
   align-items: flex-start;
-  margin-bottom:-2%;
+  /* margin-bottom:-2%; */
   cursor: pointer;
 }
 #r3:hover {
@@ -1030,10 +1028,10 @@ background: linear-gradient(0deg,  #f0ecfc 0%, #c797eb 74%);
   display: grid;
   grid-template-columns: 1fr 1fr;
   /* margin-top: 6.5%; */
-  height: 30px;
+  /* height: 30px; */
 }
 .gridTitles {
-  margin-top: 7.5%
+  /* margin-top: 7.5% */
 }
 * {
   -webkit-box-sizing: border-box;
