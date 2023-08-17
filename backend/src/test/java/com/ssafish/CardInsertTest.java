@@ -12,7 +12,6 @@ import com.ssafish.service.CardDeckService;
 import com.ssafish.service.CardService;
 import com.ssafish.web.dto.CardDto;
 import com.ssafish.web.dto.DeckDto;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -349,8 +348,6 @@ class CardInsertTest {
     }
 
 
-
-
     //명화 카드 입력
     @Test
     @Order(11)
@@ -432,6 +429,192 @@ class CardInsertTest {
 
         long decknum = 4;
         long cardIdnum =76; // 카드 아이디 시작번호
+        for(int i=0;i<25;i++){
+
+            CardDeck card_decks = CardDeck.builder()
+                    .cardDeckId(cardIdnum)
+                    .card(cardsRepository.findByCardId(cardIdnum))
+                    .deck(deckRepository.findByDeckId(decknum))
+                    .build();
+            cardDeckRepository.save(card_decks);
+            cardIdnum++;
+
+        }
+
+    }
+
+
+    //e2 반 카드 1
+    @Test
+    @Order(14)
+    void setE2CardsToDB1() {
+
+
+        String [] titles = {"권인식","김동현","김은비","라동엽","이종윤","성제현",
+                "정재범","홍정현","홍진환","신세영","황유성",
+                "공정민","이가영","이세울","김창혁","심규렬","황세진",
+                "방정우","박하윤","박소윤","최영은","김지홍","정효인",
+                "정경훈","김보경"
+        };
+
+        String [] subtitle = {"냠냠프렌즈","냠냠프렌즈","냠냠프렌즈","냠냠프렌즈","냠냠프렌즈","냠냠프렌즈",
+                "SSAFISH","SSAFISH","SSAFISH","SSAFISH","SSAFISH",
+                "싸:라웃","싸:라웃","싸:라웃","싸:라웃","싸:라웃","싸:라웃",
+                "약해지지마","약해지지마","약해지지마","약해지지마","약해지지마","약해지지마",
+                "2반 실습코치","2반 실습코치"
+        };
+
+
+// https://i9e202.p.ssafy.io/card_images/people_imgs/1_%EB%8B%A8%EA%B5%B0%EC%99%95%EA%B2%80.png
+        //String uploadPath = "http://i9e202.p.ssafy.io/home/ubuntu/ssafish/cardMainImage";
+        String uploadPath = "https://i9e202.p.ssafy.io/main_images";
+
+        String [] mainImgUrl = {
+                "/e2_imgs/권인식.jpg","/e2_imgs/김동현.jpg","/e2_imgs/김은비.jpg","/e2_imgs/라동엽.jpg","/e2_imgs/이종윤.jpg","/e2_imgs/성제현.jpg",
+                "/e2_imgs/정재범.jpg","/e2_imgs/홍정현.jpg","/e2_imgs/홍진환.jpg","/e2_imgs/신세영.jpg","/e2_imgs/황유성.jpg",
+                "/e2_imgs/공정민.jpg","/e2_imgs/이가영.jpg","/e2_imgs/이세울.jpg","/e2_imgs/김창혁.jpg","/e2_imgs/심규렬.jpg","/e2_imgs/황세진.jpg",
+                "/e2_imgs/방정우.jpg","/e2_imgs/박하윤.jpg","/e2_imgs/박소윤.jpg","/e2_imgs/최영은.jpg","/e2_imgs/김지홍.jpg","/e2_imgs/정효인.jpg",
+                "/e2_imgs/정경훈.jpg","/e2_imgs/김보경.jpg"
+        };
+
+        for(int i=0;i<25;i++){
+            CardDto cardDto = new CardDto();
+            cardDto.setUserId(1L);
+            cardDto.setMainTitle(titles[i]);
+            cardDto.setSubTitle(subtitle[i]);
+            cardDto.setMainImgUrl(uploadPath + mainImgUrl[i]);
+            Card cards = cardDto.toEntity(userRepository);
+            cardsRepository.save(cards);
+        }
+
+    }
+
+    //2. 기본 덱정보 삽입
+    @Test
+    @Order(15)
+    void setE2Deck(){
+
+        //더미 데이터 저장 및 확인
+        Deck deck = Deck.builder()
+                .user(userRepository.findById(1L).orElseThrow(() -> new IllegalArgumentException("해당하는 유저가 없습니다.")))
+                .deckId(5)
+                .card(cardsRepository.findByCardId(105L))
+                .deckName("부울경2반(1-4)")
+                .deckDescription("1팀-4팀")
+                .deckUsageCount(0)
+                .isPublic(true)
+                .build();
+
+        deckRepository.save(deck);
+
+        // select 확인
+        DeckDto deckDto = cardDeckService.deckInfo(5);
+
+        System.out.println(deckDto);
+        assertEquals("부울경 2반(1-4)", deckDto.getDeckName());
+
+
+    }
+    // 카드 덱 테이블 더미 데이터 삽입
+    @Test
+    @Order(16)
+    void setE2CardDeck(){
+
+//        cardDeckRepository.deleteAllInBatch();
+
+        long decknum = 5;
+        long cardIdnum =101; // 카드 아이디 시작번호
+        for(int i=0;i<25;i++){
+
+            CardDeck card_decks = CardDeck.builder()
+                    .cardDeckId(cardIdnum)
+                    .card(cardsRepository.findByCardId(cardIdnum))
+                    .deck(deckRepository.findByDeckId(decknum))
+                    .build();
+            cardDeckRepository.save(card_decks);
+            cardIdnum++;
+
+        }
+
+    }
+    //반카드 2
+    @Test
+    @Order(17)
+    void setE2CardsToDB2() {
+        String [] titles = {"권은정","신현탁","정영록","구배성","정현우",
+                "김나연","김예진","김현빈","김정희","이동규","하성호",
+                "김대웅","곽은정","손민영","이상훈","김태환","정근모",
+                "서이현","양불회","유혜민","김광표","차민준","정명진",
+                "박세영","황호선"
+        };
+
+        String [] subtitle = {"FishMeter","FishMeter","FishMeter","FishMeter","FishMeter",
+                "주경야학","주경야학","주경야학","주경야학","주경야학","주경야학",
+                "라온","라온","라온","라온","라온","라온",
+                "Book!빠지다","Book!빠지다","Book!빠지다","Book!빠지다","Book!빠지다","Book!빠지다",
+                "2반 컨설턴트","2반 담당프로"
+        };
+
+
+// https://i9e202.p.ssafy.io/card_images/people_imgs/1_%EB%8B%A8%EA%B5%B0%EC%99%95%EA%B2%80.png
+        //String uploadPath = "http://i9e202.p.ssafy.io/home/ubuntu/ssafish/cardMainImage";
+        String uploadPath = "https://i9e202.p.ssafy.io/main_images";
+
+        String [] mainImgUrl = {
+                "/e2_imgs/권은정.jpg","/e2_imgs/신현탁.jpg","/e2_imgs/정영록.jpg","/e2_imgs/구배성.jpg","/e2_imgs/정현우.jpg",
+                "/e2_imgs/김나연.jpg","/e2_imgs/김예진.jpg","/e2_imgs/김현빈.jpg","/e2_imgs/김정희.jpg","/e2_imgs/이동규.jpg","/e2_imgs/하성호.jpg",
+                "/e2_imgs/김대웅.jpg","/e2_imgs/곽은정.jpg","/e2_imgs/손민영.jpg","/e2_imgs/이상훈.jpg","/e2_imgs/김태환.jpg","/e2_imgs/정근모.jpg",
+                "/e2_imgs/서이현.jpg","/e2_imgs/양불회.jpg","/e2_imgs/유혜민.jpg","/e2_imgs/김광표.jpg","/e2_imgs/차민준.jpg","/e2_imgs/정명진.jpg",
+                "/e2_imgs/박세영.jpg","/e2_imgs/황호선.jpg",
+        };
+
+        for(int i=0;i<25;i++){
+            CardDto cardDto = new CardDto();
+            cardDto.setUserId(1L);
+            cardDto.setMainTitle(titles[i]);
+            cardDto.setSubTitle(subtitle[i]);
+            cardDto.setMainImgUrl(uploadPath + mainImgUrl[i]);
+            Card cards = cardDto.toEntity(userRepository);
+            cardsRepository.save(cards);
+        }
+
+    }
+
+    //2. 기본 덱정보 삽입
+    @Test
+    @Order(18)
+    void setE2Deck2(){
+
+        //더미 데이터 저장 및 확인
+        Deck deck = Deck.builder()
+                .user(userRepository.findById(1L).orElseThrow(() -> new IllegalArgumentException("해당하는 유저가 없습니다.")))
+                .deckId(6)
+                .card(cardsRepository.findByCardId(126L))
+                .deckName("부울경2반(5-8)")
+                .deckDescription("5팀-8팀")
+                .deckUsageCount(0)
+                .isPublic(true)
+                .build();
+
+        deckRepository.save(deck);
+
+        // select 확인
+        DeckDto deckDto = cardDeckService.deckInfo(6);
+
+        System.out.println(deckDto);
+        assertEquals("부울경 2반(5-8)", deckDto.getDeckName());
+
+
+    }
+    // 카드 덱 테이블 더미 데이터 삽입
+    @Test
+    @Order(19)
+    void seE2CardDeck2(){
+
+//        cardDeckRepository.deleteAllInBatch();
+
+        long decknum = 6;
+        long cardIdnum =126; // 카드 아이디 시작번호
         for(int i=0;i<25;i++){
 
             CardDeck card_decks = CardDeck.builder()
