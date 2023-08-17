@@ -36,7 +36,7 @@ const Card = () => {
             console.log(response.data);
             // setRoomId(response.data.roomId);
             const roomId = response.data.roomId;
-            const userId = window.localStorage.getItem('roomId')
+            const userId = window.localStorage.getItem('userId')
             const nickname = window.localStorage.getItem('nickname')
             // const pinNumber = response.data.pinNumber
             window.sessionStorage.setItem('roomId', roomId);
