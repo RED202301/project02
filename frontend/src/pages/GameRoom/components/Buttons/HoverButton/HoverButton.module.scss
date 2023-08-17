@@ -7,14 +7,15 @@
 .button {
   background: #3D4C53;
   margin : auto;
-  width : 200px;
-  height : 50px;
+  width : var(--width);
+  height : calc(var(--width)/4);
   overflow: hidden;
   text-align : center;
   transition : .2s;
   cursor : pointer;
-  border-radius: 3px;
-  box-shadow: 0px 1px 10px rgba(0,0,0,1);
+  border-radius: calc(var(--width)*0.015);
+  box-shadow: 0px calc(var(--width)*0.005) calc(var(--width)*0.05) rgba(0,0,0,1);
+  font-size: calc(var(--width)*0.08);
   
   pointer-events: all;
   
@@ -22,12 +23,11 @@
 }
 .btnTwo {
   position : relative;
-  width : 200px;
-  height : 100px;
-  margin-top: -100px;
-  padding-top: 2px;
-  background : #FEB309;
-  left : -250px;
+  width : var(--width);
+  height : calc(var(--width)*0.5);
+  margin-top: calc(var(--width)*-0.5);
+  padding-top: calc(var(--width)*0.01);
+  left : calc(var(--width)*-1.25);
   transition : .3s;
 }
 .btnText {
@@ -35,17 +35,17 @@
   transition : .3s;
 }
 .btnText2 {
-  margin-top : 63px;
-  margin-right : -130px;
+  margin-top : calc(var(--width)*0.315);
+  margin-right : calc(var(--width)*-0.65);
   color : #FFF;
 }
 .button:hover .btnTwo{ /*When hovering over .button change .btnTwo*/
-  left: -130px;
+  left: calc(var(--width)*-0.65);
 }
 .button:hover .btnText{ /*When hovering over .button change .btnText*/
-  margin-left : 65px;
+  margin-left : calc(var(--width)*0.315);
 }
 .button:active { /*Clicked and held*/
-  box-shadow: 0px 5px 6px rgba(0,0,0,0.3);
+  box-shadow: 0px calc(var(--width)*0.025) calc(var(--width)*0.03) rgba(0,0,0,0.3);
 }
 

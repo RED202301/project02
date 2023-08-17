@@ -8,13 +8,10 @@
   display: flex; justify-content: center;
   pointer-events: none;
 
-  // overflow: hidden;
+  overflow: hidden;
 }
 
-.ReplyButtonHolder{
-  position: absolute;
-  bottom: 1200px;
-}
+
 
 .filter{
   position: absolute;
@@ -25,7 +22,7 @@
 
 .Perspective1{
   display: flex; justify-content: center;
-  // perspective: 5000px;
+  translate: 0 -50px;
 }
 .Perspective2{
   transform-style: preserve-3d;
@@ -43,7 +40,6 @@
   align-items: center;
 
   transition: rotate 1s;
-  perspective: 6000px;
 }
 .RotateButtonContainer{
   position: absolute;
@@ -55,13 +51,21 @@
 
 .SelectedCardContainer{
   position: absolute;
+  display: flex;
+  // justify-content: center;
+  align-items: end;
+  left: 0;
+}
 
-  top:100px;
-  left: 100px;
+.CardTogglerHolder{
+  position: absolute;
+  top:275px;
 }
 
 .SelectedCard{
   position: absolute;
+  left: 100px;
+  top: 200px
 }
 
 .Table{
@@ -73,6 +77,8 @@
   
   background-image: url('./table.jpg');
   rotate: 1 0 0 90deg;
+
+  box-shadow: 0 0 100px #000;
 
 }
 
@@ -116,8 +122,6 @@
 .SubPoints{
   position: absolute;
   bottom: 0;
-  width: 1440px;
-  height: 720px;
   
   transform-origin: bottom;
   transform: rotateX(-90deg);
@@ -125,13 +129,35 @@
   display: flex; justify-content: center;
 }
 
+.PubPoints{
+  position: absolute;
+  bottom: 0;
+  width: 1440px;
+  height: 720px;
+  
+  transform-origin: bottom;
+  transform: rotateX(90deg);
+
+  display: flex; justify-content: center;
+}
+
+
 .StartButtonHolder{
   position: absolute;
+  bottom: 60px;
   width: 100vw;
-  margin-bottom: 60px;
-  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  z-index: 10;
 }
 .SelectPlayerButtonHolder{
+  position: absolute;
+  margin-bottom: 60px;
+  bottom: 0;
+  translate: 0 -20px 60px;
+}
+.ReplyButtonHolder{
   position: absolute;
   margin-bottom: 60px;
   bottom: 0;
@@ -144,6 +170,13 @@
   bottom: 0;
   display: flex;
   justify-content: center;
+  // filter: 
+  // drop-shadow(-4px -4px 10px #fff) 
+  // drop-shadow(0 0 2px #fff) 
+  // drop-shadow(0 0 10px yellowgreen) 
+  // drop-shadow(0 0 15px yellowgreen)
+  // drop-shadow(0 0 10px yellowgreen)
+  // drop-shadow(0 10px 3px #000);
 }
 
 .PubHands{

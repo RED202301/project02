@@ -1,14 +1,18 @@
 import VideoToggler from '../Buttons/ToggleButtons/VideoToggler';
 import AudioToggler from '../Buttons/ToggleButtons/AudioToggler';
 
-export default function PubTogglers({ publisher, setWebcamRunning }) {
+/** @typedef {import("openvidu-browser").Publisher} Publisher */
+
+export default function PubTogglers(
+  /** @type {{publisher:Publisher}}*/ { publisher, setWebcamRunning }
+) {
   function toggleVideo() {
     setWebcamRunning(webcamRunning => !webcamRunning);
-    publisher.stream.videoActive ? publisher.publishVideo(false) : publisher.publishVideo(true);
+    publisher.publishVideo(!publisher.stream.videoActive);
   }
 
   function toggleAudio() {
-    publisher.stream.audioActive ? publisher.publishAudio(false) : publisher.publishAudio(true);
+    publisher.publishAudio(!publisher.stream.audioActive);
   }
 
   if (publisher) {
