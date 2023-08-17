@@ -86,7 +86,7 @@ function CardFactory( ){
   }
 
   
-  console.log(responseData)
+  // console.log(responseData)
 
 
   async function fetchDeckNameData() {
@@ -177,6 +177,7 @@ function CardFactory( ){
             }}
             deckinfo={deckinfo}
             cardinfo={cardinfo}
+            // userId={userId}
             />            
              </div>
           </div>
@@ -201,7 +202,7 @@ function CardFactory( ){
     )
 }
 
-function DropdownMenu({showCard, setShowCard, deckkk, setDeckkk,fetchSomeData, deckinfo, cardinfo, setCardInfo, selectedCardIds, setSelectedCardIds, onAddToDeck }) {
+function DropdownMenu({showCard, userId, setShowCard, deckkk, setDeckkk,fetchSomeData, deckinfo, cardinfo, setCardInfo, selectedCardIds, setSelectedCardIds, onAddToDeck }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDeckName, setSelectedDeckName] = useState(null);
 
@@ -325,7 +326,7 @@ function Deckin({ userId, selectedCardId, setSelectedCardId, handleDeckCard, han
 
 
 
-function Selectin({ showCard, setShowCard, deckkk, setDeckkk, setCardInfo, deckinfo, cardinfo, userId, res, sendRequestForSelectedCardIds, onAddToDeck, fetchSomeData, selectedCardIds, setSelectedCardIds}) {
+function Selectin({ userId, showCard, setShowCard, deckkk, setDeckkk, setCardInfo, deckinfo, cardinfo, userId, res, sendRequestForSelectedCardIds, onAddToDeck, fetchSomeData, selectedCardIds, setSelectedCardIds}) {
   return (
     <div>
       <div>
@@ -460,6 +461,11 @@ function Deckmake({ userId, closeModal, fetchSomeData}) {
     } else {
       
       console.log('이미지를 선택해주세요.');
+      Swal.fire ({
+        icon:'warning',
+        title:'이미지 입력',
+        text: '이미지를 입력해주세요'
+      })
     }
     // console.log(selectedImage)
     // console.log(imageUrl)
@@ -601,13 +607,13 @@ const showTrue = () => {
         ref={fileInputRef}
         onChange={handleImageUpload}
       />
-      <div className='gridbox'>
-      <button className='button' onClick={handleCardUpload}>등록하기</button>
-      <button onClick={showCard ? showTrue: handlePreview} className='button'>
+      {/* <div className='gridboxx'> */}
+      <button className='buttonsss' onClick={handleCardUpload}>등록하기</button>
+      {/* <button onClick={showCard ? showTrue: handlePreview} className='button'>
         {showCard ? '다시 만들기' : '미리보기'}
       </button>
-      {/* <button onClick={fetchSomeData}>GET 요청 보내기</button> */}
-      </div>
+      <button onClick={fetchSomeData}>GET 요청 보내기</button> */}
+      {/* </div> */}
 
       <div className='margincard'>
         {showCard && name && imageUrl && subTitle && (
@@ -621,7 +627,7 @@ const showTrue = () => {
     </div>
   );
 }
-function CardG({cardinfo, fetchSomeData, onAddToDeck, selectedCardIds, setSelectedCardIds}) {
+function CardG({cardinfo,userId,  fetchSomeData, onAddToDeck, selectedCardIds, setSelectedCardIds}) {
   const [selectedCardId, setSelectedCardId] = useState(null);
   const [isAddToDeckButtonVisible, setIsAddToDeckButtonVisible] = useState(true);
 
@@ -1015,11 +1021,16 @@ function Carddeck({ userId, responseData, handleDeckCard, selectedCardIds, selec
     
         axios.post('https://i9e202.p.ssafy.io/api/deck', deckData)
           .then(response => {
-            // console.log('성공적으로 요청을 보냈습니다.', response.data);
+            console.log('성공적으로 요청을 보냈습니다.', response.data);
             closeModals();
           })
           .catch(error => {
             console.error('POST request failed:', error);
+            Swal.fire ({
+              icon: 'warning',
+              title: '대표카드!!',
+              text: '대표카드를 지정해주세요'
+            })
           });
       } else {
         // console.log('카드가 부족합니다.');

@@ -424,6 +424,14 @@ background-image: linear-gradient(315deg, #f0ecfc 0%, #c797eb 74%);
   height: 150px;
   text-align: center;
 }
+.buttonsss {
+  border-radius: 8px;
+  width: 90px;
+  height: 30px;
+  text-align: center;
+  padding: 2%;
+  margin-left: 33%
+}
 .button {
   
   border-radius: 6px;
@@ -431,6 +439,7 @@ background-image: linear-gradient(315deg, #f0ecfc 0%, #c797eb 74%);
   height: 30px;
   text-align: center;
   padding: 2%;
+
 
 
 }
