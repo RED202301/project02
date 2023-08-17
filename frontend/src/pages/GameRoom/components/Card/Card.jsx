@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import Back from './Back/Back';
 import Front from './Front/Front';
 import styles from './Card.module.scss';
@@ -17,20 +17,56 @@ export default function Card({
   height,
   style,
   flipped,
-  onClick,
+  handleClick,
+  onHand,
+  enrolled,
+  hidden,
+  translateX,
+  translateY,
+  offset,
+  angle,
+  selected,
+  opponent,
+  able,
 }) {
-  /** @type {React.MutableRefObject<HTMLDivElement>} */
   cardId;
+  /** @type {React.MutableRefObject<HTMLDivElement>} */
   const CardRef = useRef();
+  useEffect(() => {
+    CardRef.current.classList.remove(styles.init);
+  });
   return (
     <div
-      onClick={onClick}
-      ref={CardRef}
-      className={`${styles.Card} ${flipped && styles.flipped}`}
-      style={{ ...style, '--width': width || '200px', '--height': height || '300px' }}
+      className={`${styles.posX} ${hidden && styles.hidden}`}
+      style={{ transform: `translateX(${translateX})`, pointerEvents: opponent ? 'none' : 'all' }}
+      onClick={handleClick}
     >
-      <Back />
-      <Front {...{ mainTitle, subTitle, point, mainImgUrl }}></Front>
+      <div className={`${styles.posY}`} style={{ transform: `translateY(${translateY})` }}>
+        <div
+          onClick={handleClick}
+          ref={CardRef}
+          className={`
+      ${styles.Card} 
+      ${styles.init} 
+      ${flipped && styles.flipped} 
+      ${able && styles.able} 
+      ${onHand && styles.onHand} 
+      ${enrolled && styles.enrolled} 
+      ${selected && styles.selected} 
+      `}
+          style={{
+            ...style,
+            '--width': width || '200px',
+            '--height': height || '300px',
+            '--offset': offset || '0px',
+            '--angle': angle || 0,
+            pointerEvents: opponent ? 'none' : 'all',
+          }}
+        >
+          <Back />
+          {!opponent ? <Front {...{ mainTitle, subTitle, point, mainImgUrl }}></Front> : <></>}
+        </div>
+      </div>
     </div>
   );
 }
