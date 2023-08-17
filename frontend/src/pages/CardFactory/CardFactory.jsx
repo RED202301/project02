@@ -35,10 +35,7 @@ function CardFactory( ){
     function getUserIdFromLocalStorage() {
       return localStorage.getItem('userId');
     }
-    function getUserIdFromLocalStorage() {
-      return localStorage.getItem('userId');
-    }
-    
+ 
     useEffect(() => {
       const storedUserId = getUserIdFromLocalStorage();
       if (storedUserId) {
@@ -326,7 +323,7 @@ function Deckin({ userId, selectedCardId, setSelectedCardId, handleDeckCard, han
 
 
 
-function Selectin({ userId, showCard, setShowCard, deckkk, setDeckkk, setCardInfo, deckinfo, cardinfo, userId, res, sendRequestForSelectedCardIds, onAddToDeck, fetchSomeData, selectedCardIds, setSelectedCardIds}) {
+function Selectin({  showCard, setShowCard, deckkk, setDeckkk, setCardInfo, deckinfo, cardinfo, userId, res, sendRequestForSelectedCardIds, onAddToDeck, fetchSomeData, selectedCardIds, setSelectedCardIds}) {
   return (
     <div>
       <div>
