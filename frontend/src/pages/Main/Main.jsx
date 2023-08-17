@@ -14,9 +14,9 @@ function Main() {
   const navigate = useNavigate();
   const accessToken = window.localStorage.getItem('accessToken');
   useEffect(() => {
-    // if (!accessToken){
-    //   navigate('../')
-    // }
+    if (!accessToken){
+      navigate('../')
+    }
   })
   return (
     <div className="Main">

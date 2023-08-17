@@ -24,29 +24,31 @@
     0 0 calc(var(--font-size)*0.01) #000,
     0 calc(var(--font-size)*0.05) calc(var(--font-size)*0.03) #000;
 
-  &.on{
+  &.selected{
     text-shadow: 
     0 calc(var(--font-size)*-0.4) var(--font-size), 
-    0 0 calc(var(--font-size)*0.02), 
-    0 0 calc(var(--font-size)*0.1) skyblue,
-    0 0 calc(var(--font-size)*0.15) skyblue,
-    0 0 calc(var(--font-size)*0.01) skyblue,
+    0 0 calc(var(--font-size)*0.08), 
+    0 0 calc(var(--font-size)*0.4) #8BADD5,
+    0 0 calc(var(--font-size)*0.6) #8BADD5,
+    0 0 calc(var(--font-size)*0.04) #8BADD5,
     0 calc(var(--font-size)*0.1) calc(var(--font-size)*0.03) #000;
   }
-  // &.on{
-  //   box-shadow: 
-  //   0 calc(var(--font-size)*-0.4) var(--font-size), 
-  //   0 0 calc(var(--font-size)*0.08), 
-  //   0 0 calc(var(--font-size)*0.4) #ff4444,
-  //   0 0 calc(var(--font-size)*0.6) #ff4445,
-  //   0 0 calc(var(--font-size)*0.04) #ff4444,
-  //   0 calc(var(--font-size)*0.1) calc(var(--font-size)*0.03) #000;
-  //   text-shadow: 
-  //   0 calc(var(--font-size)*-0.4) var(--font-size), 
-  //   0 0 calc(var(--font-size)*0.08), 
-  //   0 0 calc(var(--font-size)*0.4) #ff4444,
-  //   0 0 calc(var(--font-size)*0.6) #ff4445,
-  //   0 0 calc(var(--font-size)*0.04) #ff4444,
-  //   0 calc(var(--font-size)*0.1) calc(var(--font-size)*0.03) #000;
-  // }
+  &.able{
+    text-shadow: 
+    0 calc(var(--font-size)*-0.4) var(--font-size), 
+    0 0 calc(var(--font-size)*0.08), 
+    0 0 calc(var(--font-size)*0.4) yellowgreen,
+    0 0 calc(var(--font-size)*0.6) yellowgreen,
+    0 0 calc(var(--font-size)*0.04) yellowgreen,
+    0 calc(var(--font-size)*0.1) calc(var(--font-size)*0.03) #000;
+  }
+  &.current{
+    text-shadow: 
+    0 calc(var(--font-size)*-0.4) var(--font-size), 
+    0 0 calc(var(--font-size)*0.08), 
+    0 0 calc(var(--font-size)*0.4) #F9BB3B,
+    0 0 calc(var(--font-size)*0.6) #F9BB3B,
+    0 0 calc(var(--font-size)*0.04) #F9BB3B,
+    0 calc(var(--font-size)*0.1) calc(var(--font-size)*0.03) #000;
+  }
 }

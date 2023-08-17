@@ -2,7 +2,6 @@
 $size: 150px;
 
 body {
-  font-family: 'Roboto', sans-serif;
   background-color: #FFD399;
 }
 
@@ -43,7 +42,7 @@ body {
 .cube .sides * {
   box-sizing: border-box;
   background-color: rgba(242, 119, 119, .5);
-  border: $size / 10 solid white;
+  border: calc($size / 10) solid white;
 }
 
 @mixin side($name, $rotate, $i) {
@@ -58,8 +57,8 @@ body {
   
   @keyframes #{$name}-animation {
     0% { opacity: 1; transform: #{$rotate} translateZ($size)}  
-    20% { opacity: 1; transform: #{$rotate} translateZ($size / 2)}  
-    70% {  opacity: 1; transform: #{$rotate} translateZ($size / 2) }
+    20% { opacity: 1; transform: #{$rotate} translateZ(calc($size / 2))}  
+    70% {  opacity: 1; transform: #{$rotate} translateZ(calc($size / 2)) }
     90% {  opacity: 1; transform: #{$rotate} translateZ($size) }
     100% {  opacity: 1; transform: #{$rotate} translateZ($size) }
   }

@@ -1,11 +1,18 @@
-:root{
-  font-family:Verdana, Geneva, Tahoma, sans-serif
+@font-face {
+  font-family: 'YeongdeokBlueroad';
+  src: url(../src/assets/YeongdeokBlueroad.ttf);
 }
 
+:root{
+  font-family:'YeongdeokBlueroad';
+}
+
+
 a {
+  font-family: 'YeongdeokBlueroad';
   font-weight: 500;
   /* color: #646cff; */
-  text-decoration: inherit;
+  text-decoration: none;
 }
 a:hover {
   /* color: #535bf2; */
@@ -17,15 +24,13 @@ button {
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
-  font-family: inherit;
+  font-family: 'YeongdeokBlueroad';
   cursor: pointer;
   transition: border-color 0.25s;
   background-color: transparent;
   border: solid 0.5px;
 }
-button:hover {
-  border-color: #646cff;
-}
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;

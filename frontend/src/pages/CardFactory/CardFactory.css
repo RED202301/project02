@@ -1,7 +1,9 @@
 .bold {
+  margin-top: 10px;
   margin: 5%;
   font-weight: bold;
   font-size: 20px;
+  height: 30px;
 }
 
 .factory {
@@ -9,14 +11,28 @@
   background-color: beige;
   
   margin-left: 5%;
-  margin-bottom: 5%;
+  /* margin-bottom: 5%; */
   width: 650px;
-  height: 500px;
+  height: 570px;
   border-radius: 4px;
   /* background-image:url('./deckre1.jpg'); */
   background-size: cover;
   overflow-y: scroll;
   
+}
+.factoryc {
+  border: 2px solid black;
+  background-color: beige;
+  
+  margin-left: 5%;
+  /* margin-bottom: 5%; */
+  width: 650px;
+  height: 285px;
+  border-radius: 4px;
+  /* background-image:url('./deckre1.jpg'); */
+  background-size: cover;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 #selected-card {
   border: 2px solid yellow; /* 노란 테두리 추가 */
@@ -25,7 +41,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 5%;
-  background-image: url('./cardFactory.jpg');
+  /* background-image: url('./cardFactory.jpg'); */
   background-size: cover;
   /* opacity: 90%; */
   background: linear-gradient(0deg, black 0%, black(251,75,2,1) 100%);
@@ -40,6 +56,16 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 5%;
+  /* width: 100px; */
+  
+  /* margin-left: -50%; */
+}
+.gridboxx {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10%;
+  width: 120px;
+  /* margin-left: -50%; */
 }
 
 #silverborder {
@@ -63,15 +89,18 @@
 
 /* 카드 모달 */
 .makebox {
-  margin-left: 15px;
+  margin-left:4%;
   border: 2px ;
   width: 200px;
   height: 300px;
+  z-index: 2;
   
 
 }
 
 .btn {
+  margin-top: 2%;
+  margin-bottom: 0.7%;
   width: 130px;
   height: 40px;
   color: #fff;
@@ -90,6 +119,7 @@
   outline: none;
 }
 .btn-5 {
+
   width: 130px;
   height: 40px;
   line-height: 42px;
@@ -227,21 +257,23 @@ background-image: linear-gradient(315deg, #f0ecfc 0%, #c797eb 74%);
   
 }
 .added-to-deck {
-  display: none; /* Change the background color to gray or any other style you want */
+  display: none;
+ /* Change the background color to gray or any other style you want */
   /* Add other styling properties as needed */
 }
 
 .star-container {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
   /* margin-top: 10px; */
   /* margin-right: -20%; */
+  margin-left: 5%
 }
 .star-containers {
   display: flex;
-  justify-content: flex-end;
-  margin-top: -20%;
-  margin-right: 150%;
+  justify-content: flex-start;
+  margin-top: 0%;
+  margin-left: 35%;
 }
 
 .star {
@@ -291,6 +323,7 @@ background-image: linear-gradient(315deg, #f0ecfc 0%, #c797eb 74%);
 
 .cardx:after {
   background-color: #DED966;
+
   bottom: 0;
 }
 
@@ -309,7 +342,7 @@ background-image: linear-gradient(315deg, #f0ecfc 0%, #c797eb 74%);
 .cardx .content {
   position: relative;
   /* padding: 5px; */
-  z-index: 1;
+  /* z-index: 2; */
   padding-left: 10px;
   padding-top: 10px;
   font-weight: bold;
@@ -322,6 +355,7 @@ background-image: linear-gradient(315deg, #f0ecfc 0%, #c797eb 74%);
   font-weight: bold;
   color: whitesmoke;
   font-size: 20px;
+  /* margin-left: 10px; */
 }
 
 /* Rest of your existing CSS */
@@ -336,7 +370,7 @@ background-image: linear-gradient(315deg, #f0ecfc 0%, #c797eb 74%);
 .button {
   
   border-radius: 6px;
-  width: 120px;
+  width: 90px;
   height: 30px;
   text-align: center;
   padding: 2%;
@@ -347,7 +381,7 @@ background-image: linear-gradient(315deg, #f0ecfc 0%, #c797eb 74%);
   margin-top: 5px;
   display: flex;
   width: 200px;
-  margin-left: 20px;
+  margin-left: 25px;
   justify-content: center; /* 가로 중앙 정렬 */
 }
 
@@ -381,36 +415,45 @@ background-image: linear-gradient(315deg, #f0ecfc 0%, #c797eb 74%);
   font-display: center;
 }
 
-.cardFactory {
-
+.CardFactory {
+  background-image: url('./cardFactory.jpg');
+  background-size: cover;
 }
 
 .cardd {
-  border: 2px solid black;
-  border-radius: 6px;
+  /* border: 2px solid black; */
+  border-radius: 10px;
   width: 12vw;
   height: 35vh;
-  background-color: khaki;
+  background-color: #ADBF24;
+
   position: relative; /* Make sure the position is relative */
   box-shadow: 0px 4px 8px rgba(0,0,0,0.7);
 }
 
 .cardd:before,
 .cardd:after {
+  z-index: 0;
   content: "";
   position: absolute;
   width: 100%;
-  height: 44%; /* Adjust the height of the top and bottom sections */
+  height: 42%; /* Adjust the height of the top and bottom sections */
 }
 
 .cardd:before {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
   background-color: #635348;
   top: 0;
 }
 
 .cardd:after {
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
   background-color: #DED966;
   bottom: 0;
+  /* z-index: -1; */
+
 }
 .deckbutton {
   margin-top: 1%;
@@ -427,19 +470,20 @@ background-image: linear-gradient(315deg, #f0ecfc 0%, #c797eb 74%);
 .cardd .middle-section {
   background-color: #ADBF24;
   position: absolute;
-  top: 40%; /* Adjust the position to place it between the top and bottom sections */
+  top: 10%; /* Adjust the position to place it between the top and bottom sections */
   width: 100%;
-  height: 16%;
+  height: 30%;
   /* display: flex; */
-  /* justify-content: center; */
+  /* justify-content: center;
   /* align-items: center; */
+  z-index: 1;
   margin-right: 10%;
 }
 
 .add-to-deck-button {
   width: 50px;
   height: 30px;
-  /* margin-left:5%; */
+  margin-left:5%;
   margin-top: 5%;
   font-size: 10px;
   font-weight: bold;
@@ -533,26 +577,91 @@ background: linear-gradient(0deg,  #f0ecfc 0%, #c797eb 74%);
   z-index: 1;
   /* padding-left: 1vw; */
   padding-top: 1vh;
-  font-weight: bold;
+  /* font-weight: bold; */
+  width: 25vw;
+  height: 45vh;
 
 }
 
 .cardtitled {
-  font-size:1vw;
+  display: flex;
+  font-size:1.3vw;
   text-align: center;
   width: 130px;
   height: 25px;
-  margin-left: 1%;
+  justify-content: flex-start;
+  margin-left: 5%;
+  color: white;
+  /* font-weight: bold; */
+}
+
+.cardtitl {
+  display: flex;
+  font-size:1.3vw;
+  text-align: center;
+  width: 130px;
+  height: 25px;
+  justify-content: flex-start;
+  margin-left: 5%;
+  color: white;
+  /* font-weight: bold; */
 }
 .contents {
 
-    position: relative;
+    position: absolute;
     /* padding: 5px; */
     z-index: 1;
     /* padding-left: 10px; */
     /* padding-top: 10px; */
     font-weight: bold;
   
+}
+/* DropdownMenu.css */
+.dropdown-container {
+  position: relative;
+  width: 200px;
+  margin-left: 30%;
+  
+  
+}
+
+.dropdown-button {
+  cursor: pointer;
+  padding: 10px 20px;
+  background-color: whitesmoke;
+  border: 1px solid whitesmoke;
+  margin-right: -5%;
+}
+
+.dropdown-list {
+  border-radius: 6px;
+  z-index: 1;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: whitesmoke;
+  border: 1px solid #ccc;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  height: 200px;
+  overflow-y: scroll;
+  
+}
+
+.dropdown-item {
+  cursor: pointer;
+  padding: 10px 20px;
+  transition: background-color 0.3s;
+  height: 40px;
+ 
+  
+  
+}
+
+.dropdown-item:hover {
+  background-color: #f0f0f0;
 }
 
 .yellow-stard {
@@ -564,7 +673,7 @@ background: linear-gradient(0deg,  #f0ecfc 0%, #c797eb 74%);
   color: yellow;
   transform: scale(0.6);
   margin-top:-5px;
-  margin-left: -3.5px;
+  margin-left: -7px;
 }
 .gridXX {
   width: 120px;
@@ -597,7 +706,8 @@ background: linear-gradient(0deg,  #f0ecfc 0%, #c797eb 74%);
   align-items: center;
   justify-content: center;
   margin-left: 10%;
-  transform: scale(0.6);
+  font-size: 10px;
+  transform: scale(0.7);
 }
 .repcardbox {
   background-color: beige;
@@ -611,11 +721,11 @@ background: linear-gradient(0deg,  #f0ecfc 0%, #c797eb 74%);
   /* border: 1px solid #ccc; / */
 }
 .carddeck {
-  border: 2px solid black;
+  /* border: 2px solid black; */
   border-radius: 6px;
   width: 5vw;
-  height: 12vh;
-  background-color: khaki;
+  height: 13vh;
+  background-color: #ADBF24;
   position: relative; /* Make sure the position is relative */
   box-shadow: 0px 4px 8px rgba(0,0,0,0.7);
 }
@@ -625,15 +735,20 @@ background: linear-gradient(0deg,  #f0ecfc 0%, #c797eb 74%);
   content: "";
   position: absolute;
   width: 100%;
-  height: 44%; /* Adjust the height of the top and bottom sections */
+  height: 42%;
+  /* z-index: -2; * Adjust the height of the top and bottom sections */
 }
 
 .carddeck:before {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
   background-color: #635348;
   top: 0;
 }
 
 .carddeck:after {
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
   background-color: #DED966;
   bottom: 0;
 }
@@ -641,12 +756,13 @@ background: linear-gradient(0deg,  #f0ecfc 0%, #c797eb 74%);
 .carddeck .middle-section {
   background-color: #ADBF24;
   position: absolute;
-  top: 40%; /* Adjust the position to place it between the top and bottom sections */
+  top: 10%; /* Adjust the position to place it between the top and bottom sections */
   width: 100%;
-  height: 16%;
+  height: 30%;
   /* display: flex; */
-  /* justify-content: center; */
+  /* justify-content: center;
   /* align-items: center; */
+  z-index: 1;
   margin-right: 10%;
 }
 
@@ -656,17 +772,20 @@ background: linear-gradient(0deg,  #f0ecfc 0%, #c797eb 74%);
   z-index: 1;
   padding-left: 1vw;
   padding-top: 1vh;
-  font-weight: bold;
+  /* font-weight: bold; */
 
 }
 
 .carddecktitled {
+  display: flex;
   font-size:10px;
   text-align: center;
   transform: scale(0.5);
+  justify-content: flex-start;
   margin-right: 10px;
   width: 100px;
   margin-left:-30px;
+  color: white;
 }
 
 .gridcard {
@@ -675,11 +794,24 @@ background: linear-gradient(0deg,  #f0ecfc 0%, #c797eb 74%);
   /* gap: 5%; */
 }
 .subtitle {
+  display: flex;
+  justify-content: flex-start;
   font-size: 1.3vw;
-  margin-right: 50%;
+  /* margin-right: 50%; */
+  margin-left: 5%;
   width: 120px;
   /* transform: scale(0.7); */
-  color: white;
+  color:#ADBF24;
+}
+.subtitl {
+  display: flex;
+  justify-content: flex-start;
+  font-size: 1.3vw;
+  /* margin-right: 50%; */
+  margin-left: 52%;
+  width: 120px;
+  /* transform: scale(0.7); */
+  color:#ADBF24;
 }
 .gridbutton {
   display: flex;
@@ -688,15 +820,27 @@ background: linear-gradient(0deg,  #f0ecfc 0%, #c797eb 74%);
   margin-left: 18%;
   gap:5px;
 }
-
+.titlefont {
+  color:#ADBF24;
+  display: flex;
+  justify-content: flex-start;
+  margin-left: -15%;
+  /* margin-top: 5 */
+  font-size: 10px;
+  /* font-size: 0.1vw; */
+  transform: scale(0.5);
+  
+}
 .subfont {
   display: flex;
-  font-size: 0.1vw;
-  transform: scale(0.7);
+  justify-content: flex-start;
+  /* font-size: 0.1vw; */
+  font-size: 13px;
+  /* transform: scale(0.7); */
   width: 70px;
   color: white;
-  margin-top:-10%;
-  margin-left:-4px;
+  margin-top: -10%;
+  margin-left: 32%;
 }
 
 .board {
@@ -708,13 +852,14 @@ background: linear-gradient(0deg,  #f0ecfc 0%, #c797eb 74%);
   /* opacity: 0.7; 이미지의 투명도 설정 */
   /* width: 50%; 원하는 크기로 조절 */
   /* height: 50vh; 원하는 크기로 조절 */
-  margin: auto; /* 가운데 정렬 */
+  margin: auto; 
 }
 
 .gridTitle {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  margin-top: 5%;
+  margin-top: 2%;
+  height: 50px;
 }
 
 * {
@@ -726,6 +871,8 @@ background: linear-gradient(0deg,  #f0ecfc 0%, #c797eb 74%);
 .buttons {
   margin: 10%;
   text-align: center;
+  /* margin-left: 500px; */
+  
 
 }
 
@@ -740,13 +887,15 @@ background: linear-gradient(0deg,  #f0ecfc 0%, #c797eb 74%);
   text-align:center;
   border: none;
   background-size: 300% 100%;
-  margin-top:-60%;
+  margin-top:-100%;
   border-radius: 20px;
   -moz-transition: all .4s ease-in-out;
   -o-transition: all .4s ease-in-out;
   -webkit-transition: all .4s ease-in-out;
   transition: all .4s ease-in-out;
   opacity: 80%;
+  margin-left: 100%;
+
 }
 
 .btn-hover:hover {

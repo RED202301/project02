@@ -31,7 +31,7 @@ public class Deck extends BaseTimeEntity {
     @JoinColumn(name = "card_id")
     private Card card;
 
-    @Column(name = "deck_name", length = 10)
+    @Column(name = "deck_name",unique = true, length = 10)
     private String deckName;
 
     @Column(name = "deck_desciption", length = 500)

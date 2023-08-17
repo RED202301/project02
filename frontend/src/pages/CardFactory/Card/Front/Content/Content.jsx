@@ -10,7 +10,7 @@ export default function Content({ mainTitle, subTitle, point, mainImgUrl }) {
       <div className={styles.subTitle}>&nbsp;&nbsp;{subTitle}</div>
       <div className={styles.mainTitle}>&nbsp;&nbsp;{mainTitle}</div>
       <div className={styles.point}>&nbsp;{stars}</div>
-      <div className={styles.img} style={{ backgroundImage: `url('${mainImgUrl}')` }} />
+      <div className={styles.img} style={{ backgroundImage: `url('${mainImgUrl}')`, backgroundRepeat:'no-repeat',backgroundPosition:'center center', backgroundSize:'cover', width:'180px', height:'200px'}} />
     </div>
   );
 }

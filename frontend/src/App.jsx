@@ -35,11 +35,11 @@ function App() {
             <Route path="/Tutorial" element={<Tutorial />} />
             <Route path="/Main" element={<Main/>}/>
             {/* <Route path="/RoomList" element={<RoomList />} /> */}
-            {/* <Route path="/WebMain" element={[<Header />, <WebMain />]} />
+            {/* <Route path="/WebMain" element={[<Header />, <WebMain />]} /> */}
             <Route path="/CardFactory" element={[<Header />, <CardFactory />]} />
-            <Route path="/CardMarket" element={[<Header />, <CardMarket />]} />
-            <Route path="/Mypage" element={[<Header />, <Mypage />]} />
-            <Route path="/WebMain" element={[<Header />, <WebMain />]} /> */}
+            {/* <Route path="/CardMarket" element={[<Header />, <CardMarket />]} /> */}
+            {/* <Route path="/Mypage" element={[<Header />, <Mypage />]} /> */}
+            {/* <Route path="/WebMain" element={[<Header />, <WebMain />]} /> */}
             {/* <Route path="/Room" element={<Room />} /> */}
             <Route path="/main/game" element={<Game />} />
             <Route path="/MVP" element={<MVP />} />
@@ -53,7 +53,7 @@ function App() {
 
             {/* <Route path="/Main" element={<PrivateRoute authenticated={access} component={<Main/>}/>} /> */}
             <Route path="/WebMain" element={<PrivateRoute authenticated={access} component={[<Header />, <WebMain />]}/>}/>
-            <Route path="/CardFactory" element={<PrivateRoute authenticated={access} component={[<Header />, <CardFactory />]} />}/>
+            {/* <Route path="/CardFactory" element={<PrivateRoute authenticated={access} component={[<Header />, <CardFactory />]} />}/> */}
             {/* <Route path="/CardMarket" element={<PrivateRoute authenticated={access} component={[<Header />, <CardMarket />]} />}/> */}
             {/* <Route path="/Mypage" element={<PrivateRoute authenticated={access} component={[<Header />, <Mypage />]} />}/> */}
             <Route path="/CreateRoomModal" element={<PrivateRoute authenticated={access} component={<CreateRoomModal/>} />}/>
