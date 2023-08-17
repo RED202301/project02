@@ -825,8 +825,9 @@ function CardD({ userId, fetchSomeData, onAddToDeck, res, selectedCardIds, setSe
           key={data.cardId}
           style={{ marginTop: '2%', marginLeft: '2%', width: '30%', maxWidth: '140px' }}
           onClick={() => handleCardClick(data.cardId)}
-        >
+          >
           <div className='content'>
+          <div className='cardtitled'>{truncateText(data.mainTitle, 5)}</div>
             <div className='gridXXX'>
               <div className='subtitle'>{truncateText(data.subTitle, 5)}</div>
             {selectedCardId === data.cardId && (
@@ -839,7 +840,6 @@ function CardD({ userId, fetchSomeData, onAddToDeck, res, selectedCardIds, setSe
               </button>
               )}
               </div>
-            <div className='cardtitled'>{truncateText(data.mainTitle, 5)}</div>
             <div>
               <div className='star-container'>
                 {[...Array(data.point)].map((_, index) => (
