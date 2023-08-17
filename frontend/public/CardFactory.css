@@ -1,0 +1,1141 @@
+.bold {
+  margin-top: 10px;
+  /* position: absolute; */
+  margin: 5%;
+  font-weight: bold;
+  font-size: 20px;
+  height: 40px;
+  width: 300px;
+}
+
+.factory {
+  /* border: 2px solid rgb(227, 227, 227); */
+  background-color: rgb(227, 227, 227);
+  /* border-radius: 6px; */
+  /* position: relative; */
+  margin-left: 5%;
+  /* margin-bottom: -5%; */
+  width: 650px;
+  height: 550px;
+  border-radius:16px;
+  /* background-image:url('./deckre1.jpg'); */
+  background-size: cover;
+  overflow: hidden;
+  /* overflow: scroll; */
+  /* margin-top: 2%; */
+  
+}
+.factoryc {
+  border: 2px solid black;
+  background-color: beige;
+  
+  margin-left: 5%;
+  /* margin-bottom: 5%; */
+  width: 550px;
+  height: 285px;
+  border-radius: 4px;
+  /* background-image:url('./deckre1.jpg'); */
+  background-size: cover;
+  /* overflow: scroll; */
+  overflow: hidden;
+}
+#selected-card {
+  border: 2px solid yellow; /* 노란 테두리 추가 */
+}
+.grids {
+  display: grid;
+  /* position: absolute; */
+  grid-template-columns: 3fr 1fr;
+  /* gap: 5%; */
+  /* background-image: url('./cardFactory.jpg'); */
+  background-size: cover;
+  /* opacity: 90%; */
+  background: linear-gradient(0deg, black 0%, black(251,75,2,1) 100%);
+}
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5%
+}
+.selected-cardx {
+  border: 2px solid yellow;
+  /* padding: 5px; 테두리와 카드 간의 간격을 조절 */
+}
+
+
+.gridbox {
+  margin-left: 16%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20%;
+  /* width: 100px; */
+  
+  /* margin-left: -50%; */
+}
+.gridboxx {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10%;
+  width: 120px;
+  /* margin-left: -50%; */
+}
+
+#silverborder {
+  border: 2px solid whitesmoke;
+  background-color: #515F65;
+  padding: 2%;
+  margin-left: 5%;
+  font-weight: bold;
+  margin-bottom: 2%;
+
+}
+
+
+#silverborders {
+  border: 2px solid whitesmoke;
+  background-color: beige;
+  padding: 2%;
+  margin-left: 3%;
+  font-weight: bold;
+
+}
+
+.scrollable-container {
+  width: 650px;
+  height: 550px;
+  /* overflow-x: hidden; */
+  /* border: 1px solid #ccc; */
+  position: relative;
+  border-radius: 16px;
+}
+
+.contents {
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  padding-right: 0px; /* 오른쪽에 스크롤 공간 확보 */
+  box-sizing: content-box; /* padding 포함된 크기로 계산 */
+}
+
+/* 스크롤바 스타일 */
+.contents::-webkit-scrollbar {
+  width: 7px;
+  /* height: 6px; 스크롤바 너비 */
+  /* display: none; */
+}
+
+.contents::-webkit-scrollbar-thumb {
+  background-color: #888; /* 스크롤바 색상 */
+  border-radius: 4px; /* 스크롤바 모서리 둥글게 */
+}
+
+.contents::-webkit-scrollbar-thumb:hover {
+  background-color: #555; /* 스크롤바 호버시 색상 변경 */
+}
+
+.contents::-webkit-scrollbar-track {
+  background-color: #f1f1f1; /* 스크롤바 트랙 색상 */
+  border-radius: 4px; /* 스크롤바 트랙 모서리 둥글게 */
+  display:none;
+}
+
+/* 카드 모달 */
+.makebox {
+  margin-left:4%;
+  border: 2px ;
+  width: 200px;
+  height: 300px;
+  z-index: 2;
+  /* border-radius: 30px; */
+
+}
+
+.btnd {
+  margin-top: 3%;
+  margin-bottom: 9%;
+  width: 130px;
+  height: 40px;
+  color: #fff;
+  border-radius: 5px;
+  padding: 10px 25px;
+  font-family: 'Lato', sans-serif;
+  font-weight: 500;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+   box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+   7px 7px 20px 0px rgba(0,0,0,.1),
+   4px 4px 5px 0px rgba(0,0,0,.1);
+  outline: none;
+}
+.btnd-5 {
+
+  width: 130px;
+  height: 40px;
+  line-height: 42px;
+  padding: 0;
+  border: none;
+  background: #ADBF24;
+background: linear-gradient(0deg, #ADBF24 0%, #ADBF24 100%);
+}
+.btnd-5:hover {
+  color: #ADBF24;
+  background: transparent;
+   box-shadow:none;
+}
+.btnd-5:before,
+.btnd-5:after{
+  content:'';
+  position:absolute;
+  top:0;
+  right:0;
+  height:2px;
+  width:0;
+  background:#ADBF24;
+  box-shadow:
+   -1px -1px 5px 0px #fff,
+   7px 7px 20px 0px #0003,
+   4px 4px 5px 0px #0002;
+  transition:400ms ease all;
+}
+.btnd-5:after{
+  right:inherit;
+  top:inherit;
+  left:0;
+  bottom:0;
+}
+.btnd-5:hover:before,
+.btnd-5:hover:after{
+  width:100%;
+  transition:800ms ease all;
+}
+.btnd-8 {
+  background-color: #f0ecfc;
+background-image: linear-gradient(315deg, #f0ecfc 0%, #c797eb 74%);
+  line-height: 42px;
+  padding: 0;
+  border: none;
+}
+.btnd-8 span {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.btnd-8:before,
+.btnd-8:after {
+  position: absolute;
+  content: "";
+  right: 0;
+  bottom: 0;
+  background: #c797eb;
+  /*box-shadow:  4px 4px 6px 0 rgba(255,255,255,.5),
+              -4px -4px 6px 0 rgba(116, 125, 136, .2), 
+    inset -4px -4px 6px 0 rgba(255,255,255,.5),
+    inset 4px 4px 6px 0 rgba(116, 125, 136, .3);*/
+  transition: all 0.3s ease;
+}
+.btnd-8:before{
+   height: 0%;
+   width: 2px;
+}
+.btnd-8:after {
+  width: 0%;
+  height: 2px;
+}
+.btnd-8:hover:before {
+  height: 100%;
+}
+.btnd-8:hover:after {
+  width: 100%;
+}
+.btnd-8:hover{
+  background: transparent;
+}
+.btn-8 span:hover{
+  color: #c797eb;
+}
+.btnd-8 span:before,
+.btnd-8 span:after {
+  position: absolute;
+  content: "";
+  left: 0;
+  top: 0;
+  background: #c797eb;
+  /*box-shadow:  4px 4px 6px 0 rgba(255,255,255,.5),
+              -4px -4px 6px 0 rgba(116, 125, 136, .2), 
+    inset -4px -4px 6px 0 rgba(255,255,255,.5),
+    inset 4px 4px 6px 0 rgba(116, 125, 136, .3);*/
+  transition: all 0.3s ease;
+}
+.btnd-8 span:before {
+  width: 2px;
+  height: 0%;
+}
+.btnd-8 span:after {
+  height: 2px;
+  width: 0%;
+}
+.btnd-8 span:hover:before {
+  height: 100%;
+}
+.btnd-8 span:hover:after {
+  width: 100%;
+}
+
+
+
+.showingbox {
+  border: 2px solid black;
+  border-radius: 6px;
+  width: 280px;
+  height: 40px;
+  /* margin-top: 1%; */
+
+  
+}
+.added-to-deck {
+  display: none;
+ /* Change the background color to gray or any other style you want */
+  /* Add other styling properties as needed */
+}
+
+.star-container {
+  display: flex;
+  justify-content: flex-start;
+  /* margin-top: 10px; */
+  /* margin-right: -20%; */
+  margin-left: 5%
+}
+.star-containers {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 0%;
+  margin-left: 35%;
+}
+
+.star {
+  font-size: 24px;
+  color: gray;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.yellow {
+  color: yellow;
+}
+.margincard {
+  margin-left: 250px;
+  margin-top: -400px;
+}
+.yellow-star {
+  color: yellow;
+  margin-left: 2%;
+
+}
+.shortdiv {
+  margin-top: 10px;
+}
+.cardx {
+  border: 2px solid black;
+  border-radius: 6px;
+  width: 200px;
+  height: 330px;
+  background-color: khaki;
+  position: relative; /* Make sure the position is relative */
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
+}
+
+.cardx:before,
+.cardx:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 44%; /* Adjust the height of the top and bottom sections */
+}
+
+.cardx:before {
+  background-color: #635348;
+  top: 0;
+}
+
+.cardx:after {
+  background-color: #DED966;
+
+  bottom: 0;
+}
+
+.cardx .middle-section {
+  background-color: #ADBF24;
+  position: absolute;
+  top: 40%;
+  width: 100%;
+  height: 16%;
+  /* display: flex; */
+  /* justify-content: center; */
+  /* align-items: center; */
+  margin-right: 10%;
+}
+
+.cardx .content {
+  position: relative;
+  /* padding: 5px; */
+  /* z-index: 2; */
+  padding-left: 10px;
+  padding-top: 10px;
+  font-weight: bold;
+
+}
+
+.cardtitle {
+  text-align: center;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: whitesmoke;
+  font-size: 20px;
+  /* margin-left: 10px; */
+}
+
+/* Rest of your existing CSS */
+
+
+.imagebox {
+  border: 2px solid black;
+  width: 200px;
+  height: 150px;
+  text-align: center;
+}
+.button {
+  
+  border-radius: 6px;
+  width: 90px;
+  height: 30px;
+  text-align: center;
+  padding: 2%;
+
+
+}
+.buttoncontain {
+  margin-top: 5px;
+  display: flex;
+  width: 200px;
+  margin-left: 25px;
+  justify-content: center; /* 가로 중앙 정렬 */
+}
+
+.introducebox {
+  border: 2px solid black;
+  width: 280px;
+  height: 200px;
+  border-radius: 6px;
+  margin-top: 3%;
+
+}
+
+.imgbox {
+  width: 100px;
+  height: 100px;
+}
+
+.align {
+  text-align: center;
+}
+
+.buttonX {
+  float: right;
+  margin-right: -5%;
+  margin-top: 5%;
+  width: 20px;
+  height: 20px;
+  font-size: 5px;
+  font-weight: bold;
+  /* text-align: center; */
+  font-display: center;
+}
+
+.CardFactory {
+  background-image: url('./GameRoomUp.svg');
+  background-size: cover;
+}
+.modalbox {
+  display: flex;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* border: 2px solid whitesmoke; */
+  background-color: #ADBF24;
+  width: 300px;
+  height: 450px;
+  padding-right: 2%;
+  border-radius: 6px;
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.7);
+}
+
+
+.margin {
+  margin-top:5%;
+  margin-bottom:-12%;
+}
+.modalboxs {
+  display: flex;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* border: 2px solid whitesmoke; */
+  background-color: #D0D0D0;
+  width: 300px;
+  height: 450px;
+  padding-right: 3%;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.7);
+}
+
+.cards-social {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  margin-top: 10%;
+  text-align: center;
+
+}
+/* #cs3:hover {
+  transform: scale(1.3);
+} */
+.cards-social-icon {
+  list-style: none;
+  color: white;
+  font-size: 15px;
+  display: flex;
+  /* flex-direction: column; */
+  align-items: flex-start;
+  /* margin-bottom:-2%; */
+  cursor: pointer;
+}
+#r3:hover {
+  transform: scale(1.3);
+}
+.cards-social-icon svg {
+  display: block;
+  height: 20px;
+  width: 20px;
+  fill: white;
+  
+  cursor: pointer;
+}
+
+.modalbox:before,
+.modalbox:after {
+  z-index: 0;
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 42%;
+}
+
+.modalbox:before {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  background-color: #635348;
+  top: 0;
+  z-index: -1;
+}
+
+.modalbox:after {
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+  background-color: #DED966;
+  bottom: 0;
+  z-index: -1;
+}
+.cardd {
+  /* border: 2px solid black; */
+  border-radius: 10px;
+  width: 12vw;
+  height: 25vh;
+  background-color: #ADBF24;
+
+  position: relative; /* Make sure the position is relative */
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.7);
+}
+
+.cardd:before,
+.cardd:after {
+  z-index: 0;
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 42%; /* Adjust the height of the top and bottom sections */
+}
+
+.cardd:before {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  background-color: #635348;
+  top: 0;
+}
+
+.cardd:after {
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+  background-color: #DED966;
+  bottom: 0;
+  /* z-index: -1; */
+
+}
+.deckbutton {
+  margin-top: 1%;
+  /* width: 120px; */
+  /* height: 28px; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  /* margin-left: 30%; */
+  /* transform: scale(0.7); */
+  /* transform: scale(0.7); */
+  /* margin-rig */
+}
+.deckbuttosn {
+  margin-top: -140%;
+  width: 120px;
+  height: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 50%;
+  border-radius: 12px;
+  background-color: #ADBF24;
+  color: white;
+  font-weight: bold;
+  /* font */
+  /* transform: scale(0.7); */
+  /* transform: scale(0.7); */
+  /* margin-rig */
+}
+
+.deckbuttossn {
+  margin-top: -140%;
+  width: 10px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 50%;
+  border-radius: 8px;
+  background-color: #635348;
+  border: none;
+  color: white;
+  font-weight: bold;
+  opacity: 80%;
+  /* font */
+  /* transform: scale(0.7); */
+  /* transform: scale(0.7); */
+  /* margin-rig */
+}
+
+.cardd .middle-section {
+  background-color: #ADBF24;
+  position: absolute;
+  top: 10%; /* Adjust the position to place it between the top and bottom sections */
+  width: 100%;
+  height: 30%;
+  border: 2px solid #ADBF24;
+  
+  /* display: flex; */
+  /* justify-content: center;
+  /* align-items: center; */
+  z-index: 1;
+  margin-right: 10%;
+}
+
+.add-to-deck-button {
+  width: 120px;
+  height: 30px;
+  margin-left:5%;
+  margin-top: 5%;
+  font-size: 10px;
+  font-weight: bold;
+  background-color: ivory;
+  color: #fff;
+  /* border-radius: 5px; */
+
+  font-family: 'Lato', sans-serif;
+  /* font-weight: 500; */
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+   box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+   7px 7px 20px 0px rgba(0,0,0,.1),
+   4px 4px 5px 0px rgba(0,0,0,.1);
+  outline: none;
+
+}
+.btn-12:not(:hover) {
+  display: none;
+}
+.btn-12:hover{
+  position: absolute;
+  background-color: black;
+
+  /* opacity: 70%; */
+}
+.btn-12 span {
+  /* background: #f0ecfc;
+background: linear-gradient(0deg,  #f0ecfc 0%, #c797eb 74%);
+  display: block;
+  position: absolute;
+  width: 50px;
+  height: 30px;
+  box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+   7px 7px 20px 0px rgba(0,0,0,.1),
+   4px 4px 5px 0px rgba(0,0,0,.1);
+  border-radius: 5px;
+  margin:0;
+  text-align: center;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-transition: all .3s;
+  transition: all .3s; */
+  /* background: black */
+}
+/* .btn-12 span:nth-child(1) {
+  box-shadow:
+   -7px -7px 20px 0px #fff9,
+   -4px -4px 5px 0px #fff9,
+   7px 7px 20px 0px #0002,
+   4px 4px 5px 0px #0001;
+  -webkit-transform: rotateX(90deg);
+  -moz-transform: rotateX(90deg);
+  transform: rotateX(90deg);
+  -webkit-transform-origin: 50% 50% -20px;
+  -moz-transform-origin: 50% 50% -20px;
+  transform-origin: 50% 50% -20px;
+}
+.btn-12 span:nth-child(2) {
+  -webkit-transform: rotateX(0deg);
+  -moz-transform: rotateX(0deg);
+  transform: rotateX(0deg);
+  -webkit-transform-origin: 50% 50% -20px;
+  -moz-transform-origin: 50% 50% -20px;
+  transform-origin: 50% 50% -20px;
+}
+.btn-12:hover span:nth-child(1) {
+  box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+   7px 7px 20px 0px rgba(0,0,0,.1),
+   4px 4px 5px 0px rgba(0,0,0,.1);
+  -webkit-transform: rotateX(0deg);
+  -moz-transform: rotateX(0deg);
+  transform: rotateX(0deg);
+}
+.btn-12:hover span:nth-child(2) {
+  box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+   7px 7px 20px 0px rgba(0,0,0,.1),
+   4px 4px 5px 0px rgba(0,0,0,.1);
+ color: transparent;
+  -webkit-transform: rotateX(-90deg);
+  -moz-transform: rotateX(-90deg);
+  transform: rotateX(-90deg);
+} */
+.cardd .content {
+  position: relative;
+  /* padding: 5px; */
+  z-index: 1;
+  /* padding-left: 1vw; */
+  padding-top: 1vh;
+  /* font-weight: bold; */
+  width: 25vw;
+  height: 45vh;
+
+}
+
+.cardtitled {
+  display: flex;
+  font-size:1.1vw;
+  text-align: center;
+  width: 130px;
+  height: 25px;
+  justify-content: flex-start;
+  margin-left: 5%;
+  color: white;
+  /* font-weight: bold; */
+}
+
+.cardtitl {
+  display: flex;
+  font-size:1.3vw;
+  text-align: center;
+  width: 130px;
+  height: 25px;
+  justify-content: flex-start;
+  margin-left: 5%;
+  color: white;
+  /* font-weight: bold; */
+}
+.contentss {
+
+    position: absolute;
+    /* padding: 5px; */
+    z-index: 1;
+    /* padding-left: 10px; */
+    /* padding-top: 10px; */
+    font-weight: bold;
+  
+}
+/* DropdownMenu.css */
+.dropdown-container {
+  position: relative;
+  width: 200px;
+  margin-left: 30%;
+  
+  
+}
+
+.dropdown-button {
+  cursor: pointer;
+  padding: 10px 20px;
+  background-color: whitesmoke;
+  /* border: 1px solid whitesmoke; */
+  margin-right: -5%;
+}
+
+.dropdown-list {
+  border-radius: 6px;
+  z-index: 1;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: whitesmoke;
+  border: 1px solid #ccc;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  height: 200px;
+  overflow-y: scroll;
+  
+}
+
+.dropdown-item {
+  cursor: pointer;
+  padding: 10px 20px;
+  transition: background-color 0.3s;
+  height: 40px;
+ 
+  
+  
+}
+
+.dropdown-item:hover {
+  background-color: #f0f0f0;
+}
+
+.yellow-stard {
+  font-size: 0.8vw;
+  color: yellow
+}
+.yellow-stardd {
+  font-size:0.1vw;
+  color: yellow;
+  transform: scale(0.6);
+  margin-top:-5px;
+  margin-left: -7px;
+}
+.gridXX {
+  width: 120px;
+  height: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  
+  margin-left: 25%;
+  /* gap: 50%; */
+}
+.gridXXX {
+  width: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  /* margin-left: -12%; */
+  margin-left: 3%;
+}
+
+.Xbox {
+  /* justify-content: center; */
+  /* margin-right: 5px; */
+  /* padding-left: 2px; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 200%;
+
+}
+.xbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10%;
+  font-size: 10px;
+  transform: scale(0.7);
+}
+.repcardbox {
+  background-color: beige;
+  margin-top: 5%;
+  margin-left:-30%;
+  font-weight: bold;
+  /* display: flex; */
+  align-items: center;
+  /* justify-content: center; 가로 중앙 정렬 */
+  /* height: 200px; 박스 높이 */
+  /* border: 1px solid #ccc; / */
+}
+.carddeck {
+  /* border: 2px solid black; */
+  border-radius: 6px;
+  width: 5vw;
+  height: 13vh;
+  background-color: #ADBF24;
+  position: relative; /* Make sure the position is relative */
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.7);
+}
+
+.carddeck:before,
+.carddeck:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 42%;
+  /* z-index: -2; * Adjust the height of the top and bottom sections */
+}
+
+.carddeck:before {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  background-color: #635348;
+  top: 0;
+}
+
+.carddeck:after {
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+  background-color: #DED966;
+  bottom: 0;
+}
+
+.carddeck .middle-section {
+  background-color: #ADBF24;
+  position: absolute;
+  top: 10%; /* Adjust the position to place it between the top and bottom sections */
+  width: 100%;
+  height: 30%;
+  /* display: flex; */
+  /* justify-content: center;
+  /* align-items: center; */
+  z-index: 1;
+  margin-right: 10%;
+}
+
+.carddeck .content {
+  position: relative;
+  /* padding: 5px; */
+  z-index: 1;
+  padding-left: 1vw;
+  padding-top: 1vh;
+  /* font-weight: bold; */
+
+}
+
+.carddecktitled {
+  display: flex;
+  font-size:10px;
+  text-align: center;
+  transform: scale(0.5);
+  justify-content: flex-start;
+  margin-right: 10px;
+  width: 100px;
+  margin-left:-30px;
+  color: white;
+}
+
+.gridcard {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  /* gap: 5%; */
+}
+.subtitle {
+  display: flex;
+  justify-content: flex-start;
+  font-size: 1vw;
+  /* margin-right: 50%; */
+  margin-left: 5%;
+  width: 120px;
+  /* transform: scale(0.7); */
+  color:#ADBF24;
+}
+.subtitl {
+  display: flex;
+  justify-content: flex-start;
+  font-size: 1.3vw;
+  /* margin-right: 50%; */
+  margin-left: 52%;
+  width: 120px;
+  /* transform: scale(0.7); */
+  color:#ADBF24;
+}
+.gridbutton {
+  display: flex;
+  
+  width: 100px;
+  margin-left: 18%;
+  gap:5px;
+}
+.titlefont {
+  color:#ADBF24;
+  display: flex;
+  justify-content: flex-start;
+  margin-left: -15%;
+  /* margin-top: 5 */
+  font-size: 10px;
+  /* font-size: 0.1vw; */
+  transform: scale(0.5);
+  
+}
+.subfont {
+  display: flex;
+  justify-content: flex-start;
+  /* font-size: 0.1vw; */
+  font-size: 13px;
+  /* transform: scale(0.7); */
+  width: 70px;
+  color: white;
+  margin-top: -10%;
+  margin-left: 32%;
+}
+
+.board {
+  /* background-image: url('./ssafishm.png'); */
+  background-size: contain; /* 이미지를 내부에 맞게 조절 */
+  background-repeat: no-repeat;
+  background-position: center center; /* 이미지를 가운데 정렬 */
+  /* filter: blur(5px); 이미지에 흐릿한 효과 */
+  /* opacity: 0.7; 이미지의 투명도 설정 */
+  /* width: 50%; 원하는 크기로 조절 */
+  /* height: 50vh; 원하는 크기로 조절 */
+  margin: auto; 
+}
+
+.gridTitle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  /* margin-top: 6.5%; */
+  /* height: 30px; */
+}
+.gridTitles {
+  /* margin-top: 7.5% */
+}
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.buttons {
+  margin: 10%;
+  text-align: center;
+  /* margin-left: 500px; */
+  
+
+}
+
+.btns-hover {
+  
+  width: 50px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  /* margin: 6px; */
+  height: 20px;
+  text-align:center;
+  border: none;
+  background-size: 400% 100%;
+  margin-top:15%;
+  border-radius: 12px;
+  -moz-transition: all .4s ease-in-out;
+  -o-transition: all .4s ease-in-out;
+  -webkit-transition: all .4s ease-in-out;
+  transition: all .4s ease-in-out;
+  /* opacity: 80%; */
+  margin-left: -45%;
+
+}
+
+.btns-hover:hover {
+  background-position: 100% 0;
+  -moz-transition: all .4s ease-in-out;
+  -o-transition: all .4s ease-in-out;
+  -webkit-transition: all .4s ease-in-out;
+  transition: all .4s ease-in-out;
+  display: flex;
+}
+
+
+.btns-hover:focus {
+  outline: none;
+  display: flex;
+}
+.btns-hover.color-6 {
+  /* background-image:s linear-gradient(to right, #009245, #FCEE21, #00A8C5, #D9E021); */
+  /* box-shadow: 0 4px 15px 0 rgba(83, 176, 57, 0.75); */
+  background-color: #ADBF24;
+  border: 0.5px solid white;
+}
+
+
+
+.btna-hover {
+  width: 120px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  /* margin: 6px; */
+  height: 30px;
+  text-align:center;
+  border: none;
+  background-size: 400% 100%;
+  margin-top:-20%;
+  border-radius: 12px;
+  -moz-transition: all .4s ease-in-out;
+  -o-transition: all .4s ease-in-out;
+  -webkit-transition: all .4s ease-in-out;
+  transition: all .4s ease-in-out;
+  /* opacity: 80%; */
+  margin-left: 220%;
+
+}
+
+.btna-hover:hover {
+  background-position: 100% 0;
+  -moz-transition: all .4s ease-in-out;
+  -o-transition: all .4s ease-in-out;
+  -webkit-transition: all .4s ease-in-out;
+  transition: all .4s ease-in-out;
+  display: flex;
+}
+
+
+.btna-hover:focus {
+  outline: none;
+  display: flex;
+}
+.btna-hover.color-6 {
+  /* background-image:s linear-gradient(to right, #009245, #FCEE21, #00A8C5, #D9E021); */
+  /* box-shadow: 0 4px 15px 0 rgba(83, 176, 57, 0.75); */
+  background-color: #ADBF24;
+}
