@@ -104,7 +104,7 @@
   width: 650px;
   height: 550px;
   overflow-x: hidden;
-  border: 1px solid #ccc;
+  /* border: 1px solid #ccc; */
   position: relative;
 }
 
