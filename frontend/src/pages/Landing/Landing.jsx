@@ -125,23 +125,23 @@ function Landing() {
       {/* <audio id="bgm" src="./src/assets/메인BGM.mp3" autoPlay loop controls></audio> */}
       <button onClick={playbgm}>BGM</button>
         <div className="Landing_div">
-          <div className="LOGO">
+          <div className="Landing_LOGO">
             <h1>Ssafish!</h1>
           </div>
-          <div className="PIN">
-            <div className="container">
+          <div className="Landing_PIN">
+            <div className="PIN_container">
               <input
                 required="게임 PIN"
                 type="text"
                 name="text"
-                className="input"
+                className="PIN_input"
                 value={pinNumber}
                 onChange={savePIN}
               />
               <label className="label">게임 PIN</label>
             </div>
             <Link to="">
-              <button className="btn" onClick={buttonClick}>
+              <button className="PIN_btn" style={{'color':'white'}} onClick={buttonClick}>
                 확인
               </button>
             </Link>

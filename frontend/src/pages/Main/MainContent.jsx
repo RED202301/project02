@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import './cccc.scss'
+import './MainContent.scss'
 // import CreateRoomModal from "../../components/CreateRoomModal";
 import { Link, useNavigate } from 'react-router-dom';
 import Logout from '../Login/Logout';
@@ -136,7 +136,7 @@ const Card = () => {
                </svg>
            </div>
            <br></br>
-           <div className="card-title"><Link to="/mypage">{window.localStorage.getItem('nickname')}</Link>
+           <div className="card-title">{window.localStorage.getItem('nickname')}
             </div>
            <br></br>
            <div className="card-subtitle">

@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { setCookie } from '../../components/Cookie';
 import './kakaoLogin.css';
 import Swal from 'sweetalert2';
-import Cubeloader from '../../components/cubeloader';
+import Cubeloader from '../../components/cubeloader/cubeloader';
 
 const base_url = import.meta.env.VITE_SERVER_URL;
 function Login2() {
