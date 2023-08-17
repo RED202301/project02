@@ -100,7 +100,7 @@ export default function GameRoom() {
           players.push(newPlayerMap[userId]);
         });
         // setPlayers(players);
-        console.log('입장', newPlayerMap);
+        // console.log('입장', newPlayerMap);
         return newPlayerMap;
       });
     },
@@ -117,10 +117,7 @@ export default function GameRoom() {
     },
     WAITING: () => {},
     START_GAME: (/** @type {phase}*/ phase, /** @type {cardMap} */ cardMap) => {
-      setCurrentPhase(prev => {
-        console.log(prev, '=>', phase);
-        return phase;
-      });
+      setCurrentPhase(phase);
       // setCardMap(cardMap);
       cardMapRef.current = cardMap;
       // console.log(cardMap);
@@ -129,10 +126,7 @@ export default function GameRoom() {
       setSelectedPlayer(null);
       setCurrentPlayer(null);
       setSelectedCard(null);
-      setCurrentPhase(prev => {
-        console.log(prev, '=>', phase);
-        return phase;
-      });
+      setCurrentPhase(phase);
       setPlayerMap(playerMap => {
         const newPlayerMap = { ...playerMap };
         newPlayerMap[userId].draw(cardMapRef.current[cardId]);
@@ -142,10 +136,7 @@ export default function GameRoom() {
       cardAudio.current.play();
     },
     ENROLL: (/** @type {phase}*/ phase, userId, cardId) => {
-      setCurrentPhase(prev => {
-        console.log(prev, '=>', phase);
-        return phase;
-      });
+      setCurrentPhase(phase);
       setPlayerMap(playerMap => {
         const newPlayerMap = { ...playerMap };
         newPlayerMap[userId].enroll(cardId);
@@ -154,15 +145,8 @@ export default function GameRoom() {
       cardAudio.current.play();
     },
     SELECT_PLAYER_TURN: (/** @type {phase}*/ phase, player) => {
-      setCurrentPhase(prev => {
-        console.log(prev, '=>', phase);
-        return phase;
-      });
-      setCurrentPlayer(prev => {
-        console.log(prev);
-        console.log(player);
-        return player;
-      });
+      setCurrentPhase(phase);
+      setCurrentPlayer(player);
 
       setSelectedPlayer(null);
       setSelectedCard(null);
@@ -171,50 +155,32 @@ export default function GameRoom() {
       setSelectedPlayer(player);
     },
     SELECT_PLAYER: (/** @type {phase}*/ phase, requester, responser) => {
-      setCurrentPhase(prev => {
-        console.log(prev, '=>', phase);
-        return phase;
-      });
+      setCurrentPhase(phase);
       setCurrentPlayer(requester);
       setSelectedPlayer(responser);
     },
     SELECT_CARD_TURN: (/** @type {phase}*/ phase, player) => {
-      setCurrentPhase(prev => {
-        console.log(prev, '=>', phase);
-        return phase;
-      });
+      setCurrentPhase(phase);
       setCurrentPlayer(player);
     },
     SELECT_CARD: (/** @type {phase}*/ phase, player, cardId) => {
-      setCurrentPhase(prev => {
-        console.log(prev, '=>', phase);
-        return phase;
-      });
+      setCurrentPhase(phase);
       setCurrentPlayer(player);
       setSelectedCard(cardId);
     },
     REPLY_TURN: (/** @type {phase}*/ phase, player, cardId) => {
-      setCurrentPhase(prev => {
-        console.log(prev, '=>', phase);
-        return phase;
-      });
+      setCurrentPhase(phase);
       setSelectedPlayer(player);
       setSelectedCard(cardId);
     },
     REPLY: (/** @type {phase}*/ phase, requester, responser) => {
-      setCurrentPhase(prev => {
-        console.log(prev, '=>', phase);
-        return phase;
-      });
+      setCurrentPhase(phase);
       setCurrentPlayer(requester);
       setSelectedPlayer(responser);
     },
     CARD_MOVE: (/** @type {phase}*/ phase, from, to) => {
       setGoFish(true);
-      setCurrentPhase(prev => {
-        console.log(prev, '=>', phase);
-        return phase;
-      });
+      setCurrentPhase(phase);
       setSelectedPlayer(from);
       setCurrentPlayer(to);
       setPlayerMap(playerMap => {
@@ -231,16 +197,10 @@ export default function GameRoom() {
     END_GAME: (/** @type {phase}*/ phase) => {
       setSelectedPlayer(null);
       setCurrentPlayer(null);
-      setCurrentPhase(prev => {
-        console.log(prev, '=>', phase);
-        return phase;
-      });
+      setCurrentPhase(phase);
     },
     WINNER_CEREMONY: (/** @type {phase}*/ phase, players) => {
-      setCurrentPhase(prev => {
-        console.log(prev, '=>', phase);
-        return phase;
-      });
+      setCurrentPhase(phase);
       setWinners(players);
       run();
     },

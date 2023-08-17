@@ -41,7 +41,7 @@ function CardFactory( ){
     //   }
     // }, []);
     // console.log(userId)
-    const userId = 5;
+    const userId = 6;
     const handleDeckCard = (cardId) => {
       setSelectedCardId(cardId);
       console.log('선택한 카드의 아이디:', cardId);
@@ -143,8 +143,10 @@ function CardFactory( ){
       <div>
 
     </div>
-        {dataFetched ? (
+    <div>
+
           <div className='magin'>
+            <div className='gridTitle'>
           <Selectin
             // showCard={showCard}
             DropdownMenu={DropdownMenu}
@@ -166,42 +168,24 @@ function CardFactory( ){
             deckinfo={deckinfo}
             cardinfo={cardinfo}
             />            
-             
-          </div>) : (
-          <div className='margin'>
-          <div className='gridTitle'>
-        
-          <div className='factory'>
-            <div className='grids'>
-            <h4 className='bold' style={{display:'flex', justifyContent:'flex-start', marginLeft:'30%', color:'#515F65', fontSize:'30px'}}>선택할 카드</h4>
-          <div style={{marginLeft:'-150%', marginTop: '8%'}}>
-          <DropdownMenu
-          showCard={showCard}
-          deckkk={deckkk}
-          setDeckkk={setDeckkk}
-          fetchSomeData={fetchSomeData}
-           selectedCardIds={selectedCardIds}
-          setSelectedCardIds={setSelectedCardIds}  onAddToDeck={(selectedCard) => {
-            sendRequestForSelectedCardIds(selectedCard);
-            
-          }} CardD={CardG} cardinfo={cardinfo} setCardInfo={setCardInfo} deckinfo={deckinfo}/>
+             </div>
           </div>
-          </div>
-          </div>
-        </div>
-      </div>
-      )}
-      {/* </div>       */}
-      <div style={{marginTop:'578px', marginLeft:'5%'}}>
-      <button onClick={openModal} className='btn btn-5' style={{marginLeft:'0%', marginTop:'6%'}}>카드 만들기</button>
+      {/* </div> */}
+      </div>      
+     <div>
+     <button onClick={openModal} className='btn btn-5' style={{position:'relative', marginTop:'84%'}}>카드 만들기</button>
+     </div>
+      
       {/* <button onClick={handleAddToDeck}>덱에 담기</button> */}
       {/* <button onClick={fetchSomeData}>카드 불러오기</button> */}
-      </div>
+
       {/* <button onClick={handleDeckInClick}>덱에담기</button> */}
       <Modal userId={userId} isOpen={isModalOpen} closeModal={closeModal} fetchSomeData={fetchSomeData} className='modalbox'>
         <Deckmake userId={userId} fetchSomeData={fetchSomeData} closeModal={closeModal}></Deckmake>
       </Modal>
+
       </div>
+
       </div>
         </div>
     )
@@ -324,9 +308,9 @@ function Deckin({ userId, selectedCardId, setSelectedCardId, handleDeckCard, han
 function Selectin({ deckkk, setDeckkk, setCardInfo, deckinfo, showCard, cardinfo, userId, res, sendRequestForSelectedCardIds, onAddToDeck, fetchSomeData, selectedCardIds, setSelectedCardIds}) {
   return (
     <div>
-      <div className='gridTitle'>
-        <div className='gridTitles'>
-      <div className="factory board">
+      <div>
+        <div className='gridTitles scrollable-container'>
+      <div className="factory board contents">
       <div className='grids'>
       <h4 className='bold' style={{display:'flex', justifyContent:'flex-start', marginLeft:'30%', color:'#515F65', fontSize:'30px'}}>선택할 카드</h4>
           <div style={{ marginLeft:'-150%', marginTop: '8%'}}>
@@ -967,13 +951,12 @@ function Carddeck({ userId, responseData, handleDeckCard, selectedCardIds, selec
             key={cardIndex}
             style={{ marginTop: '2%', marginLeft: '2%' }}
             >
-              <div className='contents'>
+              <div className='contentss'>
 
                   <div className='titlefont gridboxx'>
                   {truncateText(data.mainTitle, 3)}
                   {selectedCardId === data.cardId && (
                     <button
-                  style={{  width: '15px',height:'15px', fontSize: '10px',marginLeft:'30%', transform:'scale(0.5)'}}
                   className='btn-hover color-6 deckbutton added-to-deck'
                   onClick={() => handleMinusCard(data.cardId)}
                   >
