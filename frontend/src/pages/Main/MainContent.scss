@@ -17,7 +17,6 @@
     justify-content: center;
     position: absolute;
     border-radius: 25px;
-
   }
   
   .card-info {
@@ -70,9 +69,9 @@
   
   .card-title {
     color: #1b1b1b;
-    font-size: 1.5em;
+    font-size: 1.5vw;
     font-weight: 600;
-  }
+    }
   
   .card-subtitle {
     color: #515F65;
@@ -162,15 +161,15 @@
   }
   
   #cs1:hover {
-    transform: scale(2.0);
+    transform: scale(1.7);
   }
   
   #cs2:hover {
-    transform: scale(2.0);
+    transform: scale(1.7);
   }
   
   #cs3:hover {
-    transform: scale(2.0);
+    transform: scale(1.7);
   }
   
   .main:hover #c1 {
@@ -216,6 +215,9 @@
     background-color: transparent;
     box-shadow: 3px 3px 10px rgba(0,0,0,1),
     -1px -1px 6px rgba(255, 255, 255, 0.4);
+  }
+  .input_::placeholder{
+    font-family: 'YeongdeokBlueroad';
   }
   .PIN_btn {
     display: flex;

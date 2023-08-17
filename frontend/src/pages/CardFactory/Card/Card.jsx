@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import Back from './Back/Back';
 import Front from './Front/Front';
-import styles from './Card2.module.scss';
+import styles from './Card.module.scss';
 
 // /** @typedef {{cardId:number, name:string, imageUrl:string, point:number}} Card*/
 /** @typedef {{cardId:number, mainTitle:string, subTitle:string, mainImgUrl:string, point:number}} Card*/
@@ -17,28 +17,25 @@ export default function Card({
   height,
   style,
   flipped,
-  handleClick,
-  onHand,
-  enrolled,
-  hidden,
+  isOnHand,
+  onClick,
 }) {
   /** @type {React.MutableRefObject<HTMLDivElement>} */
   cardId;
   const CardRef = useRef();
   return (
     <div
-      onClick={handleClick}
+      onClick={onClick}
       ref={CardRef}
-      className={`
-      ${styles.Card} 
-      ${flipped && styles.flipped} 
-      ${onHand && styles.onHand} 
-      ${enrolled && styles.enrolled} 
-      ${hidden && styles.hidden}`}
-      style={{ ...style, '--width': width || '200px', '--height': height || '300px' }}
+      className={`${styles.Card} ${flipped && styles.flipped}`}
+      style={{ ...style, '--width': width || '200px', '--height': height || '300px' , zIndex:'1'}}
     >
       <Back />
-      <Front {...{ mainTitle, subTitle, point, mainImgUrl }}></Front>
+      {isOnHand && flipped ? (
+        <></>
+      ) : (
+        <Front {...{ mainTitle, subTitle, point, mainImgUrl }}></Front>
+      )}
     </div>
   );
 }

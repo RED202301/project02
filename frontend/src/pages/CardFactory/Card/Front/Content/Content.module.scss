@@ -55,13 +55,13 @@
         + var(--points-size)
         + calc(var(--points-size)/2)
         );
-      background-size: cover;
-      width: var(--inner-width);
-      height: calc(
-        var(--inner-height)
-        - var(--title-size) 
-        - var(--subtitle-size) 
-        - var(--points-size)
-      );
+      // background-size: cover;
+      // width: var(--inner-width);
+      // height: calc(
+      //   var(--inner-height)
+      //   - var(--title-size) 
+      //   - var(--subtitle-size) 
+      //   - var(--points-size)
+      // );
     }
 }

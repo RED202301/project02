@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import './MainContent.scss'
 // import CreateRoomModal from "../../components/CreateRoomModal";
 import { Link, useNavigate } from 'react-router-dom';
@@ -11,6 +11,16 @@ import Swal from "sweetalert2";
 const base_URL = import.meta.env.VITE_SERVER_URL;
 
 const Card = () => {
+    
+    useEffect(()=>{
+    axios.get(host_URL+`/api/deck/deckTitle`,)
+    .then(response=> {
+      for (let i = 0; i < response.data.length; i++) {
+        window.sessionStorage.setItem(`deck_${i}`,response.data[i])
+      }
+    }
+    )
+  },[])
     const navigate = useNavigate();
     const host_URL = base_URL;
     const [pinNumber, setPIN] = useState('');
@@ -26,7 +36,7 @@ const Card = () => {
             console.log(response.data);
             // setRoomId(response.data.roomId);
             const roomId = response.data.roomId;
-            const userId = window.localStorage.getItem('roomId')
+            const userId = window.localStorage.getItem('userId')
             const nickname = window.localStorage.getItem('nickname')
             // const pinNumber = response.data.pinNumber
             window.sessionStorage.setItem('roomId', roomId);

@@ -36,6 +36,7 @@ export default function Notice(
   }
 
   const notice = {
+    START_GAME: ``,
     AUTO_DRAW: `카드를 뽑는 중...`,
     ENROLL: `카드 등록 중...`,
     SELECT_PLAYER_TURN: current

@@ -73,7 +73,7 @@ export default function GameRoom() {
 
   const [webcamRunning, setWebcamRunning] = useState(true);
 
-  const [hand, setHand] = useState(true);
+  const [hidden, setHidden] = useState(false);
   const [card, setCard] = useState(true);
 
   const [view, setView] = useState(1);
@@ -126,6 +126,9 @@ export default function GameRoom() {
       // console.log(cardMap);
     },
     AUTO_DRAW: (/** @type {phase}*/ phase, userId, cardId) => {
+      setSelectedPlayer(null);
+      setCurrentPlayer(null);
+      setSelectedCard(null);
       setCurrentPhase(prev => {
         console.log(prev, '=>', phase);
         return phase;
@@ -205,9 +208,9 @@ export default function GameRoom() {
       });
       setCurrentPlayer(requester);
       setSelectedPlayer(responser);
-      setGoFish(true);
     },
     CARD_MOVE: (/** @type {phase}*/ phase, from, to) => {
+      setGoFish(true);
       setCurrentPhase(prev => {
         console.log(prev, '=>', phase);
         return phase;
@@ -226,6 +229,8 @@ export default function GameRoom() {
       cardAudio.current.play();
     },
     END_GAME: (/** @type {phase}*/ phase) => {
+      setSelectedPlayer(null);
+      setCurrentPlayer(null);
       setCurrentPhase(prev => {
         console.log(prev, '=>', phase);
         return phase;
@@ -240,13 +245,6 @@ export default function GameRoom() {
       run();
     },
   };
-
-  // const stompClient = getStomp();
-  // const { subscriberMap, session, publisher, openViduInitializer } = useOpenVidu({
-  //   sessionId: roomId,
-  //   userId,
-  //   nickname,
-  // });
 
   const [session, setSession] = useState(null);
   const [publisher, setPublisher] = useState(null);
@@ -317,7 +315,16 @@ export default function GameRoom() {
                       zIndex: 10,
                     }}
                   >
-                    <Neon fontSize={'100px'}>
+                    <Neon
+                      fontSize={'100px'}
+                      current={currentPlayer === Number(key)}
+                      selected={selectedPlayer === Number(key)}
+                      able={
+                        currentPlayer === me &&
+                        currentPhase === 'SELECT_PLAYER_TURN' &&
+                        !selectedPlayer
+                      }
+                    >
                       {JSON.parse(subscriberMap[key].stream.connection.data)['nickname']}
                     </Neon>
                   </div>
@@ -427,8 +434,9 @@ export default function GameRoom() {
           }}
         />
         <PubHandsContainer condition={currentPhase !== 'WAITING'}>
+          {/* <PubHandsContainer condition={true}> */}
           <PubHands
-            hand={hand}
+            hidden={hidden}
             current={currentPlayer === me}
             selected={selectedPlayer === me}
             currentPhase={currentPhase}
@@ -439,7 +447,7 @@ export default function GameRoom() {
           />
           <SelectCardButtonHolder
             condition={
-              hand && currentPlayer === me && currentPhase === 'SELECT_CARD_TURN' && selectedCard
+              !hidden && currentPlayer === me && currentPhase === 'SELECT_CARD_TURN' && selectedCard
             }
           >
             <HoverButton
@@ -451,7 +459,9 @@ export default function GameRoom() {
               color="yellowgreen"
             />
           </SelectCardButtonHolder>
-          <HandToggler onClick={() => setHand(hand => !hand)} />
+          <HandTogglerHolder>
+            <HandToggler onClick={() => setHidden(hidden => !hidden)} />
+          </HandTogglerHolder>
         </PubHandsContainer>
       </PubUI>
       <StartButtonHolder condition={currentPhase === 'WAITING'}>
@@ -498,6 +508,9 @@ export default function GameRoom() {
     </Container>
   );
 }
+function HandTogglerHolder({ children }) {
+  return <div className={styles.HandTogglerHolder}>{children}</div>;
+}
 
 function PubPoints({ cards }) {
   function unit(idx) {
@@ -505,24 +518,8 @@ function PubPoints({ cards }) {
     return idx - centerIdx;
   }
   function translateX(idx) {
-    return `calc(${unit(idx)}*var(--table-radius)*0.2*${
-      cards.length <= 4 ? 0.6 : 4 / (cards.length + 1)
-    })`;
-  }
-  function translateY(idx) {
-    return `calc(
-      ${1 - Math.sin(((unit(idx) * 10 + 90) / 180) * Math.PI)}
-      *var(--table-radius)
-      *${cards.length <= 4 ? 1 : 4 / (cards.length + 1)}
-      -
-      ${1 - Math.sin(((unit((cards.length - 1) / 2) * 10 + 90) / 180) * Math.PI)}
-      *var(--table-radius)
-      *${cards.length <= 4 ? 1 : 4 / (cards.length + 1)}
-      + 100px
-    )`;
-  }
-  function rotateZ(idx) {
-    return `${unit(idx) * 10 * (cards.length <= 4 ? 1 : 4 / (cards.length + 1))}deg`;
+    const offset = cards.length * 7;
+    return unit(idx) * -offset;
   }
 
   if (cards)
@@ -530,13 +527,14 @@ function PubPoints({ cards }) {
       <div className={`${styles.PubPoints}`}>
         {cards.map((card, idx) => (
           <Card
-            {...card}
             key={idx}
-            style={{
-              position: 'absolute',
-              bottom: 0,
-              translate: `${translateX(idx)} ${translateY(idx)} -100px`,
-              rotate: `z ${rotateZ(idx)}`,
+            {...{
+              ...card,
+              enrolled: true,
+              width: '200px',
+              height: '300px',
+              translateX: `${translateX(idx)}px`,
+              translateY: `100px`,
             }}
           />
         ))}
@@ -567,7 +565,7 @@ function PubHandsContainer({ condition, children }) {
 function PubHands({
   setSelectedCard,
   cards,
-  hand,
+  hidden,
   selectedCard,
   current,
   selected,
@@ -578,87 +576,118 @@ function PubHands({
     const centerIdx = (cards.length - 1) / 2;
     return idx - centerIdx;
   }
-
+  function angle(idx) {
+    return 10 * unit(idx);
+  }
+  function rad(idx) {
+    return (angle(idx) / 180) * Math.PI;
+  }
   function translateX(idx) {
-    // return `calc(${unit(idx)}*var(--table-radius)*0.2*${
-    return `calc(${unit(idx)}*var(--table-radius)*0.1*${
-      cards.length <= 4 ? 0.6 : 4 / (cards.length + 1)
-    })`;
+    return -Math.sin(rad(idx));
   }
-
   function translateY(idx) {
-    return `calc(
-      ${1 - Math.sin(((unit(idx) * 10 + 90) / 180) * Math.PI)}
-      *var(--table-radius) * 0.5
-      *${cards.length <= 4 ? 1 : 4 / (cards.length + 1)}
-      -
-      ${1 - Math.sin(((unit((cards.length - 1) / 2) * 10 + 90) / 180) * Math.PI)}
-      *var(--table-radius) * 0.5
-      *${cards.length <= 4 ? 1 : 4 / (cards.length + 1)}
-    )`;
+    return -Math.cos(rad(idx));
   }
 
-  function rotateZ(idx) {
-    return `${unit(idx) * 10 * (cards.length <= 4 ? 1 : 4 / (cards.length + 1))}deg`;
+  function getHandleClick(card) {
+    function handleClick() {
+      if (current && currentPhase === 'SELECT_CARD_TURN') setSelectedCard(card.cardId);
+      if (selected && currentPhase === 'REPLY_TURN' && selectedCard === card.cardId) {
+        setGoFish(false);
+      }
+    }
+    return handleClick;
   }
 
-  if (hand && cards)
+  // cards = [
+  //   {
+  //     cardId: 1,
+  //     mainTitle: '지젤',
+  //     subTitle: '에스파',
+  //     mainImgUrl: './지젤.webp',
+  //     point: 3,
+  //   },
+  //   {
+  //     cardId: 1,
+  //     mainTitle: '지젤',
+  //     subTitle: '에스파',
+  //     mainImgUrl: './지젤.webp',
+  //     point: 3,
+  //   },
+  //   {
+  //     cardId: 1,
+  //     mainTitle: '지젤',
+  //     subTitle: '에스파',
+  //     mainImgUrl: './지젤.webp',
+  //     point: 3,
+  //   },
+  //   {
+  //     cardId: 1,
+  //     mainTitle: '지젤',
+  //     subTitle: '에스파',
+  //     mainImgUrl: './지젤.webp',
+  //     point: 3,
+  //   },
+  //   {
+  //     cardId: 1,
+  //     mainTitle: '지젤',
+  //     subTitle: '에스파',
+  //     mainImgUrl: './지젤.webp',
+  //     point: 3,
+  //   },
+  //   {
+  //     cardId: 1,
+  //     mainTitle: '지젤',
+  //     subTitle: '에스파',
+  //     mainImgUrl: './지젤.webp',
+  //     point: 3,
+  //   },
+  //   {
+  //     cardId: 1,
+  //     mainTitle: '지젤',
+  //     subTitle: '에스파',
+  //     mainImgUrl: './지젤.webp',
+  //     point: 3,
+  //   },
+  //   {
+  //     cardId: 1,
+  //     mainTitle: '지젤',
+  //     subTitle: '에스파',
+  //     mainImgUrl: './지젤.webp',
+  //     point: 3,
+  //   },
+  //   {
+  //     cardId: 1,
+  //     mainTitle: '지젤',
+  //     subTitle: '에스파',
+  //     mainImgUrl: './지젤.webp',
+  //     point: 3,
+  //   },
+  // ];
+  if (cards)
     return (
       <div className={`${styles.PubHands}`}>
-        <div>
-          {cards.map((card, idx) => (
-            <div
-              key={idx}
-              onClick={() => {
-                if (current && currentPhase === 'SELECT_CARD_TURN') setSelectedCard(card.cardId);
-                if (selected && currentPhase === 'REPLY_TURN' && selectedCard === card.cardId) {
-                  setGoFish(false);
-                }
-              }}
-              style={{
-                pointerEvents: 'all',
-              }}
-            >
-              <Card
-                {...card}
-                width="100px"
-                height="150px"
-                style={{
-                  position: 'absolute',
-                  transformOrigin: 'bottom center',
-                  bottom: 0,
-                  filter:
-                    (current &&
-                      currentPhase === 'SELECT_CARD_TURN' &&
-                      `
-                      drop-shadow(-1.6px -1.6px 4px #fff) 
-                      drop-shadow(0 0 0.8px #fff) 
-                      drop-shadow(0 0 4px yellowgreen) 
-                      drop-shadow(0 0 6px yellowgreen)
-                      drop-shadow(0 0 4px yellowgreen)
-                      drop-shadow(0 4px 1.2px #000)
-                      `) ||
-                    (selected &&
-                      currentPhase === 'REPLY_TURN' &&
-                      selectedCard === card.cardId &&
-                      `
-                      drop-shadow(-1.6px -1.6px 4px #fff) 
-                      drop-shadow(0 0 0.8px #fff) 
-                      drop-shadow(0 0 4px yellowgreen) 
-                      drop-shadow(0 0 6px yellowgreen)
-                      drop-shadow(0 0 4px yellowgreen)
-                      drop-shadow(0 4px 1.2px #000)
-                      `),
-                  transform: `
-                  ${`translateX(calc(${translateX(idx)} - 100px))`}
-                  ${`translateY(${translateY(idx)})`}
-                  ${`rotateZ(${rotateZ(idx)})`}
-                  `,
-                }}
-              />
-            </div>
-          ))}
-        </div>
+        {cards.map((card, idx) => (
+          <Card
+            key={idx}
+            {...{
+              ...card,
+              width: '150px',
+              height: '225px',
+              onHand: true,
+              angle: `${angle(idx)}deg`,
+              offset: '50px',
+              handleClick: getHandleClick(card),
+              translateX: `${translateX(idx) * 200}px`,
+              translateY: `${translateY(idx) * 200 + 150}px`,
+              hidden,
+              selected: card.cardId === Number(selectedCard),
+              able:
+                (current && currentPhase === 'SELECT_CARD_TURN') ||
+                (selected && currentPhase === 'REPLY_TURN' && selectedCard === card.cardId),
+            }}
+          />
+        ))}
       </div>
     );
 }
@@ -681,10 +710,7 @@ function SelectedCard({ card, selectedCard }) {
   if (card && selectedCard)
     return (
       <div className={styles.SelectedCard}>
-        <Card
-          {...{ ...selectedCard, width: '200px', height: '300px' }}
-          style={{ position: 'absolute' }}
-        />
+        <Card {...{ ...selectedCard, width: '200px', height: '300px' }} />
       </div>
     );
 }
@@ -710,49 +736,41 @@ function SubHands({ cards }) {
     const centerIdx = (cards.length - 1) / 2;
     return idx - centerIdx;
   }
-
+  function angle(idx) {
+    return 10 * unit(idx);
+  }
+  function rad(idx) {
+    return (angle(idx) / 180) * Math.PI;
+  }
   function translateX(idx) {
-    // return `calc(${unit(idx)}*var(--table-radius)*0.2*${
-    return `calc(${unit(idx)}*var(--table-radius)*0.1*${
-      cards.length <= 4 ? 0.6 : 4 / (cards.length + 1)
-    })`;
+    return -Math.sin(rad(idx));
   }
-
   function translateY(idx) {
-    return `calc(
-      ${1 - Math.sin(((unit(idx) * 10 + 90) / 180) * Math.PI)}
-      *var(--table-radius) * 0.5
-      *${cards.length <= 4 ? 1 : 4 / (cards.length + 1)}
-      -
-      ${1 - Math.sin(((unit((cards.length - 1) / 2) * 10 + 90) / 180) * Math.PI)}
-      *var(--table-radius) * 0.5
-      *${cards.length <= 4 ? 1 : 4 / (cards.length + 1)}
-    )`;
+    return -Math.cos(rad(idx));
   }
 
-  function rotateZ(idx) {
-    return `${unit(idx) * 10 * (cards.length <= 4 ? 1 : 4 / (cards.length + 1))}deg`;
-  }
-
-  return (
-    <div className={`${styles.SubHands}`}>
-      {cards.map((card, idx) => (
-        <Card
-          {...card}
-          width={'150px'}
-          height={'225px'}
-          key={idx}
-          flipped={true}
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            translate: `${translateX(idx)} ${translateY(idx)} 0`,
-            rotate: `z ${rotateZ(idx)}`,
-          }}
-        />
-      ))}
-    </div>
-  );
+  if (cards)
+    return (
+      <div className={`${styles.SubHands}`}>
+        {cards.map((card, idx) => (
+          <Card
+            key={idx}
+            {...{
+              ...card,
+              width: '150px',
+              height: '225px',
+              onHand: true,
+              angle: `${angle(idx)}deg`,
+              offset: '50px',
+              translateX: `${translateX(idx) * 200}px`,
+              translateY: `${translateY(idx) * 200 + 250}px`,
+              flipped: true,
+              opponent: true,
+            }}
+          />
+        ))}
+      </div>
+    );
 }
 function SubPoints({ cards }) {
   function unit(idx) {
@@ -760,44 +778,28 @@ function SubPoints({ cards }) {
     return idx - centerIdx;
   }
   function translateX(idx) {
-    return `calc(${unit(idx)}*var(--table-radius)*0.2*${
-      cards.length <= 4 ? 0.6 : 4 / (cards.length + 1)
-    })`;
+    const offset = cards.length * 7;
+    return unit(idx) * -offset;
   }
-  function translateY(idx) {
-    return `calc(
-      ${1 - Math.sin(((unit(idx) * 10 + 90) / 180) * Math.PI)}
-      *var(--table-radius)
-      *${cards.length <= 4 ? 1 : 4 / (cards.length + 1)}
-      -
-      ${1 - Math.sin(((unit((cards.length - 1) / 2) * 10 + 90) / 180) * Math.PI)}
-      *var(--table-radius)
-      *${cards.length <= 4 ? 1 : 4 / (cards.length + 1)}
-      - 300px
-    )`;
-  }
-  function rotateZ(idx) {
-    return `${unit(idx) * 10 * (cards.length <= 4 ? 1 : 4 / (cards.length + 1))}deg`;
-  }
-  return (
-    <div className={`${styles.SubPoints}`}>
-      {cards.map((card, idx) => (
-        <Card
-          {...card}
-          key={idx}
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            rotate: `z ${rotateZ(idx)}`,
-            transform: `
-              translateX(${translateX(idx)})
-              translateY(${translateY(idx)})
-            `,
-          }}
-        />
-      ))}
-    </div>
-  );
+
+  if (cards)
+    return (
+      <div className={`${styles.SubPoints}`}>
+        {cards.map((card, idx) => (
+          <Card
+            key={idx}
+            {...{
+              ...card,
+              enrolled: true,
+              width: '200px',
+              height: '300px',
+              translateX: `${translateX(idx)}px`,
+              translateY: `-300px`,
+            }}
+          />
+        ))}
+      </div>
+    );
 }
 
 function Container({ children }) {

@@ -1,52 +1,111 @@
-.Card, .Card *{
-    --border-radius: calc(var(--w) * 0.05);
-    --w: var(--width);
-    --h: var(--height);
-    
-    --top-background-color:#635348;
-    --mid-background-color:#ADBF24;
-    --bot-background-color:#DED966;
-}
 
 
 .Card{
-    transition: rotate 1s translate 1s;
-    display: flex;
-    width: var(--w);
-    height: var(--h);
+  --border-radius: calc(var(--w) * 0.05);
+  --w: var(--width);
+  --h: var(--height);
   
-    border-radius: var(--border-radius);
-    transform-origin: center;
+  --top-background-color:#635348;
+  --mid-background-color:#ADBF24;
+  --bot-background-color:#DED966;
+  
+  * {
+    pointer-events: none;
+  }
 
-    transform-style: preserve-3d;
+  pointer-events: all;
+  position: relative;
+  bottom: 0;
+
+  transition: all 0.5s;
+  display: flex;
+  width: var(--w);
+  height: var(--h);
+
+  border-radius: var(--border-radius);
+  transform-origin: bottom;
+
+  transform-style: preserve-3d;
+  width: var(--w);
+  height: var(--h);
+  
+  perspective: 300vh;
+}
+
+
+.onHand{
+  transform: 
+    rotateZ(var(--angle))
+    ;
+    opacity: 1;
+  &.init{
+    transform: 
+    rotateZ(var(--angle))
+    translateY(calc(var(--offset)*-2))
+    ;
+    opacity: 0;
+
     &.flipped{
-        transform: rotateY(180deg);
-    }
-    width: var(--w);
-    height: var(--h);
-    // filter: 
-    // drop-shadow(-0.8px -0.8px 2px #fff) 
-    // drop-shadow(0 0 0.4px #fff) 
-    // drop-shadow(0 0 2px yellowgreen) 
-    // drop-shadow(0 0 3px yellowgreen)
-    // drop-shadow(0 0 2px yellowgreen)
-    // drop-shadow(0 2px 0.6px #000);
-    // filter: 
-    // drop-shadow(-1.6px -1.6px 4px #fff) 
-    // drop-shadow(0 0 0.8px #fff) 
-    // drop-shadow(0 0 4px yellowgreen) 
-    // drop-shadow(0 0 6px yellowgreen)
-    // drop-shadow(0 0 4px yellowgreen)
-    // drop-shadow(0 4px 1.2px #000);
+      transform: 
+      rotateZ(var(--angle))
+      translateY(calc(var(--offset)*-2))
+      rotateY(180deg);
+    }  
     
-    
-    
-    // 드래그 못하게 하기
-    -ms-user-select: none; 
-    -moz-user-select: -moz-none;
-    -khtml-user-select: none;
-    -webkit-user-select: none;
-    user-select: none;
+  } // 드로우 초기 상태
+  &.flipped{
+    transform: 
+    rotateZ(var(--angle))
+    rotateY(180deg);
+    opacity: 1;
+  }
+ 
+  
+  &:hover, &.selected{
+    transform: 
+    rotateZ(var(--angle))
+    translateY(calc(var(--offset)*-2))
+    ;
+    opacity: 1;
+  }
+}
 
-    perspective: 300vh;
+.enrolled{
+  &.init{
+    transform:
+    rotateX(-30deg);
+    opacity: 0;
+  }
+  opacity: 1;
+}
+
+.posX{
+  
+  pointer-events: all;
+  &:hover .onHand{
+    transform: 
+    rotateZ(var(--angle))
+    translateY(calc(var(--offset)*-2))
+    ;
+    opacity: 1;
+  }
+
+  &.hidden{
+    pointer-events: none;
+    opacity: 0;
+  }
+}
+
+.posY{
+  pointer-events: none;
+}
+
+.able{
+  filter: 
+    drop-shadow(-1.6px -1.6px 4px #fff) 
+    drop-shadow(0 0 0.8px #fff) 
+    drop-shadow(0 0 4px yellowgreen) 
+    drop-shadow(0 0 6px yellowgreen)
+    drop-shadow(0 0 4px yellowgreen)
+    drop-shadow(0 4px 1.2px #000);
 }
