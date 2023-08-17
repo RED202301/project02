@@ -1,10 +1,34 @@
 .header {
     height: 60px;
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-start;
     align-items: center;
-    background-color: rgb(229, 246, 251);
+    /* background-color: rgb(229, 246, 251); */
     position: sticky;
     top: 0;
     z-index: 100;
 }   
+.card-social {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-top: 10%;
+    text-align: center;
+  }
+  
+  .card-social-icon {
+    list-style: none;
+    color: #515F65;
+    font-size: 0.5em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .card-social-icon svg {
+    display: block;
+    height: 20px;
+    width: 20px;
+    fill: #515F65;
+    cursor: pointer;
+  }
