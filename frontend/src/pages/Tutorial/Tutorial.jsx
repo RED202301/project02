@@ -4,7 +4,6 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './Tutorial.css';
 import { Link } from 'react-router-dom';
-import card_image from './card-image.png';
 
 
 export default class Tutorial extends Component {
@@ -27,67 +26,98 @@ export default class Tutorial extends Component {
             <div>
               <div className="Logo">
                 <h1>튜토리얼 영상</h1>
+                <span>출처: https://www.youtube.com/watch?v=8KevEfOKJas</span>
               </div>
               <div className="Description" style={{'border':'0'}}>
                 {/* <iframe src="src/assets/고피쉬는 아이들에게 어떻게 도움이 될까요_.mp4" width='100%' height='100%'></iframe> */}
                 {/* <embed type="video/webm" src="src/assets/고피쉬는 아이들에게 어떻게 도움이 될까요_.mp4" width="100%" height="100%"  /> */}
                 <video controls controlsList="nodownload" width='auto' height='100%'>
-                  <source src='src/assets/고피쉬는 아이들에게 어떻게 도움이 될까요_.mp4' type='video/mp4'/></video>
+                  <source src='src/assets/고피쉬설명.mp4' type='video/mp4'/></video>
               </div>
             </div>
           </div>
           <div>
             <div>
               <div className="Logo">
-                <h1>카드구성</h1>
+                <h1>UI 설명 - 내 차례</h1>
               </div>
               <div className="Description">
                 <br />
-                <img className="card_image" src={card_image} />
-                <p>예시) 별 나라 수도</p>
+                <img className="tuto_img" src='src/assets/1인원선택.png' />
+                <p>질문할 플레이어를 고르는 UI</p>
+                <p>타 플레이어 주위에 초록색 표시</p>
               </div>
             </div>
           </div>
           <div>
             <div className="Logo">
-              <h1>게임목적</h1>
+            <h1>UI 설명 - 내 차례</h1>
             </div>
             <div className="Description">
-              <p>같은 단어 카드를 최대한 많이 찾으세요. </p>
-              <p>같은 단어 카드 2장을 모으면 자기 앞에 내려놓을 수 있습니다.</p>
+            <img className="tuto_img" src='src/assets/2인원선택후.png' />
+                <p>타 플레이어를 클릭하게 되면, 흰색 표시로 바뀐다</p>
+                <p>클릭한 플레이어 밑에 뜬 선택 버튼을 누르면 확정</p>
             </div>
           </div>
           <div>
             <div className="Logo">
-              <h1>게임진행</h1>
+            <h1>UI 설명 - 내 차례</h1>
             </div>
             <div className="Description">
-              <p>1. 선부터 자기 패에 있는 카드 1장을 골라 선택한다</p>
-              <p>2. 다른 플레이어 1명을 지목하여 방금 선택한 카드와 같은 카드가 있는지 질문한다.</p>
-              <p>3. 지목받은 사람이 해당 단어 카드를 가지고 있다면, 성공!</p>
-              <p>-성공 시 카드를 자기 앞에 가져오고 1번 부터 다시 반복한다</p>
-              <p>4. 실패 시, 덱에서 카드 1장을 가져오고 턴 종료</p>
+            <img className="tuto_img" src='src/assets/3카드선택.png' />
+                <p>플레이어를 선택하고 나면, 카드를 낼 수 있다</p>
+                <p>원하는 카드를 고른 후, 선택 버튼 클릭</p>
             </div>
           </div>
           <div>
             <div className="Logo">
-              <h1>게임종료와 승리조건</h1>
+            <h1>UI 설명 - 내 차례</h1>
             </div>
             <div className="Description">
-              <p>손에 카드가 1장도 없는 사람이 있다면, 즉시 게임 끝. </p>
-              <p>게임이 끝나면, 각자 자기 앞에 내려놓은 카드의 별 갯수를 더해 최종 승자를 가림!</p>
-              <p>동점이라면 손의 카드가 더 적은사람이 승자!</p>
+            <img className="tuto_img" src='src/assets/4실패후덱.png' />
+                <p>만약, 고른 상대가 내가 고른 카드를 가지고 있다면, 카드가 등록되고 한 차례 더 기회가 주어진다</p>
+                <p>이에 실패한다면, 덱에서 내 패로 카드가 한장 들어오고 턴이 종료된다</p>
             </div>
           </div>
           <div>
             <div className="Logo">
-              <h1>게임준비</h1>
+            <h1>UI 설명 - 상대방 차례</h1>
             </div>
             <div className="Description">
-              <p>4~5명이 게임을 하는 경우 50장 사용</p>
-              <p>2~3명이 게임을 하는 경우 30장 사용</p>
-              <p>한사람당 5장씩 나눠줌</p>
-              <p>남는 카드는 덱으로 사용</p>
+            <img className="tuto_img" src='src/assets/5고피쉬.png' />
+                <p>현재 턴인 타 플레이어는 노란색 표시가 된다. 만약, 상대방이 날 지목했다면, 내 화면에 흰색 표시가 생긴다 </p>
+                <p>상대방이 고른 카드가 나에게 없다면, 상대방 밑의 고피쉬 버튼을 누른다</p>
+            </div>
+          </div>
+          <div>
+            <div className="Logo">
+            <h1>UI 설명 - 상대방 차례</h1>
+            </div>
+            <div className="Description">
+            <img className="tuto_img" src='src/assets/6카드주기.png' />
+                <p>만약, 상대방이 고른 카드가 나에게 있다면,</p>
+                <p>상대방에게 주기 버튼이 생긴다</p>
+            </div>
+          </div>
+          <div>
+            <div className="Logo">
+            <h1>UI 설명 - 게임 종료</h1>
+            </div>
+            <div className="Description">
+            <img className="tuto_img" src='src/assets/7게임종료.png' />
+                <p>게임 참가자 중, 패에 카드가 없는 사람이 발생하면 게임이 종료된다</p>
+                <p>게임이 종료되면, 이펙트와 함께 화면 상단에 우승자 닉네임이 표시된다</p>
+            </div>
+          </div>
+          <div>
+            <div className="Logo">
+            </div>
+            <div className="Description">
+              <Link to="/">
+                <h1>
+                  <span>게임하러 가기</span>
+                  </h1>
+              </Link>
             </div>
           </div>
         </Slider>
@@ -96,7 +126,9 @@ export default class Tutorial extends Component {
         <br></br>
         <div className="back">
           <Link to="/">
-            <span>⬅</span>
+            <h1>
+              <span>⬅</span>
+              </h1>
           </Link>
         </div>
       </div>
