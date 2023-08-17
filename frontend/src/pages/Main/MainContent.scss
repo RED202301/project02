@@ -5,7 +5,7 @@
   
   .main_card {
     width: 16%;
-    height: 50%;
+    height: 48%;
     // background: linear-gradient(-45deg, #FFC796 0%, #ff9cb8 100%);
     // background-image: url('/table.jpg');
     // background: rgb(255, 211, 181);
@@ -161,15 +161,15 @@
   }
   
   #cs1:hover {
-    transform: scale(2.0);
+    transform: scale(1.7);
   }
   
   #cs2:hover {
-    transform: scale(2.0);
+    transform: scale(1.7);
   }
   
   #cs3:hover {
-    transform: scale(2.0);
+    transform: scale(1.7);
   }
   
   .main:hover #c1 {
@@ -215,6 +215,9 @@
     background-color: transparent;
     box-shadow: 3px 3px 10px rgba(0,0,0,1),
     -1px -1px 6px rgba(255, 255, 255, 0.4);
+  }
+  .input_::placeholder{
+    font-family: 'YeongdeokBlueroad';
   }
   .PIN_btn {
     display: flex;
