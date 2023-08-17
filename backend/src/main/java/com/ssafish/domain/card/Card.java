@@ -1,15 +1,19 @@
 package com.ssafish.domain.card;
 
 import com.ssafish.domain.BaseTimeEntity;
+import com.ssafish.domain.deck.CardDeck;
+import com.ssafish.domain.deck.Deck;
+import com.ssafish.domain.user.User;
 import com.ssafish.web.dto.CardDto;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
-//@AllArgsConstructor
 
-@ToString
 @Getter
+@Setter
 @NoArgsConstructor
 @Table(name = "Cards")
 @Entity
@@ -18,13 +22,12 @@ public class Card extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "card_id", unique = true, nullable = false)
+    @Column(name = "card_id")
     private long cardId;
 
-    //@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", unique = true, nullable = false)
-    private long userId;
-
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(name = "main_title" ,length = 15)
     private String mainTitle;
@@ -48,14 +51,18 @@ public class Card extends BaseTimeEntity {
 //    @Temporal(TemporalType.DATE)
 //    private Date createdDate;
 
+    @OneToMany(mappedBy = "card")
+    private List<CardDeck> cardDecks = new ArrayList<>();
 
+    @OneToMany(mappedBy = "card")
+    private List<Deck> decks = new ArrayList<>();
 
 
     @Builder
     public Card
-             (long cardId, long userId, String mainTitle, String subTitle,String mainImgUrl, String subImgUrl,String cardDescription, int point){
+             (long cardId, User user, String mainTitle, String subTitle,String mainImgUrl, String subImgUrl,String cardDescription, int point){
         this.cardId = cardId;
-        this.userId = userId;
+        this.user = user;
         this.mainTitle = mainTitle;
         this.subTitle = subTitle;
         this.mainImgUrl = mainImgUrl;
@@ -68,7 +75,7 @@ public class Card extends BaseTimeEntity {
     public CardDto toDto(){
         return CardDto.builder()
                 .cardId(cardId)
-                .userId(userId)
+                .userId(user.getUserId())
                 .mainTitle(mainTitle)
                 .mainImgUrl(mainImgUrl)
                 .subTitle(subTitle)

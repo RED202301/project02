@@ -50,13 +50,10 @@ pipeline {
                                  usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     script {
                         sh """
-
                         cd /var/jenkins_home/workspace/ssafish_dev/backend
-                           ./gradlew jib -Pdocker.repository=${dockerRepository} \
-                           -Pdocker.repository.username=${USERNAME} \
-                           -Pdocker.repository.password=${PASSWORD} \
-                           -Pdocker.image.name=${dockerImageName} \
-                           -Pdocker.image.tag="latest"
+                        docker build -t ${dockerRepository}/${dockerImageName} .
+                        docker login
+                        docker push ${dockerRepository}/${dockerImageName}:latest
 
                         """
 
@@ -87,8 +84,7 @@ pipeline {
 
                     sh """
                      ssh -o StrictHostKeyChecking=no ubuntu@i9e202.p.ssafy.io \
-                     '
-                     docker rm -f ${dockerImageNameFront} &&
+                     'docker rm -f ${dockerImageNameFront} &&
                       docker run -d -t -p 5173:5173 --rm --name ${dockerImageNameFront} ${dockerRepository}/${dockerImageNameFront}:latest;'
 
                     """

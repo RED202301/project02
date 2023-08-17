@@ -4,7 +4,7 @@ import com.ssafish.service.RoomService;
 import com.ssafish.web.dto.GameData;
 import com.ssafish.web.dto.GameStatus;
 import com.ssafish.web.dto.Player;
-import com.ssafish.web.dto.TypeEnum;
+import com.ssafish.web.dto.MessageType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -30,14 +30,14 @@ public class PersonChoosePhase extends Phase implements ChoosePhase {
 
         roomService.sendMessageToRoom(gameStatus.getRoomId(),
                 ResponseEntity.ok(GameData.builder()
-                                          .type(TypeEnum.SELECT_PLAYER_TURN.name())
+                                          .type(MessageType.SELECT_PLAYER_TURN.name())
                                           .player(gameStatus.getCurrentPlayer().getUserId())
                                           .build())
         );
 
         // 자동 처리 로직
         GameData gameData = GameData.builder()
-                .type(TypeEnum.SELECT_PLAYER.name())
+                .type(MessageType.SELECT_PLAYER.name())
                 .requester(gameStatus.getCurrentPlayer().getUserId())
                 .responser(randomPlayerId(gameStatus))
                 .build();
@@ -75,9 +75,9 @@ public class PersonChoosePhase extends Phase implements ChoosePhase {
 
     public void handlePub(@Payload GameData gameData, GameStatus gameStatus, ScheduledExecutorService turnTimer, CountDownLatch latch) {
         // pub 처리
-        if (TypeEnum.TEST_PLAYER.name().equals(gameData.getType())) {           // 질문 대상 떠보기
+        if (MessageType.TEST_PLAYER.name().equals(gameData.getType())) {           // 질문 대상 떠보기
             roomService.sendMessageToRoom(gameStatus.getRoomId(), ResponseEntity.ok(gameData));
-        } else if (TypeEnum.SELECT_PLAYER.name().equals(gameData.getType())) {  // 질문 대상 지목하기
+        } else if (MessageType.SELECT_PLAYER.name().equals(gameData.getType())) {  // 질문 대상 지목하기
             this.endTurn(gameData, gameStatus, turnTimer, latch);
         }
     }
