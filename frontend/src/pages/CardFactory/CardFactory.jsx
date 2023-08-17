@@ -25,36 +25,40 @@ function CardFactory( ){
     const [cardinfo, setCardInfo] = useState([]);
     const [selectedCardId, setSelectedCardId] = useState(null); // 선택한 카드의 ID 상태
     const [responseData, setResponseData] = useState([]); // GET 요청으로 받아온 데이터를 저장하는 배열
-    // const [userId, setUserId] = useState('');
+    const [userId, setUserId] = useState('');
     const [info, setInfo] = useState('');
 
     const [showCard, setShowCard] = useState(false);
-    // function getUserIdFromLocalStorage() {
-    //   return localStorage.getItem('userId');
-    // }
+    function getUserIdFromLocalStorage() {
+      return localStorage.getItem('userId');
+    }
     
-    // useEffect(() => {
-    //   const storedUserId = getUserIdFromLocalStorage();
-    //   if (storedUserId) {
-    //     setUserId(storedUserId);
-    //     console.log(setUserId)
-    //   }
-    // }, []);
+    useEffect(() => {
+      const storedUserId = getUserIdFromLocalStorage();
+      if (storedUserId) {
+        setUserId(storedUserId);
+        console.log(setUserId)
+      }
+    }, []);
     // console.log(userId)
-    const userId = 6;
+    // const userId = 6;
     const handleDeckCard = (cardId) => {
       setSelectedCardId(cardId);
-      console.log('선택한 카드의 아이디:', cardId);
+      // console.log('선택한 카드의 아이디:', cardId);
       setRecard(cardId);
     };
-  console.log(rescard)
+  // console.log(rescard)
 
   const handlerescard = () => {
     if (recard) {
       setRescard(recard);
-      console.log('대표카드가 선택되었습니다.', recard);
+      // console.log('대표카드가 선택되었습니다.', recard);
+      Swal.fire ({
+        icon: 'confirm',
+        title: '대표 카드 지정'
+      })
     } else {
-      console.log('대표 카드를 선택해주세요.');
+      // console.log('대표 카드를 선택해주세요.');
     }
   };
   function sendRequestForSelectedCardIds() {
@@ -66,7 +70,7 @@ function CardFactory( ){
     Promise.all(selectedCardIdPromises)
     .then(responses => {
       const extractedData = responses.map(response => response.data);
-      console.log('데이터 내용입니다', extractedData);
+      // console.log('데이터 내용입니다', extractedData);
       setResponseData(extractedData)
       // 여기에서 추출한 데이터를 원하는 방식으로 활용할 수 있습니다.
     })
@@ -82,7 +86,7 @@ function CardFactory( ){
   async function fetchDeckNameData() {
     try {
       const responseDeck = await axios.get(`https://i9e202.p.ssafy.io/api/deck/deckTitle`);
-      console.log('deck정보:', responseDeck.data);
+      // console.log('deck정보:', responseDeck.data);
       
       // responseDeck.data를 그대로 사용하여 deckinfo를 업데이트합니다.
       setDeckInfo(responseDeck.data);
@@ -96,16 +100,16 @@ function CardFactory( ){
     fetchDeckNameData();
   }, []);
   
-  console.log(deckinfo);
-  console.log(cardinfo);
-  console.log(deckinfo)
+  // console.log(deckinfo);
+  // console.log(cardinfo);
+  // console.log(deckinfo)
   async function fetchSomeData() {
     try {
       const response = await axios.get(`https://i9e202.p.ssafy.io/api/card/${userId}`);
       
-      console.log('GET 요청 성공:', response.data);
+      // console.log('GET 요청 성공:', response.data);
       setRes(response.data);
-      console.log(res);
+      // console.log(res);
       setDataFetched(true);
       // setFetchImg(response.data.mainImgUrl);
       // setTitle(response.data.mainTitle);
@@ -113,15 +117,15 @@ function CardFactory( ){
       console.error('GET 요청 실패:', error);
     }
   }
-    console.log(selectedCardIds)
+    // console.log(selectedCardIds)
     // console.log(res.data)
     return (
         <div className="CardFactory">
               <div className="game">
-            <Link to='/Webmain'>
+            <Link to='/Main'>
             <div id='r3' className="cards-social-icon" style={{display:'flex', justifyContent:'flex-start', width:'50px'}}>
                     <img src="src/assets/로그아웃.svg"style={{'width':'3em', marginTop:'30px', marginLeft:'30px'}} alt="z" />
-                    <p style={{marginTop:'55%'}}>GO BACK!!</p>
+                    <p style={{marginTop:'55%'}}>GO MAIN</p>
             </div>
             </Link>
             </div>
@@ -131,7 +135,7 @@ function CardFactory( ){
       <div>
       
       <Deckin setShowCard={setShowCard} userId={userId} handlerescard={handlerescard} handleDeckCard={handleDeckCard} recard={recard} setRecard={setRecard} selectedCardIds={selectedCardIds} responseData={responseData} rescard={rescard} setRescard={setRescard} setSelectedCardIds={setSelectedCardIds} selectedCardId={selectedCardId} setSelectedCardId={setSelectedCardId} sendRequestForSelectedCardIds={sendRequestForSelectedCardIds}></Deckin>
-      <button className="btnd btnd-5" onClick={openModals} style={{marginLeft:'5%'}} >덱 등록하기</button>
+      <button className="btnd btnd-5" onClick={openModals} style={{marginLeft:'5%', fontFamily:'YeongdeokBlueroad'}} >덱 등록하기</button>
       <ModalX setShowCard={setShowCard}  userId={userId} selectedCardId={selectedCardId} setSelectedCardId={setSelectedCardId} handleDeckCard={handleDeckCard} sendRequestForSelectedCardIds={sendRequestForSelectedCardIds}  setSelectedCardIds={setSelectedCardIds} isOpens={isModalOpens} closeModals={closeModals} className='modalbox' selectedCardIds={selectedCardIds} rescard={rescard}>
       <Deckintroduce setShowCard={setShowCard}  userId={userId} selectedCardId={selectedCardId} setSelectedCardId={setSelectedCardId} handleDeckCard={handleDeckCard} selectedCardIds={selectedCardIds} setSelectedCardIds={setSelectedCardIds} responseData={responseData} sendRequestForSelectedCardIds={sendRequestForSelectedCardIds} />
       </ModalX>
@@ -173,7 +177,7 @@ function CardFactory( ){
       {/* </div> */}
       </div>      
      <div>
-     <button onClick={openModal} className='btnd btnd-5' style={{position:'relative', marginTop:'84%'}}>카드 만들기</button>
+     <button onClick={openModal} className='btnd btnd-5' style={{position:'relative', fontFamily:'YeongdeokBlueroad'}}>카드 만들기</button>
      </div>
       
       {/* <button onClick={handleAddToDeck}>덱에 담기</button> */}
@@ -388,41 +392,6 @@ function Selectin({ showCard, setShowCard, deckkk, setDeckkk, setCardInfo, decki
     )
   }
 
-// 카드 만들기, 상세 모달
-
-function CardX({userId, name, point, imageUrl, subTitle }) {
-  const truncateText = (text, maxLength) => {
-    if (text.length > maxLength) {
-      return text.substring(0, maxLength) + '...';
-    }
-    return text;
-  };
-
-  return (
-    <div className='cardx'>
-      <div className='middle-section'></div>
-      <div className='content'>
-        <div className='cardtitle'>{truncateText(name, 5)}</div>
-        <div style={{display:'flex'}}>
-        <div className='cardtitle'>{truncateText(subTitle, 5)}</div>
-        <div className='star-container'>
-          {[...Array(point)].map((_, index) => (
-            <span key={index} className="yellow-star">★</span>
-          ))}
-        </div>
-        </div>
-        <div className='shortdiv'>
-          <img src={imageUrl} alt='카드 이미지' style={{ display: 'flex', width: '180px', height: '200px', borderRadius: '10px' }} />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-
-
-
-
 function Deckmake({ userId, closeModal, fetchSomeData}) {
   const fileInputRef = useRef(null);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -452,21 +421,21 @@ function Deckmake({ userId, closeModal, fetchSomeData}) {
     setImageUrl(URL.createObjectURL(file));
     event.target.value = null;
   };
-  console.log(selectedImage)
-  console.log(imageUrl)
+  // console.log(selectedImage)
+  // console.log(imageUrl)
 
   const handleStarClick = (starIndex) => {
     setSelectedStars(starIndex + 1);
   };
-  console.log(selectedImage)
-  console.log(imageUrl)
+  // console.log(selectedImage)
+  // console.log(imageUrl)
 
   const handlePreview = () => {
     if (selectedImage) {
-      console.log('선택한 이미지:', selectedImage.name);
+      // console.log('선택한 이미지:', selectedImage.name);
       setName(document.getElementById('name').value);
       setSubTitle(document.getElementById('sub_Title').value); // 수정
-      console.log('선택된 별의 갯수:', selectedStars);
+      // console.log('선택된 별의 갯수:', selectedStars);
       
       setPoint(selectedStars);
       setShowCard(true);
@@ -476,8 +445,8 @@ function Deckmake({ userId, closeModal, fetchSomeData}) {
       
       console.log('이미지를 선택해주세요.');
     }
-    console.log(selectedImage)
-    console.log(imageUrl)
+    // console.log(selectedImage)
+    // console.log(imageUrl)
   };
 
   // const [fetchImg, setFetchImg] = useState(['']);
@@ -504,7 +473,7 @@ function Deckmake({ userId, closeModal, fetchSomeData}) {
       });
   
       await fetchSomeData(); // fetchSomeData 함수 호출
-      console.log('성공적인 요청을 보냈습니다.:', response.data);
+      // console.log('성공적인 요청을 보냈습니다.:', response.data);
       setEnroll(false);
       setImageUrl(null);
       closeModal();
@@ -642,7 +611,7 @@ function CardG({cardinfo, fetchSomeData, onAddToDeck, selectedCardIds, setSelect
   const handleCardClick = (cardId) => {
     setSelectedCardId(cardId);
   };
-  console.log(selectedCardId)
+  // console.log(selectedCardId)
   
   const handleAddToDeck = () => {
     if (selectedCardId !== null) {
@@ -652,14 +621,14 @@ function CardG({cardinfo, fetchSomeData, onAddToDeck, selectedCardIds, setSelect
           const selectedCard = cardinfo.find((card) => card.cardId === selectedCardId);
           onAddToDeck(selectedCard);
         } else {
-          console.log('이미 선택된 카드입니다.');
+          // console.log('이미 선택된 카드입니다.');
           Swal.fire({
             icon: 'warning',
             text: '이미 선택된 카드입니다.'
           });
         }
       } else {
-        console.log('덱에는 최대 25개까지만 추가할 수 있습니다.');
+        // console.log('덱에는 최대 25개까지만 추가할 수 있습니다.');
         Swal.fire({
           icon: 'warning',
           title: '덱 카드 부족',
@@ -749,7 +718,7 @@ function CardD({ userId, fetchSomeData, onAddToDeck, res, selectedCardIds, setSe
   const handleCardClick = (cardId) => {
     setSelectedCardId(cardId);
   };
-  console.log(selectedCardId)
+  // console.log(selectedCardId)
   const handleDeleteCard = async () => {
     try {
       if (selectedCardId) {
@@ -761,7 +730,7 @@ function CardD({ userId, fetchSomeData, onAddToDeck, res, selectedCardIds, setSe
           });
         } else {
           const response = await axios.delete(`https://i9e202.p.ssafy.io/api/card/${selectedCardId}`);
-          console.log('카드 삭제 완료:', selectedCardId);
+          // console.log('카드 삭제 완료:', selectedCardId);
 
           setSelectedCardIds((prevSelectedCardIds) =>
             prevSelectedCardIds.filter((id) => id !== selectedCardId)
@@ -785,14 +754,14 @@ function CardD({ userId, fetchSomeData, onAddToDeck, res, selectedCardIds, setSe
           const selectedCard = res.find((card) => card.cardId === selectedCardId);
           onAddToDeck(selectedCard);
         } else {
-          console.log('이미 선택된 카드입니다.');
+          // console.log('이미 선택된 카드입니다.');
           Swal.fire({
             icon: 'warning',
             text: '이미 선택된 카드입니다.'
           });
         }
       } else {
-        console.log('덱에는 최대 25개까지만 추가할 수 있습니다.');
+        // console.log('덱에는 최대 25개까지만 추가할 수 있습니다.');
         Swal.fire({
           icon: 'warning',
           title: '덱 카드 초과',
@@ -827,19 +796,19 @@ function CardD({ userId, fetchSomeData, onAddToDeck, res, selectedCardIds, setSe
           onClick={() => handleCardClick(data.cardId)}
           >
           <div className='content'>
+          <div className='gridXXX'>
           <div className='cardtitled'>{truncateText(data.mainTitle, 5)}</div>
-            <div className='gridXXX'>
+          {selectedCardId === data.cardId && (
+              <button
+              style={{ display: 'flex', marginLeft:'25.5%', marginTop:'0%', position:'absolute',  fontSize:'10px', justifyContent:'center', alignItems:'center' }}
+            className='deckbuttossn added-to-deck'
+            onClick={() => handleDeleteCard(data.cardId)}
+            >
+            ❌
+            </button>
+            )}
+            </div>
               <div className='subtitle'>{truncateText(data.subTitle, 5)}</div>
-            {selectedCardId === data.cardId && (
-                <button
-                style={{ display: 'flex', marginLeft:'25.5%', marginTop:'0%', position:'absolute',  fontSize:'10px', justifyContent:'center', alignItems:'center' }}
-              className='deckbuttossn added-to-deck'
-              onClick={() => handleDeleteCard(data.cardId)}
-              >
-              ❌
-              </button>
-              )}
-              </div>
             <div>
               <div className='star-container'>
                 {[...Array(data.point)].map((_, index) => (
@@ -881,78 +850,6 @@ function CardD({ userId, fetchSomeData, onAddToDeck, res, selectedCardIds, setSe
   </div>
 );
 }
-//     <div>
-//       <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
-//         {res.map((data) => (
-//           <div
-//             className={`cardd ${selectedCardId === data.cardId ? 'selected-card' : ''} ${
-//               selectedCardIds.includes(data.cardId) ? 'added-to-deck' : ''
-//             }`}
-//             id={`${selectedCardId === data.cardId ? 'selected-card' : ''}`}
-//             key={data.cardId}
-//             style={{ marginTop: '2%', marginLeft: '2%', width: '30%', maxWidth: '150px' }}
-//             onClick={() => handleCardClick(data.cardId)}
-//           >
-//             <div className='content'>
-//                 <div className='gridXXX'>
-//                   <div className='subtitl'>{truncateText(data.subTitle, 5)}</div>
-//               {selectedCardId === data.cardId && (
-//                 <button
-//                 style={{width:'25px',height:'25px', fontSize: '10px'}}
-//                 className='Xbox'
-//                 onClick={() => handleDeleteCard(data.cardId)}
-//                 value={'❌'}
-//                 >
-//                   ❌ 
-//                   </button>
-//                    )}
-      
-//                   </div>
-//                    <div className='cardtitl'>{truncateText(data.mainTitle, 5)}</div>
-//               <div>
-//                 <div className='star-container'>
-//                   {[...Array(data.point)].map((_, index) => (
-//                     <span key={index} className='yellow-stard'>
-//                       ⭐
-//                     </span>
-//                   ))}
-          
-//                 </div>
-//               </div>
-//               <img
-//                 src={data.mainImgUrl}
-//                 alt=''
-//                 style={{
-//                   display: 'flex',
-//                   marginTop: '0.5vh',
-//                   width: '8vw',
-//                   height: '14vh',
-//                   // borderRadius: '10px',
-//                   marginLeft: '2.5%',
-//                   // zIndex:'1',
-                  
-//                 }}
-//                 ></img>
-//                 {selectedCardId === data.cardId && (
-//                   <button onClick={handleAddToDeck} className='btne-hover color-6 deckbutton added-to-deck' >
-
-//                     담기
-//                   </button>
-//                 )}
-//                   {/* <div style={{ display: 'flex',position:'absolute',  fontSize:'10px', justifyContent:'center', alignItems:'center' }}> */}
-    
-//                   {/* </div> */}
-
-//             </div>
-//           </div>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// }
-
-
-
 
 
 function Carddeck({ userId, responseData, handleDeckCard, selectedCardIds, selectedCardId, setSelectedCardId, recard, setRecard, fetchSomeData, rescard, setRescard, setSelectedCardIds, sendRequestForSelectedCardIds}) {
@@ -973,14 +870,14 @@ function Carddeck({ userId, responseData, handleDeckCard, selectedCardIds, selec
       await sendRequestForSelectedCardIds();
 
   
-      console.log(`카드 ${cardId}를 덱에서 제거했습니다.`);
+      // console.log(`카드 ${cardId}를 덱에서 제거했습니다.`);
       
     } catch (error) {
       console.error('오류 발생:', error);
     }
   };
-  console.log(selectedCardId)
-  console.log(recard)
+  // console.log(selectedCardId)
+  // console.log(recard)
   // const handlerescard = () => {
   //   if (recard) {
   //     setRescard(recard);
@@ -1063,18 +960,6 @@ function Carddeck({ userId, responseData, handleDeckCard, selectedCardIds, selec
                 </button>
                 )}
                 </div>
-         
-         {/* {selectedCardId === data.cardId && (
-           
-           <button
-           style={{ width: '70px', fontSize: '10px', transform: 'scale(0.5)' }}
-        className='repcardbox'
-        onClick={handlerescard}
-      >
-        대표 카드
-      </button>
-
-  )} */}
               </div>
             </div>
           ))}
@@ -1092,8 +977,8 @@ function Carddeck({ userId, responseData, handleDeckCard, selectedCardIds, selec
     // const [repCard, setRepCard] = useState(null); // 대표 카드 정보 상태
     const [repCardIdToSend, setRepCardIdToSend] = useState(''); // 대표 카드 ID 상태
 
-    console.log(rescard)
-    console.log(selectedCardIds)
+    // console.log(rescard)
+    // console.log(selectedCardIds)
 
 
 
@@ -1113,14 +998,14 @@ function Carddeck({ userId, responseData, handleDeckCard, selectedCardIds, selec
     
         axios.post('https://i9e202.p.ssafy.io/api/deck', deckData)
           .then(response => {
-            console.log('성공적으로 요청을 보냈습니다.', response.data);
+            // console.log('성공적으로 요청을 보냈습니다.', response.data);
             closeModals();
           })
           .catch(error => {
             console.error('POST request failed:', error);
           });
       } else {
-        console.log('카드가 부족합니다.');
+        // console.log('카드가 부족합니다.');
         Swal.fire({
           icon: 'warning',
           title: '덱 카드 부족',
