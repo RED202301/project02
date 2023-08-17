@@ -1,5 +1,5 @@
 import { ImageSegmenter, FilesetResolver } from '@mediapipe/tasks-vision';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import styles from './PubCam.module.scss';
 
 /** @typedef {import('openvidu-browser').Publisher} Publisher */
@@ -11,8 +11,6 @@ export default function MeidaPipe({
   selected,
   current,
 }) {
-  const [videoWidth, setVideoWidth] = useState(0);
-  const [videoHeight, setVideoHeight] = useState(0);
   const videoRef = useRef();
   /** @type {React.MutableRefObject<HTMLCanvasElement>} */
   const canvasRef = useRef();
@@ -121,8 +119,6 @@ export default function MeidaPipe({
     canvasRef.current.height = video.videoHeight;
     canvasRef2.current.width = video.videoWidth;
     canvasRef2.current.height = video.videoHeight;
-    setVideoWidth(() => video.videoWidth);
-    setVideoHeight(() => video.videoHeight);
   }
 
   useEffect(() => {
@@ -155,14 +151,10 @@ export default function MeidaPipe({
   return (
     <div className={`${styles.container}`}>
       <video className={`${mediapipe ? styles.video : ''}`} ref={videoRef} autoPlay={true} />
-      <canvas className={`${styles.canvas}`} ref={canvasRef} />
-      <div
-        className={`${styles.border} ${current ? styles.current : selected ? styles.selected : ''}`}
-        style={{
-          width: `${videoWidth}px`,
-          height: `${videoHeight}px`,
-        }}
-      ></div>
+      <canvas
+        ref={canvasRef}
+        className={`${styles.canvas} ${current && styles.current} ${selected && styles.selected}`}
+      />
     </div>
   );
 }

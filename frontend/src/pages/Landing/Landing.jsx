@@ -1,7 +1,7 @@
 import './Landing.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
@@ -15,11 +15,23 @@ function Landing() {
   const REDIRECT_URI = base_URL + '/login2'; // redirect 주소
   const KAKAO_AUTH_URI = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code&prompt=login`;
   const [pinNumber, setPIN] = useState('');
-  // const [roomId, setRoomId] = useState(null);
   const savePIN = event => {
     setPIN(event.target.value);
     // console.log(event.target.value);
   };
+
+
+  const bgm1 = new Audio('./src/assets/메인BGM.mp3')
+
+  const playbgm= () => {
+    bgm1.loop = true
+    if( bgm1.paused )
+      bgm1.play();
+    else
+      bgm1.pause();
+  }
+  useEffect(()=>{
+  })
 
   //핀번호 입력창에 핀번호 입력하고 확인 버튼(get 요청)
   const buttonClick = () => {
@@ -77,38 +89,59 @@ function Landing() {
           });
         }
       })
-      .catch(err => {
-        console.log(err);
+      .catch(res => {
         //실패 시, 접속 실패 창
-        Swal.fire({
-          icon: 'warning',
-          title: '접속 실패',
-          text: `핀번호를 다시 확인 해 주세요`,
-          confirmButtonText: '확인',
-        });
+        console.log(res);
+        if (res.response.status == '400') {
+          Swal.fire({
+            icon: 'warning',
+            iconColor: 'red',
+            title: '접속 실패',
+            text: `핀번호를 다시 확인 해 주세요`,
+            confirmButtonText: '확인',
+            width: 'auto', 
+            // background: 'url(./src/assets/배경1.jpg)',
+            color: 'black',
+            confirmButtonColor: 'black',
+          });
+        } else if (res.response.status == '403') {
+          Swal.fire({
+            icon: 'warning',
+            iconColor: 'red',
+            title: '접속 실패',
+            text: `제한 인원을 초과하였습니다`,
+            confirmButtonText: '확인',
+            width: 'auto', 
+            // background: 'url(./src/assets/배경1.jpg)',
+            color: 'black',
+            confirmButtonColor: 'black',
+          });
+      }
       });
   };
   return (
     <motion.div>
       <div className="Landing">
+      {/* <audio id="bgm" src="./src/assets/메인BGM.mp3" autoPlay loop controls></audio> */}
+      <button onClick={playbgm}>BGM</button>
         <div className="Landing_div">
-          <div className="LOGO">
+          <div className="Landing_LOGO">
             <h1>Ssafish!</h1>
           </div>
-          <div className="PIN">
-            <div className="container">
+          <div className="Landing_PIN">
+            <div className="PIN_container">
               <input
                 required="게임 PIN"
                 type="text"
                 name="text"
-                className="input"
+                className="PIN_input"
                 value={pinNumber}
                 onChange={savePIN}
               />
               <label className="label">게임 PIN</label>
             </div>
             <Link to="">
-              <button className="btn" onClick={buttonClick}>
+              <button className="PIN_btn" style={{'color':'white'}} onClick={buttonClick}>
                 확인
               </button>
             </Link>

@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { setCookie } from '../../components/Cookie';
 import './kakaoLogin.css';
 import Swal from 'sweetalert2';
-import Cubeloader from '../../components/cubeloader';
+import Cubeloader from '../../components/cubeloader/cubeloader';
 
 const base_url = import.meta.env.VITE_SERVER_URL;
 function Login2() {
@@ -48,6 +48,9 @@ function Login2() {
                 text: '닉네임을 입력 해 주세요',
                 input: 'text',
                 confirmButtonText: '등록',
+                width: 'auto', 
+                color: 'black',
+                confirmButtonColor: 'black',
               })
                 //닉네임이 입력 됐을 때,
                 .then(res => {
@@ -103,7 +106,7 @@ function Login2() {
           text: '로그인 실패',
           confirmButtonText: '확인',
         })
-        location.reload();
+        navigate('../');
       }
     })();
   }, []);
