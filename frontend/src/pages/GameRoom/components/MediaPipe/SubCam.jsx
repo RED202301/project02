@@ -1,12 +1,10 @@
 import { ImageSegmenter, FilesetResolver } from '@mediapipe/tasks-vision';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import styles from './SubCam.module.scss';
 
 /** @typedef {import('openvidu-browser').Publisher} Publisher */
 
-export default function MeidaPipe({ subscriber, mediapipe, current, selected, onClick }) {
-  const [videoWidth, setVideoWidth] = useState(0);
-  const [videoHeight, setVideoHeight] = useState(0);
+export default function MeidaPipe({ subscriber, mediapipe, current, selected, onClick, able }) {
   const videoRef = useRef();
   /** @type {React.MutableRefObject<HTMLCanvasElement>} */
   const canvasRef = useRef();
@@ -68,9 +66,7 @@ export default function MeidaPipe({ subscriber, mediapipe, current, selected, on
     canvasCtx.putImageData(faceImage, 0, 0);
     canvasCtx.restore();
 
-    if (subscriber.stream.videoActive === true) {
-      window.requestAnimationFrame(predictWebcam);
-    }
+    window.requestAnimationFrame(predictWebcam);
   }
 
   async function predictWebcam() {
@@ -78,9 +74,7 @@ export default function MeidaPipe({ subscriber, mediapipe, current, selected, on
       const video = videoRef.current;
 
       if (video.currentTime === lastWebcamTime) {
-        if (subscriber.stream.videoActive === true) {
-          window.requestAnimationFrame(predictWebcam);
-        }
+        window.requestAnimationFrame(predictWebcam);
         return;
       }
       lastWebcamTime = video.currentTime;
@@ -110,8 +104,6 @@ export default function MeidaPipe({ subscriber, mediapipe, current, selected, on
     canvasRef.current.height = video.videoHeight;
     canvasRef2.current.width = video.videoWidth;
     canvasRef2.current.height = video.videoHeight;
-    setVideoWidth(() => video.videoWidth);
-    setVideoHeight(() => video.videoHeight);
   }
 
   useEffect(() => {
@@ -136,16 +128,14 @@ export default function MeidaPipe({ subscriber, mediapipe, current, selected, on
       <div className={`${styles.SubCam}`} onClick={onClick}>
         <video className={`${mediapipe ? styles.video : ''}`} ref={videoRef} autoPlay={true} />
         {/* <video className={`${mediapipe ? styles.video : ''}`} ref={videoRef} autoPlay={true} /> */}
-        <canvas className={`${styles.canvas}`} ref={canvasRef} />
-        <div
-          className={`${styles.border} ${
-            current ? styles.current : selected ? styles.selected : ''
-          }`}
-          style={{
-            width: `${videoWidth}px`,
-            height: `${videoHeight}px`,
-          }}
-        ></div>
+        <canvas
+          className={`
+          ${styles.canvas} 
+          ${current && styles.current}  
+          ${selected && styles.selected} 
+          ${able && styles.able}`}
+          ref={canvasRef}
+        />
       </div>
     );
   }

@@ -173,10 +173,10 @@ export function subscribe(
         break;
       case WINNER_CEREMONY:
         {
-          /** @type {{type:phase, player:number}}*/
-          const { type, player } = subJson;
-          callbacks[type](type, player);
-          console.log(type, player);
+          /** @type {{type:phase, players}}*/
+          const { type, players } = subJson;
+          callbacks[type](type, players);
+          console.log(type, players);
         }
         break;
 

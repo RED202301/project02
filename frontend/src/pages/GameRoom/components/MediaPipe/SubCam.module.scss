@@ -9,13 +9,38 @@
     align-items: center;
     
     transform-origin: bottom;
-    transform: scale(2);
+    transform: scale(1.8);
     
     pointer-events: all;
 
   }
   
-.video, .canvas, .border{ position: absolute; bottom:0 }
-.border{ box-sizing: border-box; pointer-events: none;}
-.current{ border: solid 10px yellowgreen; }
-.selected{ border: solid 10px white; }
+.video, .canvas, .border{ position: absolute; bottom:0; }
+.current{ 
+  filter: 
+    drop-shadow(-1.6px -1.6px 4px #fff) 
+    drop-shadow(0 0 0.8px #fff) 
+    drop-shadow(0 0 4px #F9BB3B) 
+    drop-shadow(0 0 6px #F9BB3B)
+    drop-shadow(0 0 4px #F9BB3B)
+    drop-shadow(0 4px 1.2px #000);
+ }
+.selected{
+  filter: 
+    drop-shadow(-1.6px -1.6px 4px #fff) 
+    drop-shadow(0 0 0.8px #fff) 
+    drop-shadow(0 0 4px #8BADD5) 
+    drop-shadow(0 0 6px #8BADD5)
+    drop-shadow(0 0 4px #8BADD5)
+    drop-shadow(0 4px 1.2px #000);
+}
+
+.able{
+  filter: 
+    drop-shadow(-1.6px -1.6px 4px #fff) 
+    drop-shadow(0 0 0.8px #fff) 
+    drop-shadow(0 0 4px yellowgreen) 
+    drop-shadow(0 0 6px yellowgreen)
+    drop-shadow(0 0 4px yellowgreen)
+    drop-shadow(0 4px 1.2px #000);
+}

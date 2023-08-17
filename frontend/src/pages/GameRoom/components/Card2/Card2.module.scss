@@ -1,0 +1,79 @@
+.Card, .Card *{
+    --border-radius: calc(var(--w) * 0.05);
+    --w: var(--width);
+    --h: var(--height);
+    
+    --top-background-color:#635348;
+    --mid-background-color:#ADBF24;
+    --bot-background-color:#DED966;
+
+    user-select: none;
+
+}
+
+
+.Card{
+    transition: all 1s;
+    display: flex;
+    width: var(--w);
+    height: var(--h);
+  
+    border-radius: var(--border-radius);
+    transform-origin: center;
+
+    transform-style: preserve-3d;
+    &.flipped{
+        transform: rotateY(180deg);
+    }
+    width: var(--w);
+    height: var(--h);
+    
+    perspective: 300vh;
+}
+
+
+.onHand{
+  transition: opacity 0.5s translate 0.5s rotate 0.5s;
+  &.init{
+    translate: 
+      calc(var(--cos) * var(--offset) * 1.2)
+      calc(var(--sin) * var(--offset) * 1.2);
+    rotate: z var(--angle);
+    opacity: 0;
+    } // 드로우 초기 상태
+  &.default{
+    translate: 
+      calc(var(--cos) * var(--offset))
+      calc(var(--sin) * var(--offset));
+    rotate: z var(--angle);
+    opacity: 1;
+
+  } // 기본 상태 
+  &:hover, &.selected{
+    translate: 
+      calc(var(--cos) * var(--offset) * 1.2)
+      calc(var(--sin) * var(--offset) * 1.2);
+    rotate: z var(--angle);
+    opacity: 1;
+  }
+  &.hidden{
+    translate: 
+      calc(var(--cos) * var(--offset) * 0.8)
+      calc(var(--sin) * var(--offset) * 0.8);
+    rotate: z var(--angle);
+    opacity: 0;
+  }
+}
+
+.enrolled{
+  transition: rotate 0.5s opacity 0.5s;
+  .init{
+    rotate: x 60deg;
+    opacity: 0;
+  }
+  .default{
+    rotate: x 90deg;
+    opacity: 1;
+  }
+}
+
