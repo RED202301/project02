@@ -282,7 +282,7 @@ export default function GameRoom() {
 
   return (
     <Container>
-      <div className={styles.filter}></div>
+      {/* <div className={styles.filter}></div> */}
       <Notice
         {...{
           pinNumber,
@@ -333,21 +333,22 @@ export default function GameRoom() {
                       currentPlayer === Number(key) &&
                       currentPhase === 'REPLY_TURN' &&
                       selectedPlayer === me &&
-                      (playerMap[me].cardsOnHand.findIndex(card => card.cardId === selectedCard) ===
-                        -1 ||
+                      (playerMap[me]?.cardsOnHand?.findIndex(
+                        card => card.cardId === selectedCard
+                      ) === -1 ||
                         !goFish)
                     }
                   >
                     <HoverButton
                       text1={
-                        playerMap[me].cardsOnHand.findIndex(
+                        playerMap[me]?.cardsOnHand?.findIndex(
                           card => card.cardId === selectedCard
                         ) === -1
                           ? 'FISH!'
                           : '주기'
                       }
                       text2={
-                        playerMap[me].cardsOnHand.findIndex(
+                        playerMap[me]?.cardsOnHand?.findIndex(
                           card => card.cardId === selectedCard
                         ) === -1
                           ? 'GO'
@@ -387,8 +388,8 @@ export default function GameRoom() {
                     }}
                     mediapipe={true}
                   />
-                  <SubHands cards={playerMap[key].cardsOnHand} />
-                  <SubPoints cards={playerMap[key].cardsEnrolled} />
+                  <SubHands cards={playerMap[key]?.cardsOnHand} />
+                  <SubPoints cards={playerMap[key]?.cardsEnrolled} />
                   <SelectPlayerButtonHolder
                     condition={
                       currentPhase === 'SELECT_PLAYER_TURN' &&
