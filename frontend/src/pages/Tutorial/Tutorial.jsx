@@ -5,7 +5,6 @@ import 'slick-carousel/slick/slick-theme.css';
 import './Tutorial.css';
 import { Link } from 'react-router-dom';
 import card_image from './card-image.png';
-import ResultModal from '../../components/ResultModal';
 
 
 export default class Tutorial extends Component {
@@ -18,12 +17,25 @@ export default class Tutorial extends Component {
       slidesToScroll: 1,
       arrows: false,
       autoplay: true,
-      autoplaySpeed: 3000,
+      autoplaySpeed: 300000,
     };
     return (
-      <div className="Tutorial">
+      <div className="Tutorial" style={{}}>
         <h1 className="title"> Tutorial!</h1>
         <Slider {...settings}>
+          <div>
+            <div>
+              <div className="Logo">
+                <h1>튜토리얼 영상</h1>
+              </div>
+              <div className="Description" style={{'border':'0'}}>
+                {/* <iframe src="src/assets/고피쉬는 아이들에게 어떻게 도움이 될까요_.mp4" width='100%' height='100%'></iframe> */}
+                {/* <embed type="video/webm" src="src/assets/고피쉬는 아이들에게 어떻게 도움이 될까요_.mp4" width="100%" height="100%"  /> */}
+                <video controls controlsList="nodownload" width='auto' height='100%'>
+                  <source src='src/assets/고피쉬는 아이들에게 어떻게 도움이 될까요_.mp4' type='video/mp4'/></video>
+              </div>
+            </div>
+          </div>
           <div>
             <div>
               <div className="Logo">

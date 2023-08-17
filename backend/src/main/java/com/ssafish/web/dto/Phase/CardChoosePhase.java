@@ -3,7 +3,7 @@ package com.ssafish.web.dto.Phase;
 import com.ssafish.service.RoomService;
 import com.ssafish.web.dto.GameData;
 import com.ssafish.web.dto.GameStatus;
-import com.ssafish.web.dto.TypeEnum;
+import com.ssafish.web.dto.MessageType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +28,7 @@ public class CardChoosePhase extends Phase implements ChoosePhase {
         // 턴 시작을 알림
         roomService.sendMessageToRoom(gameStatus.getRoomId(),
                 ResponseEntity.ok(GameData.builder()
-                              .type(TypeEnum.SELECT_CARD_TURN.name())
+                              .type(MessageType.SELECT_CARD_TURN.name())
                               .player(gameStatus.getCurrentPlayer().getUserId())
                               .build())
         );
@@ -36,7 +36,7 @@ public class CardChoosePhase extends Phase implements ChoosePhase {
 
         // 자동 처리 로직
         GameData gameData = GameData.builder()
-                                    .type(TypeEnum.SELECT_CARD.name())
+                                    .type(MessageType.SELECT_CARD.name())
                                     .player(gameStatus.getCurrentPlayer().getUserId())
                                     .cardId(randomCardId((gameStatus))) // 손패에서 랜덤 카드 ID 선택
                                     .build();

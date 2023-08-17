@@ -50,7 +50,6 @@ pipeline {
                                  usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     script {
                         sh """
-
                         cd /var/jenkins_home/workspace/ssafish_dev/backend
                         docker build -t ${dockerRepository}/${dockerImageName} .
                         docker login

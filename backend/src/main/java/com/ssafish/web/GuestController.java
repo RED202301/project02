@@ -1,6 +1,7 @@
 package com.ssafish.web;
 
 import com.ssafish.service.UserService;
+import com.ssafish.web.dto.Role;
 import com.ssafish.web.dto.UserRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

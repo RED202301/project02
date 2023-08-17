@@ -1,8 +1,10 @@
 package com.ssafish.service;
 
+import com.ssafish.domain.card.CardsRepository;
 import com.ssafish.domain.user.User;
 import com.ssafish.domain.user.UserRepository;
 import com.ssafish.web.dto.KakaoUserInfo;
+import com.ssafish.web.dto.Role;
 import com.ssafish.web.dto.UserRequestDto;
 import com.ssafish.web.dto.UserResponseDto;
 import lombok.extern.slf4j.Slf4j;
@@ -19,10 +21,12 @@ import java.net.URL;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final CardsRepository cardsRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, CardsRepository cardsRepository) {
         this.userRepository = userRepository;
+        this.cardsRepository = cardsRepository;
     }
 
     public static User mapToEntity(KakaoUserInfo kakaoUserInfo, String refreshToken, String kakaoAccessToken) {
@@ -34,6 +38,7 @@ public class UserService {
         user.setProfileImgUrl(kakaoUserInfo.getProfileImgUrl());
         user.setThumbnailImgUrl(kakaoUserInfo.getThumnailImgUrl());
         user.setEmail(kakaoUserInfo.getEmail());
+        user.setRole(Role.MEMBER.name());
         return user;
     }
 
@@ -56,7 +61,7 @@ public class UserService {
         // kakao 연결 해제
         String reqURL = "https://kapi.kakao.com/v1/user/unlink";
         String kakaoAccessToken = userRepository.findByKakaoId(kakaoId).getKakaoAccessToken();
-        long userId = userRepository.findByKakaoId(kakaoId).getUserId();
+        User user = userRepository.findByKakaoId(kakaoId);
 
         try {
             URL url = new URL(reqURL);
@@ -71,8 +76,15 @@ public class UserService {
             log.info("deleteUser responseCode : " + responseCode);
 
             // DB에서 삭제
+            user.getCards().forEach(card -> {
+                        if (card.getCardDecks().isEmpty()) {
+                            cardsRepository.delete(card);
+                        } else {
+                            card.setUser(null);
+                        }
+                    });
             userRepository.deleteByKakaoId(kakaoId);
-            return userId;
+            return user.getUserId();
         } catch (IOException e) {
             e.printStackTrace();
             return -1;
@@ -84,7 +96,7 @@ public class UserService {
             throw new IllegalArgumentException("User ID cannot be null.");
         }
 
-        User user = userRepository.findById(userId).orElse(null);
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당하는 유저가 없습니다."));
         if (user == null) {
             throw new IllegalArgumentException("User not found with ID: " + userId);
         }
@@ -99,6 +111,21 @@ public class UserService {
 
     @Transactional
     public UserResponseDto create(UserRequestDto requestDto) {
+        requestDto.setRole(Role.GUEST.name());
         return UserResponseDto.from(userRepository.save(requestDto.toEntity()));
+    }
+
+    public UserResponseDto findUserById(long userId) {
+        return UserResponseDto.from(userRepository.findById(userId).orElseThrow());
+    }
+
+    public long deleteGuest(long userId) {
+        try {
+            userRepository.deleteById(userId);
+            return userId;
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            return -1L;
+        }
     }
 }

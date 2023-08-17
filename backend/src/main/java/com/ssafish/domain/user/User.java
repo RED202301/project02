@@ -1,11 +1,15 @@
 package com.ssafish.domain.user;
 
 import com.ssafish.domain.BaseTimeEntity;
+import com.ssafish.domain.card.Card;
+import com.ssafish.domain.deck.CardDeck;
+import com.ssafish.domain.deck.Deck;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
-@ToString
 @Getter
 @Data
 @Table(name = "User")
@@ -15,7 +19,7 @@ public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id", unique = true, nullable = false)
+    @Column(name = "user_id")
     private Long userId;
 
     @Column(name = "username", length=10)
@@ -55,14 +59,23 @@ public class User extends BaseTimeEntity {
     @Column(name = "play_count")
     private int playCount;
 
+    @Column(name = "role")
+    private String role;
+
 //    @Column(name = "create_date")
 //    @Temporal(TemporalType.DATE)
 //    private LocalDateTime createdDate; //Date -> LocalDateTime
 
+    @OneToMany(mappedBy = "user")
+    private List<Card> cards = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Deck> decks = new ArrayList<>();
+
     @Builder
     public User(long userId, long kakaoId, String nickname, String profileImgUrl,
          String thumbnailImgUrl, String email, String refreshToken, String kakaoAccessToken,
-         boolean isDefaultImage, boolean isLogin, int totalPoint , int playCount) {
+         boolean isDefaultImage, boolean isLogin, int totalPoint , int playCount, String role) {
 
         this.userId = userId;
         this.kakaoId = kakaoId;
@@ -76,6 +89,7 @@ public class User extends BaseTimeEntity {
         this.isLogin = isLogin;
         this.totalPoint = totalPoint;
         this.playCount = playCount;
+        this.role = role;
     }
 
 }
