@@ -73,17 +73,17 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
-jib {
-
-    to {
-        //ops!
-        image = "qortn365/ssafish"
-        //dev
-        //image = "qortn365/ssafish_dev"
-        tags = ["latest"]
-        auth{
-            username = "qortn365"
-            password = "livecream0102!!"
-        }
-    }
-}
+//jib {
+//
+//    to {
+//        //ops!
+//        image = "/ssafish"
+//        //dev
+//        //image = "/ssafish_dev"
+//        tags = ["latest"]
+//        auth{
+//            username = ""
+//            password = ""
+//        }
+//    }
+//}
