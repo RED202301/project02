@@ -247,10 +247,10 @@ function DropdownMenu({showCard, userId, setShowCard, deckkk, setDeckkk,fetchSom
     }
   };
     
-  useEffect(() => {
-    // Attach click event listener to document when the component mounts
-    handleclick();
-  }, []);
+  // useEffect(() => {
+  //   // Attach click event listener to document when the component mounts
+  //   handleclick();
+  // }, []);
 
   return (
     <div className="dropdown-container" style={{ zIndex: '2' }} ref={dropdownRef}>
@@ -478,20 +478,21 @@ function Deckmake({ userId, closeModal, fetchSomeData}) {
       // setShowCard(true);
       setEnroll(true);
       const formData = new FormData();
-    formData.append('mainTitle', name);
-    formData.append('point', point);
-    formData.append('subTitle', subTitle);
-    formData.append('MainImg', selectedImage);
-    formData.append('userId', userId);
+      formData.append('mainTitle', name);
+      formData.append('point', point);
+      formData.append('subTitle', subTitle);
+      formData.append('MainImg', selectedImage);
+      formData.append('userId', userId);
   
-    try {
-      const response = await axios.post('https://i9e202.p.ssafy.io/api/card', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      try {
+        const response = await axios.post('https://i9e202.p.ssafy.io/api/card', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data', // Content-Type 설정
+          },
+        });
+      
+         // fetchSomeData 함수 호출
   
-      await fetchSomeData(); // fetchSomeData 함수 호출
       // console.log('성공적인 요청을 보냈습니다.:', response.data);
       setEnroll(false);
       setImageUrl(null);
@@ -499,6 +500,8 @@ function Deckmake({ userId, closeModal, fetchSomeData}) {
       handleReset();
     } catch (error) {
       console.error('POST 과정 중 실패하였습니다.:', error);
+      console.error('오류 발생:', error.message); // 오류 메시지 출력
+      console.error('오류 상세정보:', error.config);
     }
   }else{
       Swal.fire({
@@ -510,7 +513,9 @@ function Deckmake({ userId, closeModal, fetchSomeData}) {
     }};
 
   
-  
+    useEffect(() => {
+    fetchSomeData();
+  }, [handleCardUpload]);
     
   
   
@@ -794,13 +799,15 @@ function CardD({ userId, fetchSomeData, onAddToDeck, res, selectedCardIds, setSe
     }
     
   };
-  const [dis, setDis] = useState(false);
-  const truncateText = (text, maxLength) => {
-    if (text.length > maxLength) {
-      return text.substring(0, maxLength) + '...';
-    }
-    return text;
-  };
+
+  // const truncateText = (text, maxLength) => {
+  //   if (text.length > maxLength) {
+  //     return text.substring(0, maxLength) + '...';
+  //   } else {
+  //     console.log(text)
+  //   }
+  //   return text;
+  // };
 
   return (
     <div>
@@ -817,7 +824,7 @@ function CardD({ userId, fetchSomeData, onAddToDeck, res, selectedCardIds, setSe
           >
           <div className='content'>
           <div className='gridXXX'>
-          <div className='cardtitled'>{truncateText(data.mainTitle, 5)}</div>
+          <div className='cardtitled'>{data.mainTitle}</div>
           {selectedCardId === data.cardId && (
               <button
               style={{ display: 'flex', marginLeft:'25.5%', marginTop:'0%', position:'absolute',  fontSize:'10px', justifyContent:'center', alignItems:'center' }}
@@ -828,7 +835,7 @@ function CardD({ userId, fetchSomeData, onAddToDeck, res, selectedCardIds, setSe
             </button>
             )}
             </div>
-              <div className='subtitle'>{truncateText(data.subTitle, 5)}</div>
+              <div className='subtitle'>{data.subTitle}</div>
             <div>
               <div className='star-container'>
                 {[...Array(data.point)].map((_, index) => (
