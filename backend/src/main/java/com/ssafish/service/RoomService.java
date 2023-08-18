@@ -1,20 +1,17 @@
 package com.ssafish.service;
 
 import com.ssafish.common.util.WebSocketSubscriberManager;
-import com.ssafish.domain.Room;
-import com.ssafish.domain.RoomRepository;
+import com.ssafish.domain.room.Room;
+import com.ssafish.domain.room.RoomRepository;
 import com.ssafish.web.dto.RoomRequestDto;
 import com.ssafish.web.dto.RoomResponseDto;
-import com.ssafish.web.dto.SocketData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
-import java.io.IOException;
 import java.util.Map;
 
 @Slf4j

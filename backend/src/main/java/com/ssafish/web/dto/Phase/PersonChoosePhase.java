@@ -8,7 +8,6 @@ import com.ssafish.web.dto.MessageType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -73,7 +72,7 @@ public class PersonChoosePhase extends Phase implements ChoosePhase {
         latch.countDown();
     }
 
-    public void handlePub(@Payload GameData gameData, GameStatus gameStatus, ScheduledExecutorService turnTimer, CountDownLatch latch) {
+    public void handlePub(GameData gameData, GameStatus gameStatus, ScheduledExecutorService turnTimer, CountDownLatch latch) {
         // pub 처리
         if (MessageType.TEST_PLAYER.name().equals(gameData.getType())) {           // 질문 대상 떠보기
             roomService.sendMessageToRoom(gameStatus.getRoomId(), ResponseEntity.ok(gameData));
