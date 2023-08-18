@@ -78,6 +78,7 @@ pipeline {
                     sh """
                     ssh -o StrictHostKeyChecking=no ubuntu@i9e202.p.ssafy.io \
                     'docker rm -f ${dockerImageName} &&
+                    docker rmi ${dockerRepository}/${dockerImageName} &&
                     docker run -d -t -p 5001:5001 -v /home/ubuntu/ssafish:/home/ssafish  --rm --name ${dockerImageName} ${dockerRepository}/${dockerImageName}:latest;'
                     """
 
@@ -85,6 +86,7 @@ pipeline {
                     sh """
                      ssh -o StrictHostKeyChecking=no ubuntu@i9e202.p.ssafy.io \
                      'docker rm -f ${dockerImageNameFront} &&
+                     docker rmi ${dockerRepository}/${dockerImageNameFront} &&
                       docker run -d -t -p 5173:5173 --rm --name ${dockerImageNameFront} ${dockerRepository}/${dockerImageNameFront}:latest;'
 
                     """

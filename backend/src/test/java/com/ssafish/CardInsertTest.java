@@ -470,11 +470,11 @@ class CardInsertTest {
         String uploadPath = "https://i9e202.p.ssafy.io/main_images";
 
         String [] mainImgUrl = {
-                "/e2_imgs/권인식.jpg","/e2_imgs/김동현.jpg","/e2_imgs/김은비.jpg","/e2_imgs/라동엽.jpg","/e2_imgs/이종윤.jpg","/e2_imgs/성제현.jpg",
-                "/e2_imgs/정재범.jpg","/e2_imgs/홍정현.jpg","/e2_imgs/홍진환.jpg","/e2_imgs/신세영.jpg","/e2_imgs/황유성.jpg",
-                "/e2_imgs/공정민.jpg","/e2_imgs/이가영.jpg","/e2_imgs/이세울.jpg","/e2_imgs/김창혁.jpg","/e2_imgs/심규렬.jpg","/e2_imgs/황세진.jpg",
-                "/e2_imgs/방정우.jpg","/e2_imgs/박하윤.jpg","/e2_imgs/박소윤.jpg","/e2_imgs/최영은.jpg","/e2_imgs/김지홍.jpg","/e2_imgs/정효인.jpg",
-                "/e2_imgs/정경훈.jpg","/e2_imgs/김보경.jpg"
+                "/e2_imgs/권인식.png","/e2_imgs/김동현.png","/e2_imgs/김은비.png","/e2_imgs/라동엽.png","/e2_imgs/이종윤.png","/e2_imgs/성제현.png",
+                "/e2_imgs/정재범.png","/e2_imgs/홍정현.png","/e2_imgs/홍진환.png","/e2_imgs/신세영.png","/e2_imgs/황유성.png",
+                "/e2_imgs/공정민.png","/e2_imgs/이가영.png","/e2_imgs/이세울.png","/e2_imgs/김창혁.png","/e2_imgs/심규렬.png","/e2_imgs/황세진.png",
+                "/e2_imgs/방정우.png","/e2_imgs/박하윤.png","/e2_imgs/박소윤.png","/e2_imgs/최영은.png","/e2_imgs/김지홍.png","/e2_imgs/정효인.png",
+                "/e2_imgs/정경훈.png","/e2_imgs/김보경.png"
         };
 
         for(int i=0;i<25;i++){
@@ -561,11 +561,11 @@ class CardInsertTest {
         String uploadPath = "https://i9e202.p.ssafy.io/main_images";
 
         String [] mainImgUrl = {
-                "/e2_imgs/권은정.jpg","/e2_imgs/신현탁.jpg","/e2_imgs/정영록.jpg","/e2_imgs/구배성.jpg","/e2_imgs/정현우.jpg",
-                "/e2_imgs/김나연.jpg","/e2_imgs/김예진.jpg","/e2_imgs/김현빈.jpg","/e2_imgs/김정희.jpg","/e2_imgs/이동규.jpg","/e2_imgs/하성호.jpg",
-                "/e2_imgs/김대웅.jpg","/e2_imgs/곽은정.jpg","/e2_imgs/손민영.jpg","/e2_imgs/이상훈.jpg","/e2_imgs/김태환.jpg","/e2_imgs/정근모.jpg",
-                "/e2_imgs/서이현.jpg","/e2_imgs/양불회.jpg","/e2_imgs/유혜민.jpg","/e2_imgs/김광표.jpg","/e2_imgs/차민준.jpg","/e2_imgs/정명진.jpg",
-                "/e2_imgs/박세영.jpg","/e2_imgs/황호선.jpg",
+                "/e2_imgs/권은정.png","/e2_imgs/신현탁.png","/e2_imgs/정영록.png","/e2_imgs/구배성.png","/e2_imgs/정현우.png",
+                "/e2_imgs/김나연.png","/e2_imgs/김예진.png","/e2_imgs/김현빈.png","/e2_imgs/김정희.png","/e2_imgs/이동규.png","/e2_imgs/하성호.png",
+                "/e2_imgs/김대웅.png","/e2_imgs/곽은정.png","/e2_imgs/손민영.png","/e2_imgs/이상훈.png","/e2_imgs/김태환.png","/e2_imgs/정근모.png",
+                "/e2_imgs/서이현.png","/e2_imgs/양불회.png","/e2_imgs/유혜민.png","/e2_imgs/김광표.png","/e2_imgs/차민준.png","/e2_imgs/정명진.png",
+                "/e2_imgs/박세영.png","/e2_imgs/황호선.png",
         };
 
         for(int i=0;i<25;i++){
