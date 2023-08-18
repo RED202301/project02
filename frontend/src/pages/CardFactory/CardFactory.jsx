@@ -22,12 +22,12 @@ function CardFactory( ){
     const closeModals = () => setIsModalOpens(false)
     const [res, setRes] = useState([''])
     const [rescard, setRescard] = useState('');
-    // const [userId, setUserId] = useState('');
+    const [userId, setUserId] = useState('');
     const [deckinfo, setDeckInfo] = useState([]);
     const [cardinfo, setCardInfo] = useState([]);
     const [selectedCardId, setSelectedCardId] = useState(null); // 선택한 카드의 ID 상태
     const [responseData, setResponseData] = useState([]); // GET 요청으로 받아온 데이터를 저장하는 배열
-    const [userId, setUserId] = useState('');
+    // const [userId, setUserId] = useState('');
 
     const [info, setInfo] = useState('');
 
@@ -413,7 +413,7 @@ function Deckmake({ userId, closeModal, fetchSomeData}) {
   const [name, setName] = useState('');
   const [subTitle, setSubTitle] = useState('');
   const [selectedStars, setSelectedStars] = useState(0);
-  const [point, setPoint] = useState(false);
+  const [point, setPoint] = useState(0);
   const [showCard, setShowCard] = useState(false);
   const [enroll, setEnroll] = useState(false);
   const [inputValue, setInputValue] = useState('');
@@ -475,25 +475,27 @@ function Deckmake({ userId, closeModal, fetchSomeData}) {
     setSubTitle(document.getElementById('sub_Title').value);
     setPoint(selectedStars);
     if (selectedImage || name || subTitle || point) {
-      // setShowCard(true);
       setEnroll(true);
-      const formData = new FormData();
-      formData.append('mainTitle', name);
-      formData.append('point', point);
-      formData.append('subTitle', subTitle);
-      formData.append('MainImg', selectedImage);
-      formData.append('userId', userId);
-  
       try {
+        const formData = new FormData();
+        formData.append('mainTitle', name);
+        formData.append('point', point);
+        formData.append('subTitle', subTitle);
+        formData.append('MainImg', selectedImage);
+        formData.append('userId', userId);
+      
         const response = await axios.post('https://i9e202.p.ssafy.io/api/card', formData, {
           headers: {
             'Content-Type': 'multipart/form-data', // Content-Type 설정
           },
         });
+    
       
+        
          // fetchSomeData 함수 호출
   
       // console.log('성공적인 요청을 보냈습니다.:', response.data);
+      fetchSomeData();
       setEnroll(false);
       setImageUrl(null);
       closeModal();
@@ -800,14 +802,14 @@ function CardD({ userId, fetchSomeData, onAddToDeck, res, selectedCardIds, setSe
     
   };
 
-  // const truncateText = (text, maxLength) => {
-  //   if (text.length > maxLength) {
-  //     return text.substring(0, maxLength) + '...';
-  //   } else {
-  //     console.log(text)
-  //   }
-  //   return text;
-  // };
+  const truncateText = (text, maxLength) => {
+    if (text.length > maxLength) {
+      return text.substring(0, maxLength) + '...';
+    } else {
+      console.log(text)
+    }
+    return text;
+  };
 
   return (
     <div>
@@ -824,7 +826,7 @@ function CardD({ userId, fetchSomeData, onAddToDeck, res, selectedCardIds, setSe
           >
           <div className='content'>
           <div className='gridXXX'>
-          <div className='cardtitled'>{data.mainTitle}</div>
+          <div className='cardtitled'>{truncateText[data.mainTitle,5]}</div>
           {selectedCardId === data.cardId && (
               <button
               style={{ display: 'flex', marginLeft:'25.5%', marginTop:'0%', position:'absolute',  fontSize:'10px', justifyContent:'center', alignItems:'center' }}
@@ -835,7 +837,7 @@ function CardD({ userId, fetchSomeData, onAddToDeck, res, selectedCardIds, setSe
             </button>
             )}
             </div>
-              <div className='subtitle'>{data.subTitle}</div>
+              <div className='subtitle'>{truncateText[data.subTitle,5]}</div>
             <div>
               <div className='star-container'>
                 {[...Array(data.point)].map((_, index) => (
