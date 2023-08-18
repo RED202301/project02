@@ -323,7 +323,7 @@ function Deckin({ userId, selectedCardId, setSelectedCardId, handleDeckCard, han
 
 
 
-function Selectin({  showCard, setShowCard, deckkk, setDeckkk, setCardInfo, deckinfo, cardinfo, userId, res, sendRequestForSelectedCardIds, onAddToDeck, fetchSomeData, selectedCardIds, setSelectedCardIds}) {
+function Selectin({  sendRequestForSelectedCardIds, showCard, setShowCard, deckkk, setDeckkk, setCardInfo, deckinfo, cardinfo, userId, res, onAddToDeck, fetchSomeData, selectedCardIds, setSelectedCardIds}) {
   return (
     <div>
       <div>
@@ -738,7 +738,7 @@ function CardG({cardinfo,userId,  fetchSomeData, onAddToDeck, selectedCardIds, s
 
 
 
-function CardD({ userId, fetchSomeData, onAddToDeck, res, selectedCardIds, setSelectedCardIds}) {
+function CardD({ userId, fetchSomeData, onAddToDeck, res, sendRequestForSelectedCardIds, selectedCardIds, setSelectedCardIds}) {
   const [selectedCardId, setSelectedCardId] = useState(null);
   // const [isAddToDeckButtonVisible, setIsAddToDeckButtonVisible] = useState(true);
 
@@ -826,7 +826,7 @@ function CardD({ userId, fetchSomeData, onAddToDeck, res, selectedCardIds, setSe
           >
           <div className='content'>
           <div className='gridXXX'>
-          <div className='cardtitled'>{truncateText[data.mainTitle,5]}</div>
+          <div className='cardtitled'>{truncateText(data.mainTitle,5)}</div>
           {selectedCardId === data.cardId && (
               <button
               style={{ display: 'flex', marginLeft:'25.5%', marginTop:'0%', position:'absolute',  fontSize:'10px', justifyContent:'center', alignItems:'center' }}
@@ -837,7 +837,7 @@ function CardD({ userId, fetchSomeData, onAddToDeck, res, selectedCardIds, setSe
             </button>
             )}
             </div>
-              <div className='subtitle'>{truncateText[data.subTitle,5]}</div>
+              <div className='subtitle'>{truncateText(data.subTitle,5)}</div>
             <div>
               <div className='star-container'>
                 {[...Array(data.point)].map((_, index) => (
