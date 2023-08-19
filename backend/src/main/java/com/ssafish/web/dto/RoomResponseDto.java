@@ -1,6 +1,6 @@
 package com.ssafish.web.dto;
 
-import com.ssafish.domain.Room;
+import com.ssafish.domain.room.Room;
 import lombok.*;
 
 @ToString

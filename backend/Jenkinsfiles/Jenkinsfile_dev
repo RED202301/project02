@@ -1,4 +1,4 @@
-def dockerRepository = "qortn365"
+def dockerRepository = ""
 def dockerImageName = "ssafish_dev"
 def dockerImageNameFront = "ssafish-fe"
 def deployHost = "i9e202.p.ssafy.io"
